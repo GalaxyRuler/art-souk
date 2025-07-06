@@ -107,6 +107,21 @@ export interface IStorage {
   createFavorite(favorite: InsertFavorite): Promise<Favorite>;
   deleteFavorite(userId: string, artworkId: number): Promise<void>;
   isFavorite(userId: string, artworkId: number): Promise<boolean>;
+  
+  // Admin count operations
+  getUserCount(): Promise<number>;
+  getArtistCount(): Promise<number>;
+  getGalleryCount(): Promise<number>;
+  getArtworkCount(): Promise<number>;
+  getAuctionCount(): Promise<number>;
+  getArticleCount(): Promise<number>;
+  getInquiryCount(): Promise<number>;
+  getFavoriteCount(): Promise<number>;
+  
+  // Delete operations  
+  deleteArtist(id: number): Promise<void>;
+  deleteGallery(id: number): Promise<void>;
+  deleteArtwork(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -621,6 +636,60 @@ export class DatabaseStorage implements IStorage {
       .from(favorites)
       .where(and(eq(favorites.userId, userId), eq(favorites.artworkId, artworkId)));
     return result.count > 0;
+  }
+
+  // Admin count methods
+  async getUserCount(): Promise<number> {
+    const [result] = await db.select({ count: count() }).from(users);
+    return result.count;
+  }
+
+  async getArtistCount(): Promise<number> {
+    const [result] = await db.select({ count: count() }).from(artists);
+    return result.count;
+  }
+
+  async getGalleryCount(): Promise<number> {
+    const [result] = await db.select({ count: count() }).from(galleries);
+    return result.count;
+  }
+
+  async getArtworkCount(): Promise<number> {
+    const [result] = await db.select({ count: count() }).from(artworks);
+    return result.count;
+  }
+
+  async getAuctionCount(): Promise<number> {
+    const [result] = await db.select({ count: count() }).from(auctions);
+    return result.count;
+  }
+
+  async getArticleCount(): Promise<number> {
+    const [result] = await db.select({ count: count() }).from(articles);
+    return result.count;
+  }
+
+  async getInquiryCount(): Promise<number> {
+    const [result] = await db.select({ count: count() }).from(inquiries);
+    return result.count;
+  }
+
+  async getFavoriteCount(): Promise<number> {
+    const [result] = await db.select({ count: count() }).from(favorites);
+    return result.count;
+  }
+
+  // Delete methods
+  async deleteArtist(id: number): Promise<void> {
+    await db.delete(artists).where(eq(artists.id, id));
+  }
+
+  async deleteGallery(id: number): Promise<void> {
+    await db.delete(galleries).where(eq(galleries.id, id));
+  }
+
+  async deleteArtwork(id: number): Promise<void> {
+    await db.delete(artworks).where(eq(artworks.id, id));
   }
 }
 

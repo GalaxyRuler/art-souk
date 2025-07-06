@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
-import { Search, Menu, X, Heart, User } from "lucide-react";
+import { Search, Menu, X, Heart, User, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -71,12 +71,23 @@ export function Navbar() {
             {/* User Actions */}
             {isAuthenticated ? (
               <>
-                <Button variant="ghost" size="sm" className="hover:bg-brand-light-gold hover:text-brand-purple">
-                  <Heart className="h-5 w-5" />
-                </Button>
-                <Button variant="ghost" size="sm" className="hover:bg-brand-light-gold hover:text-brand-purple">
-                  <User className="h-5 w-5" />
-                </Button>
+                {user?.role === 'admin' && (
+                  <Link href="/admin">
+                    <Button variant="ghost" size="sm" className="hover:bg-brand-light-gold hover:text-brand-purple text-xs">
+                      Admin
+                    </Button>
+                  </Link>
+                )}
+                <Link href="/dashboard">
+                  <Button variant="ghost" size="sm" className="hover:bg-brand-light-gold hover:text-brand-purple">
+                    <Heart className="h-5 w-5" />
+                  </Button>
+                </Link>
+                <Link href="/dashboard">
+                  <Button variant="ghost" size="sm" className="hover:bg-brand-light-gold hover:text-brand-purple">
+                    <User className="h-5 w-5" />
+                  </Button>
+                </Link>
                 <Button
                   variant="outline"
                   size="sm"

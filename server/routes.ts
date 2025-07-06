@@ -62,6 +62,169 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin stats endpoint
+  app.get('/api/admin/stats', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const stats = {
+        totalUsers: await storage.getUserCount(),
+        totalArtists: await storage.getArtistCount(),
+        totalGalleries: await storage.getGalleryCount(),
+        totalArtworks: await storage.getArtworkCount(),
+        totalAuctions: await storage.getAuctionCount(),
+        totalArticles: await storage.getArticleCount(),
+        totalInquiries: await storage.getInquiryCount(),
+        totalFavorites: await storage.getFavoriteCount(),
+        recentUsers: 0,
+        recentArtworks: 0,
+        liveAuctions: 0,
+        featuredArtworks: 0,
+      };
+
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching admin stats:", error);
+      res.status(500).json({ message: "Failed to fetch admin stats" });
+    }
+  });
+
+  // Admin users endpoint
+  app.get('/api/admin/users', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const users = await storage.getAllUsers();
+      res.json(users);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ message: "Failed to fetch users" });
+    }
+  });
+
+  // Admin artists endpoint
+  app.get('/api/admin/artists', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const artists = await storage.getArtists(100, 0);
+      res.json(artists);
+    } catch (error) {
+      console.error("Error fetching artists:", error);
+      res.status(500).json({ message: "Failed to fetch artists" });
+    }
+  });
+
+  // Admin galleries endpoint
+  app.get('/api/admin/galleries', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const galleries = await storage.getGalleries(100, 0);
+      res.json(galleries);
+    } catch (error) {
+      console.error("Error fetching galleries:", error);
+      res.status(500).json({ message: "Failed to fetch galleries" });
+    }
+  });
+
+  // Admin artworks endpoint
+  app.get('/api/admin/artworks', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const artworks = await storage.getArtworks(100, 0);
+      res.json(artworks);
+    } catch (error) {
+      console.error("Error fetching artworks:", error);
+      res.status(500).json({ message: "Failed to fetch artworks" });
+    }
+  });
+
+  // Admin role update endpoint
+  app.patch('/api/admin/users/:userId/role', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const { userId: targetUserId } = req.params;
+      const { role } = req.body;
+
+      if (!['user', 'artist', 'gallery', 'admin'].includes(role)) {
+        return res.status(400).json({ message: 'Invalid role' });
+      }
+
+      const updatedUser = await storage.updateUserRole(targetUserId, role);
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      res.status(500).json({ message: "Failed to update user role" });
+    }
+  });
+
+  // Admin feature toggle endpoint
+  app.patch('/api/admin/:type/:id/feature', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const { type, id } = req.params;
+      const { featured } = req.body;
+
+      switch (type) {
+        case 'artists':
+          await storage.updateArtist(parseInt(id), { featured });
+          break;
+        case 'galleries':
+          await storage.updateGallery(parseInt(id), { featured });
+          break;
+        case 'artworks':
+          await storage.updateArtwork(parseInt(id), { featured });
+          break;
+        default:
+          return res.status(400).json({ message: 'Invalid type' });
+      }
+
+      res.json({ message: 'Feature status updated' });
+    } catch (error) {
+      console.error("Error updating feature status:", error);
+      res.status(500).json({ message: "Failed to update feature status" });
+    }
+  });
+
   // Admin-only route to manage user roles
   app.put('/api/admin/users/:userId/role', isAuthenticated, async (req: any, res) => {
     try {
