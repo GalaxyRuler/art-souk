@@ -110,7 +110,7 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- July 06, 2025: Site name updated to "Art Souk" (Arabic: سوق الفن)
+- July 06, 2025: Site name updated to "Art Souk" (Arabic: سوق آرت)
 - July 06, 2025: Fixed all TypeScript compilation errors in routes and storage
 - July 06, 2025: Updated all branding and meta tags to reflect new site name
 - July 06, 2025: Database schema successfully deployed and initialized
