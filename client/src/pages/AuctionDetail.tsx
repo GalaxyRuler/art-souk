@@ -214,13 +214,13 @@ export default function AuctionDetail() {
     );
   }
 
-  const title = isRTL && auction.titleAr ? auction.titleAr : auction.title;
-  const description = isRTL && auction.descriptionAr ? auction.descriptionAr : auction.description;
-  const artworkTitle = isRTL && auction.artwork.titleAr ? auction.artwork.titleAr : auction.artwork.title;
-  const artistName = isRTL && auction.artwork.artist?.nameAr ? auction.artwork.artist.nameAr : auction.artwork.artist?.name;
-  const galleryName = isRTL && auction.artwork.gallery?.nameAr ? auction.artwork.gallery.nameAr : auction.artwork.gallery?.name;
-  const medium = isRTL && auction.artwork.mediumAr ? auction.artwork.mediumAr : auction.artwork.medium;
-  const terms = isRTL && auction.termsAr ? auction.termsAr : auction.terms;
+  const title = (isRTL && auction.titleAr) ? auction.titleAr : auction.title;
+  const description = (isRTL && auction.descriptionAr) ? auction.descriptionAr : auction.description;
+  const artworkTitle = (isRTL && auction.artwork?.titleAr) ? auction.artwork?.titleAr : auction.artwork?.title;
+  const artistName = (isRTL && auction.artwork?.artist?.nameAr) ? auction.artwork?.artist?.nameAr : auction.artwork?.artist?.name;
+  const galleryName = (isRTL && auction.artwork?.gallery?.nameAr) ? auction.artwork?.gallery?.nameAr : auction.artwork?.gallery?.name;
+  const medium = (isRTL && auction.artwork?.mediumAr) ? auction.artwork?.mediumAr : auction.artwork?.medium;
+  const terms = (isRTL && auction.termsAr) ? auction.termsAr : auction.terms;
 
   const handlePlaceBid = (e: React.FormEvent) => {
     e.preventDefault();
@@ -312,7 +312,7 @@ export default function AuctionDetail() {
           <div className="space-y-6">
             <div className="relative">
               <img
-                src={auction.artwork.images[0]}
+                src={auction.artwork?.images?.[0] || "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop"}
                 alt={artworkTitle}
                 className="w-full h-96 md:h-[500px] object-cover rounded-2xl shadow-brand"
               />
@@ -346,7 +346,7 @@ export default function AuctionDetail() {
                   {artworkTitle}
                 </h2>
                 
-                {auction.artwork.artist && (
+                {auction.artwork?.artist && (
                   <Link href={`/artists/${auction.artwork.artist.id}`}>
                     <p className="text-lg text-brand-purple font-semibold hover:underline mb-2">
                       {artistName}
@@ -355,10 +355,10 @@ export default function AuctionDetail() {
                 )}
 
                 <div className="grid grid-cols-2 gap-4 text-sm">
-                  {auction.artwork.year && (
+                  {auction.artwork?.year && (
                     <div>
                       <span className="text-muted-foreground">Year:</span>
-                      <p className="font-medium">{auction.artwork.year}</p>
+                      <p className="font-medium">{auction.artwork?.year}</p>
                     </div>
                   )}
                   
@@ -369,17 +369,17 @@ export default function AuctionDetail() {
                     </div>
                   )}
                   
-                  {auction.artwork.dimensions && (
+                  {auction.artwork?.dimensions && (
                     <div>
                       <span className="text-muted-foreground">Dimensions:</span>
-                      <p className="font-medium">{auction.artwork.dimensions}</p>
+                      <p className="font-medium">{auction.artwork?.dimensions}</p>
                     </div>
                   )}
 
                   {galleryName && (
                     <div>
                       <span className="text-muted-foreground">Gallery:</span>
-                      <Link href={`/galleries/${auction.artwork.gallery?.id}`}>
+                      <Link href={`/galleries/${auction.artwork?.gallery?.id}`}>
                         <p className="font-medium text-brand-purple hover:underline">{galleryName}</p>
                       </Link>
                     </div>

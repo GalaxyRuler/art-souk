@@ -156,6 +156,10 @@ Preferred communication style: Simple, everyday language.
   ✓ Favorites, inquiries, and social interaction endpoints
   ✓ Auction bidding and real-time updates functionality
 
+- July 06, 2025: Added comma separators to all price displays (85,000 SAR format)
+- July 06, 2025: Fixed Artists and Galleries 404 errors by making pages public
+- July 06, 2025: Fixed auction bidding API endpoint mismatch
+- July 06, 2025: Fixed auction detail page crash with safe navigation for nested properties
 - July 06, 2025: Conditional currency display (ر.س in Arabic, SAR in English)
 - July 06, 2025: Complete UI/UX redesign with purple & gold brand colors
 - July 06, 2025: Enhanced typography with Playfair Display for headings
