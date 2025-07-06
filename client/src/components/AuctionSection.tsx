@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Link } from "wouter";
 
@@ -209,7 +209,6 @@ export function AuctionSection() {
             const title = isRTL && auction.titleAr ? auction.titleAr : auction.title;
             const artworkTitle = isRTL && auction.artwork?.titleAr ? auction.artwork.titleAr : auction.artwork?.title;
             const artistName = isRTL && auction.artwork?.artist?.nameAr ? auction.artwork.artist.nameAr : auction.artwork?.artist?.name;
-            const currencyDisplay = isRTL ? "ر.س" : "SAR";
 
             return (
               <Card key={auction.id} className="overflow-hidden group cursor-pointer transition-all duration-300 hover:shadow-lg">
@@ -239,7 +238,7 @@ export function AuctionSection() {
                     {title}
                   </p>
                   <p className="text-primary font-semibold text-sm">
-                    {currencyDisplay} {auction.currentBid}
+                    {formatPrice(auction.currentBid, auction.currency, isRTL ? 'ar' : 'en')}
                   </p>
                   <p className="text-xs text-gray-500">
                     {auction.status === "live" ? `Ends in ${getTimeRemaining(auction.endDate)}` : 

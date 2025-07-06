@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Heart, Share2, Eye, MapPin, Calendar, Palette, Ruler, ArrowLeft, ExternalLink } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -192,7 +192,6 @@ export default function ArtworkDetail() {
   const medium = isRTL && artwork.mediumAr ? artwork.mediumAr : artwork.medium;
   const category = isRTL && artwork.categoryAr ? artwork.categoryAr : artwork.category;
   const style = isRTL && artwork.styleAr ? artwork.styleAr : artwork.style;
-  const currencyDisplay = isRTL ? "ر.س" : "SAR";
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -305,7 +304,7 @@ export default function ArtworkDetail() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-3xl font-bold text-brand-gold">
-                      {currencyDisplay} {artwork.price}
+                      {formatPrice(artwork.price, artwork.currency || 'SAR', isRTL ? 'ar' : 'en')}
                     </p>
                     <p className="text-sm text-muted-foreground">
                       {t(`artwork.status.${artwork.availability}`)}

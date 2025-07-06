@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Eye } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -54,7 +54,6 @@ export function ArtworkCard({
   const galleryName = isRTL && artwork.gallery?.nameAr ? artwork.gallery.nameAr : artwork.gallery?.name;
   const medium = isRTL && artwork.mediumAr ? artwork.mediumAr : artwork.medium;
   const category = isRTL && artwork.categoryAr ? artwork.categoryAr : artwork.category;
-  const currencyDisplay = isRTL ? "ر.س" : "SAR";
 
   const handleFavorite = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -189,7 +188,7 @@ export function ArtworkCard({
           {showPrice && artwork.price && (
             <div className="pt-2 border-t border-brand-light-gold/50">
               <p className="text-brand-gold font-bold text-lg">
-                {currencyDisplay} {artwork.price}
+                {formatPrice(artwork.price, artwork.currency || 'SAR', isRTL ? 'ar' : 'en')}
               </p>
             </div>
           )}

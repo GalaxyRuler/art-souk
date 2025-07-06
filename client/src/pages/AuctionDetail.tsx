@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Gavel, Timer, Users, TrendingUp, ArrowLeft, Heart, Share2, AlertCircle, Eye, DollarSign } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -221,7 +221,6 @@ export default function AuctionDetail() {
   const galleryName = isRTL && auction.artwork.gallery?.nameAr ? auction.artwork.gallery.nameAr : auction.artwork.gallery?.name;
   const medium = isRTL && auction.artwork.mediumAr ? auction.artwork.mediumAr : auction.artwork.medium;
   const terms = isRTL && auction.termsAr ? auction.termsAr : auction.terms;
-  const currencyDisplay = isRTL ? "ر.س" : "SAR";
 
   const handlePlaceBid = (e: React.FormEvent) => {
     e.preventDefault();
@@ -241,7 +240,7 @@ export default function AuctionDetail() {
     if (newBidAmount <= currentBidAmount) {
       toast({
         title: "Bid too low",
-        description: `Bid must be higher than current bid of ${currencyDisplay} ${currentBidAmount.toLocaleString()}`,
+        description: `Bid must be higher than current bid of ${formatPrice(currentBidAmount, auction.currency, isRTL ? 'ar' : 'en')}`,
         variant: "destructive",
       });
       return;
@@ -250,7 +249,7 @@ export default function AuctionDetail() {
     if (newBidAmount < currentBidAmount + minBidIncrement) {
       toast({
         title: "Bid increment too small",
-        description: `Minimum bid increment is ${currencyDisplay} ${minBidIncrement}`,
+        description: `Minimum bid increment is ${formatPrice(minBidIncrement, auction.currency, isRTL ? 'ar' : 'en')}`,
         variant: "destructive",
       });
       return;
@@ -391,8 +390,8 @@ export default function AuctionDetail() {
                   <div className="mt-4 pt-4 border-t">
                     <span className="text-sm text-muted-foreground">Estimate:</span>
                     <p className="font-semibold text-brand-gold">
-                      {currencyDisplay} {auction.estimateLow && parseInt(auction.estimateLow).toLocaleString()}
-                      {auction.estimateHigh && ` - ${currencyDisplay} ${parseInt(auction.estimateHigh).toLocaleString()}`}
+                      {auction.estimateLow && formatPrice(auction.estimateLow, auction.currency, isRTL ? 'ar' : 'en')}
+                      {auction.estimateHigh && ` - ${formatPrice(auction.estimateHigh, auction.currency, isRTL ? 'ar' : 'en')}`}
                     </p>
                   </div>
                 )}
@@ -419,7 +418,7 @@ export default function AuctionDetail() {
                 <div className="text-center">
                   <p className="text-sm text-muted-foreground mb-2">Current Bid</p>
                   <p className="text-4xl font-bold text-brand-gold">
-                    {currencyDisplay} {parseInt(auction.currentBid).toLocaleString()}
+                    {formatPrice(auction.currentBid, auction.currency, isRTL ? 'ar' : 'en')}
                   </p>
                   <div className="flex items-center justify-center gap-4 mt-2 text-sm text-muted-foreground">
                     <div className="flex items-center gap-1">
@@ -441,7 +440,7 @@ export default function AuctionDetail() {
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="bidAmount" className="text-sm font-medium">
-                        Your Bid ({currencyDisplay})
+                        Your Bid ({isRTL ? 'ر.س' : 'SAR'})
                       </Label>
                       <form onSubmit={handlePlaceBid} className="flex gap-2 mt-2">
                         <Input
@@ -464,8 +463,8 @@ export default function AuctionDetail() {
                     </div>
 
                     <div className="text-xs text-muted-foreground space-y-1">
-                      <p>• Minimum bid: {currencyDisplay} {(parseInt(auction.currentBid) + 100).toLocaleString()}</p>
-                      <p>• Bidding increments: {currencyDisplay} 100</p>
+                      <p>• Minimum bid: {formatPrice(parseInt(auction.currentBid) + 100, auction.currency, isRTL ? 'ar' : 'en')}</p>
+                      <p>• Bidding increments: {formatPrice(100, auction.currency, isRTL ? 'ar' : 'en')}</p>
                       {auction.hasReserve && <p>• This lot has a reserve price</p>}
                     </div>
                   </div>
@@ -493,7 +492,7 @@ export default function AuctionDetail() {
                     <Gavel className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
                     <p className="text-brand-charcoal font-medium mb-2">Auction Ended</p>
                     <p className="text-sm text-muted-foreground">
-                      Final bid: {currencyDisplay} {parseInt(auction.currentBid).toLocaleString()}
+                      Final bid: {formatPrice(auction.currentBid, auction.currency, isRTL ? 'ar' : 'en')}
                     </p>
                   </div>
                 )}
@@ -523,7 +522,7 @@ export default function AuctionDetail() {
                         <div key={bid.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
                           <div>
                             <p className="font-medium text-sm">
-                              {currencyDisplay} {parseInt(bid.amount).toLocaleString()}
+                              {formatPrice(bid.amount, bid.currency, isRTL ? 'ar' : 'en')}
                             </p>
                             <p className="text-xs text-muted-foreground">
                               {bid.bidderName || "Anonymous"} • {new Date(bid.createdAt).toLocaleTimeString()}
