@@ -34,6 +34,7 @@ Art Souk is a bilingual art marketplace web application focused on the Saudi Ara
 - **Provider**: Replit Auth integration
 - **Session Storage**: PostgreSQL-based session management
 - **User Roles**: Support for different user types (user, artist, gallery, admin)
+- **Admin System**: One-time admin setup endpoint and role management
 - **Security**: HTTP-only cookies with secure session handling
 
 ### Bilingual Support
@@ -155,6 +156,12 @@ Preferred communication style: Simple, everyday language.
   ✓ Advanced search capabilities for artworks, artists, and galleries
   ✓ Favorites, inquiries, and social interaction endpoints
   ✓ Auction bidding and real-time updates functionality
+
+- July 06, 2025: Admin system implementation
+  ✓ User role management with admin, artist, gallery, user roles
+  ✓ One-time admin setup endpoint (/api/admin/setup)
+  ✓ Admin role management endpoint for user promotion
+  ✓ Admin setup page (/admin/setup) with authentication flow
 
 - July 06, 2025: Added comma separators to all price displays (85,000 SAR format)
 - July 06, 2025: Fixed Artists and Galleries 404 errors by making pages public

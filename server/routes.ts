@@ -40,6 +40,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin setup endpoint - can be called once to make first user admin
+  app.post('/api/admin/setup', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const allUsers = await storage.getAllUsers();
+      
+      // Check if there are any admins already
+      const hasAdmin = allUsers.some(user => user.role === 'admin');
+      
+      if (hasAdmin) {
+        return res.status(400).json({ message: "Admin already exists" });
+      }
+      
+      // Make this user an admin
+      const adminUser = await storage.updateUserRole(userId, 'admin');
+      res.json({ message: "Admin user created successfully", user: adminUser });
+    } catch (error) {
+      console.error("Error creating admin:", error);
+      res.status(500).json({ message: "Failed to create admin user" });
+    }
+  });
+
+  // Admin-only route to manage user roles
+  app.put('/api/admin/users/:userId/role', isAuthenticated, async (req: any, res) => {
+    try {
+      const currentUserId = req.user.claims.sub;
+      const currentUser = await storage.getUser(currentUserId);
+      
+      if (currentUser?.role !== 'admin') {
+        return res.status(403).json({ message: "Admin access required" });
+      }
+      
+      const { userId } = req.params;
+      const { role } = req.body;
+      
+      if (!['user', 'artist', 'gallery', 'admin'].includes(role)) {
+        return res.status(400).json({ message: "Invalid role" });
+      }
+      
+      const updatedUser = await storage.updateUserRole(userId, role);
+      res.json({ message: "User role updated successfully", user: updatedUser });
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      res.status(500).json({ message: "Failed to update user role" });
+    }
+  });
+
   // Artist routes
   app.get('/api/artists', async (req, res) => {
     try {
