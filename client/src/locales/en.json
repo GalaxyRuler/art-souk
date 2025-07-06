@@ -1,0 +1,311 @@
+{
+  "tagline": "Saudi & GCC Art",
+  "nav": {
+    "artists": "Artists",
+    "galleries": "Galleries",
+    "auctions": "Auctions",
+    "editorial": "Editorial"
+  },
+  "auth": {
+    "signin": "Sign In",
+    "signup": "Sign Up",
+    "logout": "Log Out"
+  },
+  "hero": {
+    "title": "Discover Saudi & GCC",
+    "subtitle": "Contemporary Art",
+    "description": "Connect with the region's most talented artists, galleries, and collectors. Explore traditional calligraphy, contemporary works, and emerging talent from across the Gulf.",
+    "featuredArt": "Contemporary Saudi art exhibition",
+    "featuredArtist": "Featured Artist",
+    "cta": {
+      "start": "Start Collecting",
+      "browse": "Browse Artists"
+    }
+  },
+  "collections": {
+    "featured": {
+      "title": "Featured Collections",
+      "description": "Curated selections showcasing the best of Saudi and GCC contemporary art"
+    }
+  },
+  "curators": {
+    "title": "Curators' Picks",
+    "description": "Fresh standout works handpicked by our regional art experts",
+    "viewAll": "View All Works"
+  },
+  "editorial": {
+    "title": "Editorial",
+    "subtitle": "Latest insights from the Saudi & GCC art world",
+    "description": "Discover the stories behind the art, meet the artists, and explore the cultural movements shaping the contemporary Gulf art scene.",
+    "featured": "Featured Articles",
+    "search": {
+      "placeholder": "Search articles, artists, topics..."
+    },
+    "filters": {
+      "category": "Category",
+      "allCategories": "All Categories"
+    },
+    "categories": {
+      "art": "Art",
+      "interview": "Interview",
+      "guide": "Guide",
+      "news": "News",
+      "market": "Art Market"
+    },
+    "sort": {
+      "latest": "Latest",
+      "popular": "Most Popular",
+      "featured": "Featured"
+    },
+    "results": "{{count}} articles found",
+    "noResults": {
+      "title": "No articles found",
+      "description": "Try adjusting your search terms or filters to find what you're looking for.",
+      "clearFilters": "Clear Filters"
+    },
+    "author": "Author",
+    "newsletter": {
+      "title": "Stay Updated",
+      "description": "Get the latest art news, artist features, and exclusive content delivered to your inbox.",
+      "placeholder": "Enter your email",
+      "subscribe": "Subscribe"
+    },
+    "viewAll": "View All Articles"
+  },
+  "auctions": {
+    "title": "Auctions",
+    "subtitle": "Discover exceptional works from regional artists and galleries at live and upcoming auctions.",
+    "description": "Exceptional works from regional artists and galleries",
+    "live": "Live",
+    "upcoming": "Upcoming",
+    "ended": "Ended",
+    "bids": "bids",
+    "placeBid": "Place Bid",
+    "currentBid": "Current Bid",
+    "timeRemaining": {
+      "title": "Time Remaining",
+      "days": "{{count}} days",
+      "hours": "{{count}} hours",
+      "minutes": "{{count}} minutes"
+    },
+    "endingSoon": "Ending Soon",
+    "tabs": {
+      "live": "Live Auctions",
+      "upcoming": "Upcoming",
+      "all": "All Auctions"
+    },
+    "stats": {
+      "live": "Live Auctions",
+      "upcoming": "Upcoming",
+      "totalBids": "Total Bids",
+      "total": "Total Auctions"
+    },
+    "noLive": {
+      "title": "No Live Auctions",
+      "description": "Check back soon for upcoming auctions."
+    },
+    "noUpcoming": {
+      "title": "No Upcoming Auctions",
+      "description": "All scheduled auctions are currently live or have ended."
+    },
+    "noAuctions": {
+      "title": "No Auctions Available",
+      "description": "Check back later for new auction listings."
+    },
+    "viewAll": "View All Auctions"
+  },
+  "artists": {
+    "title": "Artists",
+    "subtitle": "Discover talented artists from Saudi Arabia and the GCC region, from emerging voices to established masters.",
+    "featured": "Featured Artists",
+    "search": {
+      "placeholder": "Search artists by name..."
+    },
+    "filters": {
+      "nationality": "Nationality",
+      "allCountries": "All Countries"
+    },
+    "sort": {
+      "latest": "Latest",
+      "name": "Name A-Z",
+      "featured": "Featured First"
+    },
+    "results": "{{count}} artists found",
+    "noResults": {
+      "title": "No artists found",
+      "description": "Try adjusting your search terms or filters to find artists.",
+      "clearFilters": "Clear All Filters"
+    }
+  },
+  "artist": {
+    "featured": "Featured",
+    "share": "Share",
+    "shareText": "Check out {{name}} on Artisan",
+    "tabs": {
+      "artworks": "Artworks",
+      "about": "About"
+    },
+    "artworksCount": "{{count}} artworks",
+    "noArtworks": {
+      "title": "No artworks available",
+      "description": "This artist hasn't uploaded any artworks yet."
+    },
+    "about": {
+      "title": "About the Artist",
+      "noBiography": "No biography available for this artist.",
+      "details": "Artist Details",
+      "nationality": "Nationality",
+      "birthYear": "Born",
+      "links": "Links",
+      "website": "Website",
+      "instagram": "Instagram"
+    },
+    "sidebar": {
+      "quickInfo": "Quick Info",
+      "artworks": "Artworks",
+      "nationality": "Nationality",
+      "age": "Age",
+      "follow": "Follow Artist",
+      "website": "Visit Website"
+    }
+  },
+  "galleries": {
+    "title": "Galleries",
+    "subtitle": "Explore prestigious galleries and exhibition spaces across Saudi Arabia and the GCC region.",
+    "featured": "Featured Galleries",
+    "website": "Website",
+    "contact": "Contact",
+    "search": {
+      "placeholder": "Search galleries by name..."
+    },
+    "filters": {
+      "location": "Location",
+      "allLocations": "All Locations"
+    },
+    "sort": {
+      "latest": "Latest",
+      "name": "Name A-Z",
+      "featured": "Featured First"
+    },
+    "results": "{{count}} galleries found",
+    "noResults": {
+      "title": "No galleries found",
+      "description": "Try adjusting your search terms or filters to find galleries.",
+      "clearFilters": "Clear All Filters"
+    }
+  },
+  "artwork": {
+    "artist": "Artist",
+    "description": "Description",
+    "details": "Details",
+    "gallery": "Gallery",
+    "price": "Price",
+    "inquire": "Inquire",
+    "favorite": "Add to Favorites",
+    "favorited": "Favorited",
+    "share": "Share",
+    "status": {
+      "available": "Available",
+      "sold": "Sold",
+      "on_auction": "At Auction"
+    },
+    "inquiryTitle": "Inquire About This Artwork",
+    "inquiryMessage": "Message",
+    "inquiryMessagePlaceholder": "I'm interested in learning more about this artwork...",
+    "inquiryEmail": "Email",
+    "inquiryEmailPlaceholder": "your@email.com",
+    "inquiryPhone": "Phone (Optional)",
+    "inquiryPhonePlaceholder": "+966 XX XXX XXXX",
+    "sendInquiry": "Send Inquiry",
+    "inquirySent": "Inquiry Sent",
+    "inquirySentDescription": "Your inquiry has been sent to the gallery. They will contact you soon.",
+    "favoriteAdded": "Added to Favorites",
+    "favoriteAddedDescription": "This artwork has been added to your favorites.",
+    "favoriteRemoved": "Removed from Favorites",
+    "favoriteRemovedDescription": "This artwork has been removed from your favorites.",
+    "shareText": "Check out this artwork: {{title}}",
+    "linkCopied": "Link Copied",
+    "linkCopiedDescription": "The artwork link has been copied to your clipboard.",
+    "moreFromArtist": "More from this Artist"
+  },
+  "home": {
+    "welcome": "Welcome back, {{name}}",
+    "user": "Art Lover",
+    "subtitle": "Discover new artworks, follow your favorite artists, and stay updated with the latest from the GCC art scene.",
+    "stats": {
+      "favorites": "Favorites",
+      "trending": "Trending",
+      "liveAuctions": "Live Auctions",
+      "artists": "Featured Artists"
+    },
+    "recommendations": {
+      "title": "Recommended for You",
+      "subtitle": "Artworks selected based on your interests and preferences",
+      "empty": "No recommendations available. Start exploring to get personalized suggestions!",
+      "exploreArtists": "Explore Artists"
+    },
+    "liveAuctions": {
+      "title": "Live Auctions"
+    },
+    "featuredArtists": {
+      "title": "Featured Artists",
+      "subtitle": "Discover the region's most talented and emerging artists",
+      "empty": "No featured artists available at the moment."
+    }
+  },
+  "footer": {
+    "newsletter": {
+      "title": "Stay Connected",
+      "description": "Get the latest news from the Saudi and GCC art world, including new artist features, exclusive exhibitions, and market insights.",
+      "placeholder": "Enter your email",
+      "subscribe": "Subscribe"
+    },
+    "explore": {
+      "title": "Explore"
+    },
+    "resources": {
+      "title": "Resources",
+      "guide": "Art Guide",
+      "investment": "Investment Tips",
+      "support": "Support"
+    },
+    "copyright": "© 2025 Artisan. All rights reserved."
+  },
+  "countries": {
+    "saudiArabia": "Saudi Arabia",
+    "uae": "United Arab Emirates",
+    "kuwait": "Kuwait",
+    "qatar": "Qatar",
+    "bahrain": "Bahrain",
+    "oman": "Oman"
+  },
+  "cities": {
+    "riyadh": "Riyadh",
+    "jeddah": "Jeddah",
+    "dubai": "Dubai",
+    "abuDhabi": "Abu Dhabi",
+    "kuwaitCity": "Kuwait City",
+    "doha": "Doha",
+    "manama": "Manama",
+    "muscat": "Muscat"
+  },
+  "common": {
+    "viewAll": "View All",
+    "sortBy": "Sort By",
+    "retry": "Try Again",
+    "goBack": "Go Back",
+    "sending": "Sending...",
+    "loading": "Loading..."
+  },
+  "errors": {
+    "generic": "Something went wrong",
+    "tryAgainLater": "Please try again later.",
+    "loadingArtists": "Failed to load artists",
+    "loadingGalleries": "Failed to load galleries",
+    "loadingArticles": "Failed to load articles",
+    "artworkNotFound": "Artwork not found",
+    "artworkNotFoundDescription": "The artwork you're looking for doesn't exist or has been removed.",
+    "artistNotFound": "Artist not found",
+    "artistNotFoundDescription": "The artist profile you're looking for doesn't exist or has been removed."
+  }
+}
