@@ -96,7 +96,7 @@ export default function AuctionDetail() {
 
   const placeBidMutation = useMutation({
     mutationFn: async (amount: string) => {
-      await apiRequest(`/api/auctions/${id}/bid`, {
+      await apiRequest(`/api/auctions/${id}/bids`, {
         method: 'POST',
         body: { amount },
       });
