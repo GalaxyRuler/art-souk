@@ -15,7 +15,7 @@ if (!process.env.REPLIT_DOMAINS) {
 const getOidcConfig = memoize(
   async () => {
     return await client.discovery(
-      new URL(process.env.ISSUER_URL ?? "https://replit.com/oidc"),
+      new URL("https://replit.com/oidc"),
       process.env.REPL_ID!
     );
   },
@@ -105,6 +105,8 @@ export async function setupAuth(app: Express) {
     passport.authenticate(`replitauth:${req.hostname}`, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
+      // Enable multiple OAuth provider selection
+      max_age: 0, // Force fresh authentication to show provider selection
     })(req, res, next);
   });
 

@@ -21,6 +21,7 @@ import GalleryProfile from "@/pages/GalleryProfile";
 import AuctionDetail from "@/pages/AuctionDetail";
 import ArticleDetail from "@/pages/ArticleDetail";
 import AdminSetup from "@/pages/AdminSetup";
+import AuthTest from "@/pages/AuthTest";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -57,6 +58,7 @@ function Router() {
       <Route path="/artwork/:id" component={ArtworkDetail} />
       <Route path="/search" component={Search} />
       <Route path="/admin/setup" component={AdminSetup} />
+      <Route path="/auth/test" component={AuthTest} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -31,7 +31,8 @@ Art Souk is a bilingual art marketplace web application focused on the Saudi Ara
 ## Key Components
 
 ### Authentication System
-- **Provider**: Replit Auth integration
+- **Provider**: Replit Auth with multiple OAuth providers
+- **OAuth Providers**: Google, Apple, X (Twitter), GitHub, Email/Password
 - **Session Storage**: PostgreSQL-based session management
 - **User Roles**: Support for different user types (user, artist, gallery, admin)
 - **Admin System**: One-time admin setup endpoint and role management
@@ -162,6 +163,13 @@ Preferred communication style: Simple, everyday language.
   ✓ One-time admin setup endpoint (/api/admin/setup)
   ✓ Admin role management endpoint for user promotion
   ✓ Admin setup page (/admin/setup) with authentication flow
+
+- July 06, 2025: Multi-provider OAuth authentication migration
+  ✓ Migrated to Replit Auth with multiple OAuth providers
+  ✓ Support for Google, Apple, X (Twitter), GitHub, and Email login
+  ✓ Enhanced authentication flow with provider selection
+  ✓ Test page created (/auth/test) for verification
+  ✓ Backward compatibility maintained for existing users
 
 - July 06, 2025: Added comma separators to all price displays (85,000 SAR format)
 - July 06, 2025: Fixed Artists and Galleries 404 errors by making pages public
