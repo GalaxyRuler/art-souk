@@ -8,7 +8,7 @@ import { ArtistCard } from "@/components/ArtistCard";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { Link } from "wouter";
 import { Heart, TrendingUp, Clock, Users } from "lucide-react";
 
@@ -167,7 +167,7 @@ export default function Home() {
                     </div>
                     <h3 className="font-semibold text-primary mb-2">{auction.title}</h3>
                     <p className="text-2xl font-bold text-primary mb-4">
-                      {auction.currency} {auction.currentBid}
+                      {formatPrice(parseFloat(auction.currentBid), auction.currency, isRTL ? 'ar' : 'en')}
                     </p>
                     <Button size="sm" className="w-full">
                       {t("auctions.placeBid")}

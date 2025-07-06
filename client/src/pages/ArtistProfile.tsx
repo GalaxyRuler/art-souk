@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MapPin, Calendar, Users, Heart, Share2, ArrowLeft, ExternalLink, Award, Palette, Eye } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -317,7 +317,7 @@ export default function ArtistProfile() {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">Total Sales</span>
                       <span className="font-semibold text-brand-gold">
-                        {currencyDisplay} {artist.totalSales.toLocaleString()}
+                        {formatPrice(artist.totalSales, "SAR", isRTL ? 'ar' : 'en')}
                       </span>
                     </div>
                   )}
@@ -326,7 +326,7 @@ export default function ArtistProfile() {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">Average Price</span>
                       <span className="font-semibold">
-                        {currencyDisplay} {artist.averagePrice.toLocaleString()}
+                        {formatPrice(artist.averagePrice, "SAR", isRTL ? 'ar' : 'en')}
                       </span>
                     </div>
                   )}

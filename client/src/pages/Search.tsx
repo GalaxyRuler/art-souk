@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Search as SearchIcon, Filter, X, SlidersHorizontal } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { ArtworkCard } from "@/components/ArtworkCard";
 import { ArtistCard } from "@/components/ArtistCard";
@@ -246,8 +246,8 @@ export default function Search() {
                         className="w-full"
                       />
                       <div className="flex justify-between text-sm text-muted-foreground mt-2">
-                        <span>{isRTL ? "ر.س" : "SAR"} {filters.priceRange[0].toLocaleString()}</span>
-                        <span>{isRTL ? "ر.س" : "SAR"} {filters.priceRange[1].toLocaleString()}</span>
+                        <span>{formatPrice(filters.priceRange[0], "SAR", isRTL ? 'ar' : 'en')}</span>
+                        <span>{formatPrice(filters.priceRange[1], "SAR", isRTL ? 'ar' : 'en')}</span>
                       </div>
                     </div>
                   </div>

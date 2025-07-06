@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Heart, MessageSquare, User, Settings, Eye, Calendar, MapPin, Phone, Mail, Edit2, Save, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -162,7 +162,7 @@ export default function Dashboard() {
     );
   }
 
-  const currencyDisplay = isRTL ? "ر.س" : "SAR";
+
 
   return (
     <div className="min-h-screen bg-background">

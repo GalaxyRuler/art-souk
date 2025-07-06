@@ -10,7 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { Clock, Users, TrendingUp, Calendar } from "lucide-react";
 
 export default function Auctions() {
@@ -97,7 +97,7 @@ export default function Auctions() {
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">{t("auctions.currentBid")}:</span>
                 <span className="text-lg font-bold text-primary">
-                  {auction.currency} {auction.currentBid || auction.startingPrice}
+                  {formatPrice(parseFloat(auction.currentBid || auction.startingPrice), auction.currency, isRTL ? 'ar' : 'en')}
                 </span>
               </div>
 
