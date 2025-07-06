@@ -45,11 +45,15 @@ function Router() {
         </>
       )}
       {/* Public routes accessible to all users */}
-      <Route path="/artwork/:id" component={ArtworkDetail} />
+      <Route path="/artists" component={Artists} />
       <Route path="/artists/:id" component={ArtistProfile} />
+      <Route path="/galleries" component={Galleries} />
       <Route path="/galleries/:id" component={GalleryProfile} />
+      <Route path="/auctions" component={Auctions} />
       <Route path="/auctions/:id" component={AuctionDetail} />
+      <Route path="/editorial" component={Editorial} />
       <Route path="/editorial/:id" component={ArticleDetail} />
+      <Route path="/artwork/:id" component={ArtworkDetail} />
       <Route path="/search" component={Search} />
       <Route component={NotFound} />
     </Switch>
