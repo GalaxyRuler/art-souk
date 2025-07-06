@@ -1,5 +1,8 @@
 {
-  "tagline": "Saudi & GCC Art",
+  "site": {
+    "name": "Art Souk",
+    "tagline": "Saudi & GCC Art"
+  },
   "nav": {
     "artists": "Artists",
     "galleries": "Galleries",

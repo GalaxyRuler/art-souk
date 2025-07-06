@@ -1,4 +1,4 @@
-import type { Express } from "express";
+import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
@@ -14,6 +14,15 @@ import {
   insertFavoriteSchema
 } from "@shared/schema";
 import { z } from "zod";
+
+// Extend Express Request interface to include user with claims
+interface AuthenticatedRequest extends Request {
+  user: {
+    claims: {
+      sub: string;
+    };
+  };
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -69,7 +78,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/artists', isAuthenticated, async (req, res) => {
+  app.post('/api/artists', isAuthenticated, async (req: any, res) => {
     try {
       const artistData = insertArtistSchema.parse(req.body);
       const artist = await storage.createArtist(artistData);
@@ -201,7 +210,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/artworks', isAuthenticated, async (req, res) => {
+  app.post('/api/artworks', isAuthenticated, async (req: any, res) => {
     try {
       const artworkData = insertArtworkSchema.parse(req.body);
       const artwork = await storage.createArtwork(artworkData);
@@ -284,7 +293,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/auctions/:id/bids', isAuthenticated, async (req, res) => {
+  app.post('/api/auctions/:id/bids', isAuthenticated, async (req: any, res) => {
     try {
       const auctionId = parseInt(req.params.id);
       const bidData = insertBidSchema.parse({
@@ -387,7 +396,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/articles', isAuthenticated, async (req, res) => {
+  app.post('/api/articles', isAuthenticated, async (req: any, res) => {
     try {
       const articleData = insertArticleSchema.parse({
         ...req.body,
@@ -402,7 +411,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Inquiry routes
-  app.get('/api/inquiries', isAuthenticated, async (req, res) => {
+  app.get('/api/inquiries', isAuthenticated, async (req: any, res) => {
     try {
       const limit = parseInt(req.query.limit as string) || 20;
       const offset = parseInt(req.query.offset as string) || 0;
@@ -425,7 +434,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/inquiries', async (req, res) => {
+  app.post('/api/inquiries', async (req: any, res) => {
     try {
       const inquiryData = insertInquirySchema.parse({
         ...req.body,
@@ -440,7 +449,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Favorite routes
-  app.get('/api/favorites', isAuthenticated, async (req, res) => {
+  app.get('/api/favorites', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const favorites = await storage.getUserFavorites(userId);
@@ -451,7 +460,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/favorites', isAuthenticated, async (req, res) => {
+  app.post('/api/favorites', isAuthenticated, async (req: any, res) => {
     try {
       const favoriteData = insertFavoriteSchema.parse({
         ...req.body,
@@ -465,7 +474,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete('/api/favorites/:artworkId', isAuthenticated, async (req, res) => {
+  app.delete('/api/favorites/:artworkId', isAuthenticated, async (req: any, res) => {
     try {
       const artworkId = parseInt(req.params.artworkId);
       const userId = req.user.claims.sub;
@@ -477,7 +486,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/favorites/:artworkId/check', isAuthenticated, async (req, res) => {
+  app.get('/api/favorites/:artworkId/check', isAuthenticated, async (req: any, res) => {
     try {
       const artworkId = parseInt(req.params.artworkId);
       const userId = req.user.claims.sub;

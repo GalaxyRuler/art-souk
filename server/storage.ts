@@ -255,10 +255,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async searchArtworks(query: string, filters?: any): Promise<Artwork[]> {
-    let queryBuilder = db.select().from(artworks);
+    const baseQuery = db.select().from(artworks);
     
     if (query) {
-      queryBuilder = queryBuilder.where(
+      const results = await baseQuery.where(
         or(
           ilike(artworks.title, `%${query}%`),
           ilike(artworks.titleAr, `%${query}%`),
@@ -266,10 +266,11 @@ export class DatabaseStorage implements IStorage {
           ilike(artworks.medium, `%${query}%`),
           ilike(artworks.category, `%${query}%`)
         )
-      );
+      ).orderBy(desc(artworks.createdAt)).limit(50);
+      return results;
     }
     
-    return await queryBuilder.orderBy(desc(artworks.createdAt)).limit(50);
+    return await baseQuery.orderBy(desc(artworks.createdAt)).limit(50);
   }
 
   async createArtwork(artwork: InsertArtwork): Promise<Artwork> {
@@ -383,12 +384,36 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getCollectionArtworks(collectionId: number): Promise<Artwork[]> {
-    return await db
-      .select()
+    const results = await db
+      .select({
+        id: artworks.id,
+        artistId: artworks.artistId,
+        galleryId: artworks.galleryId,
+        title: artworks.title,
+        titleAr: artworks.titleAr,
+        description: artworks.description,
+        descriptionAr: artworks.descriptionAr,
+        year: artworks.year,
+        medium: artworks.medium,
+        mediumAr: artworks.mediumAr,
+        dimensions: artworks.dimensions,
+        images: artworks.images,
+        price: artworks.price,
+        currency: artworks.currency,
+        category: artworks.category,
+        categoryAr: artworks.categoryAr,
+        style: artworks.style,
+        styleAr: artworks.styleAr,
+        featured: artworks.featured,
+        availability: artworks.availability,
+        createdAt: artworks.createdAt,
+        updatedAt: artworks.updatedAt
+      })
       .from(artworks)
       .innerJoin(collectionArtworks, eq(artworks.id, collectionArtworks.artworkId))
       .where(eq(collectionArtworks.collectionId, collectionId))
       .orderBy(asc(collectionArtworks.order));
+    return results;
   }
 
   async createCollection(collection: InsertCollection): Promise<Collection> {

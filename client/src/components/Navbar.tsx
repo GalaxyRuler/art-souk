@@ -29,9 +29,9 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <div className="text-2xl font-bold text-primary">
-              <span className="text-accent">Artisan</span>
+              <span className="text-accent">{t("site.name")}</span>
               <span className="text-xs text-gray-500 ml-2">
-                {t("tagline")}
+                {t("site.tagline")}
               </span>
             </div>
           </Link>

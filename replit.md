@@ -1,8 +1,8 @@
-# Artisan - Saudi & GCC Art Marketplace
+# Art Souk - Saudi & GCC Art Marketplace
 
 ## Overview
 
-Artisan is a bilingual art marketplace web application focused on the Saudi Arabian and Gulf Cooperation Council (GCC) art market. The platform connects artists, galleries, collectors, and art enthusiasts in the region, providing a comprehensive platform for discovering, collecting, and engaging with contemporary Middle Eastern art.
+Art Souk is a bilingual art marketplace web application focused on the Saudi Arabian and Gulf Cooperation Council (GCC) art market. The platform connects artists, galleries, collectors, and art enthusiasts in the region, providing a comprehensive platform for discovering, collecting, and engaging with contemporary Middle Eastern art.
 
 ## System Architecture
 
@@ -108,7 +108,11 @@ Artisan is a bilingual art marketplace web application focused on the Saudi Arab
 
 Preferred communication style: Simple, everyday language.
 
-## Changelog
+## Recent Changes
 
-Changelog:
-- July 06, 2025. Initial setup
+- July 06, 2025: Site name updated to "Art Souk" (Arabic: سوق الفن)
+- July 06, 2025: Fixed all TypeScript compilation errors in routes and storage
+- July 06, 2025: Updated all branding and meta tags to reflect new site name
+- July 06, 2025: Database schema successfully deployed and initialized
+- July 06, 2025: All authentication routes properly typed and functional
+- July 06, 2025: Initial setup
