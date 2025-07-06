@@ -54,6 +54,7 @@ export function ArtworkCard({
   const galleryName = isRTL && artwork.gallery?.nameAr ? artwork.gallery.nameAr : artwork.gallery?.name;
   const medium = isRTL && artwork.mediumAr ? artwork.mediumAr : artwork.medium;
   const category = isRTL && artwork.categoryAr ? artwork.categoryAr : artwork.category;
+  const currencyDisplay = isRTL ? "ر.س" : "SAR";
 
   const handleFavorite = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -188,7 +189,7 @@ export function ArtworkCard({
           {showPrice && artwork.price && (
             <div className="pt-2 border-t border-brand-light-gold/50">
               <p className="text-brand-gold font-bold text-lg">
-                {artwork.currency} {artwork.price}
+                {currencyDisplay} {artwork.price}
               </p>
             </div>
           )}

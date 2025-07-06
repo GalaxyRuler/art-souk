@@ -75,7 +75,7 @@ export function AuctionSection() {
       artworkId: 1,
       startingPrice: "15000",
       currentBid: "18000",
-      currency: "ر.س",
+      currency: "SAR",
       endDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
       status: "live",
       bidCount: 3,
@@ -96,7 +96,7 @@ export function AuctionSection() {
       artworkId: 2,
       startingPrice: "20000",
       currentBid: "22000",
-      currency: "ر.س",
+      currency: "SAR",
       endDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
       status: "upcoming",
       bidCount: 5,
@@ -117,7 +117,7 @@ export function AuctionSection() {
       artworkId: 3,
       startingPrice: "30000",
       currentBid: "35000",
-      currency: "ر.س",
+      currency: "SAR",
       endDate: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(),
       status: "live",
       bidCount: 12,
@@ -138,7 +138,7 @@ export function AuctionSection() {
       artworkId: 4,
       startingPrice: "25000",
       currentBid: "28000",
-      currency: "ر.س",
+      currency: "SAR",
       endDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
       status: "upcoming",
       bidCount: 0,
@@ -209,6 +209,7 @@ export function AuctionSection() {
             const title = isRTL && auction.titleAr ? auction.titleAr : auction.title;
             const artworkTitle = isRTL && auction.artwork?.titleAr ? auction.artwork.titleAr : auction.artwork?.title;
             const artistName = isRTL && auction.artwork?.artist?.nameAr ? auction.artwork.artist.nameAr : auction.artwork?.artist?.name;
+            const currencyDisplay = isRTL ? "ر.س" : "SAR";
 
             return (
               <Card key={auction.id} className="overflow-hidden group cursor-pointer transition-all duration-300 hover:shadow-lg">
@@ -238,7 +239,7 @@ export function AuctionSection() {
                     {title}
                   </p>
                   <p className="text-primary font-semibold text-sm">
-                    {auction.currency} {auction.currentBid}
+                    {currencyDisplay} {auction.currentBid}
                   </p>
                   <p className="text-xs text-gray-500">
                     {auction.status === "live" ? `Ends in ${getTimeRemaining(auction.endDate)}` : 

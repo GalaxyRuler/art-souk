@@ -110,6 +110,9 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- July 06, 2025: Implemented conditional currency display (ر.س in Arabic, SAR in English)
+- July 06, 2025: Complete UI/UX redesign with purple & gold brand colors
+- July 06, 2025: Enhanced typography with Playfair Display for headings
 - July 06, 2025: Site name updated to "Art Souk" (Arabic: سوق آرت)
 - July 06, 2025: Fixed all TypeScript compilation errors in routes and storage
 - July 06, 2025: Updated all branding and meta tags to reflect new site name

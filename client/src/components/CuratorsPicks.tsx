@@ -61,7 +61,7 @@ export function CuratorsPicks() {
       medium: "Oil on canvas",
       mediumAr: "زيت على القماش",
       price: "12,000–18,000",
-      currency: "ر.س",
+      currency: "SAR",
       category: "Contemporary",
       categoryAr: "معاصر",
       availability: "available"
@@ -83,7 +83,7 @@ export function CuratorsPicks() {
       medium: "Mixed media",
       mediumAr: "وسائط متعددة",
       price: "8,500–12,000",
-      currency: "ر.س",
+      currency: "SAR",
       category: "Islamic Art",
       categoryAr: "فن إسلامي",
       availability: "available"
@@ -105,7 +105,7 @@ export function CuratorsPicks() {
       medium: "Digital art",
       mediumAr: "فن رقمي",
       price: "15,000–22,000",
-      currency: "ر.س",
+      currency: "SAR",
       category: "Digital",
       categoryAr: "رقمي",
       availability: "available"
@@ -127,7 +127,7 @@ export function CuratorsPicks() {
       medium: "Watercolor",
       mediumAr: "ألوان مائية",
       price: "25,000–35,000",
-      currency: "ر.س",
+      currency: "SAR",
       category: "Traditional",
       categoryAr: "تقليدي",
       availability: "available"
