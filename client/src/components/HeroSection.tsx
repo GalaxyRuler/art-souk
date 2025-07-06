@@ -10,29 +10,35 @@ export function HeroSection() {
   const { isRTL } = useLanguage();
 
   return (
-    <section className="relative bg-gradient-to-r from-warm-sand to-gray-100 overflow-hidden">
+    <section className="relative bg-hero-gradient overflow-hidden min-h-[80vh] flex items-center">
       {/* Background Decorations */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-10 left-10 w-32 h-32 bg-accent rounded-full opacity-20"></div>
-        <div className="absolute bottom-10 right-10 w-24 h-24 bg-arabic-gold rounded-full opacity-15"></div>
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-20 left-20 w-40 h-40 bg-brand-gold rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-32 h-32 bg-white rounded-full blur-2xl"></div>
+        <div className="absolute top-1/3 right-1/4 w-24 h-24 bg-brand-purple rounded-full blur-xl"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Text Content */}
-          <div className={cn("space-y-8", isRTL && "text-right")}>
-            <h1 className="text-4xl md:text-5xl font-bold text-primary leading-tight">
-              {t("hero.title")}
-              <span className="text-accent block">{t("hero.subtitle")}</span>
-            </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              {t("hero.description")}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+          <div className={cn("space-y-10", isRTL && "text-right")}>
+            <div className="space-y-6">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+                {t("hero.title")}
+                <span className="text-brand-gold block text-4xl md:text-5xl lg:text-6xl mt-2">
+                  {t("hero.subtitle")}
+                </span>
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-2xl">
+                {t("hero.description")}
+              </p>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-6">
               {isAuthenticated ? (
                 <Button
                   size="lg"
-                  className="bg-primary hover:bg-gray-800 text-white"
+                  className="bg-white text-brand-purple hover:bg-brand-cream shadow-gold text-lg px-8 py-4 h-auto font-semibold"
                 >
                   {t("hero.cta.browse")}
                 </Button>
@@ -40,7 +46,7 @@ export function HeroSection() {
                 <>
                   <Button
                     size="lg"
-                    className="bg-primary hover:bg-gray-800 text-white"
+                    className="bg-white text-brand-purple hover:bg-brand-cream shadow-gold text-lg px-8 py-4 h-auto font-semibold"
                     onClick={() => (window.location.href = "/api/login")}
                   >
                     {t("hero.cta.start")}
@@ -48,7 +54,7 @@ export function HeroSection() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-gray-300 text-gray-700 hover:bg-gray-50"
+                    className="border-2 border-white text-white hover:bg-white hover:text-brand-purple text-lg px-8 py-4 h-auto font-semibold backdrop-blur-sm bg-white/10"
                   >
                     {t("hero.cta.browse")}
                   </Button>
@@ -59,17 +65,23 @@ export function HeroSection() {
 
           {/* Featured Artwork */}
           <div className="relative">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+              <div className="absolute inset-0 bg-gradient-to-tr from-brand-purple/20 to-brand-gold/20 z-10"></div>
               <img
                 src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
                 alt={t("hero.featuredArt")}
-                className="w-full h-96 object-cover"
+                className="w-full h-96 md:h-[500px] object-cover"
               />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
-                <p className="text-white text-sm">{t("hero.featuredArtist")}</p>
-                <p className="text-white text-lg font-medium">Ahmed Al-Rashid</p>
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-8 z-20">
+                <p className="text-white/80 text-sm font-medium mb-2">{t("hero.featuredArtist")}</p>
+                <p className="text-white text-2xl font-bold">Ahmed Al-Rashid</p>
+                <p className="text-brand-gold text-sm mt-1 font-medium">Contemporary Saudi Artist</p>
               </div>
             </div>
+            
+            {/* Floating decorative elements */}
+            <div className="absolute -top-6 -right-6 w-16 h-16 bg-brand-gold rounded-full shadow-gold opacity-80"></div>
+            <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white rounded-full shadow-lg opacity-90"></div>
           </div>
         </div>
       </div>

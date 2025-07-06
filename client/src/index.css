@@ -4,48 +4,64 @@
 
 :root {
   --background: hsl(0, 0%, 100%);
-  --foreground: hsl(20, 14.3%, 4.1%);
-  --muted: hsl(60, 4.8%, 95.9%);
-  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --foreground: hsl(230, 24%, 12%);
+  --muted: hsl(35, 22%, 96%);
+  --muted-foreground: hsl(230, 6%, 44%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --popover-foreground: hsl(230, 24%, 12%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(20, 5.9%, 90%);
-  --input: hsl(20, 5.9%, 90%);
-  --primary: hsl(207, 90%, 54%);
-  --primary-foreground: hsl(211, 100%, 99%);
-  --secondary: hsl(60, 4.8%, 95.9%);
-  --secondary-foreground: hsl(24, 9.8%, 10%);
-  --accent: hsl(60, 4.8%, 95.9%);
-  --accent-foreground: hsl(24, 9.8%, 10%);
-  --destructive: hsl(0, 84.2%, 60.2%);
-  --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(20, 14.3%, 4.1%);
-  --radius: 0.5rem;
+  --card-foreground: hsl(230, 24%, 12%);
+  --border: hsl(35, 20%, 88%);
+  --input: hsl(35, 20%, 88%);
+  --primary: hsl(283, 86%, 60%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(35, 22%, 96%);
+  --secondary-foreground: hsl(230, 24%, 12%);
+  --accent: hsl(35, 85%, 92%);
+  --accent-foreground: hsl(230, 24%, 12%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(283, 86%, 60%);
+  --radius: 0.75rem;
+  
+  /* Custom brand colors */
+  --brand-gold: hsl(35, 85%, 62%);
+  --brand-purple: hsl(283, 86%, 60%);
+  --brand-deep-purple: hsl(265, 91%, 35%);
+  --brand-cream: hsl(35, 22%, 96%);
+  --brand-charcoal: hsl(230, 24%, 12%);
+  --brand-light-gold: hsl(35, 85%, 92%);
 }
 
 .dark {
-  --background: hsl(240, 10%, 3.9%);
-  --foreground: hsl(0, 0%, 98%);
-  --muted: hsl(240, 3.7%, 15.9%);
-  --muted-foreground: hsl(240, 5%, 64.9%);
-  --popover: hsl(240, 10%, 3.9%);
-  --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(240, 10%, 3.9%);
-  --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(240, 3.7%, 15.9%);
-  --input: hsl(240, 3.7%, 15.9%);
-  --primary: hsl(207, 90%, 54%);
-  --primary-foreground: hsl(211, 100%, 99%);
-  --secondary: hsl(240, 3.7%, 15.9%);
-  --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(240, 3.7%, 15.9%);
-  --accent-foreground: hsl(0, 0%, 98%);
-  --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(240, 4.9%, 83.9%);
-  --radius: 0.5rem;
+  --background: hsl(230, 24%, 8%);
+  --foreground: hsl(0, 0%, 96%);
+  --muted: hsl(230, 12%, 16%);
+  --muted-foreground: hsl(230, 6%, 64%);
+  --popover: hsl(230, 24%, 8%);
+  --popover-foreground: hsl(0, 0%, 96%);
+  --card: hsl(230, 20%, 12%);
+  --card-foreground: hsl(0, 0%, 96%);
+  --border: hsl(230, 12%, 20%);
+  --input: hsl(230, 12%, 20%);
+  --primary: hsl(283, 86%, 65%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(230, 12%, 16%);
+  --secondary-foreground: hsl(0, 0%, 96%);
+  --accent: hsl(230, 12%, 20%);
+  --accent-foreground: hsl(0, 0%, 96%);
+  --destructive: hsl(0, 84%, 65%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(283, 86%, 65%);
+  --radius: 0.75rem;
+  
+  /* Custom brand colors for dark mode */
+  --brand-gold: hsl(35, 85%, 70%);
+  --brand-purple: hsl(283, 86%, 65%);
+  --brand-deep-purple: hsl(265, 91%, 45%);
+  --brand-cream: hsl(230, 12%, 16%);
+  --brand-charcoal: hsl(0, 0%, 96%);
+  --brand-light-gold: hsl(35, 65%, 25%);
 }
 
 @layer base {
@@ -55,5 +71,79 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    font-feature-settings: "cv05", "cv11";
+  }
+  
+  /* Typography improvements */
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight font-semibold;
+  }
+  
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold;
+    font-family: "Playfair Display", serif;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+    font-family: "Playfair Display", serif;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl;
+    font-family: "Playfair Display", serif;
+  }
+  
+  h4 {
+    @apply text-xl md:text-2xl;
+  }
+  
+  /* Arabic typography */
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3 {
+    font-family: "Noto Sans Arabic", sans-serif;
+    font-weight: 700;
+  }
+  
+  [dir="rtl"] body {
+    font-family: "Noto Sans Arabic", sans-serif;
+  }
+  
+  /* Custom gradient backgrounds */
+  .bg-brand-gradient {
+    background: linear-gradient(135deg, hsl(283, 86%, 60%) 0%, hsl(265, 91%, 35%) 100%);
+  }
+  
+  .bg-gold-gradient {
+    background: linear-gradient(135deg, hsl(35, 85%, 62%) 0%, hsl(35, 85%, 72%) 100%);
+  }
+  
+  .bg-hero-gradient {
+    background: linear-gradient(135deg, hsl(283, 86%, 60%) 0%, hsl(265, 91%, 35%) 50%, hsl(35, 85%, 62%) 100%);
+  }
+  
+  /* Enhanced shadows */
+  .shadow-brand {
+    box-shadow: 0 10px 25px -5px hsla(283, 86%, 60%, 0.1), 0 10px 10px -5px hsla(283, 86%, 60%, 0.04);
+  }
+  
+  .shadow-gold {
+    box-shadow: 0 10px 25px -5px hsla(35, 85%, 62%, 0.1), 0 10px 10px -5px hsla(35, 85%, 62%, 0.04);
+  }
+  
+  /* Improved focus states */
+  .focus-brand:focus {
+    @apply ring-2 ring-offset-2;
+    ring-color: hsl(283, 86%, 60%);
+  }
+  
+  /* Card enhancements */
+  .card-elevated {
+    @apply bg-card border shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+  
+  .card-brand {
+    @apply bg-gradient-to-br from-purple-50 to-amber-50 dark:from-purple-900/20 dark:to-amber-900/20;
   }
 }

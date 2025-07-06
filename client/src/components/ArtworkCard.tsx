@@ -75,7 +75,7 @@ export function ArtworkCard({
   return (
     <Card
       className={cn(
-        "overflow-hidden group cursor-pointer transition-all duration-300 hover:shadow-lg",
+        "overflow-hidden group cursor-pointer transition-all duration-500 hover:shadow-brand card-elevated bg-gradient-to-br from-white to-brand-light-gold/10 border-0",
         className
       )}
       onMouseEnter={() => setIsHovered(true)}
@@ -84,31 +84,34 @@ export function ArtworkCard({
       <Link href={`/artwork/${artwork.id}`}>
         <div className="relative">
           {/* Artwork Image */}
-          <img
-            src={getImageSrc()}
-            alt={title}
-            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-          />
+          <div className="relative overflow-hidden rounded-t-xl">
+            <img
+              src={getImageSrc()}
+              alt={title}
+              className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-deep-purple/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          </div>
 
           {/* Overlay with Actions */}
           <div
             className={cn(
-              "absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+              "absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500",
               isHovered && "opacity-100"
             )}
           >
-            <div className="absolute top-3 right-3 flex gap-2">
+            <div className="absolute top-4 right-4 flex gap-3">
               {isAuthenticated && (
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="bg-white/80 hover:bg-white h-8 w-8 p-0"
+                  className="bg-white/90 hover:bg-white h-10 w-10 p-0 rounded-full shadow-lg backdrop-blur-sm"
                   onClick={handleFavorite}
                 >
                   <Heart
                     className={cn(
-                      "h-4 w-4",
-                      isFavorited ? "fill-red-500 text-red-500" : "text-gray-600"
+                      "h-5 w-5",
+                      isFavorited ? "fill-brand-purple text-brand-purple" : "text-brand-charcoal"
                     )}
                   />
                 </Button>
@@ -116,18 +119,23 @@ export function ArtworkCard({
               <Button
                 variant="ghost"
                 size="sm"
-                className="bg-white/80 hover:bg-white h-8 w-8 p-0"
+                className="bg-white/90 hover:bg-white h-10 w-10 p-0 rounded-full shadow-lg backdrop-blur-sm"
               >
-                <Eye className="h-4 w-4 text-gray-600" />
+                <Eye className="h-5 w-5 text-brand-charcoal" />
               </Button>
             </div>
 
             {/* Status Badge */}
             {artwork.availability && (
-              <div className="absolute bottom-3 left-3">
+              <div className="absolute bottom-4 left-4">
                 <Badge
                   variant={artwork.availability === "available" ? "default" : "secondary"}
-                  className="text-xs"
+                  className={cn(
+                    "text-xs font-semibold px-3 py-1",
+                    artwork.availability === "available" 
+                      ? "bg-brand-gold text-white shadow-lg" 
+                      : "bg-white/90 text-brand-charcoal"
+                  )}
                 >
                   {t(`artwork.status.${artwork.availability}`)}
                 </Badge>
@@ -136,48 +144,53 @@ export function ArtworkCard({
           </div>
         </div>
 
-        <CardContent className="p-4">
+        <CardContent className="p-6 space-y-3">
           {/* Category */}
           {showCategory && category && (
-            <div className="mb-2">
-              <Badge variant="outline" className="text-xs">
+            <div>
+              <Badge 
+                variant="outline" 
+                className="text-xs border-brand-purple/30 text-brand-purple bg-brand-purple/5"
+              >
                 {category}
               </Badge>
             </div>
           )}
 
           {/* Title */}
-          <h3 className="font-semibold text-primary text-sm mb-1 line-clamp-1">
+          <h3 className="font-bold text-brand-charcoal text-lg mb-2 line-clamp-2 leading-tight">
             {title}
           </h3>
 
           {/* Artist */}
           {artistName && (
-            <p className="text-gray-600 text-xs mb-1 line-clamp-1">
+            <p className="text-brand-purple font-medium text-sm line-clamp-1">
               {artistName}
-              {artwork.year && `, ${artwork.year}`}
+              {artwork.year && <span className="text-muted-foreground ml-1">• {artwork.year}</span>}
             </p>
           )}
 
           {/* Medium */}
           {medium && (
-            <p className="text-gray-500 text-xs mb-2 line-clamp-1 italic">
+            <p className="text-muted-foreground text-sm line-clamp-1 italic">
               {medium}
             </p>
           )}
 
           {/* Gallery */}
           {galleryName && (
-            <p className="text-gray-500 text-xs mb-2 line-clamp-1">
+            <p className="text-muted-foreground text-sm line-clamp-1">
               {galleryName}
             </p>
           )}
 
           {/* Price */}
           {showPrice && artwork.price && (
-            <p className="text-primary font-semibold text-sm">
-              {artwork.currency} {artwork.price}
-            </p>
+            <div className="pt-2 border-t border-brand-light-gold/50">
+              <p className="text-brand-gold font-bold text-lg">
+                {artwork.currency} {artwork.price}
+              </p>
+            </div>
           )}
         </CardContent>
       </Link>

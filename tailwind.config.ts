@@ -44,6 +44,14 @@ export default {
         border: "var(--border)",
         input: "var(--input)",
         ring: "var(--ring)",
+        brand: {
+          gold: "var(--brand-gold)",
+          purple: "var(--brand-purple)",
+          "deep-purple": "var(--brand-deep-purple)",
+          cream: "var(--brand-cream)",
+          charcoal: "var(--brand-charcoal)",
+          "light-gold": "var(--brand-light-gold)",
+        },
         chart: {
           "1": "var(--chart-1)",
           "2": "var(--chart-2)",

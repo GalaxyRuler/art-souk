@@ -23,16 +23,18 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-200">
+    <nav className="bg-white/90 backdrop-blur-lg shadow-brand sticky top-0 z-50 border-b border-brand-light-gold">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex justify-between items-center py-5">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <div className="text-2xl font-bold text-primary">
-              <span className="text-accent">{t("site.name")}</span>
-              <span className="text-xs text-gray-500 ml-2">
+          <Link href="/" className="flex items-center group">
+            <div className="relative">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-brand-purple via-brand-deep-purple to-brand-gold bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+                {t("site.name")}
+              </h1>
+              <p className="text-sm text-muted-foreground font-medium mt-1">
                 {t("site.tagline")}
-              </span>
+              </p>
             </div>
           </Link>
 
@@ -43,37 +45,42 @@ export function Navbar() {
                 key={item.key}
                 href={item.href}
                 className={cn(
-                  "text-gray-700 hover:text-primary transition-colors",
-                  location === item.href && "text-primary font-medium"
+                  "text-foreground hover:text-brand-purple transition-all duration-300 font-medium text-base relative group",
+                  location === item.href && "text-brand-purple"
                 )}
               >
                 {t(`nav.${item.key}`)}
+                <span className={cn(
+                  "absolute -bottom-2 left-0 w-0 h-0.5 bg-brand-purple transition-all duration-300 group-hover:w-full",
+                  location === item.href && "w-full"
+                )} />
               </Link>
             ))}
           </div>
 
           {/* Right Side Actions */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             {/* Language Toggle */}
             <LanguageToggle />
 
             {/* Search */}
-            <Button variant="ghost" size="sm">
-              <Search className="h-4 w-4" />
+            <Button variant="ghost" size="sm" className="hover:bg-brand-light-gold hover:text-brand-purple">
+              <Search className="h-5 w-5" />
             </Button>
 
             {/* User Actions */}
             {isAuthenticated ? (
               <>
-                <Button variant="ghost" size="sm">
-                  <Heart className="h-4 w-4" />
+                <Button variant="ghost" size="sm" className="hover:bg-brand-light-gold hover:text-brand-purple">
+                  <Heart className="h-5 w-5" />
                 </Button>
-                <Button variant="ghost" size="sm">
-                  <User className="h-4 w-4" />
+                <Button variant="ghost" size="sm" className="hover:bg-brand-light-gold hover:text-brand-purple">
+                  <User className="h-5 w-5" />
                 </Button>
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="sm"
+                  className="border-brand-purple text-brand-purple hover:bg-brand-purple hover:text-white"
                   onClick={() => (window.location.href = "/api/logout")}
                 >
                   {t("auth.logout")}
@@ -84,12 +91,13 @@ export function Navbar() {
                 <Button
                   variant="ghost"
                   size="sm"
+                  className="hover:bg-brand-light-gold hover:text-brand-purple"
                   onClick={() => (window.location.href = "/api/login")}
                 >
                   {t("auth.signin")}
                 </Button>
                 <Button
-                  variant="default"
+                  className="bg-brand-gradient hover:opacity-90 text-white shadow-brand font-medium"
                   size="sm"
                   onClick={() => (window.location.href = "/api/login")}
                 >
@@ -102,25 +110,25 @@ export function Navbar() {
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden"
+              className="md:hidden hover:bg-brand-light-gold hover:text-brand-purple"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t">
+          <div className="md:hidden py-6 border-t border-brand-light-gold bg-white/95 backdrop-blur-lg">
             <div className="flex flex-col space-y-4">
               {navItems.map((item) => (
                 <Link
                   key={item.key}
                   href={item.href}
                   className={cn(
-                    "text-gray-700 hover:text-primary transition-colors",
-                    location === item.href && "text-primary font-medium"
+                    "text-foreground hover:text-brand-purple transition-colors font-medium text-lg py-2",
+                    location === item.href && "text-brand-purple"
                   )}
                   onClick={() => setIsMenuOpen(false)}
                 >
