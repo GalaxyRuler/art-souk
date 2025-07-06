@@ -85,13 +85,13 @@ export default function AuctionDetail() {
 
   const { data: auction, isLoading } = useQuery<AuctionDetail>({
     queryKey: [`/api/auctions/${id}`],
-    refetchInterval: autoRefresh && auction?.status === 'live' ? 5000 : false,
+    refetchInterval: autoRefresh ? 5000 : false,
   });
 
   const { data: recentBids } = useQuery<Bid[]>({
     queryKey: [`/api/auctions/${id}/bids`],
     enabled: !!auction,
-    refetchInterval: autoRefresh && auction?.status === 'live' ? 3000 : false,
+    refetchInterval: autoRefresh ? 3000 : false,
   });
 
   const placeBidMutation = useMutation({
