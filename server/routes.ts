@@ -198,6 +198,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/artworks/:id/similar', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const artwork = await storage.getArtwork(id);
+      if (!artwork) {
+        return res.status(404).json({ message: "Artwork not found" });
+      }
+      
+      // Get similar artworks by same artist or similar category
+      const similarArtworks = await storage.searchArtworks("", {
+        category: artwork.category,
+        artistId: artwork.artistId,
+        excludeId: id,
+        limit: 4
+      });
+      
+      res.json(similarArtworks);
+    } catch (error) {
+      console.error("Error fetching similar artworks:", error);
+      res.status(500).json({ message: "Failed to fetch similar artworks" });
+    }
+  });
+
+  // Enhanced search endpoint
+  app.get('/api/search', async (req, res) => {
+    try {
+      const query = req.query.q as string || "";
+      const type = req.query.type as string || "all";
+      const filters = {
+        category: req.query.category as string,
+        medium: req.query.medium as string,
+        style: req.query.style as string,
+        priceMin: req.query.priceMin ? parseInt(req.query.priceMin as string) : undefined,
+        priceMax: req.query.priceMax ? parseInt(req.query.priceMax as string) : undefined,
+        availability: req.query.availability as string,
+        nationality: req.query.nationality as string,
+        yearMin: req.query.yearMin ? parseInt(req.query.yearMin as string) : undefined,
+        yearMax: req.query.yearMax ? parseInt(req.query.yearMax as string) : undefined,
+        sortBy: req.query.sortBy as string || "relevance",
+        limit: parseInt(req.query.limit as string) || 20,
+        offset: parseInt(req.query.offset as string) || 0
+      };
+
+      let results = {
+        artworks: [],
+        artists: [],
+        galleries: [],
+        total: 0
+      };
+
+      if (type === "all" || type === "artworks") {
+        results.artworks = await storage.searchArtworks(query, filters);
+      }
+      
+      if (type === "all" || type === "artists") {
+        results.artists = await storage.searchArtists(query, filters);
+      }
+      
+      if (type === "all" || type === "galleries") {
+        results.galleries = await storage.searchGalleries(query, filters);
+      }
+
+      results.total = results.artworks.length + results.artists.length + results.galleries.length;
+      res.json(results);
+    } catch (error) {
+      console.error("Error performing search:", error);
+      res.status(500).json({ message: "Failed to perform search" });
+    }
+  });
+
   app.get('/api/artists/:id/artworks', async (req, res) => {
     try {
       const artistId = parseInt(req.params.id);
@@ -497,6 +567,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to check favorite" });
     }
   });
+
+
 
   const httpServer = createServer(app);
   return httpServer;

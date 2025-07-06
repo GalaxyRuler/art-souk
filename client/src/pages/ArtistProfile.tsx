@@ -1,351 +1,569 @@
 import { useState } from "react";
-import { useParams } from "wouter";
+import { useParams, Link } from "wouter";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArtworkCard } from "@/components/ArtworkCard";
-import { useLanguage } from "@/hooks/useLanguage";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { MapPin, Calendar, Users, Heart, Share2, ArrowLeft, ExternalLink, Award, Palette, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { MapPin, Calendar, ExternalLink, Instagram, Globe, Share2 } from "lucide-react";
+import { useLanguage } from "@/hooks/useLanguage";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import { ArtworkCard } from "@/components/ArtworkCard";
+
+interface ArtistDetail {
+  id: number;
+  name: string;
+  nameAr?: string;
+  biography?: string;
+  biographyAr?: string;
+  nationality?: string;
+  birthYear?: number;
+  deathYear?: number;
+  profileImage?: string;
+  coverImage?: string;
+  featured?: boolean;
+  website?: string;
+  instagram?: string;
+  facebook?: string;
+  twitter?: string;
+  phone?: string;
+  email?: string;
+  education?: string;
+  awards?: string;
+  exhibitions?: string;
+  style?: string;
+  medium?: string;
+  artworkCount?: number;
+  totalSales?: number;
+  averagePrice?: number;
+}
+
+interface Artwork {
+  id: number;
+  title: string;
+  titleAr?: string;
+  images: string[];
+  year?: number;
+  medium?: string;
+  mediumAr?: string;
+  dimensions?: string;
+  price?: string;
+  currency?: string;
+  availability?: string;
+  category?: string;
+  categoryAr?: string;
+}
+
+interface Exhibition {
+  id: number;
+  title: string;
+  titleAr?: string;
+  year: number;
+  venue: string;
+  venueAr?: string;
+  type: 'solo' | 'group';
+  location: string;
+  locationAr?: string;
+}
 
 export default function ArtistProfile() {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
+  const { isAuthenticated } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("artworks");
 
-  const { data: artist, isLoading, error } = useQuery({
+  const { data: artist, isLoading } = useQuery<ArtistDetail>({
     queryKey: [`/api/artists/${id}`],
-    enabled: !!id,
   });
 
-  const { data: artworks = [] } = useQuery({
+  const { data: artworks, isLoading: artworksLoading } = useQuery<Artwork[]>({
     queryKey: [`/api/artists/${id}/artworks`],
-    enabled: !!id,
+    enabled: !!artist,
   });
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: artist?.name,
-          text: t("artist.shareText", { name: artist?.name }),
-          url: window.location.href,
-        });
-      } catch (error) {
-        // User cancelled or error occurred
-      }
-    } else {
-      // Fallback to copying URL
-      await navigator.clipboard.writeText(window.location.href);
-    }
-  };
+  const { data: exhibitions } = useQuery<Exhibition[]>({
+    queryKey: [`/api/artists/${id}/exhibitions`],
+    enabled: !!artist,
+  });
 
-  if (error) {
+  const { data: isFollowing } = useQuery<{ isFollowing: boolean }>({
+    queryKey: [`/api/artists/${id}/follow-status`],
+    enabled: isAuthenticated && !!id,
+  });
+
+  const followMutation = useMutation({
+    mutationFn: async () => {
+      if (isFollowing?.isFollowing) {
+        await apiRequest(`/api/artists/${id}/unfollow`, { method: 'POST' });
+      } else {
+        await apiRequest(`/api/artists/${id}/follow`, { method: 'POST' });
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/artists/${id}/follow-status`] });
+      toast({
+        title: isFollowing?.isFollowing ? "Unfollowed artist" : "Following artist",
+        description: isFollowing?.isFollowing 
+          ? "You are no longer following this artist" 
+          : "You will receive updates about this artist",
+      });
+    },
+  });
+
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <main className="py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-2xl font-bold text-red-600 mb-4">
-              {t("errors.artistNotFound")}
-            </h1>
-            <p className="text-gray-600 mb-8">
-              {t("errors.artistNotFoundDescription")}
-            </p>
-            <Button onClick={() => window.history.back()}>
-              {t("common.goBack")}
-            </Button>
+      <div className="min-h-screen bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="animate-pulse space-y-8">
+            <div className="h-8 bg-muted rounded w-1/4"></div>
+            <div className="h-64 bg-muted rounded-2xl"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="h-96 bg-muted rounded-2xl"></div>
+              <div className="lg:col-span-2 h-96 bg-muted rounded-2xl"></div>
+            </div>
           </div>
-        </main>
-        <Footer />
+        </div>
       </div>
     );
   }
 
-  if (isLoading || !artist) {
+  if (!artist) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <main>
-          <div className="animate-pulse">
-            {/* Cover Image Skeleton */}
-            <div className="h-64 md:h-80 bg-gray-200"></div>
-            
-            {/* Profile Content Skeleton */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 space-y-6">
-                  <div className="h-8 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                  <div className="h-4 bg-gray-200 rounded"></div>
-                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                </div>
-                <div className="space-y-4">
-                  <div className="h-32 bg-gray-200 rounded-lg"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </main>
-        <Footer />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-4">Artist not found</h1>
+          <Link href="/artists">
+            <Button>Browse Artists</Button>
+          </Link>
+        </div>
       </div>
     );
   }
 
   const name = isRTL && artist.nameAr ? artist.nameAr : artist.name;
   const biography = isRTL && artist.biographyAr ? artist.biographyAr : artist.biography;
+  const currencyDisplay = isRTL ? "ر.س" : "SAR";
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: name,
+          text: `${name} - Artist Profile`,
+          url: window.location.href,
+        });
+      } catch (error) {
+        console.log('Share failed:', error);
+      }
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied",
+        description: "Artist profile link copied to clipboard",
+      });
+    }
+  };
+
+  const artworkCategories = artworks?.reduce((acc, artwork) => {
+    const category = isRTL && artwork.categoryAr ? artwork.categoryAr : artwork.category;
+    if (category) {
+      acc[category] = (acc[category] || 0) + 1;
+    }
+    return acc;
+  }, {} as Record<string, number>);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <main>
-        {/* Cover Image */}
-        <div className="relative h-64 md:h-80 overflow-hidden">
-          <img
-            src={artist.coverImage || "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1200&h=400"}
-            alt={name}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back Button */}
+        <Link href="/artists">
+          <Button variant="ghost" className="mb-6 hover:bg-brand-light-gold">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Artists
+          </Button>
+        </Link>
+
+        {/* Hero Section */}
+        <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden shadow-brand mb-8">
+          {artist.coverImage ? (
+            <img
+              src={artist.coverImage}
+              alt={`${name} cover`}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-brand-gradient" />
+          )}
+          <div className="absolute inset-0 bg-black/20" />
           
-          {/* Profile Image */}
-          <div className="absolute bottom-0 left-0 right-0">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-end pb-6">
-                <div className="relative">
-                  <img
-                    src={artist.profileImage || "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&h=200"}
-                    alt={name}
-                    className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white object-cover"
-                  />
+          <div className="absolute bottom-6 left-6 right-6">
+            <div className="flex items-end gap-6">
+              <Avatar className="w-24 h-24 border-4 border-white shadow-lg">
+                <AvatarImage src={artist.profileImage} />
+                <AvatarFallback className="text-2xl bg-brand-purple text-white">
+                  {name[0]}
+                </AvatarFallback>
+              </Avatar>
+              
+              <div className="flex-1 text-white">
+                <div className="flex items-center gap-2 mb-2">
+                  <h1 className="text-3xl md:text-4xl font-bold">
+                    {name}
+                  </h1>
                   {artist.featured && (
-                    <Badge className="absolute -top-2 -right-2 bg-accent text-white">
-                      {t("artist.featured")}
+                    <Badge className="bg-brand-gold text-brand-charcoal">
+                      <Award className="h-3 w-3 mr-1" />
+                      Featured
                     </Badge>
                   )}
                 </div>
-                <div className={cn("ml-6 flex-1", isRTL && "ml-0 mr-6")}>
-                  <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">
-                    {name}
-                  </h1>
-                  <div className="flex flex-wrap items-center gap-4 text-white/80">
-                    {artist.nationality && (
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-4 w-4" />
-                        <span>{artist.nationality}</span>
-                      </div>
-                    )}
-                    {artist.birthYear && (
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4" />
-                        <span>b. {artist.birthYear}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={handleShare}
-                    className="flex items-center gap-2"
-                  >
-                    <Share2 className="h-4 w-4" />
-                    {t("artist.share")}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main Content */}
-            <div className="lg:col-span-2">
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className={cn("grid w-full grid-cols-2", isRTL && "grid-flow-row-dense")}>
-                  <TabsTrigger value="artworks">{t("artist.tabs.artworks")}</TabsTrigger>
-                  <TabsTrigger value="about">{t("artist.tabs.about")}</TabsTrigger>
-                </TabsList>
-
-                {/* Artworks Tab */}
-                <TabsContent value="artworks" className="mt-6">
-                  {artworks.length > 0 ? (
-                    <>
-                      <div className={cn("mb-6 text-sm text-gray-600", isRTL && "text-right")}>
-                        {t("artist.artworksCount", { count: artworks.length })}
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        {artworks.map((artwork: any) => (
-                          <ArtworkCard key={artwork.id} artwork={artwork} />
-                        ))}
-                      </div>
-                    </>
-                  ) : (
-                    <div className="text-center py-12">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        {t("artist.noArtworks.title")}
-                      </h3>
-                      <p className="text-gray-600">
-                        {t("artist.noArtworks.description")}
-                      </p>
-                    </div>
-                  )}
-                </TabsContent>
-
-                {/* About Tab */}
-                <TabsContent value="about" className="mt-6">
-                  <div className={cn("space-y-6", isRTL && "text-right")}>
-                    <div>
-                      <h2 className="text-2xl font-bold text-primary mb-4">
-                        {t("artist.about.title")}
-                      </h2>
-                      {biography ? (
-                        <div className="prose max-w-none text-gray-600">
-                          <p className="leading-relaxed">{biography}</p>
-                        </div>
-                      ) : (
-                        <p className="text-gray-500 italic">
-                          {t("artist.about.noBiography")}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Artist Details */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-primary mb-4">
-                        {t("artist.about.details")}
-                      </h3>
-                      <div className="space-y-3">
-                        {artist.nationality && (
-                          <div className="flex items-center gap-3">
-                            <MapPin className="h-4 w-4 text-gray-400" />
-                            <span className="text-gray-600">
-                              <strong>{t("artist.about.nationality")}:</strong> {artist.nationality}
-                            </span>
-                          </div>
-                        )}
-                        {artist.birthYear && (
-                          <div className="flex items-center gap-3">
-                            <Calendar className="h-4 w-4 text-gray-400" />
-                            <span className="text-gray-600">
-                              <strong>{t("artist.about.birthYear")}:</strong> {artist.birthYear}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Links */}
-                    {(artist.website || artist.instagram) && (
-                      <div>
-                        <h3 className="text-lg font-semibold text-primary mb-4">
-                          {t("artist.about.links")}
-                        </h3>
-                        <div className="flex flex-wrap gap-4">
-                          {artist.website && (
-                            <a
-                              href={artist.website}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-2 text-accent hover:text-accent/80 transition-colors"
-                            >
-                              <Globe className="h-4 w-4" />
-                              {t("artist.about.website")}
-                              <ExternalLink className="h-3 w-3" />
-                            </a>
-                          )}
-                          {artist.instagram && (
-                            <a
-                              href={`https://instagram.com/${artist.instagram}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-2 text-accent hover:text-accent/80 transition-colors"
-                            >
-                              <Instagram className="h-4 w-4" />
-                              @{artist.instagram}
-                              <ExternalLink className="h-3 w-3" />
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </div>
-
-            {/* Sidebar */}
-            <div className="space-y-6">
-              {/* Quick Info */}
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <h3 className={cn("font-semibold text-primary mb-4", isRTL && "text-right")}>
-                  {t("artist.sidebar.quickInfo")}
-                </h3>
-                <div className="space-y-3 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">{t("artist.sidebar.artworks")}:</span>
-                    <span className="font-medium">{artworks.length}</span>
-                  </div>
+                
+                <div className="flex flex-wrap items-center gap-4 text-white/90">
                   {artist.nationality && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">{t("artist.sidebar.nationality")}:</span>
-                      <span className="font-medium">{artist.nationality}</span>
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-4 w-4" />
+                      <span>{artist.nationality}</span>
                     </div>
                   )}
                   {artist.birthYear && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">{t("artist.sidebar.age")}:</span>
-                      <span className="font-medium">{new Date().getFullYear() - artist.birthYear}</span>
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-4 w-4" />
+                      <span>
+                        b. {artist.birthYear}
+                        {artist.deathYear && ` - d. ${artist.deathYear}`}
+                      </span>
+                    </div>
+                  )}
+                  {artist.artworkCount && (
+                    <div className="flex items-center gap-1">
+                      <Palette className="h-4 w-4" />
+                      <span>{artist.artworkCount} artworks</span>
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* Contact/Follow */}
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <h3 className={cn("font-semibold text-primary mb-4", isRTL && "text-right")}>
-                  {t("artist.sidebar.follow")}
-                </h3>
-                <div className="space-y-3">
-                  {artist.website && (
-                    <a
-                      href={artist.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                      <Globe className="h-4 w-4" />
-                      {t("artist.sidebar.website")}
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
-                  )}
-                  {artist.instagram && (
-                    <a
-                      href={`https://instagram.com/${artist.instagram}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                      <Instagram className="h-4 w-4" />
-                      Instagram
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
-                  )}
-                </div>
+              <div className="flex gap-2">
+                {isAuthenticated && (
+                  <Button
+                    variant={isFollowing?.isFollowing ? "secondary" : "default"}
+                    onClick={() => followMutation.mutate()}
+                    disabled={followMutation.isPending}
+                    className={isFollowing?.isFollowing 
+                      ? "bg-white/20 text-white hover:bg-white/30" 
+                      : "bg-brand-purple text-white hover:bg-brand-purple/90"
+                    }
+                  >
+                    <Users className="h-4 w-4 mr-2" />
+                    {isFollowing?.isFollowing ? "Following" : "Follow"}
+                  </Button>
+                )}
+                
+                <Button
+                  variant="secondary"
+                  onClick={handleShare}
+                  className="bg-white/20 text-white hover:bg-white/30"
+                >
+                  <Share2 className="h-4 w-4 mr-2" />
+                  Share
+                </Button>
               </div>
             </div>
           </div>
         </div>
-      </main>
-      <Footer />
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Artist Info Sidebar */}
+          <div className="space-y-6">
+            {/* Biography */}
+            {biography && (
+              <Card className="card-elevated">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold text-brand-charcoal mb-4">
+                    About the Artist
+                  </h3>
+                  <ScrollArea className="h-40">
+                    <p className="text-muted-foreground leading-relaxed text-sm">
+                      {biography}
+                    </p>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Artist Stats */}
+            <Card className="card-elevated">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-brand-charcoal mb-4">
+                  Statistics
+                </h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Total Artworks</span>
+                    <span className="font-semibold">{artworks?.length || 0}</span>
+                  </div>
+                  
+                  {artist.totalSales && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Total Sales</span>
+                      <span className="font-semibold text-brand-gold">
+                        {currencyDisplay} {artist.totalSales.toLocaleString()}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {artist.averagePrice && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Average Price</span>
+                      <span className="font-semibold">
+                        {currencyDisplay} {artist.averagePrice.toLocaleString()}
+                      </span>
+                    </div>
+                  )}
+
+                  {artworkCategories && Object.keys(artworkCategories).length > 0 && (
+                    <>
+                      <Separator />
+                      <div>
+                        <span className="text-sm text-muted-foreground mb-2 block">Categories</span>
+                        <div className="flex flex-wrap gap-1">
+                          {Object.entries(artworkCategories).map(([category, count]) => (
+                            <Badge key={category} variant="outline" className="text-xs">
+                              {category} ({count})
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Contact & Social */}
+            <Card className="card-elevated">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-brand-charcoal mb-4">
+                  Contact & Social
+                </h3>
+                <div className="space-y-3">
+                  {artist.website && (
+                    <a 
+                      href={artist.website} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-brand-purple hover:underline text-sm"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      Website
+                    </a>
+                  )}
+                  
+                  {artist.instagram && (
+                    <a 
+                      href={`https://instagram.com/${artist.instagram}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-brand-purple hover:underline text-sm"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      Instagram
+                    </a>
+                  )}
+
+                  {artist.email && (
+                    <a 
+                      href={`mailto:${artist.email}`}
+                      className="flex items-center gap-2 text-brand-purple hover:underline text-sm"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      Email
+                    </a>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Additional Info */}
+            {(artist.education || artist.awards || artist.style || artist.medium) && (
+              <Card className="card-elevated">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold text-brand-charcoal mb-4">
+                    Additional Information
+                  </h3>
+                  <div className="space-y-3">
+                    {artist.style && (
+                      <div>
+                        <span className="text-sm font-medium">Style:</span>
+                        <p className="text-sm text-muted-foreground">{artist.style}</p>
+                      </div>
+                    )}
+                    
+                    {artist.medium && (
+                      <div>
+                        <span className="text-sm font-medium">Primary Medium:</span>
+                        <p className="text-sm text-muted-foreground">{artist.medium}</p>
+                      </div>
+                    )}
+                    
+                    {artist.education && (
+                      <div>
+                        <span className="text-sm font-medium">Education:</span>
+                        <p className="text-sm text-muted-foreground">{artist.education}</p>
+                      </div>
+                    )}
+                    
+                    {artist.awards && (
+                      <div>
+                        <span className="text-sm font-medium">Awards:</span>
+                        <p className="text-sm text-muted-foreground">{artist.awards}</p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
+          {/* Main Content */}
+          <div className="lg:col-span-2">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="artworks" className="flex items-center gap-2">
+                  <Palette className="h-4 w-4" />
+                  Artworks ({artworks?.length || 0})
+                </TabsTrigger>
+                <TabsTrigger value="exhibitions" className="flex items-center gap-2">
+                  <Eye className="h-4 w-4" />
+                  Exhibitions
+                </TabsTrigger>
+              </TabsList>
+
+              {/* Artworks Tab */}
+              <TabsContent value="artworks" className="space-y-6">
+                {artworksLoading ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[...Array(6)].map((_, i) => (
+                      <Card key={i} className="animate-pulse">
+                        <div className="h-48 bg-muted rounded-t-lg"></div>
+                        <CardContent className="p-4 space-y-2">
+                          <div className="h-4 bg-muted rounded w-3/4"></div>
+                          <div className="h-3 bg-muted rounded w-1/2"></div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                ) : artworks && artworks.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {artworks.map((artwork) => (
+                      <ArtworkCard key={artwork.id} artwork={artwork} />
+                    ))}
+                  </div>
+                ) : (
+                  <Card className="card-elevated">
+                    <CardContent className="p-12 text-center">
+                      <Palette className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-brand-charcoal mb-2">
+                        No artworks available
+                      </h3>
+                      <p className="text-muted-foreground">
+                        This artist hasn't uploaded any artworks yet
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+
+              {/* Exhibitions Tab */}
+              <TabsContent value="exhibitions" className="space-y-6">
+                {exhibitions && exhibitions.length > 0 ? (
+                  <div className="space-y-4">
+                    <div className="grid gap-2">
+                      <h3 className="text-lg font-semibold text-brand-charcoal">
+                        Solo Exhibitions
+                      </h3>
+                      {exhibitions
+                        .filter(ex => ex.type === 'solo')
+                        .map((exhibition) => {
+                          const title = isRTL && exhibition.titleAr ? exhibition.titleAr : exhibition.title;
+                          const venue = isRTL && exhibition.venueAr ? exhibition.venueAr : exhibition.venue;
+                          const location = isRTL && exhibition.locationAr ? exhibition.locationAr : exhibition.location;
+                          
+                          return (
+                            <Card key={exhibition.id} className="card-elevated">
+                              <CardContent className="p-4">
+                                <div className="flex items-start justify-between">
+                                  <div>
+                                    <h4 className="font-semibold text-brand-charcoal">{title}</h4>
+                                    <p className="text-sm text-muted-foreground">{venue}</p>
+                                    <p className="text-xs text-muted-foreground">{location}</p>
+                                  </div>
+                                  <Badge variant="outline">{exhibition.year}</Badge>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          );
+                        })}
+                    </div>
+
+                    <Separator />
+
+                    <div className="grid gap-2">
+                      <h3 className="text-lg font-semibold text-brand-charcoal">
+                        Group Exhibitions
+                      </h3>
+                      {exhibitions
+                        .filter(ex => ex.type === 'group')
+                        .map((exhibition) => {
+                          const title = isRTL && exhibition.titleAr ? exhibition.titleAr : exhibition.title;
+                          const venue = isRTL && exhibition.venueAr ? exhibition.venueAr : exhibition.venue;
+                          const location = isRTL && exhibition.locationAr ? exhibition.locationAr : exhibition.location;
+                          
+                          return (
+                            <Card key={exhibition.id} className="card-elevated">
+                              <CardContent className="p-4">
+                                <div className="flex items-start justify-between">
+                                  <div>
+                                    <h4 className="font-semibold text-brand-charcoal">{title}</h4>
+                                    <p className="text-sm text-muted-foreground">{venue}</p>
+                                    <p className="text-xs text-muted-foreground">{location}</p>
+                                  </div>
+                                  <Badge variant="secondary">{exhibition.year}</Badge>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          );
+                        })}
+                    </div>
+                  </div>
+                ) : (
+                  <Card className="card-elevated">
+                    <CardContent className="p-12 text-center">
+                      <Eye className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-brand-charcoal mb-2">
+                        No exhibitions listed
+                      </h3>
+                      <p className="text-muted-foreground">
+                        Exhibition history will be displayed here when available
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

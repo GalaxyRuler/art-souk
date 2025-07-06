@@ -1,368 +1,362 @@
 import { useState } from "react";
-import { useParams } from "wouter";
+import { useParams, Link } from "wouter";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { ArtworkCard } from "@/components/ArtworkCard";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Heart, Share2, Eye, MapPin, Calendar, Palette, Ruler, ArrowLeft, ExternalLink } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
 import { apiRequest } from "@/lib/queryClient";
-import { cn } from "@/lib/utils";
-import { Heart, Share2, ZoomIn, Ruler, Calendar, MapPin, Mail, Phone, Eye } from "lucide-react";
+import { ArtworkCard } from "@/components/ArtworkCard";
+
+interface ArtworkDetail {
+  id: number;
+  title: string;
+  titleAr?: string;
+  description?: string;
+  descriptionAr?: string;
+  images: string[];
+  artist?: {
+    id: number;
+    name: string;
+    nameAr?: string;
+    biography?: string;
+    biographyAr?: string;
+    nationality?: string;
+    birthYear?: number;
+    profileImage?: string;
+  };
+  gallery?: {
+    id: number;
+    name: string;
+    nameAr?: string;
+    location?: string;
+    locationAr?: string;
+    website?: string;
+    phone?: string;
+    email?: string;
+  };
+  year?: number;
+  medium?: string;
+  mediumAr?: string;
+  dimensions?: string;
+  price?: string;
+  currency?: string;
+  category?: string;
+  categoryAr?: string;
+  style?: string;
+  styleAr?: string;
+  availability?: string;
+  paymentLink?: string;
+  featured?: boolean;
+}
+
+interface SimilarArtwork {
+  id: number;
+  title: string;
+  titleAr?: string;
+  images: string[];
+  artist?: {
+    name: string;
+    nameAr?: string;
+  };
+  price?: string;
+  currency?: string;
+  availability?: string;
+}
 
 export default function ArtworkDetail() {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   const [inquiryForm, setInquiryForm] = useState({
-    message: "",
-    contactEmail: "",
-    contactPhone: "",
+    name: "",
+    email: "",
+    phone: "",
+    message: ""
   });
 
-  const { data: artwork, isLoading, error } = useQuery({
+  const { data: artwork, isLoading } = useQuery<ArtworkDetail>({
     queryKey: [`/api/artworks/${id}`],
-    enabled: !!id,
   });
 
-  const { data: relatedArtworks = [] } = useQuery({
-    queryKey: [`/api/artists/${artwork?.artistId}/artworks`],
-    enabled: !!artwork?.artistId,
+  const { data: similarArtworks } = useQuery<SimilarArtwork[]>({
+    queryKey: [`/api/artworks/${id}/similar`],
+    enabled: !!artwork,
   });
 
-  const { data: isFavorite = false } = useQuery({
+  const { data: isFavorite } = useQuery<{ isFavorite: boolean }>({
     queryKey: [`/api/favorites/${id}/check`],
     enabled: isAuthenticated && !!id,
   });
 
   const favoriteMutation = useMutation({
     mutationFn: async () => {
-      if (isFavorite) {
-        await apiRequest("DELETE", `/api/favorites/${id}`);
+      if (isFavorite?.isFavorite) {
+        await apiRequest(`/api/favorites/${id}`, { method: 'DELETE' });
       } else {
-        await apiRequest("POST", "/api/favorites", { artworkId: parseInt(id!) });
+        await apiRequest('/api/favorites', {
+          method: 'POST',
+          body: { artworkId: parseInt(id!) },
+        });
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/favorites/${id}/check`] });
-      queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
       toast({
-        title: isFavorite ? t("artwork.favoriteRemoved") : t("artwork.favoriteAdded"),
-        description: isFavorite ? 
-          t("artwork.favoriteRemovedDescription") : 
-          t("artwork.favoriteAddedDescription"),
-      });
-    },
-    onError: (error) => {
-      if (isUnauthorizedError(error as Error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
-      toast({
-        title: t("errors.generic"),
-        description: t("errors.tryAgainLater"),
-        variant: "destructive",
+        title: isFavorite?.isFavorite ? "Removed from favorites" : "Added to favorites",
+        description: isFavorite?.isFavorite ? "Artwork removed from your collection" : "Artwork saved to your collection",
       });
     },
   });
 
   const inquiryMutation = useMutation({
     mutationFn: async (data: typeof inquiryForm) => {
-      return await apiRequest("POST", "/api/inquiries", {
-        artworkId: parseInt(id!),
-        ...data,
+      await apiRequest('/api/inquiries', {
+        method: 'POST',
+        body: {
+          artworkId: parseInt(id!),
+          ...data,
+        },
       });
     },
     onSuccess: () => {
-      toast({
-        title: t("artwork.inquirySent"),
-        description: t("artwork.inquirySentDescription"),
-      });
       setIsInquiryOpen(false);
-      setInquiryForm({ message: "", contactEmail: "", contactPhone: "" });
-    },
-    onError: (error) => {
+      setInquiryForm({ name: "", email: "", phone: "", message: "" });
       toast({
-        title: t("errors.generic"),
-        description: t("errors.tryAgainLater"),
-        variant: "destructive",
+        title: "Inquiry sent successfully",
+        description: "We'll contact you soon with more information.",
       });
     },
   });
 
-  const handleFavorite = () => {
-    if (!isAuthenticated) {
-      window.location.href = "/api/login";
-      return;
-    }
-    favoriteMutation.mutate();
-  };
-
-  const handleInquiry = () => {
-    if (!isAuthenticated) {
-      window.location.href = "/api/login";
-      return;
-    }
-    
-    const formData = {
-      ...inquiryForm,
-      contactEmail: inquiryForm.contactEmail || user?.email || "",
-    };
-    
-    inquiryMutation.mutate(formData);
-  };
-
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: artwork?.title,
-          text: t("artwork.shareText", { title: artwork?.title }),
-          url: window.location.href,
-        });
-      } catch (error) {
-        // User cancelled or error occurred
-      }
-    } else {
-      // Fallback to copying URL
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: t("artwork.linkCopied"),
-        description: t("artwork.linkCopiedDescription"),
-      });
-    }
-  };
-
-  if (error) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <main className="py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-2xl font-bold text-red-600 mb-4">
-              {t("errors.artworkNotFound")}
-            </h1>
-            <p className="text-gray-600 mb-8">
-              {t("errors.artworkNotFoundDescription")}
-            </p>
-            <Button onClick={() => window.history.back()}>
-              {t("common.goBack")}
-            </Button>
+      <div className="min-h-screen bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="animate-pulse">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div className="space-y-4">
+                <div className="h-96 bg-muted rounded-2xl"></div>
+                <div className="flex gap-2">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="h-20 w-20 bg-muted rounded-lg"></div>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-6">
+                <div className="h-8 bg-muted rounded w-3/4"></div>
+                <div className="h-6 bg-muted rounded w-1/2"></div>
+                <div className="h-32 bg-muted rounded"></div>
+              </div>
+            </div>
           </div>
-        </main>
-        <Footer />
+        </div>
       </div>
     );
   }
 
-  if (isLoading || !artwork) {
+  if (!artwork) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <main className="py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="animate-pulse">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div className="h-96 bg-gray-200 rounded-lg"></div>
-                <div className="space-y-6">
-                  <div className="h-8 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-6 bg-gray-200 rounded w-1/2"></div>
-                  <div className="h-4 bg-gray-200 rounded"></div>
-                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </main>
-        <Footer />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-4">Artwork not found</h1>
+          <Link href="/">
+            <Button>Return to Home</Button>
+          </Link>
+        </div>
       </div>
     );
   }
 
   const title = isRTL && artwork.titleAr ? artwork.titleAr : artwork.title;
   const description = isRTL && artwork.descriptionAr ? artwork.descriptionAr : artwork.description;
+  const artistName = isRTL && artwork.artist?.nameAr ? artwork.artist.nameAr : artwork.artist?.name;
+  const artistBio = isRTL && artwork.artist?.biographyAr ? artwork.artist.biographyAr : artwork.artist?.biography;
+  const galleryName = isRTL && artwork.gallery?.nameAr ? artwork.gallery.nameAr : artwork.gallery?.name;
+  const galleryLocation = isRTL && artwork.gallery?.locationAr ? artwork.gallery.locationAr : artwork.gallery?.location;
   const medium = isRTL && artwork.mediumAr ? artwork.mediumAr : artwork.medium;
   const category = isRTL && artwork.categoryAr ? artwork.categoryAr : artwork.category;
+  const style = isRTL && artwork.styleAr ? artwork.styleAr : artwork.style;
+  const currencyDisplay = isRTL ? "ر.س" : "SAR";
 
-  const images = artwork.images && artwork.images.length > 0 ? artwork.images : 
-    ["https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"];
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: title,
+          text: `${title} by ${artistName}`,
+          url: window.location.href,
+        });
+      } catch (error) {
+        console.log('Share failed:', error);
+      }
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied",
+        description: "Artwork link copied to clipboard",
+      });
+    }
+  };
 
-  const relatedArtworksFiltered = relatedArtworks.filter((item: any) => item.id !== artwork.id);
+  const handleInquiry = (e: React.FormEvent) => {
+    e.preventDefault();
+    inquiryMutation.mutate(inquiryForm);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <main className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Main Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            {/* Image Gallery */}
-            <div className="space-y-4">
-              <div className="relative group">
-                <img
-                  src={images[selectedImageIndex]}
-                  alt={title}
-                  className="w-full h-96 object-cover rounded-lg"
-                />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute top-4 right-4 bg-white/80 hover:bg-white"
-                >
-                  <ZoomIn className="h-4 w-4" />
-                </Button>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back Button */}
+        <Link href="/">
+          <Button variant="ghost" className="mb-6 hover:bg-brand-light-gold">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            {t("common.back")}
+          </Button>
+        </Link>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Image Gallery */}
+          <div className="space-y-4">
+            <div className="relative group">
+              <img
+                src={artwork.images[selectedImageIndex] || artwork.images[0]}
+                alt={title}
+                className="w-full h-96 md:h-[500px] lg:h-[600px] object-cover rounded-2xl shadow-brand"
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors rounded-2xl"></div>
+            </div>
+            
+            {artwork.images.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {artwork.images.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImageIndex(index)}
+                    className={cn(
+                      "flex-shrink-0 h-20 w-20 rounded-lg overflow-hidden border-2 transition-all",
+                      selectedImageIndex === index 
+                        ? "border-brand-purple shadow-lg" 
+                        : "border-transparent hover:border-brand-gold"
+                    )}
+                  >
+                    <img
+                      src={image}
+                      alt={`${title} ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
               </div>
+            )}
+          </div>
+
+          {/* Artwork Details */}
+          <div className="space-y-8">
+            {/* Header */}
+            <div className="space-y-4">
+              {category && (
+                <Badge 
+                  variant="outline" 
+                  className="border-brand-purple/30 text-brand-purple bg-brand-purple/5"
+                >
+                  {category}
+                </Badge>
+              )}
               
-              {images.length > 1 && (
-                <div className="grid grid-cols-4 gap-2">
-                  {images.map((image: string, index: number) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedImageIndex(index)}
-                      className={cn(
-                        "relative h-20 rounded overflow-hidden border-2 transition-colors",
-                        selectedImageIndex === index ? "border-primary" : "border-transparent"
-                      )}
-                    >
-                      <img
-                        src={image}
-                        alt={`${title} ${index + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-                  ))}
+              <h1 className="text-4xl font-bold text-brand-charcoal leading-tight">
+                {title}
+              </h1>
+              
+              {artwork.artist && (
+                <div>
+                  <Link href={`/artists/${artwork.artist.id}`}>
+                    <p className="text-xl text-brand-purple font-semibold hover:underline">
+                      {artistName}
+                    </p>
+                  </Link>
+                  {artwork.artist.nationality && artwork.year && (
+                    <p className="text-muted-foreground">
+                      {artwork.artist.nationality} • {artwork.year}
+                    </p>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Artwork Details */}
-            <div className={cn("space-y-6", isRTL && "text-right")}>
-              {/* Category */}
-              {category && (
-                <Badge variant="outline" className="text-sm">
-                  {category}
-                </Badge>
-              )}
-
-              {/* Title */}
-              <h1 className="text-3xl md:text-4xl font-bold text-primary">
-                {title}
-              </h1>
-
-              {/* Artist */}
-              {artwork.artist && (
-                <div>
-                  <p className="text-lg text-gray-600 mb-2">
-                    <span className="font-medium">{t("artwork.artist")}:</span>{" "}
-                    {isRTL && artwork.artist.nameAr ? artwork.artist.nameAr : artwork.artist.name}
-                  </p>
-                  {artwork.year && (
-                    <p className="text-gray-600">{artwork.year}</p>
-                  )}
-                </div>
-              )}
-
-              {/* Description */}
-              {description && (
-                <div>
-                  <h3 className="font-semibold text-primary mb-2">{t("artwork.description")}</h3>
-                  <p className="text-gray-600 leading-relaxed">{description}</p>
-                </div>
-              )}
-
-              {/* Details */}
-              <div className="space-y-3">
-                <h3 className="font-semibold text-primary">{t("artwork.details")}</h3>
-                
-                {medium && (
-                  <div className="flex items-center gap-2">
-                    <Eye className="h-4 w-4 text-gray-400" />
-                    <span className="text-gray-600">{medium}</span>
-                  </div>
-                )}
-                
-                {artwork.dimensions && (
-                  <div className="flex items-center gap-2">
-                    <Ruler className="h-4 w-4 text-gray-400" />
-                    <span className="text-gray-600">{artwork.dimensions}</span>
-                  </div>
-                )}
-                
-                {artwork.year && (
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-gray-400" />
-                    <span className="text-gray-600">{artwork.year}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Gallery */}
-              {artwork.gallery && (
-                <div>
-                  <h3 className="font-semibold text-primary mb-2">{t("artwork.gallery")}</h3>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-gray-400" />
-                    <span className="text-gray-600">
-                      {isRTL && artwork.gallery.nameAr ? artwork.gallery.nameAr : artwork.gallery.name}
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {/* Price */}
+            {/* Price and Actions */}
+            <div className="space-y-4">
               {artwork.price && (
-                <div className="bg-gray-100 p-4 rounded-lg">
-                  <h3 className="font-semibold text-primary mb-2">{t("artwork.price")}</h3>
-                  <p className="text-2xl font-bold text-primary">
-                    {artwork.currency} {artwork.price}
-                  </p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-3xl font-bold text-brand-gold">
+                      {currencyDisplay} {artwork.price}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {t(`artwork.status.${artwork.availability}`)}
+                    </p>
+                  </div>
+                  
+                  <div className="flex gap-2">
+                    {isAuthenticated && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => favoriteMutation.mutate()}
+                        disabled={favoriteMutation.isPending}
+                        className="hover:bg-brand-light-gold"
+                      >
+                        <Heart className={cn(
+                          "h-4 w-4 mr-2",
+                          isFavorite?.isFavorite ? "fill-brand-purple text-brand-purple" : ""
+                        )} />
+                        {isFavorite?.isFavorite ? t("artwork.favorited") : t("artwork.favorite")}
+                      </Button>
+                    )}
+                    
+                    <Button variant="outline" size="sm" onClick={handleShare} className="hover:bg-brand-light-gold">
+                      <Share2 className="h-4 w-4 mr-2" />
+                      {t("artwork.share")}
+                    </Button>
+                  </div>
                 </div>
               )}
-
-              {/* Actions */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              
+              <div className="flex gap-3">
                 <Dialog open={isInquiryOpen} onOpenChange={setIsInquiryOpen}>
                   <DialogTrigger asChild>
-                    <Button size="lg" className="flex-1">
-                      <Mail className="h-4 w-4 mr-2" />
+                    <Button className="bg-brand-gradient hover:opacity-90 flex-1">
+                      <Eye className="h-4 w-4 mr-2" />
                       {t("artwork.inquire")}
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-md">
+                  <DialogContent className="max-w-md">
                     <DialogHeader>
                       <DialogTitle>{t("artwork.inquiryTitle")}</DialogTitle>
                     </DialogHeader>
-                    <div className="space-y-4">
+                    <form onSubmit={handleInquiry} className="space-y-4">
                       <div>
-                        <Label htmlFor="message">{t("artwork.inquiryMessage")}</Label>
-                        <Textarea
-                          id="message"
-                          placeholder={t("artwork.inquiryMessagePlaceholder")}
-                          value={inquiryForm.message}
-                          onChange={(e) => setInquiryForm(prev => ({ ...prev, message: e.target.value }))}
-                          rows={4}
+                        <Label htmlFor="name">Name</Label>
+                        <Input
+                          id="name"
+                          value={inquiryForm.name}
+                          onChange={(e) => setInquiryForm(prev => ({ ...prev, name: e.target.value }))}
+                          required
                         />
                       </div>
                       <div>
@@ -370,72 +364,211 @@ export default function ArtworkDetail() {
                         <Input
                           id="email"
                           type="email"
-                          placeholder={t("artwork.inquiryEmailPlaceholder")}
-                          value={inquiryForm.contactEmail}
-                          onChange={(e) => setInquiryForm(prev => ({ ...prev, contactEmail: e.target.value }))}
+                          value={inquiryForm.email}
+                          onChange={(e) => setInquiryForm(prev => ({ ...prev, email: e.target.value }))}
+                          required
                         />
                       </div>
                       <div>
                         <Label htmlFor="phone">{t("artwork.inquiryPhone")}</Label>
                         <Input
                           id="phone"
-                          type="tel"
-                          placeholder={t("artwork.inquiryPhonePlaceholder")}
-                          value={inquiryForm.contactPhone}
-                          onChange={(e) => setInquiryForm(prev => ({ ...prev, contactPhone: e.target.value }))}
+                          value={inquiryForm.phone}
+                          onChange={(e) => setInquiryForm(prev => ({ ...prev, phone: e.target.value }))}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="message">{t("artwork.inquiryMessage")}</Label>
+                        <Textarea
+                          id="message"
+                          value={inquiryForm.message}
+                          onChange={(e) => setInquiryForm(prev => ({ ...prev, message: e.target.value }))}
+                          placeholder={t("artwork.inquiryMessagePlaceholder")}
+                          required
                         />
                       </div>
                       <Button 
-                        onClick={handleInquiry} 
-                        disabled={inquiryMutation.isPending || !inquiryForm.message}
-                        className="w-full"
+                        type="submit" 
+                        className="w-full bg-brand-gradient"
+                        disabled={inquiryMutation.isPending}
                       >
-                        {inquiryMutation.isPending ? t("common.sending") : t("artwork.sendInquiry")}
+                        {inquiryMutation.isPending ? "Sending..." : t("artwork.sendInquiry")}
                       </Button>
-                    </div>
+                    </form>
                   </DialogContent>
                 </Dialog>
-
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={handleFavorite}
-                  disabled={favoriteMutation.isPending}
-                  className="flex items-center gap-2"
-                >
-                  <Heart className={cn("h-4 w-4", isFavorite && "fill-red-500 text-red-500")} />
-                  {isFavorite ? t("artwork.favorited") : t("artwork.favorite")}
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={handleShare}
-                  className="flex items-center gap-2"
-                >
-                  <Share2 className="h-4 w-4" />
-                  {t("artwork.share")}
-                </Button>
+                
+                {artwork.paymentLink && (
+                  <Button 
+                    variant="outline" 
+                    className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-white"
+                    onClick={() => window.open(artwork.paymentLink, '_blank')}
+                  >
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    Purchase
+                  </Button>
+                )}
               </div>
             </div>
-          </div>
 
-          {/* Related Artworks */}
-          {relatedArtworksFiltered.length > 0 && (
-            <section>
-              <h2 className={cn("text-2xl font-bold text-primary mb-8", isRTL && "text-right")}>
-                {t("artwork.moreFromArtist")}
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {relatedArtworksFiltered.slice(0, 4).map((relatedArtwork: any) => (
-                  <ArtworkCard key={relatedArtwork.id} artwork={relatedArtwork} />
-                ))}
+            <Separator />
+
+            {/* Description */}
+            {description && (
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold text-brand-charcoal">
+                  {t("artwork.description")}
+                </h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  {description}
+                </p>
               </div>
-            </section>
-          )}
+            )}
+
+            {/* Details */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-brand-charcoal">
+                {t("artwork.details")}
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {medium && (
+                  <div className="flex items-center gap-3">
+                    <Palette className="h-5 w-5 text-brand-purple" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">Medium</p>
+                      <p className="font-medium">{medium}</p>
+                    </div>
+                  </div>
+                )}
+                
+                {artwork.dimensions && (
+                  <div className="flex items-center gap-3">
+                    <Ruler className="h-5 w-5 text-brand-purple" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">Dimensions</p>
+                      <p className="font-medium">{artwork.dimensions}</p>
+                    </div>
+                  </div>
+                )}
+                
+                {artwork.year && (
+                  <div className="flex items-center gap-3">
+                    <Calendar className="h-5 w-5 text-brand-purple" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">Year</p>
+                      <p className="font-medium">{artwork.year}</p>
+                    </div>
+                  </div>
+                )}
+                
+                {style && (
+                  <div className="flex items-center gap-3">
+                    <div className="h-5 w-5 bg-brand-purple rounded-full" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">Style</p>
+                      <p className="font-medium">{style}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Artist Info */}
+            {artwork.artist && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-brand-charcoal">
+                  {t("artwork.artist")}
+                </h3>
+                
+                <div className="flex items-start gap-4">
+                  {artwork.artist.profileImage && (
+                    <img
+                      src={artwork.artist.profileImage}
+                      alt={artistName}
+                      className="w-16 h-16 rounded-full object-cover"
+                    />
+                  )}
+                  <div className="flex-1">
+                    <Link href={`/artists/${artwork.artist.id}`}>
+                      <h4 className="font-semibold text-brand-purple hover:underline">
+                        {artistName}
+                      </h4>
+                    </Link>
+                    {artwork.artist.nationality && (
+                      <p className="text-sm text-muted-foreground">
+                        {artwork.artist.nationality}
+                        {artwork.artist.birthYear && ` • Born ${artwork.artist.birthYear}`}
+                      </p>
+                    )}
+                    {artistBio && (
+                      <p className="text-sm text-muted-foreground mt-2 line-clamp-3">
+                        {artistBio}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Gallery Info */}
+            {artwork.gallery && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-brand-charcoal">
+                  {t("artwork.gallery")}
+                </h3>
+                
+                <div className="space-y-2">
+                  <Link href={`/galleries/${artwork.gallery.id}`}>
+                    <h4 className="font-semibold text-brand-purple hover:underline">
+                      {galleryName}
+                    </h4>
+                  </Link>
+                  {galleryLocation && (
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-brand-purple" />
+                      <p className="text-sm text-muted-foreground">{galleryLocation}</p>
+                    </div>
+                  )}
+                  <div className="flex gap-4 text-sm">
+                    {artwork.gallery.website && (
+                      <a 
+                        href={artwork.gallery.website} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-brand-purple hover:underline"
+                      >
+                        Website
+                      </a>
+                    )}
+                    {artwork.gallery.phone && (
+                      <a href={`tel:${artwork.gallery.phone}`} className="text-brand-purple hover:underline">
+                        {artwork.gallery.phone}
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </main>
-      <Footer />
+
+        {/* Similar Artworks */}
+        {similarArtworks && similarArtworks.length > 0 && (
+          <div className="mt-16">
+            <h2 className="text-3xl font-bold text-brand-charcoal mb-8">
+              Similar Artworks
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {similarArtworks.map((similarArtwork) => (
+                <ArtworkCard key={similarArtwork.id} artwork={similarArtwork} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

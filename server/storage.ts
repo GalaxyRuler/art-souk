@@ -61,6 +61,8 @@ export interface IStorage {
   getArtworksByArtist(artistId: number, limit?: number): Promise<Artwork[]>;
   getArtworksByGallery(galleryId: number, limit?: number): Promise<Artwork[]>;
   searchArtworks(query: string, filters?: any): Promise<Artwork[]>;
+  searchArtists(query: string, filters?: any): Promise<Artist[]>;
+  searchGalleries(query: string, filters?: any): Promise<Gallery[]>;
   createArtwork(artwork: InsertArtwork): Promise<Artwork>;
   updateArtwork(id: number, artwork: Partial<InsertArtwork>): Promise<Artwork>;
   
@@ -255,10 +257,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async searchArtworks(query: string, filters?: any): Promise<Artwork[]> {
-    const baseQuery = db.select().from(artworks);
+    let queryBuilder = db.select().from(artworks);
     
     if (query) {
-      const results = await baseQuery.where(
+      queryBuilder = queryBuilder.where(
         or(
           ilike(artworks.title, `%${query}%`),
           ilike(artworks.titleAr, `%${query}%`),
@@ -266,11 +268,80 @@ export class DatabaseStorage implements IStorage {
           ilike(artworks.medium, `%${query}%`),
           ilike(artworks.category, `%${query}%`)
         )
-      ).orderBy(desc(artworks.createdAt)).limit(50);
-      return results;
+      );
     }
+
+    if (filters?.category) {
+      queryBuilder = queryBuilder.where(eq(artworks.category, filters.category));
+    }
+
+    if (filters?.medium) {
+      queryBuilder = queryBuilder.where(eq(artworks.medium, filters.medium));
+    }
+
+    if (filters?.artistId) {
+      queryBuilder = queryBuilder.where(eq(artworks.artistId, filters.artistId));
+    }
+
+    if (filters?.excludeId) {
+      queryBuilder = queryBuilder.where(ne(artworks.id, filters.excludeId));
+    }
+
+    const results = await queryBuilder
+      .orderBy(desc(artworks.createdAt))
+      .limit(filters?.limit || 50);
     
-    return await baseQuery.orderBy(desc(artworks.createdAt)).limit(50);
+    return results;
+  }
+
+  async searchArtists(query: string, filters?: any): Promise<Artist[]> {
+    let queryBuilder = db.select().from(artists);
+    
+    if (query) {
+      queryBuilder = queryBuilder.where(
+        or(
+          ilike(artists.name, `%${query}%`),
+          ilike(artists.nameAr, `%${query}%`),
+          ilike(artists.biography, `%${query}%`),
+          ilike(artists.biographyAr, `%${query}%`)
+        )
+      );
+    }
+
+    if (filters?.nationality) {
+      queryBuilder = queryBuilder.where(eq(artists.nationality, filters.nationality));
+    }
+
+    const results = await queryBuilder
+      .orderBy(desc(artists.createdAt))
+      .limit(filters?.limit || 20);
+    
+    return results;
+  }
+
+  async searchGalleries(query: string, filters?: any): Promise<Gallery[]> {
+    let queryBuilder = db.select().from(galleries);
+    
+    if (query) {
+      queryBuilder = queryBuilder.where(
+        or(
+          ilike(galleries.name, `%${query}%`),
+          ilike(galleries.nameAr, `%${query}%`),
+          ilike(galleries.description, `%${query}%`),
+          ilike(galleries.descriptionAr, `%${query}%`)
+        )
+      );
+    }
+
+    if (filters?.location) {
+      queryBuilder = queryBuilder.where(eq(galleries.location, filters.location));
+    }
+
+    const results = await queryBuilder
+      .orderBy(desc(galleries.createdAt))
+      .limit(filters?.limit || 20);
+    
+    return results;
   }
 
   async createArtwork(artwork: InsertArtwork): Promise<Artwork> {

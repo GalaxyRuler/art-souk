@@ -15,6 +15,11 @@ import Auctions from "@/pages/Auctions";
 import Editorial from "@/pages/Editorial";
 import ArtworkDetail from "@/pages/ArtworkDetail";
 import ArtistProfile from "@/pages/ArtistProfile";
+import Search from "@/pages/Search";
+import Dashboard from "@/pages/Dashboard";
+import GalleryProfile from "@/pages/GalleryProfile";
+import AuctionDetail from "@/pages/AuctionDetail";
+import ArticleDetail from "@/pages/ArticleDetail";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -29,14 +34,23 @@ function Router() {
           <Route path="/artists" component={Artists} />
           <Route path="/artists/:id" component={ArtistProfile} />
           <Route path="/galleries" component={Galleries} />
+          <Route path="/galleries/:id" component={GalleryProfile} />
           <Route path="/auctions" component={Auctions} />
+          <Route path="/auctions/:id" component={AuctionDetail} />
           <Route path="/editorial" component={Editorial} />
+          <Route path="/editorial/:id" component={ArticleDetail} />
           <Route path="/artwork/:id" component={ArtworkDetail} />
+          <Route path="/search" component={Search} />
+          <Route path="/dashboard" component={Dashboard} />
         </>
       )}
       {/* Public routes accessible to all users */}
       <Route path="/artwork/:id" component={ArtworkDetail} />
       <Route path="/artists/:id" component={ArtistProfile} />
+      <Route path="/galleries/:id" component={GalleryProfile} />
+      <Route path="/auctions/:id" component={AuctionDetail} />
+      <Route path="/editorial/:id" component={ArticleDetail} />
+      <Route path="/search" component={Search} />
       <Route component={NotFound} />
     </Switch>
   );
