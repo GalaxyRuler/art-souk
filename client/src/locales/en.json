@@ -12,7 +12,35 @@
   "auth": {
     "signin": "Sign In",
     "signup": "Sign Up",
-    "logout": "Log Out"
+    "logout": "Log Out",
+    "welcome": "Welcome to",
+    "artSouk": "Art Souk",
+    "subtitle": "Discover, collect, and connect with the vibrant Saudi and GCC contemporary art scene.",
+    "badge": "Premium Art Platform",
+    "getStarted": "Get Started",
+    "joinCommunity": "Join our community of artists, collectors, and art enthusiasts",
+    "signUpFree": "Sign Up Free",
+    "alreadyMember": "Already a member?",
+    "trustedBy": "Trusted by thousands of art lovers across the region",
+    "secureLogin": "Secure login powered by",
+    "backToHome": "Back to Home",
+    "joinBenefits": "Why join Art Souk?",
+    "features": {
+      "discover": "Discover Art",
+      "discoverDesc": "Explore thousands of contemporary works",
+      "galleries": "Top Galleries", 
+      "galleriesDesc": "Connect with leading GCC art spaces",
+      "community": "Art Community",
+      "communityDesc": "Join collectors and enthusiasts",
+      "collections": "Premium Collections",
+      "collectionsDesc": "Access curated selections"
+    },
+    "benefits": {
+      "favorites": "Save and organize your favorite artworks",
+      "inquiries": "Direct contact with artists and galleries",
+      "auctions": "Participate in exclusive live auctions",
+      "personalized": "Get personalized art recommendations"
+    }
   },
   "hero": {
     "title": "Discover Saudi & GCC",
@@ -298,7 +326,9 @@
     "retry": "Try Again",
     "goBack": "Go Back",
     "sending": "Sending...",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "siteName": "Art Souk",
+    "siteNameAr": "سوق آرت"
   },
   "errors": {
     "generic": "Something went wrong",

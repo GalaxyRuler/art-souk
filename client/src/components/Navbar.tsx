@@ -99,21 +99,23 @@ export function Navbar() {
               </>
             ) : (
               <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="hover:bg-brand-light-gold hover:text-brand-purple"
-                  onClick={() => (window.location.href = "/api/login")}
-                >
-                  {t("auth.signin")}
-                </Button>
-                <Button
-                  className="bg-brand-gradient hover:opacity-90 text-white shadow-brand font-medium"
-                  size="sm"
-                  onClick={() => (window.location.href = "/api/login")}
-                >
-                  {t("auth.signup")}
-                </Button>
+                <Link href="/auth">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="hover:bg-brand-light-gold hover:text-brand-purple"
+                  >
+                    {t("auth.signin")}
+                  </Button>
+                </Link>
+                <Link href="/auth">
+                  <Button
+                    className="bg-brand-gradient hover:opacity-90 text-white shadow-brand font-medium"
+                    size="sm"
+                  >
+                    {t("auth.signup")}
+                  </Button>
+                </Link>
               </>
             )}
 

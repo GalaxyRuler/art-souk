@@ -20,6 +20,7 @@ import Dashboard from "@/pages/Dashboard";
 import GalleryProfile from "@/pages/GalleryProfile";
 import AuctionDetail from "@/pages/AuctionDetail";
 import ArticleDetail from "@/pages/ArticleDetail";
+import Auth from "@/pages/Auth";
 import AdminSetup from "@/pages/AdminSetup";
 import AdminDashboard from "@/pages/AdminDashboard";
 import AdminTest from "@/pages/AdminTest";
@@ -59,6 +60,7 @@ function Router() {
       <Route path="/editorial/:id" component={ArticleDetail} />
       <Route path="/artwork/:id" component={ArtworkDetail} />
       <Route path="/search" component={Search} />
+      <Route path="/auth" component={Auth} />
       <Route path="/admin/setup" component={AdminSetup} />
       <Route path="/admin/test" component={AdminTest} />
       <Route path="/admin" component={AdminDashboard} />
