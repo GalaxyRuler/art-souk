@@ -41,8 +41,8 @@ export default function Workshops() {
   const handleRegisterWorkshop = async (workshopId: number) => {
     if (!isAuthenticated) {
       toast({
-        title: "Authentication Required",
-        description: "Please log in to register for workshops",
+        title: t("auth.required"),
+        description: t("workshops.loginToRegister"),
         variant: "destructive",
       });
       setTimeout(() => {
@@ -56,14 +56,14 @@ export default function Workshops() {
         method: "POST",
       });
       toast({
-        title: "Registration Successful",
-        description: "You've successfully registered for this workshop",
+        title: t("workshops.registrationSuccess"),
+        description: t("workshops.registrationSuccessDesc"),
       });
     } catch (error) {
       if (isUnauthorizedError(error)) {
         toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
+          title: t("auth.unauthorized"),
+          description: t("auth.loggingInAgain"),
           variant: "destructive",
         });
         setTimeout(() => {
@@ -72,8 +72,8 @@ export default function Workshops() {
         return;
       }
       toast({
-        title: "Registration Failed",
-        description: "Unable to register for this workshop. Please try again.",
+        title: t("workshops.registrationFailed"),
+        description: t("workshops.registrationFailedDesc"),
         variant: "destructive",
       });
     }
@@ -121,7 +121,7 @@ export default function Workshops() {
       <div className="min-h-screen bg-mesh-gradient flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent mx-auto"></div>
-          <p className="mt-6 text-xl text-gray-700 font-medium">Loading workshops...</p>
+          <p className="mt-6 text-xl text-gray-700 font-medium">{t("workshops.loading")}</p>
         </div>
       </div>
     );
@@ -158,12 +158,12 @@ export default function Workshops() {
                 <SelectValue placeholder={t("workshops.category", "Category")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                <SelectItem value="painting">Painting</SelectItem>
-                <SelectItem value="sculpture">Sculpture</SelectItem>
-                <SelectItem value="drawing">Drawing</SelectItem>
-                <SelectItem value="digital">Digital Art</SelectItem>
-                <SelectItem value="photography">Photography</SelectItem>
+                <SelectItem value="all">{t("common.allCategories")}</SelectItem>
+                <SelectItem value="painting">{t("workshops.categories.painting")}</SelectItem>
+                <SelectItem value="sculpture">{t("workshops.categories.sculpture")}</SelectItem>
+                <SelectItem value="drawing">{t("workshops.categories.drawing")}</SelectItem>
+                <SelectItem value="digital">{t("workshops.categories.digital_art")}</SelectItem>
+                <SelectItem value="photography">{t("workshops.categories.photography")}</SelectItem>
               </SelectContent>
             </Select>
             <Select value={selectedLevel} onValueChange={setSelectedLevel}>
@@ -171,10 +171,10 @@ export default function Workshops() {
                 <SelectValue placeholder={t("workshops.level", "Skill Level")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Levels</SelectItem>
-                <SelectItem value="beginner">Beginner</SelectItem>
-                <SelectItem value="intermediate">Intermediate</SelectItem>
-                <SelectItem value="advanced">Advanced</SelectItem>
+                <SelectItem value="all">{t("workshops.skillLevel.all")}</SelectItem>
+                <SelectItem value="beginner">{t("workshops.skillLevel.beginner")}</SelectItem>
+                <SelectItem value="intermediate">{t("workshops.skillLevel.intermediate")}</SelectItem>
+                <SelectItem value="advanced">{t("workshops.skillLevel.advanced")}</SelectItem>
               </SelectContent>
             </Select>
             <Button className="h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl">
@@ -198,7 +198,7 @@ export default function Workshops() {
                       <CardTitle className="text-2xl font-bold text-gray-800">
                         {language === "ar" && workshop.titleAr ? workshop.titleAr : workshop.title}
                       </CardTitle>
-                      <Badge className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg">Featured</Badge>
+                      <Badge className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg">{t("common.featured")}</Badge>
                     </div>
                     <CardDescription className="text-gray-600 mt-2">
                       {language === "ar" && workshop.descriptionAr ? workshop.descriptionAr : workshop.description}
@@ -216,26 +216,26 @@ export default function Workshops() {
                         <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center mr-3">
                           <Clock className="h-5 w-5 text-amber-600" />
                         </div>
-                        <span className="font-medium">{workshop.duration} hours</span>
+                        <span className="font-medium">{t("workshops.duration", { hours: workshop.duration })}</span>
                       </div>
                       <div className="flex items-center text-gray-700">
                         <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
                           <Users className="h-5 w-5 text-green-600" />
                         </div>
-                        <span className="font-medium">{workshop.currentParticipants}/{workshop.maxParticipants} participants</span>
+                        <span className="font-medium">{t("workshops.participants", { current: workshop.currentParticipants, max: workshop.maxParticipants })}</span>
                       </div>
                       <div className="flex items-center text-gray-700">
                         <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
                           <MapPin className="h-5 w-5 text-blue-600" />
                         </div>
-                        <span className="font-medium">{workshop.isOnline ? "Online" : workshop.location}</span>
+                        <span className="font-medium">{workshop.isOnline ? t("workshops.online") : workshop.location}</span>
                       </div>
                       <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                         <Badge className={cn("font-semibold", getSkillLevelColor(workshop.skillLevel))}>
-                          {workshop.skillLevel}
+                          {t(`workshops.skillLevel.${workshop.skillLevel}`)}
                         </Badge>
                         <span className="text-2xl font-bold text-gradient">
-                          {workshop.price ? `${workshop.price} ${workshop.currency}` : "Free"}
+                          {workshop.price ? `${workshop.price} ${workshop.currency}` : t("workshops.free")}
                         </span>
                       </div>
                       <Button
@@ -243,7 +243,7 @@ export default function Workshops() {
                         className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-xl shadow-lg"
                         disabled={workshop.currentParticipants >= workshop.maxParticipants}
                       >
-                        {workshop.currentParticipants >= workshop.maxParticipants ? "Workshop Full" : "Register Now"}
+                        {workshop.currentParticipants >= workshop.maxParticipants ? t("workshops.full") : t("workshops.register")}
                       </Button>
                     </div>
                   </CardContent>
@@ -281,26 +281,26 @@ export default function Workshops() {
                       <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center mr-3">
                         <Clock className="h-5 w-5 text-amber-600" />
                       </div>
-                      <span className="font-medium">{workshop.duration} hours</span>
+                      <span className="font-medium">{t("workshops.duration", { hours: workshop.duration })}</span>
                     </div>
                     <div className="flex items-center text-gray-700">
                       <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
                         <Users className="h-5 w-5 text-green-600" />
                       </div>
-                      <span className="font-medium">{workshop.currentParticipants}/{workshop.maxParticipants} participants</span>
+                      <span className="font-medium">{t("workshops.participants", { current: workshop.currentParticipants, max: workshop.maxParticipants })}</span>
                     </div>
                     <div className="flex items-center text-gray-700">
                       <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
                         <MapPin className="h-5 w-5 text-blue-600" />
                       </div>
-                      <span className="font-medium">{workshop.isOnline ? "Online" : workshop.location}</span>
+                      <span className="font-medium">{workshop.isOnline ? t("workshops.online") : workshop.location}</span>
                     </div>
                     <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                       <Badge className={cn("font-semibold", getSkillLevelColor(workshop.skillLevel))}>
-                        {workshop.skillLevel}
+                        {t(`workshops.skillLevel.${workshop.skillLevel}`)}
                       </Badge>
                       <span className="text-2xl font-bold text-gradient">
-                        {workshop.price ? `${workshop.price} ${workshop.currency}` : "Free"}
+                        {workshop.price ? `${workshop.price} ${workshop.currency}` : t("workshops.free")}
                       </span>
                     </div>
                     <Button
@@ -308,7 +308,7 @@ export default function Workshops() {
                       className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-xl shadow-lg"
                       disabled={workshop.currentParticipants >= workshop.maxParticipants}
                     >
-                      {workshop.currentParticipants >= workshop.maxParticipants ? "Workshop Full" : "Register Now"}
+                      {workshop.currentParticipants >= workshop.maxParticipants ? t("workshops.full") : t("workshops.register")}
                     </Button>
                   </div>
                 </CardContent>

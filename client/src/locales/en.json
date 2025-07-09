@@ -41,7 +41,10 @@
       "inquiries": "Direct contact with artists and galleries",
       "auctions": "Participate in exclusive live auctions",
       "personalized": "Get personalized art recommendations"
-    }
+    },
+    "required": "Authentication Required",
+    "unauthorized": "Unauthorized", 
+    "loggingInAgain": "You are logged out. Logging in again..."
   },
   "hero": {
     "title": "Discover Saudi & GCC",
@@ -220,7 +223,9 @@
       "age": "Age",
       "follow": "Follow Artist",
       "website": "Visit Website"
-    }
+    },
+    "notFound": "Artist not found",
+    "browseArtists": "Browse Artists"
   },
   "galleries": {
     "title": "Galleries",
@@ -831,8 +836,22 @@
       "digital_art": "Digital Art",
       "mixed_media": "Mixed Media",
       "ceramics": "Ceramics",
-      "printmaking": "Printmaking"
-    }
+      "printmaking": "Printmaking",
+      "drawing": "Drawing"
+    },
+    "category": "Category",
+    "level": "Skill Level",
+    "search": "Search workshops...",
+    "filter": "Filter",
+    "featured": "Featured Workshops",
+    "all": "All Workshops",
+    "empty": "No workshops found matching your criteria.",
+    "loading": "Loading workshops...",
+    "loginToRegister": "Please log in to register for workshops",
+    "registrationSuccess": "Registration Successful",
+    "registrationSuccessDesc": "You've successfully registered for this workshop",
+    "registrationFailed": "Registration Failed", 
+    "registrationFailedDesc": "Unable to register for this workshop. Please try again."
   },
   "events": {
     "title": "Events",
@@ -871,7 +890,21 @@
       "googleCalendar": "Google Calendar",
       "outlookCalendar": "Outlook Calendar",
       "appleCalendar": "Apple Calendar"
-    }
+    },
+    "category": "Category",
+    "status": "Status",
+    "search": "Search events...",
+    "filter": "Filter",
+    "featured": "Featured Events",
+    "all": "All Events",
+    "empty": "No events found matching your criteria.",
+    "online": "Online",
+    "loading": "Loading events...",
+    "loginToRSVP": "Please log in to RSVP for events",
+    "rsvpSuccess": "RSVP Successful",
+    "rsvpSuccessDesc": "You've successfully RSVP'd as {{status}}",
+    "rsvpFailed": "RSVP Failed",
+    "rsvpFailedDesc": "Unable to RSVP for this event. Please try again."
   },
   "newsletter": {
     "subscribe": "Subscribe to Newsletter",
@@ -985,7 +1018,13 @@
     "edit": "Edit",
     "delete": "Delete",
     "error": "Error",
-    "items": "items"
+    "items": "items",
+    "allCategories": "All Categories",
+    "allStatus": "All Status",
+    "published": "Published",
+    "upcoming": "Upcoming",
+    "completed": "Completed",
+    "featured": "Featured"
   },
   "social": {
     "follow": "Follow",

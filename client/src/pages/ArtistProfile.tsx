@@ -113,10 +113,10 @@ export default function ArtistProfile() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/artists/${id}/follow-status`] });
       toast({
-        title: isFollowing?.isFollowing ? "Unfollowed artist" : "Following artist",
+        title: isFollowing?.isFollowing ? t("social.unfollowed") : t("social.followed"),
         description: isFollowing?.isFollowing 
-          ? "You are no longer following this artist" 
-          : "You will receive updates about this artist",
+          ? t("social.unfollowedDesc") 
+          : t("social.followedDesc"),
       });
     },
   });
@@ -142,9 +142,9 @@ export default function ArtistProfile() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">Artist not found</h1>
+          <h1 className="text-2xl font-bold text-foreground mb-4">{t("artist.notFound")}</h1>
           <Link href="/artists">
-            <Button>Browse Artists</Button>
+            <Button>{t("artist.browseArtists")}</Button>
           </Link>
         </div>
       </div>
