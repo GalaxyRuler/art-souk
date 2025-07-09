@@ -25,6 +25,7 @@ import UserPreferences from "@/pages/UserPreferences";
 import CollectorDashboard from "@/pages/CollectorDashboard";
 import SellerDashboard from "@/pages/SellerDashboard";
 import EmailTest from "@/pages/EmailTest";
+import AchievementsPage from "@/pages/AchievementsPage";
 
 import Auth from "@/pages/Auth";
 import AdminSetup from "@/pages/AdminSetup";
@@ -58,6 +59,7 @@ function Router() {
           <Route path="/preferences" component={UserPreferences} />
           <Route path="/collector" component={CollectorDashboard} />
           <Route path="/seller" component={SellerDashboard} />
+          <Route path="/achievements/:id" component={AchievementsPage} />
         </>
       )}
       {/* Public routes accessible to all users */}
@@ -72,6 +74,7 @@ function Router() {
 
       <Route path="/artwork/:id" component={ArtworkDetail} />
       <Route path="/search" component={Search} />
+      <Route path="/achievements/:id" component={AchievementsPage} />
       <Route path="/auth" component={Auth} />
       <Route path="/admin/setup" component={AdminSetup} />
       <Route path="/admin/test" component={AdminTest} />

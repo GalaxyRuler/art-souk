@@ -27,6 +27,7 @@ import {
   insertUserProfileSchema,
   insertNewsletterSubscriberSchema,
   insertEmailTemplateSchema,
+  insertAchievementBadgeSchema,
   purchaseOrders,
   shippingTracking,
   collectorProfiles,
@@ -691,6 +692,105 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching artist auction stats:", error);
       res.status(500).json({ message: "Failed to fetch artist auction stats" });
+    }
+  });
+
+  // Achievement routes
+  app.get('/api/achievements/badges', async (req, res) => {
+    try {
+      const category = req.query.category as string;
+      const badges = await storage.getAchievementBadges(category);
+      res.json(badges);
+    } catch (error) {
+      console.error("Error fetching achievement badges:", error);
+      res.status(500).json({ message: "Failed to fetch achievement badges" });
+    }
+  });
+
+  app.get('/api/achievements/badges/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const badge = await storage.getAchievementBadge(id);
+      if (!badge) {
+        return res.status(404).json({ message: "Badge not found" });
+      }
+      res.json(badge);
+    } catch (error) {
+      console.error("Error fetching achievement badge:", error);
+      res.status(500).json({ message: "Failed to fetch achievement badge" });
+    }
+  });
+
+  app.post('/api/achievements/badges', isAuthenticated, async (req: any, res) => {
+    try {
+      const user = await storage.getUser(req.user.claims.sub);
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const badgeData = insertAchievementBadgeSchema.parse(req.body);
+      const badge = await storage.createAchievementBadge(badgeData);
+      res.json(badge);
+    } catch (error) {
+      console.error("Error creating achievement badge:", error);
+      res.status(500).json({ message: "Failed to create achievement badge" });
+    }
+  });
+
+  app.get('/api/artists/:id/achievements', async (req, res) => {
+    try {
+      const artistId = parseInt(req.params.id);
+      const achievements = await storage.getArtistAchievements(artistId);
+      res.json(achievements);
+    } catch (error) {
+      console.error("Error fetching artist achievements:", error);
+      res.status(500).json({ message: "Failed to fetch artist achievements" });
+    }
+  });
+
+  app.get('/api/artists/:id/stats', async (req, res) => {
+    try {
+      const artistId = parseInt(req.params.id);
+      const stats = await storage.getArtistStats(artistId);
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching artist stats:", error);
+      res.status(500).json({ message: "Failed to fetch artist stats" });
+    }
+  });
+
+  app.get('/api/artists/:id/badge-progress', async (req, res) => {
+    try {
+      const artistId = parseInt(req.params.id);
+      const progress = await storage.getBadgeProgress(artistId);
+      res.json(progress);
+    } catch (error) {
+      console.error("Error fetching badge progress:", error);
+      res.status(500).json({ message: "Failed to fetch badge progress" });
+    }
+  });
+
+  app.post('/api/artists/:id/calculate-achievements', isAuthenticated, async (req: any, res) => {
+    try {
+      const artistId = parseInt(req.params.id);
+      await storage.calculateAchievements(artistId);
+      res.json({ message: "Achievements calculated successfully" });
+    } catch (error) {
+      console.error("Error calculating achievements:", error);
+      res.status(500).json({ message: "Failed to calculate achievements" });
+    }
+  });
+
+  app.patch('/api/achievements/:id/display', isAuthenticated, async (req: any, res) => {
+    try {
+      const achievementId = parseInt(req.params.id);
+      const { isDisplayed } = req.body;
+      
+      const achievement = await storage.updateArtistAchievement(achievementId, { isDisplayed });
+      res.json(achievement);
+    } catch (error) {
+      console.error("Error updating achievement display:", error);
+      res.status(500).json({ message: "Failed to update achievement display" });
     }
   });
 

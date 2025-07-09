@@ -98,6 +98,18 @@ import {
   emailNotificationLog,
   type EmailNotificationLog,
   type InsertEmailNotificationLog,
+  achievementBadges,
+  type AchievementBadge,
+  type InsertAchievementBadge,
+  artistAchievements,
+  type ArtistAchievement,
+  type InsertArtistAchievement,
+  artistStats,
+  type ArtistStats,
+  type InsertArtistStats,
+  badgeProgress,
+  type BadgeProgress,
+  type InsertBadgeProgress,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
@@ -1890,6 +1902,250 @@ export class DatabaseStorage implements IStorage {
     return await query
       .orderBy(desc(emailNotificationLog.sentAt))
       .limit(limit);
+  }
+
+  // Achievement Badge operations
+  async getAchievementBadges(category?: string): Promise<AchievementBadge[]> {
+    let query = db.select().from(achievementBadges).where(eq(achievementBadges.isActive, true));
+    
+    if (category) {
+      query = query.where(and(
+        eq(achievementBadges.isActive, true),
+        eq(achievementBadges.category, category)
+      ));
+    }
+    
+    return await query.orderBy(asc(achievementBadges.pointsValue));
+  }
+
+  async getAchievementBadge(id: number): Promise<AchievementBadge | undefined> {
+    const [badge] = await db.select()
+      .from(achievementBadges)
+      .where(eq(achievementBadges.id, id));
+    return badge;
+  }
+
+  async createAchievementBadge(badge: InsertAchievementBadge): Promise<AchievementBadge> {
+    const [newBadge] = await db.insert(achievementBadges)
+      .values(badge)
+      .returning();
+    return newBadge;
+  }
+
+  // Artist Achievement operations
+  async getArtistAchievements(artistId: number): Promise<ArtistAchievement[]> {
+    return await db.select({
+      id: artistAchievements.id,
+      artistId: artistAchievements.artistId,
+      badgeId: artistAchievements.badgeId,
+      earnedAt: artistAchievements.earnedAt,
+      progress: artistAchievements.progress,
+      level: artistAchievements.level,
+      isDisplayed: artistAchievements.isDisplayed,
+      notificationSent: artistAchievements.notificationSent,
+      badge: {
+        id: achievementBadges.id,
+        name: achievementBadges.name,
+        nameAr: achievementBadges.nameAr,
+        description: achievementBadges.description,
+        descriptionAr: achievementBadges.descriptionAr,
+        category: achievementBadges.category,
+        icon: achievementBadges.icon,
+        color: achievementBadges.color,
+        rarity: achievementBadges.rarity,
+        pointsValue: achievementBadges.pointsValue,
+      }
+    })
+    .from(artistAchievements)
+    .leftJoin(achievementBadges, eq(artistAchievements.badgeId, achievementBadges.id))
+    .where(and(
+      eq(artistAchievements.artistId, artistId),
+      eq(artistAchievements.isDisplayed, true)
+    ))
+    .orderBy(desc(artistAchievements.earnedAt));
+  }
+
+  async createArtistAchievement(achievement: InsertArtistAchievement): Promise<ArtistAchievement> {
+    const [newAchievement] = await db.insert(artistAchievements)
+      .values(achievement)
+      .returning();
+    return newAchievement;
+  }
+
+  async updateArtistAchievement(id: number, achievement: Partial<InsertArtistAchievement>): Promise<ArtistAchievement> {
+    const [updated] = await db.update(artistAchievements)
+      .set(achievement)
+      .where(eq(artistAchievements.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Artist Stats operations
+  async getArtistStats(artistId: number): Promise<ArtistStats | undefined> {
+    const [stats] = await db.select()
+      .from(artistStats)
+      .where(eq(artistStats.artistId, artistId));
+    return stats;
+  }
+
+  async createArtistStats(stats: InsertArtistStats): Promise<ArtistStats> {
+    const [newStats] = await db.insert(artistStats)
+      .values(stats)
+      .returning();
+    return newStats;
+  }
+
+  async updateArtistStats(artistId: number, stats: Partial<InsertArtistStats>): Promise<ArtistStats> {
+    const [updated] = await db.update(artistStats)
+      .set({ ...stats, updatedAt: new Date() })
+      .where(eq(artistStats.artistId, artistId))
+      .returning();
+    return updated;
+  }
+
+  // Badge Progress operations
+  async getBadgeProgress(artistId: number): Promise<BadgeProgress[]> {
+    return await db.select({
+      id: badgeProgress.id,
+      artistId: badgeProgress.artistId,
+      badgeId: badgeProgress.badgeId,
+      currentValue: badgeProgress.currentValue,
+      targetValue: badgeProgress.targetValue,
+      progressPercentage: badgeProgress.progressPercentage,
+      isCompleted: badgeProgress.isCompleted,
+      updatedAt: badgeProgress.updatedAt,
+      badge: {
+        id: achievementBadges.id,
+        name: achievementBadges.name,
+        nameAr: achievementBadges.nameAr,
+        description: achievementBadges.description,
+        descriptionAr: achievementBadges.descriptionAr,
+        category: achievementBadges.category,
+        icon: achievementBadges.icon,
+        color: achievementBadges.color,
+        rarity: achievementBadges.rarity,
+        pointsValue: achievementBadges.pointsValue,
+      }
+    })
+    .from(badgeProgress)
+    .leftJoin(achievementBadges, eq(badgeProgress.badgeId, achievementBadges.id))
+    .where(eq(badgeProgress.artistId, artistId))
+    .orderBy(desc(badgeProgress.progressPercentage));
+  }
+
+  async createBadgeProgress(progress: InsertBadgeProgress): Promise<BadgeProgress> {
+    const [newProgress] = await db.insert(badgeProgress)
+      .values(progress)
+      .returning();
+    return newProgress;
+  }
+
+  async updateBadgeProgress(artistId: number, badgeId: number, progress: Partial<InsertBadgeProgress>): Promise<BadgeProgress> {
+    const [updated] = await db.update(badgeProgress)
+      .set({ ...progress, updatedAt: new Date() })
+      .where(and(
+        eq(badgeProgress.artistId, artistId),
+        eq(badgeProgress.badgeId, badgeId)
+      ))
+      .returning();
+    return updated;
+  }
+
+  // Achievement calculation method
+  async calculateAchievements(artistId: number): Promise<void> {
+    // Get artist stats
+    const stats = await this.getArtistStats(artistId);
+    if (!stats) return;
+
+    // Get all active badges
+    const badges = await this.getAchievementBadges();
+    
+    // Check each badge against current stats
+    for (const badge of badges) {
+      if (!badge.requiredMetric || !badge.requiredValue) continue;
+      
+      let currentValue = 0;
+      switch (badge.requiredMetric) {
+        case 'total_sales':
+          currentValue = stats.totalSales;
+          break;
+        case 'total_revenue':
+          currentValue = parseFloat(stats.totalRevenue || '0');
+          break;
+        case 'total_followers':
+          currentValue = stats.totalFollowers;
+          break;
+        case 'total_views':
+          currentValue = stats.totalViews;
+          break;
+        case 'total_artworks':
+          currentValue = stats.totalArtworks;
+          break;
+        case 'total_workshops':
+          currentValue = stats.totalWorkshops;
+          break;
+        case 'total_exhibitions':
+          currentValue = stats.totalExhibitions;
+          break;
+        case 'average_rating':
+          currentValue = Math.round(parseFloat(stats.averageRating || '0') * 10); // Convert to 0-50 scale
+          break;
+        case 'profile_completeness':
+          currentValue = stats.profileCompleteness;
+          break;
+        default:
+          continue;
+      }
+
+      // Check if badge should be awarded
+      if (currentValue >= badge.requiredValue) {
+        // Check if artist already has this badge
+        const existingAchievement = await db.select()
+          .from(artistAchievements)
+          .where(and(
+            eq(artistAchievements.artistId, artistId),
+            eq(artistAchievements.badgeId, badge.id)
+          ));
+
+        if (existingAchievement.length === 0) {
+          // Award the badge
+          await this.createArtistAchievement({
+            artistId,
+            badgeId: badge.id,
+            level: 1,
+            progress: 0,
+            isDisplayed: true,
+            notificationSent: false
+          });
+
+          // Update artist's achievement points
+          await this.updateArtistStats(artistId, {
+            achievementPoints: stats.achievementPoints + badge.pointsValue
+          });
+        }
+      }
+
+      // Update or create badge progress
+      const progressPercentage = Math.min((currentValue / badge.requiredValue) * 100, 100);
+      
+      try {
+        await this.updateBadgeProgress(artistId, badge.id, {
+          currentValue,
+          progressPercentage: progressPercentage.toFixed(2),
+          isCompleted: currentValue >= badge.requiredValue
+        });
+      } catch {
+        // If update fails, create new progress record
+        await this.createBadgeProgress({
+          artistId,
+          badgeId: badge.id,
+          currentValue,
+          targetValue: badge.requiredValue,
+          progressPercentage: progressPercentage.toFixed(2),
+          isCompleted: currentValue >= badge.requiredValue
+        });
+      }
+    }
   }
 }
 

@@ -155,6 +155,72 @@ export const auctionResults = pgTable("auction_results", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Achievement Badges table - defines all available badges
+export const achievementBadges = pgTable("achievement_badges", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  nameAr: varchar("name_ar"),
+  description: text("description"),
+  descriptionAr: text("description_ar"),
+  category: varchar("category").notNull(), // sales, engagement, participation, expertise, time_based
+  icon: varchar("icon").notNull(), // lucide icon name
+  color: varchar("color").default("#3b82f6"), // hex color code
+  rarity: varchar("rarity").default("common"), // common, uncommon, rare, epic, legendary
+  requiredValue: integer("required_value"), // threshold value for achievement
+  requiredMetric: varchar("required_metric"), // artworks_sold, total_sales, followers, etc.
+  pointsValue: integer("points_value").default(0), // points awarded for earning this badge
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Artist Achievements table - tracks badges earned by artists
+export const artistAchievements = pgTable("artist_achievements", {
+  id: serial("id").primaryKey(),
+  artistId: integer("artist_id").references(() => artists.id),
+  badgeId: integer("badge_id").references(() => achievementBadges.id),
+  earnedAt: timestamp("earned_at").defaultNow(),
+  progress: integer("progress").default(0), // current progress towards next level
+  level: integer("level").default(1), // badge level (for recurring achievements)
+  isDisplayed: boolean("is_displayed").default(true), // whether artist wants to display this badge
+  notificationSent: boolean("notification_sent").default(false),
+}, (table) => [
+  unique("artist_badge_unique").on(table.artistId, table.badgeId),
+]);
+
+// Artist Statistics table - tracks metrics for badge calculations
+export const artistStats = pgTable("artist_stats", {
+  id: serial("id").primaryKey(),
+  artistId: integer("artist_id").references(() => artists.id).unique(),
+  totalArtworks: integer("total_artworks").default(0),
+  totalSales: integer("total_sales").default(0),
+  totalRevenue: decimal("total_revenue", { precision: 12, scale: 2 }).default("0"),
+  totalViews: integer("total_views").default(0),
+  totalLikes: integer("total_likes").default(0),
+  totalFollowers: integer("total_followers").default(0),
+  totalWorkshops: integer("total_workshops").default(0),
+  totalExhibitions: integer("total_exhibitions").default(0),
+  averageRating: decimal("average_rating", { precision: 3, scale: 2 }).default("0"),
+  totalReviews: integer("total_reviews").default(0),
+  achievementPoints: integer("achievement_points").default(0),
+  profileCompleteness: integer("profile_completeness").default(0), // percentage
+  lastActivityAt: timestamp("last_activity_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Badge Progress table - tracks progress towards achievements
+export const badgeProgress = pgTable("badge_progress", {
+  id: serial("id").primaryKey(),
+  artistId: integer("artist_id").references(() => artists.id),
+  badgeId: integer("badge_id").references(() => achievementBadges.id),
+  currentValue: integer("current_value").default(0),
+  targetValue: integer("target_value").notNull(),
+  progressPercentage: decimal("progress_percentage", { precision: 5, scale: 2 }).default("0"),
+  isCompleted: boolean("is_completed").default(false),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  unique("artist_badge_progress_unique").on(table.artistId, table.badgeId),
+]);
+
 // Collections table
 export const collections = pgTable("collections", {
   id: serial("id").primaryKey(),
@@ -857,6 +923,26 @@ export const auctionResultsRelations = relations(auctionResults, ({ one }) => ({
   winner: one(users, { fields: [auctionResults.winnerUserId], references: [users.id] }),
 }));
 
+// Achievement Badges relations
+export const achievementBadgesRelations = relations(achievementBadges, ({ many }) => ({
+  achievements: many(artistAchievements),
+  progress: many(badgeProgress),
+}));
+
+export const artistAchievementsRelations = relations(artistAchievements, ({ one }) => ({
+  artist: one(artists, { fields: [artistAchievements.artistId], references: [artists.id] }),
+  badge: one(achievementBadges, { fields: [artistAchievements.badgeId], references: [achievementBadges.id] }),
+}));
+
+export const artistStatsRelations = relations(artistStats, ({ one }) => ({
+  artist: one(artists, { fields: [artistStats.artistId], references: [artists.id] }),
+}));
+
+export const badgeProgressRelations = relations(badgeProgress, ({ one }) => ({
+  artist: one(artists, { fields: [badgeProgress.artistId], references: [artists.id] }),
+  badge: one(achievementBadges, { fields: [badgeProgress.badgeId], references: [achievementBadges.id] }),
+}));
+
 // Export types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -958,6 +1044,16 @@ export type InsertEmailNotificationQueue = typeof emailNotificationQueue.$inferI
 export type EmailNotificationLog = typeof emailNotificationLog.$inferSelect;
 export type InsertEmailNotificationLog = typeof emailNotificationLog.$inferInsert;
 
+// Achievement types
+export type AchievementBadge = typeof achievementBadges.$inferSelect;
+export type InsertAchievementBadge = typeof achievementBadges.$inferInsert;
+export type ArtistAchievement = typeof artistAchievements.$inferSelect;
+export type InsertArtistAchievement = typeof artistAchievements.$inferInsert;
+export type ArtistStats = typeof artistStats.$inferSelect;
+export type InsertArtistStats = typeof artistStats.$inferInsert;
+export type BadgeProgress = typeof badgeProgress.$inferSelect;
+export type InsertBadgeProgress = typeof badgeProgress.$inferInsert;
+
 // Zod schemas
 export const insertArtistSchema = createInsertSchema(artists).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertGallerySchema = createInsertSchema(galleries).omit({ id: true, createdAt: true, updatedAt: true });
@@ -995,3 +1091,9 @@ export const insertNewsletterSubscriberSchema = createInsertSchema(newsletterSub
 export const insertEmailTemplateSchema = createInsertSchema(emailTemplates).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertEmailNotificationQueueSchema = createInsertSchema(emailNotificationQueue).omit({ id: true, createdAt: true });
 export const insertEmailNotificationLogSchema = createInsertSchema(emailNotificationLog).omit({ id: true, sentAt: true });
+
+// Achievement schemas
+export const insertAchievementBadgeSchema = createInsertSchema(achievementBadges).omit({ id: true, createdAt: true });
+export const insertArtistAchievementSchema = createInsertSchema(artistAchievements).omit({ id: true, earnedAt: true });
+export const insertArtistStatsSchema = createInsertSchema(artistStats).omit({ id: true, updatedAt: true });
+export const insertBadgeProgressSchema = createInsertSchema(badgeProgress).omit({ id: true, updatedAt: true });
