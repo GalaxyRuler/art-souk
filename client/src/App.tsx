@@ -24,6 +24,7 @@ import Analytics from "@/pages/Analytics";
 import UserPreferences from "@/pages/UserPreferences";
 import CollectorDashboard from "@/pages/CollectorDashboard";
 import SellerDashboard from "@/pages/SellerDashboard";
+import EmailTest from "@/pages/EmailTest";
 
 import Auth from "@/pages/Auth";
 import AdminSetup from "@/pages/AdminSetup";
@@ -76,6 +77,7 @@ function Router() {
       <Route path="/admin/test" component={AdminTest} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/auth/test" component={AuthTest} />
+      <Route path="/email/test" component={EmailTest} />
       <Route component={NotFound} />
     </Switch>
   );
