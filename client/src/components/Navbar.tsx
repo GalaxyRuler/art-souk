@@ -24,16 +24,16 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="bg-white/90 backdrop-blur-lg shadow-brand sticky top-0 z-50 border-b border-brand-light-gold">
+    <nav className="bg-white/95 backdrop-blur-md shadow-md sticky top-0 z-50 border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-5">
+        <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
             <div className="relative">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-brand-purple via-brand-deep-purple to-brand-gold bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-brand-navy to-brand-charcoal bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
                 {t("site.name")}
               </h1>
-              <p className="text-sm text-muted-foreground font-medium mt-1">
+              <p className="text-sm text-gray-600 font-medium mt-0.5">
                 {t("site.tagline")}
               </p>
             </div>

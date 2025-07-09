@@ -5,32 +5,32 @@
 :root {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(230, 24%, 12%);
-  --muted: hsl(35, 22%, 96%);
+  --muted: hsl(210, 10%, 96%);
   --muted-foreground: hsl(230, 6%, 44%);
   --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(230, 24%, 12%);
   --card: hsl(0, 0%, 100%);
   --card-foreground: hsl(230, 24%, 12%);
-  --border: hsl(35, 20%, 88%);
-  --input: hsl(35, 20%, 88%);
-  --primary: hsl(283, 86%, 60%);
+  --border: hsl(210, 15%, 88%);
+  --input: hsl(210, 15%, 88%);
+  --primary: hsl(217, 91%, 35%);
   --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(35, 22%, 96%);
+  --secondary: hsl(210, 10%, 96%);
   --secondary-foreground: hsl(230, 24%, 12%);
-  --accent: hsl(35, 85%, 92%);
+  --accent: hsl(35, 65%, 85%);
   --accent-foreground: hsl(230, 24%, 12%);
   --destructive: hsl(0, 84%, 60%);
   --destructive-foreground: hsl(0, 0%, 100%);
-  --ring: hsl(283, 86%, 60%);
-  --radius: 0.75rem;
+  --ring: hsl(217, 91%, 35%);
+  --radius: 0.5rem;
   
   /* Custom brand colors */
-  --brand-gold: hsl(35, 85%, 62%);
-  --brand-purple: hsl(283, 86%, 60%);
-  --brand-deep-purple: hsl(265, 91%, 35%);
-  --brand-cream: hsl(35, 22%, 96%);
+  --brand-gold: hsl(35, 65%, 55%);
+  --brand-navy: hsl(217, 91%, 35%);
+  --brand-deep-navy: hsl(217, 91%, 25%);
+  --brand-steel: hsl(210, 10%, 96%);
   --brand-charcoal: hsl(230, 24%, 12%);
-  --brand-light-gold: hsl(35, 85%, 92%);
+  --brand-light-gold: hsl(35, 65%, 85%);
 }
 
 .dark {
@@ -44,7 +44,7 @@
   --card-foreground: hsl(0, 0%, 96%);
   --border: hsl(230, 12%, 20%);
   --input: hsl(230, 12%, 20%);
-  --primary: hsl(283, 86%, 65%);
+  --primary: hsl(217, 71%, 50%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(230, 12%, 16%);
   --secondary-foreground: hsl(0, 0%, 96%);
@@ -52,16 +52,16 @@
   --accent-foreground: hsl(0, 0%, 96%);
   --destructive: hsl(0, 84%, 65%);
   --destructive-foreground: hsl(0, 0%, 100%);
-  --ring: hsl(283, 86%, 65%);
-  --radius: 0.75rem;
+  --ring: hsl(217, 71%, 50%);
+  --radius: 0.5rem;
   
   /* Custom brand colors for dark mode */
-  --brand-gold: hsl(35, 85%, 70%);
-  --brand-purple: hsl(283, 86%, 65%);
-  --brand-deep-purple: hsl(265, 91%, 45%);
-  --brand-cream: hsl(230, 12%, 16%);
+  --brand-gold: hsl(35, 65%, 65%);
+  --brand-navy: hsl(217, 71%, 50%);
+  --brand-deep-navy: hsl(217, 91%, 35%);
+  --brand-steel: hsl(230, 12%, 16%);
   --brand-charcoal: hsl(0, 0%, 96%);
-  --brand-light-gold: hsl(35, 65%, 25%);
+  --brand-light-gold: hsl(35, 45%, 25%);
 }
 
 @layer base {
@@ -112,43 +112,43 @@
   
   /* Custom gradient backgrounds */
   .bg-brand-gradient {
-    background: linear-gradient(135deg, hsl(283, 86%, 60%) 0%, hsl(265, 91%, 35%) 100%);
+    background: linear-gradient(135deg, hsl(217, 91%, 35%) 0%, hsl(217, 91%, 25%) 100%);
   }
   
   .bg-gold-gradient {
-    background: linear-gradient(135deg, hsl(35, 85%, 62%) 0%, hsl(35, 85%, 72%) 100%);
+    background: linear-gradient(135deg, hsl(35, 65%, 55%) 0%, hsl(35, 65%, 45%) 100%);
   }
   
   .bg-hero-gradient {
-    background: linear-gradient(135deg, hsl(283, 86%, 60%) 0%, hsl(265, 91%, 35%) 50%, hsl(35, 85%, 62%) 100%);
+    background: linear-gradient(135deg, hsl(217, 91%, 25%) 0%, hsl(217, 91%, 35%) 50%, hsl(230, 24%, 12%) 100%);
   }
   
   .bg-mesh-gradient {
-    background-color: hsl(283, 86%, 98%);
-    background-image: radial-gradient(at 40% 20%, hsl(283, 86%, 90%) 0px, transparent 50%),
-      radial-gradient(at 80% 0%, hsl(35, 85%, 90%) 0px, transparent 50%),
-      radial-gradient(at 0% 50%, hsl(265, 91%, 90%) 0px, transparent 50%),
-      radial-gradient(at 80% 50%, hsl(35, 85%, 85%) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, hsl(283, 86%, 85%) 0px, transparent 50%);
+    background-color: hsl(210, 20%, 98%);
+    background-image: radial-gradient(at 40% 20%, hsl(217, 40%, 93%) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, hsl(210, 20%, 90%) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, hsl(217, 30%, 95%) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, hsl(35, 20%, 92%) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsl(217, 40%, 90%) 0px, transparent 50%);
   }
   
   /* Enhanced shadows */
   .shadow-brand {
-    box-shadow: 0 10px 25px -5px hsla(283, 86%, 60%, 0.1), 0 10px 10px -5px hsla(283, 86%, 60%, 0.04);
+    box-shadow: 0 10px 25px -5px hsla(217, 91%, 35%, 0.1), 0 10px 10px -5px hsla(217, 91%, 35%, 0.04);
   }
   
   .shadow-gold {
-    box-shadow: 0 10px 25px -5px hsla(35, 85%, 62%, 0.1), 0 10px 10px -5px hsla(35, 85%, 62%, 0.04);
+    box-shadow: 0 10px 25px -5px hsla(35, 65%, 55%, 0.1), 0 10px 10px -5px hsla(35, 65%, 55%, 0.04);
   }
   
   .shadow-glow {
-    box-shadow: 0 0 40px -10px hsla(283, 86%, 60%, 0.3);
+    box-shadow: 0 0 30px -10px hsla(217, 91%, 35%, 0.2);
   }
   
   /* Improved focus states */
   .focus-brand:focus {
     @apply ring-2 ring-offset-2;
-    ring-color: hsl(283, 86%, 60%);
+    ring-color: hsl(217, 91%, 35%);
   }
   
   /* Card enhancements */
@@ -157,19 +157,19 @@
   }
   
   .card-brand {
-    @apply bg-gradient-to-br from-purple-50 to-amber-50 dark:from-purple-900/20 dark:to-amber-900/20;
+    @apply bg-gradient-to-br from-slate-50 to-gray-50 dark:from-slate-900/20 dark:to-gray-900/20;
   }
   
   .card-glass {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
   }
   
   .dark .card-glass {
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid rgba(31, 41, 55, 0.2);
+    background: rgba(17, 24, 39, 0.7);
+    border: 1px solid rgba(31, 41, 55, 0.3);
   }
   
   /* Smooth animations */
@@ -193,7 +193,7 @@
   
   /* Gradient text */
   .text-gradient {
-    @apply bg-gradient-to-r from-brand-purple to-brand-gold bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-brand-navy to-brand-charcoal bg-clip-text text-transparent;
   }
   
   /* Smooth scrolling */

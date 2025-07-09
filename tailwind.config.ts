@@ -46,9 +46,9 @@ export default {
         ring: "var(--ring)",
         brand: {
           gold: "var(--brand-gold)",
-          purple: "var(--brand-purple)",
-          "deep-purple": "var(--brand-deep-purple)",
-          cream: "var(--brand-cream)",
+          navy: "var(--brand-navy)",
+          "deep-navy": "var(--brand-deep-navy)",
+          steel: "var(--brand-steel)",
           charcoal: "var(--brand-charcoal)",
           "light-gold": "var(--brand-light-gold)",
         },

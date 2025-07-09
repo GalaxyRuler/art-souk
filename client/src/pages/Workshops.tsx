@@ -118,7 +118,7 @@ export default function Workshops() {
     return (
       <div className="min-h-screen bg-mesh-gradient flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-400 border-t-transparent mx-auto"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent mx-auto"></div>
           <p className="mt-6 text-xl text-gray-700 font-medium">Loading workshops...</p>
         </div>
       </div>
@@ -142,16 +142,16 @@ export default function Workshops() {
         <div className="mb-10 card-glass rounded-2xl p-8 shadow-lg">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-purple-500" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-blue-600" />
               <Input
                 placeholder={t("workshops.search", "Search workshops...")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-12 h-12 bg-white/80 border-purple-200 focus:border-purple-400 rounded-xl"
+                className="pl-12 h-12 bg-white/80 border-gray-300 focus:border-blue-500 rounded-xl"
               />
             </div>
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="h-12 bg-white/80 border-purple-200 focus:border-purple-400 rounded-xl">
+              <SelectTrigger className="h-12 bg-white/80 border-gray-300 focus:border-blue-500 rounded-xl">
                 <SelectValue placeholder={t("workshops.category", "Category")} />
               </SelectTrigger>
               <SelectContent>
@@ -164,7 +164,7 @@ export default function Workshops() {
               </SelectContent>
             </Select>
             <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-              <SelectTrigger className="h-12 bg-white/80 border-purple-200 focus:border-purple-400 rounded-xl">
+              <SelectTrigger className="h-12 bg-white/80 border-gray-300 focus:border-blue-500 rounded-xl">
                 <SelectValue placeholder={t("workshops.level", "Skill Level")} />
               </SelectTrigger>
               <SelectContent>
@@ -174,7 +174,7 @@ export default function Workshops() {
                 <SelectItem value="advanced">Advanced</SelectItem>
               </SelectContent>
             </Select>
-            <Button className="h-12 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl">
+            <Button className="h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl">
               <Filter className="h-5 w-5 mr-2" />
               {t("workshops.filter", "Filter")}
             </Button>
@@ -189,13 +189,13 @@ export default function Workshops() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredWorkshops.map((workshop: any) => (
-                <Card key={workshop.id} className="card-glass hover-lift rounded-2xl overflow-hidden border-purple-200">
-                  <CardHeader className="bg-gradient-to-br from-purple-500/20 to-amber-500/20 pb-4">
+                <Card key={workshop.id} className="card-glass hover-lift rounded-2xl overflow-hidden border-gray-200">
+                  <CardHeader className="bg-gradient-to-br from-blue-500/10 to-gray-500/10 pb-4">
                     <div className="flex justify-between items-start">
                       <CardTitle className="text-2xl font-bold text-gray-800">
                         {language === "ar" && workshop.titleAr ? workshop.titleAr : workshop.title}
                       </CardTitle>
-                      <Badge className="bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg">Featured</Badge>
+                      <Badge className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg">Featured</Badge>
                     </div>
                     <CardDescription className="text-gray-600 mt-2">
                       {language === "ar" && workshop.descriptionAr ? workshop.descriptionAr : workshop.description}
@@ -237,7 +237,7 @@ export default function Workshops() {
                       </div>
                       <Button
                         onClick={() => handleRegisterWorkshop(workshop.id)}
-                        className="w-full h-12 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-xl shadow-lg"
+                        className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-xl shadow-lg"
                         disabled={workshop.currentParticipants >= workshop.maxParticipants}
                       >
                         {workshop.currentParticipants >= workshop.maxParticipants ? "Workshop Full" : "Register Now"}
@@ -269,8 +269,8 @@ export default function Workshops() {
                 <CardContent className="pt-4">
                   <div className="space-y-4">
                     <div className="flex items-center text-gray-700">
-                      <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
-                        <Calendar className="h-5 w-5 text-purple-600" />
+                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                        <Calendar className="h-5 w-5 text-blue-600" />
                       </div>
                       <span className="font-medium">{formatDate(workshop.startDate)}</span>
                     </div>

@@ -122,7 +122,7 @@ export default function Events() {
     return (
       <div className="min-h-screen bg-mesh-gradient flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-400 border-t-transparent mx-auto"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent mx-auto"></div>
           <p className="mt-6 text-xl text-gray-700 font-medium">Loading events...</p>
         </div>
       </div>
@@ -146,16 +146,16 @@ export default function Events() {
         <div className="mb-10 card-glass rounded-2xl p-8 shadow-lg">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-purple-500" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-blue-600" />
               <Input
                 placeholder={t("events.search", "Search events...")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-12 h-12 bg-white/80 border-purple-200 focus:border-purple-400 rounded-xl"
+                className="pl-12 h-12 bg-white/80 border-gray-300 focus:border-blue-500 rounded-xl"
               />
             </div>
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="h-12 bg-white/80 border-purple-200 focus:border-purple-400 rounded-xl">
+              <SelectTrigger className="h-12 bg-white/80 border-gray-300 focus:border-blue-500 rounded-xl">
                 <SelectValue placeholder={t("events.category", "Category")} />
               </SelectTrigger>
               <SelectContent>
@@ -167,7 +167,7 @@ export default function Events() {
               </SelectContent>
             </Select>
             <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-              <SelectTrigger className="h-12 bg-white/80 border-purple-200 focus:border-purple-400 rounded-xl">
+              <SelectTrigger className="h-12 bg-white/80 border-gray-300 focus:border-blue-500 rounded-xl">
                 <SelectValue placeholder={t("events.status", "Status")} />
               </SelectTrigger>
               <SelectContent>
@@ -177,7 +177,7 @@ export default function Events() {
                 <SelectItem value="completed">Completed</SelectItem>
               </SelectContent>
             </Select>
-            <Button className="h-12 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl">
+            <Button className="h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl">
               <Filter className="h-5 w-5 mr-2" />
               {t("events.filter", "Filter")}
             </Button>
@@ -192,13 +192,13 @@ export default function Events() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredEvents.map((event: any) => (
-                <Card key={event.id} className="card-glass hover-lift rounded-2xl overflow-hidden border-purple-200">
-                  <CardHeader className="bg-gradient-to-br from-purple-500/20 to-amber-500/20 pb-4">
+                <Card key={event.id} className="card-glass hover-lift rounded-2xl overflow-hidden border-gray-200">
+                  <CardHeader className="bg-gradient-to-br from-blue-500/10 to-gray-500/10 pb-4">
                     <div className="flex justify-between items-start">
                       <CardTitle className="text-2xl font-bold text-gray-800">
                         {language === "ar" && event.titleAr ? event.titleAr : event.title}
                       </CardTitle>
-                      <Badge className="bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg">Featured</Badge>
+                      <Badge className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg">Featured</Badge>
                     </div>
                     <CardDescription className="text-gray-600 mt-2">
                       {language === "ar" && event.descriptionAr ? event.descriptionAr : event.description}
@@ -207,8 +207,8 @@ export default function Events() {
                   <CardContent className="pt-6">
                     <div className="space-y-4">
                       <div className="flex items-center text-gray-700">
-                        <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
-                          <Calendar className="h-5 w-5 text-purple-600" />
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                          <Calendar className="h-5 w-5 text-blue-600" />
                         </div>
                         <span className="font-medium">{formatDate(event.startDate)} - {formatDate(event.endDate)}</span>
                       </div>
@@ -248,7 +248,7 @@ export default function Events() {
                         <Button
                           onClick={() => handleRSVPEvent(event.id, "maybe")}
                           variant="outline"
-                          className="flex-1 h-10 border-purple-300 text-purple-700 hover:bg-purple-50 font-semibold rounded-xl"
+                          className="flex-1 h-10 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold rounded-xl"
                         >
                           Maybe
                         </Button>
@@ -280,8 +280,8 @@ export default function Events() {
                 <CardContent className="pt-4">
                   <div className="space-y-4">
                     <div className="flex items-center text-gray-700">
-                      <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
-                        <Calendar className="h-5 w-5 text-purple-600" />
+                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                        <Calendar className="h-5 w-5 text-blue-600" />
                       </div>
                       <span className="font-medium">{formatDate(event.startDate)} - {formatDate(event.endDate)}</span>
                     </div>
@@ -321,7 +321,7 @@ export default function Events() {
                       <Button
                         onClick={() => handleRSVPEvent(event.id, "maybe")}
                         variant="outline"
-                        className="flex-1 h-10 border-purple-300 text-purple-700 hover:bg-purple-50 font-semibold rounded-xl"
+                        className="flex-1 h-10 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold rounded-xl"
                       >
                         Maybe
                       </Button>

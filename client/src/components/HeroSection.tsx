@@ -15,7 +15,7 @@ export function HeroSection() {
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-20 left-20 w-40 h-40 bg-brand-gold rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-32 h-32 bg-white rounded-full blur-2xl"></div>
-        <div className="absolute top-1/3 right-1/4 w-24 h-24 bg-brand-purple rounded-full blur-xl"></div>
+        <div className="absolute top-1/3 right-1/4 w-24 h-24 bg-brand-navy rounded-full blur-xl"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10">
@@ -38,7 +38,7 @@ export function HeroSection() {
               {isAuthenticated ? (
                 <Button
                   size="lg"
-                  className="bg-white text-brand-purple hover:bg-brand-cream shadow-gold text-lg px-8 py-4 h-auto font-semibold"
+                  className="bg-white text-brand-navy hover:bg-gray-100 shadow-lg text-lg px-8 py-4 h-auto font-semibold"
                 >
                   {t("hero.cta.browse")}
                 </Button>
@@ -46,7 +46,7 @@ export function HeroSection() {
                 <>
                   <Button
                     size="lg"
-                    className="bg-white text-brand-purple hover:bg-brand-cream shadow-gold text-lg px-8 py-4 h-auto font-semibold"
+                    className="bg-white text-brand-navy hover:bg-gray-100 shadow-lg text-lg px-8 py-4 h-auto font-semibold"
                     onClick={() => (window.location.href = "/api/login")}
                   >
                     {t("hero.cta.start")}
@@ -54,7 +54,7 @@ export function HeroSection() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-2 border-white text-white hover:bg-white hover:text-brand-purple text-lg px-8 py-4 h-auto font-semibold backdrop-blur-sm bg-white/10"
+                    className="border-2 border-white text-white hover:bg-white hover:text-brand-navy text-lg px-8 py-4 h-auto font-semibold backdrop-blur-sm bg-white/10"
                   >
                     {t("hero.cta.browse")}
                   </Button>
@@ -66,7 +66,7 @@ export function HeroSection() {
           {/* Featured Artwork */}
           <div className="relative">
             <div className="relative rounded-3xl overflow-hidden shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
-              <div className="absolute inset-0 bg-gradient-to-tr from-brand-purple/20 to-brand-gold/20 z-10"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-brand-navy/20 to-brand-gold/20 z-10"></div>
               <img
                 src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
                 alt={t("hero.featuredArt")}

@@ -35,7 +35,7 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-amber-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
       <Navbar />
       <main>
         {/* Welcome Section */}
@@ -58,14 +58,14 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="card-glass rounded-2xl p-6 hover-lift">
-                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-pink-400 to-purple-400 rounded-xl mx-auto mb-4 shadow-glow">
+                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-xl mx-auto mb-4 shadow-glow">
                   <Heart className="h-7 w-7 text-white" />
                 </div>
                 <div className="text-3xl font-bold text-gradient mb-1">{userFavorites.length}</div>
                 <div className="text-sm text-gray-700 font-medium">{t("home.stats.favorites")}</div>
               </div>
               <div className="card-glass rounded-2xl p-6 hover-lift">
-                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-400 to-indigo-400 rounded-xl mx-auto mb-4 shadow-glow">
+                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl mx-auto mb-4 shadow-glow">
                   <TrendingUp className="h-7 w-7 text-white" />
                 </div>
                 <div className="text-3xl font-bold text-gradient mb-1">{featuredArtworks.length}</div>
@@ -79,7 +79,7 @@ export default function Home() {
                 <div className="text-sm text-gray-700 font-medium">{t("home.stats.liveAuctions")}</div>
               </div>
               <div className="card-glass rounded-2xl p-6 hover-lift">
-                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-amber-400 to-yellow-400 rounded-xl mx-auto mb-4 shadow-glow">
+                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-gray-600 to-gray-700 rounded-xl mx-auto mb-4 shadow-glow">
                   <Users className="h-7 w-7 text-white" />
                 </div>
                 <div className="text-3xl font-bold text-gradient mb-1">{featuredArtists.length}</div>
