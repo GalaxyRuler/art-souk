@@ -813,74 +813,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Community discussion routes
-  app.get('/api/discussions', async (req, res) => {
-    try {
-      const page = parseInt(req.query.page as string) || 1;
-      const limit = parseInt(req.query.limit as string) || 10;
-      const offset = (page - 1) * limit;
-      const discussions = await storage.getDiscussions(limit, offset);
-      res.json(discussions);
-    } catch (error) {
-      console.error('Error fetching discussions:', error);
-      res.status(500).json({ message: 'Failed to fetch discussions' });
-    }
-  });
 
-  app.get('/api/discussions/:id', async (req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      const discussion = await storage.getDiscussion(id);
-      if (!discussion) {
-        return res.status(404).json({ message: 'Discussion not found' });
-      }
-      res.json(discussion);
-    } catch (error) {
-      console.error('Error fetching discussion:', error);
-      res.status(500).json({ message: 'Failed to fetch discussion' });
-    }
-  });
-
-  app.post('/api/discussions', isAuthenticated, async (req: any, res) => {
-    try {
-      const discussionData = insertDiscussionSchema.parse({
-        ...req.body,
-        authorId: req.user.claims.sub
-      });
-      const discussion = await storage.createDiscussion(discussionData);
-      res.json(discussion);
-    } catch (error) {
-      console.error('Error creating discussion:', error);
-      res.status(500).json({ message: 'Failed to create discussion' });
-    }
-  });
-
-  app.get('/api/discussions/:id/replies', async (req, res) => {
-    try {
-      const discussionId = parseInt(req.params.id);
-      const replies = await storage.getDiscussionReplies(discussionId);
-      res.json(replies);
-    } catch (error) {
-      console.error('Error fetching discussion replies:', error);
-      res.status(500).json({ message: 'Failed to fetch replies' });
-    }
-  });
-
-  app.post('/api/discussions/:id/replies', isAuthenticated, async (req: any, res) => {
-    try {
-      const discussionId = parseInt(req.params.id);
-      const replyData = insertDiscussionReplySchema.parse({
-        ...req.body,
-        authorId: req.user.claims.sub,
-        discussionId
-      });
-      const reply = await storage.createDiscussionReply(replyData);
-      res.json(reply);
-    } catch (error) {
-      console.error('Error creating discussion reply:', error);
-      res.status(500).json({ message: 'Failed to create reply' });
-    }
-  });
 
   // Inquiry routes
   app.get('/api/inquiries', isAuthenticated, async (req: any, res) => {

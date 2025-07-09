@@ -20,7 +20,7 @@ import GalleryProfile from "@/pages/GalleryProfile";
 import AuctionDetail from "@/pages/AuctionDetail";
 import Workshops from "@/pages/Workshops";
 import Events from "@/pages/Events";
-import Community from "@/pages/Community";
+
 import Auth from "@/pages/Auth";
 import AdminSetup from "@/pages/AdminSetup";
 import AdminDashboard from "@/pages/AdminDashboard";
@@ -45,7 +45,7 @@ function Router() {
           <Route path="/auctions/:id" component={AuctionDetail} />
           <Route path="/workshops" component={Workshops} />
           <Route path="/events" component={Events} />
-          <Route path="/community" component={Community} />
+
           <Route path="/artwork/:id" component={ArtworkDetail} />
           <Route path="/search" component={Search} />
           <Route path="/dashboard" component={Dashboard} />
@@ -60,7 +60,7 @@ function Router() {
       <Route path="/auctions/:id" component={AuctionDetail} />
       <Route path="/workshops" component={Workshops} />
       <Route path="/events" component={Events} />
-      <Route path="/community" component={Community} />
+
       <Route path="/artwork/:id" component={ArtworkDetail} />
       <Route path="/search" component={Search} />
       <Route path="/auth" component={Auth} />
