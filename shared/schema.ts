@@ -55,6 +55,7 @@ export const artists = pgTable("artists", {
   website: varchar("website"),
   instagram: varchar("instagram"),
   featured: boolean("featured").default(false),
+  paymentMethods: jsonb("payment_methods").default([]),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -75,6 +76,7 @@ export const galleries = pgTable("galleries", {
   profileImage: varchar("profile_image"),
   coverImage: varchar("cover_image"),
   featured: boolean("featured").default(false),
+  paymentMethods: jsonb("payment_methods").default([]),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -434,6 +436,9 @@ export const purchaseOrders = pgTable("purchase_orders", {
   paymentMethod: varchar("payment_method"), // card, bank_transfer, cash_on_delivery
   paymentStatus: varchar("payment_status").default("pending"), // pending, paid, failed, refunded
   notes: text("notes"),
+  sellerNotes: text("seller_notes"),
+  sellerUpdatedAt: timestamp("seller_updated_at"),
+  paymentConfirmedAt: timestamp("payment_confirmed_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

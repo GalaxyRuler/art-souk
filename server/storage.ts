@@ -260,6 +260,16 @@ export interface IStorage {
   createPortfolioSection(section: InsertPortfolioSection): Promise<PortfolioSection>;
   updatePortfolioSection(id: number, section: Partial<InsertPortfolioSection>): Promise<PortfolioSection>;
   deletePortfolioSection(id: number): Promise<void>;
+  
+  // Seller operations
+  getArtistByUserId(userId: string): Promise<Artist | undefined>;
+  getGalleryByUserId(userId: string): Promise<Gallery | undefined>;
+  getSellerPaymentMethods(userId: string): Promise<any[]>;
+  addSellerPaymentMethod(userId: string, method: any): Promise<any>;
+  updateSellerPaymentMethod(userId: string, methodId: string, method: any): Promise<any>;
+  deleteSellerPaymentMethod(userId: string, methodId: string): Promise<void>;
+  getSellerOrders(userId: string): Promise<any[]>;
+  updateSellerOrder(userId: string, orderId: number, update: any): Promise<any>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1424,6 +1434,256 @@ export class DatabaseStorage implements IStorage {
   
   async deletePortfolioSection(id: number): Promise<void> {
     await db.delete(portfolioSections).where(eq(portfolioSections.id, id));
+  }
+  
+  // Seller operations
+  async getArtistByUserId(userId: string): Promise<Artist | undefined> {
+    const [artist] = await db.select().from(artists).where(eq(artists.userId, userId));
+    return artist;
+  }
+  
+  async getGalleryByUserId(userId: string): Promise<Gallery | undefined> {
+    const [gallery] = await db.select().from(galleries).where(eq(galleries.userId, userId));
+    return gallery;
+  }
+  
+  async getSellerPaymentMethods(userId: string): Promise<any[]> {
+    const user = await this.getUser(userId);
+    if (!user) return [];
+    
+    if (user.role === 'artist') {
+      const artist = await this.getArtistByUserId(userId);
+      if (artist?.paymentMethods) {
+        return (artist.paymentMethods as any[]).map((method: any, index: number) => ({
+          ...method,
+          id: `artist-${artist.id}-${index}`
+        }));
+      }
+    } else if (user.role === 'gallery') {
+      const gallery = await this.getGalleryByUserId(userId);
+      if (gallery?.paymentMethods) {
+        return (gallery.paymentMethods as any[]).map((method: any, index: number) => ({
+          ...method,
+          id: `gallery-${gallery.id}-${index}`
+        }));
+      }
+    }
+    
+    return [];
+  }
+  
+  async addSellerPaymentMethod(userId: string, method: any): Promise<any> {
+    const user = await this.getUser(userId);
+    if (!user) throw new Error("User not found");
+    
+    if (user.role === 'artist') {
+      const artist = await this.getArtistByUserId(userId);
+      if (!artist) throw new Error("Artist not found");
+      
+      const methods = (artist.paymentMethods as any[]) || [];
+      methods.push(method);
+      
+      await db.update(artists)
+        .set({ paymentMethods: methods, updatedAt: new Date() })
+        .where(eq(artists.userId, userId));
+      
+      return { ...method, id: `artist-${artist.id}-${methods.length - 1}` };
+    } else if (user.role === 'gallery') {
+      const gallery = await this.getGalleryByUserId(userId);
+      if (!gallery) throw new Error("Gallery not found");
+      
+      const methods = (gallery.paymentMethods as any[]) || [];
+      methods.push(method);
+      
+      await db.update(galleries)
+        .set({ paymentMethods: methods, updatedAt: new Date() })
+        .where(eq(galleries.userId, userId));
+      
+      return { ...method, id: `gallery-${gallery.id}-${methods.length - 1}` };
+    }
+    
+    throw new Error("User is not a seller");
+  }
+  
+  async updateSellerPaymentMethod(userId: string, methodId: string, method: any): Promise<any> {
+    const user = await this.getUser(userId);
+    if (!user) throw new Error("User not found");
+    
+    const [type, id, index] = methodId.split('-');
+    const methodIndex = parseInt(index);
+    
+    if (type === 'artist' && user.role === 'artist') {
+      const artist = await this.getArtistByUserId(userId);
+      if (!artist) throw new Error("Artist not found");
+      
+      const methods = (artist.paymentMethods as any[]) || [];
+      if (methodIndex >= 0 && methodIndex < methods.length) {
+        methods[methodIndex] = { ...methods[methodIndex], ...method };
+        
+        await db.update(artists)
+          .set({ paymentMethods: methods, updatedAt: new Date() })
+          .where(eq(artists.userId, userId));
+        
+        return { ...methods[methodIndex], id: methodId };
+      }
+    } else if (type === 'gallery' && user.role === 'gallery') {
+      const gallery = await this.getGalleryByUserId(userId);
+      if (!gallery) throw new Error("Gallery not found");
+      
+      const methods = (gallery.paymentMethods as any[]) || [];
+      if (methodIndex >= 0 && methodIndex < methods.length) {
+        methods[methodIndex] = { ...methods[methodIndex], ...method };
+        
+        await db.update(galleries)
+          .set({ paymentMethods: methods, updatedAt: new Date() })
+          .where(eq(galleries.userId, userId));
+        
+        return { ...methods[methodIndex], id: methodId };
+      }
+    }
+    
+    throw new Error("Payment method not found");
+  }
+  
+  async deleteSellerPaymentMethod(userId: string, methodId: string): Promise<void> {
+    const user = await this.getUser(userId);
+    if (!user) throw new Error("User not found");
+    
+    const [type, id, index] = methodId.split('-');
+    const methodIndex = parseInt(index);
+    
+    if (type === 'artist' && user.role === 'artist') {
+      const artist = await this.getArtistByUserId(userId);
+      if (!artist) throw new Error("Artist not found");
+      
+      const methods = (artist.paymentMethods as any[]) || [];
+      if (methodIndex >= 0 && methodIndex < methods.length) {
+        methods.splice(methodIndex, 1);
+        
+        await db.update(artists)
+          .set({ paymentMethods: methods, updatedAt: new Date() })
+          .where(eq(artists.userId, userId));
+      }
+    } else if (type === 'gallery' && user.role === 'gallery') {
+      const gallery = await this.getGalleryByUserId(userId);
+      if (!gallery) throw new Error("Gallery not found");
+      
+      const methods = (gallery.paymentMethods as any[]) || [];
+      if (methodIndex >= 0 && methodIndex < methods.length) {
+        methods.splice(methodIndex, 1);
+        
+        await db.update(galleries)
+          .set({ paymentMethods: methods, updatedAt: new Date() })
+          .where(eq(galleries.userId, userId));
+      }
+    }
+  }
+  
+  async getSellerOrders(userId: string): Promise<any[]> {
+    const user = await this.getUser(userId);
+    if (!user) return [];
+    
+    if (user.role === 'artist') {
+      const artist = await this.getArtistByUserId(userId);
+      if (!artist) return [];
+      
+      const orders = await db.select({
+        order: purchaseOrders,
+        artwork: artworks,
+        buyer: users,
+        tracking: shippingTracking
+      })
+      .from(purchaseOrders)
+      .innerJoin(artworks, eq(purchaseOrders.artworkId, artworks.id))
+      .innerJoin(users, eq(purchaseOrders.userId, users.id))
+      .leftJoin(shippingTracking, eq(shippingTracking.orderId, purchaseOrders.id))
+      .where(eq(artworks.artistId, artist.id))
+      .orderBy(desc(purchaseOrders.createdAt));
+      
+      return orders.map(row => ({
+        ...row.order,
+        artwork: row.artwork,
+        buyer: row.buyer,
+        tracking: row.tracking
+      }));
+    } else if (user.role === 'gallery') {
+      const gallery = await this.getGalleryByUserId(userId);
+      if (!gallery) return [];
+      
+      const orders = await db.select({
+        order: purchaseOrders,
+        artwork: artworks,
+        buyer: users,
+        tracking: shippingTracking
+      })
+      .from(purchaseOrders)
+      .innerJoin(artworks, eq(purchaseOrders.artworkId, artworks.id))
+      .innerJoin(users, eq(purchaseOrders.userId, users.id))
+      .leftJoin(shippingTracking, eq(shippingTracking.orderId, purchaseOrders.id))
+      .where(eq(artworks.galleryId, gallery.id))
+      .orderBy(desc(purchaseOrders.createdAt));
+      
+      return orders.map(row => ({
+        ...row.order,
+        artwork: row.artwork,
+        buyer: row.buyer,
+        tracking: row.tracking
+      }));
+    }
+    
+    return [];
+  }
+  
+  async updateSellerOrder(userId: string, orderId: number, update: any): Promise<any> {
+    const user = await this.getUser(userId);
+    if (!user) throw new Error("User not found");
+    
+    // Verify the order belongs to the seller
+    const orders = await this.getSellerOrders(userId);
+    const order = orders.find(o => o.id === orderId);
+    if (!order) throw new Error("Order not found or not authorized");
+    
+    // Update order status
+    const [updatedOrder] = await db.update(purchaseOrders)
+      .set({
+        status: update.status,
+        sellerNotes: update.sellerNotes,
+        sellerUpdatedAt: new Date(),
+        paymentStatus: update.status === 'confirmed' ? 'paid' : purchaseOrders.paymentStatus,
+        paymentConfirmedAt: update.status === 'confirmed' ? new Date() : undefined,
+        updatedAt: new Date()
+      })
+      .where(eq(purchaseOrders.id, orderId))
+      .returning();
+    
+    // Update or create tracking info
+    if (update.trackingInfo && (update.trackingInfo.trackingNumber || update.trackingInfo.carrier)) {
+      const existingTracking = await db.select().from(shippingTracking)
+        .where(eq(shippingTracking.orderId, orderId))
+        .limit(1);
+      
+      if (existingTracking.length > 0) {
+        await db.update(shippingTracking)
+          .set({
+            trackingNumber: update.trackingInfo.trackingNumber || existingTracking[0].trackingNumber,
+            carrier: update.trackingInfo.carrier || existingTracking[0].carrier,
+            status: update.status === 'shipped' ? 'in_transit' : 
+                    update.status === 'delivered' ? 'delivered' : existingTracking[0].status,
+            updatedAt: new Date()
+          })
+          .where(eq(shippingTracking.orderId, orderId));
+      } else {
+        await db.insert(shippingTracking)
+          .values({
+            orderId: orderId,
+            trackingNumber: update.trackingInfo.trackingNumber,
+            carrier: update.trackingInfo.carrier,
+            status: update.status === 'shipped' ? 'in_transit' : 'pending'
+          });
+      }
+    }
+    
+    return updatedOrder;
   }
 }
 

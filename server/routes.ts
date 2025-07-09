@@ -1579,6 +1579,126 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Seller routes
+  app.get('/api/seller/info', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      let sellerInfo = null;
+      if (user.role === 'artist') {
+        sellerInfo = await storage.getArtistByUserId(userId);
+      } else if (user.role === 'gallery') {
+        sellerInfo = await storage.getGalleryByUserId(userId);
+      }
+
+      res.json({ type: user.role, info: sellerInfo });
+    } catch (error) {
+      console.error("Error fetching seller info:", error);
+      res.status(500).json({ message: "Failed to fetch seller info" });
+    }
+  });
+
+  app.get('/api/seller/payment-methods', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user || (user.role !== 'artist' && user.role !== 'gallery')) {
+        return res.status(403).json({ message: "Not authorized as seller" });
+      }
+
+      const methods = await storage.getSellerPaymentMethods(userId);
+      res.json(methods);
+    } catch (error) {
+      console.error("Error fetching payment methods:", error);
+      res.status(500).json({ message: "Failed to fetch payment methods" });
+    }
+  });
+
+  app.post('/api/seller/payment-methods', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user || (user.role !== 'artist' && user.role !== 'gallery')) {
+        return res.status(403).json({ message: "Not authorized as seller" });
+      }
+
+      const method = await storage.addSellerPaymentMethod(userId, req.body);
+      res.json(method);
+    } catch (error) {
+      console.error("Error adding payment method:", error);
+      res.status(500).json({ message: "Failed to add payment method" });
+    }
+  });
+
+  app.patch('/api/seller/payment-methods/:methodId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { methodId } = req.params;
+      
+      const method = await storage.updateSellerPaymentMethod(userId, methodId, req.body);
+      res.json(method);
+    } catch (error) {
+      console.error("Error updating payment method:", error);
+      res.status(500).json({ message: "Failed to update payment method" });
+    }
+  });
+
+  app.delete('/api/seller/payment-methods/:methodId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { methodId } = req.params;
+      
+      await storage.deleteSellerPaymentMethod(userId, methodId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting payment method:", error);
+      res.status(500).json({ message: "Failed to delete payment method" });
+    }
+  });
+
+  app.get('/api/seller/orders', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user || (user.role !== 'artist' && user.role !== 'gallery')) {
+        return res.status(403).json({ message: "Not authorized as seller" });
+      }
+
+      const orders = await storage.getSellerOrders(userId);
+      res.json(orders);
+    } catch (error) {
+      console.error("Error fetching seller orders:", error);
+      res.status(500).json({ message: "Failed to fetch orders" });
+    }
+  });
+
+  app.patch('/api/seller/orders/:orderId/status', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { orderId } = req.params;
+      const { status, sellerNotes, trackingInfo } = req.body;
+      
+      const updatedOrder = await storage.updateSellerOrder(userId, parseInt(orderId), {
+        status,
+        sellerNotes,
+        trackingInfo
+      });
+      
+      res.json(updatedOrder);
+    } catch (error) {
+      console.error("Error updating order:", error);
+      res.status(500).json({ message: "Failed to update order" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

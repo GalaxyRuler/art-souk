@@ -272,3 +272,26 @@ Preferred communication style: Simple, everyday language.
   ✓ Successfully created all database tables using SQL execution
   ✓ Platform now serves as a marketplace facilitator with payments handled externally
   ✓ Updated UI to reflect that all payments are arranged directly between buyers and sellers
+
+- January 17, 2025: Seller Dashboard and Payment Method Management
+  ✓ Added payment methods support for artists and galleries:
+    • Added payment_methods jsonb column to artists and galleries tables
+    • Sellers can add multiple payment methods (bank transfer, PayPal, STC Pay, etc.)
+    • Each payment method includes type, name, details, and optional instructions
+  ✓ Created comprehensive SellerDashboard page with 2 main sections:
+    • Orders Tab: View and manage incoming orders from collectors
+    • Payment Methods Tab: Add, edit, and delete payment methods
+  ✓ Order management features for sellers:
+    • Update order status (pending, confirmed, processing, shipped, delivered, cancelled)
+    • Add seller notes for buyers
+    • Add tracking information (tracking number and carrier)
+    • Automatic payment status update when order is confirmed
+  ✓ Implemented seller API endpoints:
+    • GET /api/seller/info - Get seller type and information
+    • GET/POST/PATCH/DELETE /api/seller/payment-methods - Manage payment methods
+    • GET /api/seller/orders - View orders for seller's artworks
+    • PATCH /api/seller/orders/:id/status - Update order status and tracking
+  ✓ Added seller_notes, seller_updated_at, and payment_confirmed_at to purchase_orders table
+  ✓ Added Seller Dashboard link to main Dashboard for artists and galleries
+  ✓ Added /seller route to App.tsx router for Seller Dashboard access
+  ✓ Platform maintains external payment model - all payments handled directly between parties

@@ -338,7 +338,7 @@ export default function Dashboard() {
                 
                 {/* Analytics Link for Artists/Galleries */}
                 {(user?.role === 'artist' || user?.role === 'gallery') && (
-                  <Link href="/analytics">
+                  <Link to="/analytics">
                     <Button className="w-full mt-4 bg-brand-navy hover:bg-brand-steel">
                       <BarChart3 className="h-4 w-4 mr-2" />
                       View Analytics
@@ -347,12 +347,22 @@ export default function Dashboard() {
                 )}
                 
                 {/* Collector Dashboard Link */}
-                <Link href="/collector">
+                <Link to="/collector">
                   <Button className="w-full mt-4 bg-brand-navy hover:bg-brand-steel">
                     <Package className="h-4 w-4 mr-2" />
                     Collector Dashboard
                   </Button>
                 </Link>
+                
+                {/* Seller Dashboard Link for Artists/Galleries */}
+                {(user?.role === 'artist' || user?.role === 'gallery') && (
+                  <Link to="/seller">
+                    <Button className="w-full mt-2 bg-brand-navy hover:bg-brand-steel">
+                      <ShoppingBag className="h-4 w-4 mr-2" />
+                      Seller Dashboard
+                    </Button>
+                  </Link>
+                )}
               </CardContent>
             </Card>
           </div>
