@@ -952,7 +952,8 @@
       "noResults": "No results found",
       "endOfResults": "End of results"
     }
-  }
+  },
+  "common": {
     "sending": "Sending...",
     "loading": "Loading...",
     "siteName": "Art Souk",
