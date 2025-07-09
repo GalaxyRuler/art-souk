@@ -27,6 +27,9 @@ import {
   type InsertAuction,
   type Bid,
   type InsertBid,
+  auctionResults,
+  type AuctionResult,
+  type InsertAuctionResult,
   type Collection,
   type InsertCollection,
   type Workshop,
@@ -144,6 +147,21 @@ export interface IStorage {
   // Bid operations
   getBidsForAuction(auctionId: number): Promise<Bid[]>;
   createBid(bid: InsertBid): Promise<Bid>;
+  
+  // Auction Results operations
+  getAuctionResultsByArtist(artistId: number, limit?: number): Promise<AuctionResult[]>;
+  getAuctionResultsByArtwork(artworkId: number): Promise<AuctionResult[]>;
+  getAuctionResult(auctionId: number): Promise<AuctionResult | undefined>;
+  createAuctionResult(result: InsertAuctionResult): Promise<AuctionResult>;
+  updateAuctionResult(id: number, result: Partial<InsertAuctionResult>): Promise<AuctionResult>;
+  getArtistAuctionStats(artistId: number): Promise<{
+    totalAuctions: number;
+    totalSales: number;
+    totalRevenue: string;
+    averagePrice: string;
+    highestPrice: string;
+    lowestPrice: string;
+  }>;
   
   // Collection operations
   getCollections(limit?: number, offset?: number): Promise<Collection[]>;
@@ -629,6 +647,89 @@ export class DatabaseStorage implements IStorage {
       .where(eq(auctions.id, bid.auctionId!));
     
     return newBid;
+  }
+
+  // Auction Results operations
+  async getAuctionResultsByArtist(artistId: number, limit = 20): Promise<AuctionResult[]> {
+    return await db
+      .select()
+      .from(auctionResults)
+      .where(eq(auctionResults.artistId, artistId))
+      .orderBy(desc(auctionResults.auctionDate))
+      .limit(limit);
+  }
+
+  async getAuctionResultsByArtwork(artworkId: number): Promise<AuctionResult[]> {
+    return await db
+      .select()
+      .from(auctionResults)
+      .where(eq(auctionResults.artworkId, artworkId))
+      .orderBy(desc(auctionResults.auctionDate));
+  }
+
+  async getAuctionResult(auctionId: number): Promise<AuctionResult | undefined> {
+    const [result] = await db
+      .select()
+      .from(auctionResults)
+      .where(eq(auctionResults.auctionId, auctionId));
+    return result;
+  }
+
+  async createAuctionResult(result: InsertAuctionResult): Promise<AuctionResult> {
+    const [newResult] = await db.insert(auctionResults).values(result).returning();
+    return newResult;
+  }
+
+  async updateAuctionResult(id: number, result: Partial<InsertAuctionResult>): Promise<AuctionResult> {
+    const [updatedResult] = await db
+      .update(auctionResults)
+      .set(result)
+      .where(eq(auctionResults.id, id))
+      .returning();
+    return updatedResult;
+  }
+
+  async getArtistAuctionStats(artistId: number): Promise<{
+    totalAuctions: number;
+    totalSales: number;
+    totalRevenue: string;
+    averagePrice: string;
+    highestPrice: string;
+    lowestPrice: string;
+  }> {
+    const results = await db
+      .select()
+      .from(auctionResults)
+      .where(and(
+        eq(auctionResults.artistId, artistId),
+        eq(auctionResults.status, 'completed')
+      ));
+
+    if (results.length === 0) {
+      return {
+        totalAuctions: 0,
+        totalSales: 0,
+        totalRevenue: '0',
+        averagePrice: '0',
+        highestPrice: '0',
+        lowestPrice: '0'
+      };
+    }
+
+    const prices = results.map(r => parseFloat(r.finalPrice || '0'));
+    const totalRevenue = prices.reduce((sum, price) => sum + price, 0);
+    const averagePrice = totalRevenue / prices.length;
+    const highestPrice = Math.max(...prices);
+    const lowestPrice = Math.min(...prices);
+
+    return {
+      totalAuctions: results.length,
+      totalSales: results.length,
+      totalRevenue: totalRevenue.toFixed(2),
+      averagePrice: averagePrice.toFixed(2),
+      highestPrice: highestPrice.toFixed(2),
+      lowestPrice: lowestPrice.toFixed(2)
+    };
   }
 
   // Collection operations

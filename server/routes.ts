@@ -11,6 +11,7 @@ import {
   insertArtworkSchema, 
   insertAuctionSchema,
   insertBidSchema,
+  insertAuctionResultSchema,
   insertCollectionSchema,
   insertWorkshopSchema,
   insertWorkshopRegistrationSchema,
@@ -608,6 +609,88 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error creating bid:", error);
       res.status(500).json({ message: "Failed to create bid" });
+    }
+  });
+
+  // Auction Results routes
+  app.get('/api/auction-results/artist/:artistId', async (req, res) => {
+    try {
+      const artistId = parseInt(req.params.artistId);
+      const limit = parseInt(req.query.limit as string) || 20;
+      const results = await storage.getAuctionResultsByArtist(artistId, limit);
+      res.json(results);
+    } catch (error) {
+      console.error("Error fetching artist auction results:", error);
+      res.status(500).json({ message: "Failed to fetch artist auction results" });
+    }
+  });
+
+  app.get('/api/auction-results/artwork/:artworkId', async (req, res) => {
+    try {
+      const artworkId = parseInt(req.params.artworkId);
+      const results = await storage.getAuctionResultsByArtwork(artworkId);
+      res.json(results);
+    } catch (error) {
+      console.error("Error fetching artwork auction results:", error);
+      res.status(500).json({ message: "Failed to fetch artwork auction results" });
+    }
+  });
+
+  app.get('/api/auction-results/auction/:auctionId', async (req, res) => {
+    try {
+      const auctionId = parseInt(req.params.auctionId);
+      const result = await storage.getAuctionResult(auctionId);
+      if (!result) {
+        return res.status(404).json({ message: "Auction result not found" });
+      }
+      res.json(result);
+    } catch (error) {
+      console.error("Error fetching auction result:", error);
+      res.status(500).json({ message: "Failed to fetch auction result" });
+    }
+  });
+
+  app.post('/api/auction-results', isAuthenticated, async (req: any, res) => {
+    try {
+      const user = await storage.getUser(req.user.claims.sub);
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const resultData = insertAuctionResultSchema.parse(req.body);
+      const result = await storage.createAuctionResult(resultData);
+      res.json(result);
+    } catch (error) {
+      console.error("Error creating auction result:", error);
+      res.status(500).json({ message: "Failed to create auction result" });
+    }
+  });
+
+  app.put('/api/auction-results/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const user = await storage.getUser(req.user.claims.sub);
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const id = parseInt(req.params.id);
+      const resultData = insertAuctionResultSchema.partial().parse(req.body);
+      const result = await storage.updateAuctionResult(id, resultData);
+      res.json(result);
+    } catch (error) {
+      console.error("Error updating auction result:", error);
+      res.status(500).json({ message: "Failed to update auction result" });
+    }
+  });
+
+  app.get('/api/artists/:id/auction-stats', async (req, res) => {
+    try {
+      const artistId = parseInt(req.params.id);
+      const stats = await storage.getArtistAuctionStats(artistId);
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching artist auction stats:", error);
+      res.status(500).json({ message: "Failed to fetch artist auction stats" });
     }
   });
 

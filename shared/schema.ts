@@ -136,6 +136,25 @@ export const bids = pgTable("bids", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Auction Results table - tracks final auction outcomes
+export const auctionResults = pgTable("auction_results", {
+  id: serial("id").primaryKey(),
+  auctionId: integer("auction_id").references(() => auctions.id).unique(),
+  artworkId: integer("artwork_id").references(() => artworks.id),
+  artistId: integer("artist_id").references(() => artists.id),
+  finalPrice: decimal("final_price", { precision: 10, scale: 2 }),
+  currency: varchar("currency").default("SAR"),
+  winnerUserId: varchar("winner_user_id").references(() => users.id),
+  totalBids: integer("total_bids").default(0),
+  startingPrice: decimal("starting_price", { precision: 10, scale: 2 }),
+  priceIncrease: decimal("price_increase", { precision: 10, scale: 2 }), // percentage increase
+  auctionDate: timestamp("auction_date"),
+  status: varchar("status").default("completed"), // completed, cancelled, no_sale
+  notes: text("notes"),
+  notesAr: text("notes_ar"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Collections table
 export const collections = pgTable("collections", {
   id: serial("id").primaryKey(),
@@ -635,11 +654,13 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   newsletterSubscription: one(newsletterSubscribers, { fields: [users.id], references: [newsletterSubscribers.userId] }),
   emailNotifications: many(emailNotificationQueue),
   emailLogs: many(emailNotificationLog),
+  auctionWins: many(auctionResults),
 }));
 
 export const artistsRelations = relations(artists, ({ one, many }) => ({
   user: one(users, { fields: [artists.userId], references: [users.id] }),
   artworks: many(artworks),
+  auctionResults: many(auctionResults),
 }));
 
 export const galleriesRelations = relations(galleries, ({ one, many }) => ({
@@ -660,11 +681,13 @@ export const artworksRelations = relations(artworks, ({ one, many }) => ({
   certificate: one(artworkCertificates, { fields: [artworks.id], references: [artworkCertificates.artworkId] }),
   wishlistItems: many(collectorWishlist),
   reviews: many(collectorReviews),
+  auctionResults: many(auctionResults),
 }));
 
 export const auctionsRelations = relations(auctions, ({ one, many }) => ({
   artwork: one(artworks, { fields: [auctions.artworkId], references: [artworks.id] }),
   bids: many(bids),
+  result: one(auctionResults, { fields: [auctions.id], references: [auctionResults.auctionId] }),
 }));
 
 export const bidsRelations = relations(bids, ({ one }) => ({
@@ -826,6 +849,14 @@ export const emailNotificationLogRelations = relations(emailNotificationLog, ({ 
   queue: one(emailNotificationQueue, { fields: [emailNotificationLog.queueId], references: [emailNotificationQueue.id] }),
 }));
 
+// Auction Results relations
+export const auctionResultsRelations = relations(auctionResults, ({ one }) => ({
+  auction: one(auctions, { fields: [auctionResults.auctionId], references: [auctions.id] }),
+  artwork: one(artworks, { fields: [auctionResults.artworkId], references: [artworks.id] }),
+  artist: one(artists, { fields: [auctionResults.artistId], references: [artists.id] }),
+  winner: one(users, { fields: [auctionResults.winnerUserId], references: [users.id] }),
+}));
+
 // Export types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -887,6 +918,9 @@ export type Auction = typeof auctions.$inferSelect;
 export type InsertBid = typeof bids.$inferInsert;
 export type Bid = typeof bids.$inferSelect;
 
+export type InsertAuctionResult = typeof auctionResults.$inferInsert;
+export type AuctionResult = typeof auctionResults.$inferSelect;
+
 export type InsertCollection = typeof collections.$inferInsert;
 export type Collection = typeof collections.$inferSelect;
 
@@ -930,6 +964,7 @@ export const insertGallerySchema = createInsertSchema(galleries).omit({ id: true
 export const insertArtworkSchema = createInsertSchema(artworks).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertAuctionSchema = createInsertSchema(auctions).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertBidSchema = createInsertSchema(bids).omit({ id: true, createdAt: true });
+export const insertAuctionResultSchema = createInsertSchema(auctionResults).omit({ id: true, createdAt: true });
 export const insertCollectionSchema = createInsertSchema(collections).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertWorkshopSchema = createInsertSchema(workshops).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertWorkshopRegistrationSchema = createInsertSchema(workshopRegistrations).omit({ id: true, registeredAt: true });
