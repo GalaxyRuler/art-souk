@@ -169,8 +169,8 @@ export default function ArtistProfile() {
     } else {
       navigator.clipboard.writeText(window.location.href);
       toast({
-        title: "Link copied",
-        description: "Artist profile link copied to clipboard",
+        title: t("artist.linkCopied"),
+        description: t("artist.linkCopiedDescription"),
       });
     }
   };
@@ -190,7 +190,7 @@ export default function ArtistProfile() {
         <Link href="/artists">
           <Button variant="ghost" className="mb-6 hover:bg-brand-light-gold">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Artists
+            {t("artist.backToArtists")}
           </Button>
         </Link>
 
@@ -224,7 +224,7 @@ export default function ArtistProfile() {
                   {artist.featured && (
                     <Badge className="bg-brand-gold text-brand-charcoal">
                       <Award className="h-3 w-3 mr-1" />
-                      Featured
+                      {t("artist.featured")}
                     </Badge>
                   )}
                 </div>
@@ -240,15 +240,15 @@ export default function ArtistProfile() {
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
                       <span>
-                        b. {artist.birthYear}
-                        {artist.deathYear && ` - d. ${artist.deathYear}`}
+                        {t("artist.born")} {artist.birthYear}
+                        {artist.deathYear && ` - ${t("artist.died")} ${artist.deathYear}`}
                       </span>
                     </div>
                   )}
                   {artist.artworkCount && (
                     <div className="flex items-center gap-1">
                       <Palette className="h-4 w-4" />
-                      <span>{artist.artworkCount} artworks</span>
+                      <span>{artist.artworkCount} {t("artist.artworks")}</span>
                     </div>
                   )}
                 </div>
@@ -266,7 +266,7 @@ export default function ArtistProfile() {
                   className="bg-white/20 text-white hover:bg-white/30"
                 >
                   <Share2 className="h-4 w-4 mr-2" />
-                  Share
+                  {t("artist.share")}
                 </Button>
               </div>
             </div>
@@ -281,7 +281,7 @@ export default function ArtistProfile() {
               <Card className="card-elevated">
                 <CardContent className="p-6">
                   <h3 className="text-lg font-semibold text-brand-charcoal mb-4">
-                    About the Artist
+                    {t("artist.aboutArtist")}
                   </h3>
                   <ScrollArea className="h-40">
                     <p className="text-muted-foreground leading-relaxed text-sm">
@@ -296,17 +296,17 @@ export default function ArtistProfile() {
             <Card className="card-elevated">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold text-brand-charcoal mb-4">
-                  Statistics
+                  {t("artist.statistics")}
                 </h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Total Artworks</span>
+                    <span className="text-sm text-muted-foreground">{t("artist.totalArtworks")}</span>
                     <span className="font-semibold">{artworks?.length || 0}</span>
                   </div>
                   
                   {artist.totalSales && (
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Total Sales</span>
+                      <span className="text-sm text-muted-foreground">{t("artist.totalSales")}</span>
                       <span className="font-semibold text-brand-gold">
                         {formatPrice(artist.totalSales, "SAR", isRTL ? 'ar' : 'en')}
                       </span>
@@ -315,7 +315,7 @@ export default function ArtistProfile() {
                   
                   {artist.averagePrice && (
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Average Price</span>
+                      <span className="text-sm text-muted-foreground">{t("artist.averagePrice")}</span>
                       <span className="font-semibold">
                         {formatPrice(artist.averagePrice, "SAR", isRTL ? 'ar' : 'en')}
                       </span>
@@ -326,7 +326,7 @@ export default function ArtistProfile() {
                     <>
                       <Separator />
                       <div>
-                        <span className="text-sm text-muted-foreground mb-2 block">Categories</span>
+                        <span className="text-sm text-muted-foreground mb-2 block">{t("artist.categories")}</span>
                         <div className="flex flex-wrap gap-1">
                           {Object.entries(artworkCategories).map(([category, count]) => (
                             <Badge key={category} variant="outline" className="text-xs">
@@ -345,7 +345,7 @@ export default function ArtistProfile() {
             <Card className="card-elevated">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold text-brand-charcoal mb-4">
-                  Contact & Social
+                  {t("artist.contactSocial")}
                 </h3>
                 <div className="space-y-3">
                   {artist.website && (
@@ -356,7 +356,7 @@ export default function ArtistProfile() {
                       className="flex items-center gap-2 text-brand-purple hover:underline text-sm"
                     >
                       <ExternalLink className="h-4 w-4" />
-                      Website
+                      {t("artist.website")}
                     </a>
                   )}
                   
@@ -368,7 +368,7 @@ export default function ArtistProfile() {
                       className="flex items-center gap-2 text-brand-purple hover:underline text-sm"
                     >
                       <ExternalLink className="h-4 w-4" />
-                      Instagram
+                      {t("artist.instagram")}
                     </a>
                   )}
 
@@ -378,7 +378,7 @@ export default function ArtistProfile() {
                       className="flex items-center gap-2 text-brand-purple hover:underline text-sm"
                     >
                       <ExternalLink className="h-4 w-4" />
-                      Email
+                      {t("artist.email")}
                     </a>
                   )}
                 </div>
@@ -390,33 +390,33 @@ export default function ArtistProfile() {
               <Card className="card-elevated">
                 <CardContent className="p-6">
                   <h3 className="text-lg font-semibold text-brand-charcoal mb-4">
-                    Additional Information
+                    {t("artist.additionalInfo")}
                   </h3>
                   <div className="space-y-3">
                     {artist.style && (
                       <div>
-                        <span className="text-sm font-medium">Style:</span>
+                        <span className="text-sm font-medium">{t("artist.style")}:</span>
                         <p className="text-sm text-muted-foreground">{artist.style}</p>
                       </div>
                     )}
                     
                     {artist.medium && (
                       <div>
-                        <span className="text-sm font-medium">Primary Medium:</span>
+                        <span className="text-sm font-medium">{t("artist.primaryMedium")}:</span>
                         <p className="text-sm text-muted-foreground">{artist.medium}</p>
                       </div>
                     )}
                     
                     {artist.education && (
                       <div>
-                        <span className="text-sm font-medium">Education:</span>
+                        <span className="text-sm font-medium">{t("artist.education")}:</span>
                         <p className="text-sm text-muted-foreground">{artist.education}</p>
                       </div>
                     )}
                     
                     {artist.awards && (
                       <div>
-                        <span className="text-sm font-medium">Awards:</span>
+                        <span className="text-sm font-medium">{t("artist.awards")}:</span>
                         <p className="text-sm text-muted-foreground">{artist.awards}</p>
                       </div>
                     )}
@@ -432,11 +432,11 @@ export default function ArtistProfile() {
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="artworks" className="flex items-center gap-2">
                   <Palette className="h-4 w-4" />
-                  Artworks ({artworks?.length || 0})
+                  {t("artist.tabs.artworks")} ({artworks?.length || 0})
                 </TabsTrigger>
                 <TabsTrigger value="exhibitions" className="flex items-center gap-2">
                   <Eye className="h-4 w-4" />
-                  Exhibitions
+                  {t("artist.exhibitions")}
                 </TabsTrigger>
               </TabsList>
 
@@ -465,10 +465,10 @@ export default function ArtistProfile() {
                     <CardContent className="p-12 text-center">
                       <Palette className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                       <h3 className="text-xl font-semibold text-brand-charcoal mb-2">
-                        No artworks available
+                        {t("artist.noArtworksTitle")}
                       </h3>
                       <p className="text-muted-foreground">
-                        This artist hasn't uploaded any artworks yet
+                        {t("artist.noArtworksDescription")}
                       </p>
                     </CardContent>
                   </Card>
@@ -481,7 +481,7 @@ export default function ArtistProfile() {
                   <div className="space-y-4">
                     <div className="grid gap-2">
                       <h3 className="text-lg font-semibold text-brand-charcoal">
-                        Solo Exhibitions
+                        {t("artist.soloExhibitions")}
                       </h3>
                       {exhibitions
                         .filter(ex => ex.type === 'solo')
@@ -511,7 +511,7 @@ export default function ArtistProfile() {
 
                     <div className="grid gap-2">
                       <h3 className="text-lg font-semibold text-brand-charcoal">
-                        Group Exhibitions
+                        {t("artist.groupExhibitions")}
                       </h3>
                       {exhibitions
                         .filter(ex => ex.type === 'group')
@@ -542,10 +542,10 @@ export default function ArtistProfile() {
                     <CardContent className="p-12 text-center">
                       <Eye className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                       <h3 className="text-xl font-semibold text-brand-charcoal mb-2">
-                        No exhibitions listed
+                        {t("artist.noExhibitionsTitle")}
                       </h3>
                       <p className="text-muted-foreground">
-                        Exhibition history will be displayed here when available
+                        {t("artist.noExhibitionsDescription")}
                       </p>
                     </CardContent>
                   </Card>

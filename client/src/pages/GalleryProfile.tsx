@@ -142,10 +142,10 @@ export default function GalleryProfile() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/galleries/${id}/follow-status`] });
       toast({
-        title: isFollowing?.isFollowing ? "Unfollowed gallery" : "Following gallery",
+        title: isFollowing?.isFollowing ? t('gallery.unfollowedGallery') : t('gallery.followingGallery'),
         description: isFollowing?.isFollowing 
-          ? "You are no longer following this gallery" 
-          : "You will receive updates about this gallery",
+          ? t('gallery.unfollowDescription') 
+          : t('gallery.followDescription'),
       });
     },
   });
@@ -171,9 +171,9 @@ export default function GalleryProfile() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">Gallery not found</h1>
+          <h1 className="text-2xl font-bold text-foreground mb-4">{t('gallery.notFound')}</h1>
           <Link href="/galleries">
-            <Button>Browse Galleries</Button>
+            <Button>{t('gallery.browseGalleries')}</Button>
           </Link>
         </div>
       </div>
@@ -203,8 +203,8 @@ export default function GalleryProfile() {
     } else {
       navigator.clipboard.writeText(window.location.href);
       toast({
-        title: "Link copied",
-        description: "Gallery profile link copied to clipboard",
+        title: t('gallery.linkCopied'),
+        description: t('gallery.linkCopiedDescription'),
       });
     }
   };
@@ -220,7 +220,7 @@ export default function GalleryProfile() {
         <Link href="/galleries">
           <Button variant="ghost" className="mb-6 hover:bg-brand-light-gold">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Galleries
+            {t('gallery.backToGalleries')}
           </Button>
         </Link>
 
@@ -254,7 +254,7 @@ export default function GalleryProfile() {
                   {gallery.featured && (
                     <Badge className="bg-brand-gold text-brand-charcoal">
                       <Award className="h-3 w-3 mr-1" />
-                      Featured
+                      {t('gallery.featured')}
                     </Badge>
                   )}
                 </div>
@@ -269,13 +269,13 @@ export default function GalleryProfile() {
                   {gallery.founded && (
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
-                      <span>Est. {gallery.founded}</span>
+                      <span>{t('gallery.established')} {gallery.founded}</span>
                     </div>
                   )}
                   {gallery.artistCount && (
                     <div className="flex items-center gap-1">
                       <Users className="h-4 w-4" />
-                      <span>{gallery.artistCount} artists</span>
+                      <span>{gallery.artistCount} {t('gallery.artists')}</span>
                     </div>
                   )}
                 </div>
@@ -293,7 +293,7 @@ export default function GalleryProfile() {
                   className="bg-white/20 text-white hover:bg-white/30"
                 >
                   <Share2 className="h-4 w-4 mr-2" />
-                  Share
+                  {t('gallery.share')}
                 </Button>
               </div>
             </div>
@@ -308,7 +308,7 @@ export default function GalleryProfile() {
               <Card className="card-elevated">
                 <CardContent className="p-6">
                   <h3 className="text-lg font-semibold text-brand-charcoal mb-4">
-                    About the Gallery
+                    {t('gallery.aboutGallery')}
                   </h3>
                   <ScrollArea className="h-40">
                     <p className="text-muted-foreground leading-relaxed text-sm">
@@ -323,14 +323,14 @@ export default function GalleryProfile() {
             <Card className="card-elevated">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold text-brand-charcoal mb-4">
-                  Contact Information
+                  {t('gallery.contactInfo')}
                 </h3>
                 <div className="space-y-3">
                   {address && (
                     <div className="flex items-start gap-3">
                       <MapPin className="h-4 w-4 text-brand-purple mt-0.5" />
                       <div>
-                        <p className="text-sm font-medium">Address</p>
+                        <p className="text-sm font-medium">{t('gallery.address')}</p>
                         <p className="text-sm text-muted-foreground">{address}</p>
                       </div>
                     </div>
@@ -340,7 +340,7 @@ export default function GalleryProfile() {
                     <div className="flex items-center gap-3">
                       <Phone className="h-4 w-4 text-brand-purple" />
                       <div>
-                        <p className="text-sm font-medium">Phone</p>
+                        <p className="text-sm font-medium">{t('gallery.phone')}</p>
                         <a href={`tel:${gallery.phone}`} className="text-sm text-brand-purple hover:underline">
                           {gallery.phone}
                         </a>
@@ -352,7 +352,7 @@ export default function GalleryProfile() {
                     <div className="flex items-center gap-3">
                       <Mail className="h-4 w-4 text-brand-purple" />
                       <div>
-                        <p className="text-sm font-medium">Email</p>
+                        <p className="text-sm font-medium">{t('gallery.email')}</p>
                         <a href={`mailto:${gallery.email}`} className="text-sm text-brand-purple hover:underline">
                           {gallery.email}
                         </a>
@@ -364,14 +364,14 @@ export default function GalleryProfile() {
                     <div className="flex items-center gap-3">
                       <Globe className="h-4 w-4 text-brand-purple" />
                       <div>
-                        <p className="text-sm font-medium">Website</p>
+                        <p className="text-sm font-medium">{t('gallery.website')}</p>
                         <a 
                           href={gallery.website} 
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="text-sm text-brand-purple hover:underline"
                         >
-                          Visit Website
+                          {t('gallery.visitWebsite')}
                         </a>
                       </div>
                     </div>
@@ -381,7 +381,7 @@ export default function GalleryProfile() {
                     <div className="flex items-start gap-3">
                       <Clock className="h-4 w-4 text-brand-purple mt-0.5" />
                       <div>
-                        <p className="text-sm font-medium">Opening Hours</p>
+                        <p className="text-sm font-medium">{t('gallery.openingHours')}</p>
                         <p className="text-sm text-muted-foreground whitespace-pre-line">
                           {openingHours}
                         </p>
@@ -396,27 +396,27 @@ export default function GalleryProfile() {
             <Card className="card-elevated">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold text-brand-charcoal mb-4">
-                  Gallery Statistics
+                  {t('gallery.galleryStats')}
                 </h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Represented Artists</span>
+                    <span className="text-sm text-muted-foreground">{t('gallery.representedArtists')}</span>
                     <span className="font-semibold">{artists?.length || 0}</span>
                   </div>
                   
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Available Artworks</span>
+                    <span className="text-sm text-muted-foreground">{t('gallery.availableArtworks')}</span>
                     <span className="font-semibold">{artworks?.length || 0}</span>
                   </div>
                   
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Total Exhibitions</span>
+                    <span className="text-sm text-muted-foreground">{t('gallery.totalExhibitions')}</span>
                     <span className="font-semibold">{gallery.exhibitionCount || exhibitions?.length || 0}</span>
                   </div>
 
                   {gallery.founded && (
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Years in Business</span>
+                      <span className="text-sm text-muted-foreground">{t('gallery.yearsInBusiness')}</span>
                       <span className="font-semibold">{new Date().getFullYear() - gallery.founded}</span>
                     </div>
                   )}
@@ -425,7 +425,7 @@ export default function GalleryProfile() {
                     <>
                       <Separator />
                       <div>
-                        <span className="text-sm font-medium mb-2 block">Specialties</span>
+                        <span className="text-sm font-medium mb-2 block">{t('gallery.specialties')}</span>
                         <p className="text-sm text-muted-foreground">{specialties}</p>
                       </div>
                     </>
@@ -435,7 +435,7 @@ export default function GalleryProfile() {
                     <>
                       <Separator />
                       <div>
-                        <span className="text-sm font-medium mb-1 block">Curator</span>
+                        <span className="text-sm font-medium mb-1 block">{t('gallery.curator')}</span>
                         <p className="text-sm text-muted-foreground">{curatorName}</p>
                       </div>
                     </>
@@ -449,7 +449,7 @@ export default function GalleryProfile() {
               <Card className="card-elevated">
                 <CardContent className="p-6">
                   <h3 className="text-lg font-semibold text-brand-charcoal mb-4">
-                    Social Media
+                    {t('gallery.socialMedia')}
                   </h3>
                   <div className="space-y-3">
                     {gallery.instagram && (
@@ -460,7 +460,7 @@ export default function GalleryProfile() {
                         className="flex items-center gap-2 text-brand-purple hover:underline text-sm"
                       >
                         <ExternalLink className="h-4 w-4" />
-                        Instagram
+                        {t('gallery.instagram')}
                       </a>
                     )}
                     
@@ -472,7 +472,7 @@ export default function GalleryProfile() {
                         className="flex items-center gap-2 text-brand-purple hover:underline text-sm"
                       >
                         <ExternalLink className="h-4 w-4" />
-                        Facebook
+                        {t('gallery.facebook')}
                       </a>
                     )}
 
@@ -484,7 +484,7 @@ export default function GalleryProfile() {
                         className="flex items-center gap-2 text-brand-purple hover:underline text-sm"
                       >
                         <ExternalLink className="h-4 w-4" />
-                        Twitter
+                        {t('gallery.twitter')}
                       </a>
                     )}
                   </div>
@@ -502,7 +502,7 @@ export default function GalleryProfile() {
                   <div className="flex items-center gap-3 mb-3">
                     <Eye className="h-5 w-5 text-brand-gold" />
                     <h3 className="text-lg font-semibold text-brand-charcoal">
-                      Current Exhibition{currentExhibitions.length > 1 ? 's' : ''}
+                      {currentExhibitions.length > 1 ? t('gallery.currentExhibitions') : t('gallery.currentExhibition')}
                     </h3>
                   </div>
                   <div className="space-y-2">
@@ -513,11 +513,11 @@ export default function GalleryProfile() {
                           <div>
                             <h4 className="font-medium text-brand-charcoal">{title}</h4>
                             <p className="text-sm text-muted-foreground">
-                              Until {new Date(exhibition.endDate).toLocaleDateString()}
+                              {t('gallery.until')} {new Date(exhibition.endDate).toLocaleDateString()}
                             </p>
                           </div>
                           <Badge className="bg-brand-gold text-brand-charcoal">
-                            {exhibition.type === 'solo' ? 'Solo' : 'Group'}
+                            {exhibition.type === 'solo' ? t('gallery.solo') : t('gallery.group')}
                           </Badge>
                         </div>
                       );
@@ -531,15 +531,15 @@ export default function GalleryProfile() {
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="artworks" className="flex items-center gap-2">
                   <Palette className="h-4 w-4" />
-                  Artworks ({artworks?.length || 0})
+                  {t('gallery.artworks')} ({artworks?.length || 0})
                 </TabsTrigger>
                 <TabsTrigger value="artists" className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
-                  Artists ({artists?.length || 0})
+                  {t('gallery.artists')} ({artists?.length || 0})
                 </TabsTrigger>
                 <TabsTrigger value="exhibitions" className="flex items-center gap-2">
                   <Eye className="h-4 w-4" />
-                  Exhibitions
+                  {t('gallery.exhibitions')}
                 </TabsTrigger>
               </TabsList>
 
@@ -568,10 +568,10 @@ export default function GalleryProfile() {
                     <CardContent className="p-12 text-center">
                       <Palette className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                       <h3 className="text-xl font-semibold text-brand-charcoal mb-2">
-                        No artworks available
+                        {t('gallery.noArtworksAvailable')}
                       </h3>
                       <p className="text-muted-foreground">
-                        This gallery hasn't listed any artworks yet
+                        {t('gallery.noArtworksDescription')}
                       </p>
                     </CardContent>
                   </Card>
@@ -603,10 +603,10 @@ export default function GalleryProfile() {
                     <CardContent className="p-12 text-center">
                       <Users className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                       <h3 className="text-xl font-semibold text-brand-charcoal mb-2">
-                        No artists represented
+                        {t('gallery.noArtistsRepresented')}
                       </h3>
                       <p className="text-muted-foreground">
-                        This gallery hasn't listed any represented artists yet
+                        {t('gallery.noArtistsDescription')}
                       </p>
                     </CardContent>
                   </Card>
@@ -621,7 +621,7 @@ export default function GalleryProfile() {
                     {currentExhibitions.length > 0 && (
                       <div>
                         <h3 className="text-xl font-semibold text-brand-charcoal mb-4">
-                          Current Exhibitions
+                          {t('gallery.currentExhibitions')}
                         </h3>
                         <div className="grid gap-4">
                           {currentExhibitions.map((exhibition) => {
@@ -643,9 +643,9 @@ export default function GalleryProfile() {
                                       <div className="flex items-center justify-between mb-2">
                                         <h4 className="text-lg font-semibold text-brand-charcoal">{title}</h4>
                                         <div className="flex gap-2">
-                                          <Badge className="bg-brand-gold text-brand-charcoal">Current</Badge>
+                                          <Badge className="bg-brand-gold text-brand-charcoal">{t('gallery.current')}</Badge>
                                           <Badge variant="outline">
-                                            {exhibition.type === 'solo' ? 'Solo' : 'Group'}
+                                            {exhibition.type === 'solo' ? t('gallery.solo') : t('gallery.group')}
                                           </Badge>
                                         </div>
                                       </div>
@@ -664,7 +664,7 @@ export default function GalleryProfile() {
                                         {exhibition.artworkCount && (
                                           <div className="flex items-center gap-1">
                                             <Palette className="h-4 w-4" />
-                                            <span>{exhibition.artworkCount} artworks</span>
+                                            <span>{exhibition.artworkCount} {t('gallery.artworksLowercase')}</span>
                                           </div>
                                         )}
                                       </div>
@@ -682,7 +682,7 @@ export default function GalleryProfile() {
                     {upcomingExhibitions.length > 0 && (
                       <div>
                         <h3 className="text-xl font-semibold text-brand-charcoal mb-4">
-                          Upcoming Exhibitions
+                          {t('gallery.upcomingExhibitions')}
                         </h3>
                         <div className="grid gap-4">
                           {upcomingExhibitions.map((exhibition) => {
@@ -704,9 +704,9 @@ export default function GalleryProfile() {
                                       <div className="flex items-center justify-between mb-2">
                                         <h4 className="text-lg font-semibold text-brand-charcoal">{title}</h4>
                                         <div className="flex gap-2">
-                                          <Badge variant="secondary">Upcoming</Badge>
+                                          <Badge variant="secondary">{t('gallery.upcoming')}</Badge>
                                           <Badge variant="outline">
-                                            {exhibition.type === 'solo' ? 'Solo' : 'Group'}
+                                            {exhibition.type === 'solo' ? t('gallery.solo') : t('gallery.group')}
                                           </Badge>
                                         </div>
                                       </div>
@@ -719,13 +719,13 @@ export default function GalleryProfile() {
                                         <div className="flex items-center gap-1">
                                           <Calendar className="h-4 w-4" />
                                           <span>
-                                            Starts {new Date(exhibition.startDate).toLocaleDateString()}
+                                            {t('gallery.starts')} {new Date(exhibition.startDate).toLocaleDateString()}
                                           </span>
                                         </div>
                                         {exhibition.artworkCount && (
                                           <div className="flex items-center gap-1">
                                             <Palette className="h-4 w-4" />
-                                            <span>{exhibition.artworkCount} artworks</span>
+                                            <span>{exhibition.artworkCount} {t('gallery.artworksLowercase')}</span>
                                           </div>
                                         )}
                                       </div>
@@ -743,7 +743,7 @@ export default function GalleryProfile() {
                     {pastExhibitions.length > 0 && (
                       <div>
                         <h3 className="text-xl font-semibold text-brand-charcoal mb-4">
-                          Past Exhibitions
+                          {t('gallery.pastExhibitions')}
                         </h3>
                         <ScrollArea className="h-96">
                           <div className="grid gap-3 pr-4">
@@ -761,7 +761,7 @@ export default function GalleryProfile() {
                                         </p>
                                       </div>
                                       <Badge variant="outline" className="text-xs">
-                                        {exhibition.type === 'solo' ? 'Solo' : 'Group'}
+                                        {exhibition.type === 'solo' ? t('gallery.solo') : t('gallery.group')}
                                       </Badge>
                                     </div>
                                   </CardContent>
@@ -778,10 +778,10 @@ export default function GalleryProfile() {
                     <CardContent className="p-12 text-center">
                       <Eye className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                       <h3 className="text-xl font-semibold text-brand-charcoal mb-2">
-                        No exhibitions listed
+                        {t('gallery.noExhibitions')}
                       </h3>
                       <p className="text-muted-foreground">
-                        Exhibition history will be displayed here when available
+                        {t('gallery.noExhibitionsDescription')}
                       </p>
                     </CardContent>
                   </Card>
