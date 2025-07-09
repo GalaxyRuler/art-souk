@@ -13,6 +13,8 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 export default function Workshops() {
   const { t } = useTranslation();
@@ -127,6 +129,7 @@ export default function Workshops() {
 
   return (
     <div className="min-h-screen bg-mesh-gradient">
+      <Navbar />
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
@@ -204,8 +207,8 @@ export default function Workshops() {
                   <CardContent className="pt-6">
                     <div className="space-y-4">
                       <div className="flex items-center text-gray-700">
-                        <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
-                          <Calendar className="h-5 w-5 text-purple-600" />
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                          <Calendar className="h-5 w-5 text-blue-600" />
                         </div>
                         <span className="font-medium">{formatDate(workshop.startDate)}</span>
                       </div>
@@ -302,7 +305,7 @@ export default function Workshops() {
                     </div>
                     <Button
                       onClick={() => handleRegisterWorkshop(workshop.id)}
-                      className="w-full h-12 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-xl shadow-lg"
+                      className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-xl shadow-lg"
                       disabled={workshop.currentParticipants >= workshop.maxParticipants}
                     >
                       {workshop.currentParticipants >= workshop.maxParticipants ? "Workshop Full" : "Register Now"}
@@ -323,6 +326,7 @@ export default function Workshops() {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

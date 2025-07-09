@@ -13,6 +13,8 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 export default function Events() {
   const { t } = useTranslation();
@@ -131,6 +133,7 @@ export default function Events() {
 
   return (
     <div className="min-h-screen bg-mesh-gradient">
+      <Navbar />
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
@@ -342,6 +345,7 @@ export default function Events() {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 }
