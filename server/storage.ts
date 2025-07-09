@@ -1723,6 +1723,16 @@ export class DatabaseStorage implements IStorage {
       .where(eq(newsletterSubscribers.userId, userId));
     return subscriber;
   }
+
+  async getNewsletterSubscribers(status?: string): Promise<NewsletterSubscriber[]> {
+    let query = db.select().from(newsletterSubscribers);
+    
+    if (status) {
+      query = query.where(eq(newsletterSubscribers.subscriptionStatus, status));
+    }
+    
+    return await query.orderBy(desc(newsletterSubscribers.subscribedAt));
+  }
   
   async createEmailTemplate(template: InsertEmailTemplate): Promise<EmailTemplate> {
     const [newTemplate] = await db.insert(emailTemplates)
