@@ -20,8 +20,8 @@ export default function Events() {
   const { toast } = useToast();
   
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
 
   const isRTL = language === "ar";
 
@@ -81,8 +81,8 @@ export default function Events() {
   const filteredEvents = events?.filter((event: any) => {
     const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          event.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !selectedCategory || event.category === selectedCategory;
-    const matchesStatus = !selectedStatus || event.status === selectedStatus;
+    const matchesCategory = !selectedCategory || selectedCategory === "all" || event.category === selectedCategory;
+    const matchesStatus = !selectedStatus || selectedStatus === "all" || event.status === selectedStatus;
     
     return matchesSearch && matchesCategory && matchesStatus;
   });
@@ -158,7 +158,7 @@ export default function Events() {
                 <SelectValue placeholder={t("events.category", "Category")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="exhibition">Exhibition</SelectItem>
                 <SelectItem value="workshop">Workshop</SelectItem>
                 <SelectItem value="talk">Talk</SelectItem>
@@ -170,7 +170,7 @@ export default function Events() {
                 <SelectValue placeholder={t("events.status", "Status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Status</SelectItem>
+                <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="published">Published</SelectItem>
                 <SelectItem value="upcoming">Upcoming</SelectItem>
                 <SelectItem value="completed">Completed</SelectItem>

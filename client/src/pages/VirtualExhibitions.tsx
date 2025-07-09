@@ -61,8 +61,8 @@ export default function VirtualExhibitions() {
   const { isRTL } = useLanguage();
   const [activeTab, setActiveTab] = useState("featured");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterType, setFilterType] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
+  const [filterType, setFilterType] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
 
   const { data: featuredExhibitions, isLoading: featuredLoading } = useQuery<VirtualExhibition[]>({
@@ -351,7 +351,7 @@ export default function VirtualExhibitions() {
                       <SelectValue placeholder="Type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Types</SelectItem>
+                      <SelectItem value="all">All Types</SelectItem>
                       <SelectItem value="solo">Solo</SelectItem>
                       <SelectItem value="group">Group</SelectItem>
                       <SelectItem value="thematic">Thematic</SelectItem>
@@ -364,7 +364,7 @@ export default function VirtualExhibitions() {
                       <SelectValue placeholder="Status" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Status</SelectItem>
+                      <SelectItem value="all">All Status</SelectItem>
                       <SelectItem value="live">Live Now</SelectItem>
                       <SelectItem value="upcoming">Upcoming</SelectItem>
                       <SelectItem value="ended">Archived</SelectItem>

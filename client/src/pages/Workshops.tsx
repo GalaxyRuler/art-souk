@@ -20,8 +20,8 @@ export default function Workshops() {
   const { toast } = useToast();
   
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [selectedLevel, setSelectedLevel] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedLevel, setSelectedLevel] = useState<string>("all");
 
   const isRTL = language === "ar";
 
@@ -79,8 +79,8 @@ export default function Workshops() {
   const filteredWorkshops = workshops?.filter((workshop: any) => {
     const matchesSearch = workshop.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          workshop.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !selectedCategory || workshop.category === selectedCategory;
-    const matchesLevel = !selectedLevel || workshop.skillLevel === selectedLevel;
+    const matchesCategory = !selectedCategory || selectedCategory === "all" || workshop.category === selectedCategory;
+    const matchesLevel = !selectedLevel || selectedLevel === "all" || workshop.skillLevel === selectedLevel;
     
     return matchesSearch && matchesCategory && matchesLevel;
   });
@@ -154,7 +154,7 @@ export default function Workshops() {
                 <SelectValue placeholder={t("workshops.category", "Category")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="painting">Painting</SelectItem>
                 <SelectItem value="sculpture">Sculpture</SelectItem>
                 <SelectItem value="drawing">Drawing</SelectItem>
@@ -167,7 +167,7 @@ export default function Workshops() {
                 <SelectValue placeholder={t("workshops.level", "Skill Level")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Levels</SelectItem>
+                <SelectItem value="all">All Levels</SelectItem>
                 <SelectItem value="beginner">Beginner</SelectItem>
                 <SelectItem value="intermediate">Intermediate</SelectItem>
                 <SelectItem value="advanced">Advanced</SelectItem>

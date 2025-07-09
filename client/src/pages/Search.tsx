@@ -46,12 +46,12 @@ export default function Search() {
   const [filters, setFilters] = useState<SearchFilters>({
     query: '',
     type: 'all',
-    category: '',
-    medium: '',
-    style: '',
+    category: 'all',
+    medium: 'all',
+    style: 'all',
     priceRange: [0, 100000],
     availability: [],
-    nationality: '',
+    nationality: 'all',
     yearRange: [1900, 2024],
     sortBy: 'relevance'
   });
@@ -88,7 +88,7 @@ export default function Search() {
       style: '',
       priceRange: [0, 100000],
       availability: [],
-      nationality: '',
+      nationality: 'all',
       yearRange: [1900, 2024],
       sortBy: 'relevance'
     }));
@@ -191,7 +191,7 @@ export default function Search() {
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Categories</SelectItem>
+                        <SelectItem value="all">All Categories</SelectItem>
                         {categories.map((category) => (
                           <SelectItem key={category} value={category}>{category}</SelectItem>
                         ))}
@@ -207,7 +207,7 @@ export default function Search() {
                         <SelectValue placeholder="Select medium" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Mediums</SelectItem>
+                        <SelectItem value="all">All Mediums</SelectItem>
                         {mediums.map((medium) => (
                           <SelectItem key={medium} value={medium}>{medium}</SelectItem>
                         ))}
@@ -223,7 +223,7 @@ export default function Search() {
                         <SelectValue placeholder="Select style" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Styles</SelectItem>
+                        <SelectItem value="all">All Styles</SelectItem>
                         {styles.map((style) => (
                           <SelectItem key={style} value={style}>{style}</SelectItem>
                         ))}
@@ -285,7 +285,7 @@ export default function Search() {
                         <SelectValue placeholder="Select nationality" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Nationalities</SelectItem>
+                        <SelectItem value="all">All Nationalities</SelectItem>
                         {nationalities.map((nationality) => (
                           <SelectItem key={nationality} value={nationality}>{nationality}</SelectItem>
                         ))}
