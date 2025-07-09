@@ -60,6 +60,21 @@ import {
   userProfiles,
   type UserProfile,
   type InsertUserProfile,
+  artworkViews,
+  type ArtworkView,
+  type InsertArtworkView,
+  artistAnalytics,
+  type ArtistAnalytics,
+  type InsertArtistAnalytics,
+  searchHistory,
+  type SearchHistory,
+  type InsertSearchHistory,
+  userPreferences,
+  type UserPreferences,
+  type InsertUserPreferences,
+  portfolioSections,
+  type PortfolioSection,
+  type InsertPortfolioSection,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
@@ -223,6 +238,20 @@ export interface IStorage {
   getUserProfile(userId: string): Promise<UserProfile | undefined>;
   createUserProfile(profile: InsertUserProfile): Promise<UserProfile>;
   updateUserProfile(userId: string, profile: Partial<InsertUserProfile>): Promise<UserProfile>;
+  
+  // Analytics operations
+  recordArtworkView(view: InsertArtworkView): Promise<ArtworkView>;
+  getArtworkViews(artworkId: number, days?: number): Promise<ArtworkView[]>;
+  updateArtistAnalytics(artistId: number, date: string): Promise<ArtistAnalytics>;
+  getArtistAnalytics(artistId: number, startDate?: string, endDate?: string): Promise<ArtistAnalytics[]>;
+  recordSearchHistory(search: InsertSearchHistory): Promise<SearchHistory>;
+  getSearchHistory(userId: string, limit?: number): Promise<SearchHistory[]>;
+  getUserPreferences(userId: string): Promise<UserPreferences | undefined>;
+  upsertUserPreferences(preferences: InsertUserPreferences): Promise<UserPreferences>;
+  getPortfolioSections(artistId: number): Promise<PortfolioSection[]>;
+  createPortfolioSection(section: InsertPortfolioSection): Promise<PortfolioSection>;
+  updatePortfolioSection(id: number, section: Partial<InsertPortfolioSection>): Promise<PortfolioSection>;
+  deletePortfolioSection(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1250,6 +1279,143 @@ export class DatabaseStorage implements IStorage {
   async getDiscussionCount(): Promise<number> {
     const [result] = await db.select({ count: count() }).from(discussions);
     return result.count;
+  }
+  
+  // Analytics operations
+  async recordArtworkView(view: InsertArtworkView): Promise<ArtworkView> {
+    const [newView] = await db.insert(artworkViews).values(view).returning();
+    return newView;
+  }
+  
+  async getArtworkViews(artworkId: number, days = 30): Promise<ArtworkView[]> {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+    
+    return await db.select().from(artworkViews)
+      .where(and(
+        eq(artworkViews.artworkId, artworkId),
+        gte(artworkViews.viewedAt, startDate)
+      ))
+      .orderBy(desc(artworkViews.viewedAt));
+  }
+  
+  async updateArtistAnalytics(artistId: number, date: string): Promise<ArtistAnalytics> {
+    // Get current stats for the artist
+    const [profileViews] = await db.select({ count: count() }).from(artworkViews)
+      .innerJoin(artworks, eq(artworkViews.artworkId, artworks.id))
+      .where(and(
+        eq(artworks.artistId, artistId),
+        eq(sql`DATE(${artworkViews.viewedAt})`, date)
+      ));
+    
+    const [artworkViewsCount] = await db.select({ count: count() }).from(artworkViews)
+      .innerJoin(artworks, eq(artworkViews.artworkId, artworks.id))
+      .where(eq(artworks.artistId, artistId));
+    
+    const [inquiriesCount] = await db.select({ count: count() }).from(inquiries)
+      .innerJoin(artworks, eq(inquiries.artworkId, artworks.id))
+      .where(eq(artworks.artistId, artistId));
+    
+    const [followersCount] = await db.select({ count: count() }).from(follows)
+      .where(and(
+        eq(follows.entityType, 'artist'),
+        eq(follows.entityId, artistId)
+      ));
+    
+    const analytics = {
+      artistId,
+      date,
+      profileViews: profileViews.count,
+      artworkViews: artworkViewsCount.count,
+      inquiries: inquiriesCount.count,
+      followers: followersCount.count,
+      totalSales: "0", // This would need to be calculated from actual sales data
+    };
+    
+    const [updated] = await db.insert(artistAnalytics)
+      .values(analytics)
+      .onConflictDoUpdate({
+        target: [artistAnalytics.artistId, artistAnalytics.date],
+        set: {
+          ...analytics,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    
+    return updated;
+  }
+  
+  async getArtistAnalytics(artistId: number, startDate?: string, endDate?: string): Promise<ArtistAnalytics[]> {
+    let query = db.select().from(artistAnalytics).where(eq(artistAnalytics.artistId, artistId));
+    
+    if (startDate && endDate) {
+      query = query.where(and(
+        gte(artistAnalytics.date, startDate),
+        lte(artistAnalytics.date, endDate)
+      ));
+    }
+    
+    return await query.orderBy(desc(artistAnalytics.date));
+  }
+  
+  async recordSearchHistory(search: InsertSearchHistory): Promise<SearchHistory> {
+    const [newSearch] = await db.insert(searchHistory).values(search).returning();
+    return newSearch;
+  }
+  
+  async getSearchHistory(userId: string, limit = 20): Promise<SearchHistory[]> {
+    return await db.select().from(searchHistory)
+      .where(eq(searchHistory.userId, userId))
+      .orderBy(desc(searchHistory.searchedAt))
+      .limit(limit);
+  }
+  
+  async getUserPreferences(userId: string): Promise<UserPreferences | undefined> {
+    const [preferences] = await db.select().from(userPreferences)
+      .where(eq(userPreferences.userId, userId));
+    return preferences;
+  }
+  
+  async upsertUserPreferences(preferences: InsertUserPreferences): Promise<UserPreferences> {
+    const [updated] = await db.insert(userPreferences)
+      .values(preferences)
+      .onConflictDoUpdate({
+        target: userPreferences.userId,
+        set: {
+          ...preferences,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return updated;
+  }
+  
+  async getPortfolioSections(artistId: number): Promise<PortfolioSection[]> {
+    return await db.select().from(portfolioSections)
+      .where(and(
+        eq(portfolioSections.artistId, artistId),
+        eq(portfolioSections.isVisible, true)
+      ))
+      .orderBy(asc(portfolioSections.orderIndex));
+  }
+  
+  async createPortfolioSection(section: InsertPortfolioSection): Promise<PortfolioSection> {
+    const [newSection] = await db.insert(portfolioSections).values(section).returning();
+    return newSection;
+  }
+  
+  async updatePortfolioSection(id: number, section: Partial<InsertPortfolioSection>): Promise<PortfolioSection> {
+    const [updated] = await db
+      .update(portfolioSections)
+      .set({ ...section, updatedAt: new Date() })
+      .where(eq(portfolioSections.id, id))
+      .returning();
+    return updated;
+  }
+  
+  async deletePortfolioSection(id: number): Promise<void> {
+    await db.delete(portfolioSections).where(eq(portfolioSections.id, id));
   }
 }
 

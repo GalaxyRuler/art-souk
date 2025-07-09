@@ -10,6 +10,8 @@ import {
   decimal,
   boolean,
   uuid,
+  date,
+  unique,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
@@ -357,6 +359,66 @@ export const userProfiles = pgTable("user_profiles", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Analytics tables
+export const artworkViews = pgTable("artwork_views", {
+  id: serial("id").primaryKey(),
+  artworkId: integer("artwork_id").references(() => artworks.id).notNull(),
+  userId: varchar("user_id").references(() => users.id),
+  viewedAt: timestamp("viewed_at").defaultNow().notNull(),
+  duration: integer("duration"), // in seconds
+  source: varchar("source", { length: 50 }), // 'search', 'direct', 'collection', etc.
+});
+
+export const artistAnalytics = pgTable("artist_analytics", {
+  id: serial("id").primaryKey(),
+  artistId: integer("artist_id").references(() => artists.id).notNull(),
+  date: date("date").notNull(),
+  profileViews: integer("profile_views").default(0),
+  artworkViews: integer("artwork_views").default(0),
+  inquiries: integer("inquiries").default(0),
+  followers: integer("followers").default(0),
+  totalSales: decimal("total_sales", { precision: 10, scale: 2 }).default("0"),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => ({
+  uniqueArtistDate: unique().on(table.artistId, table.date)
+}));
+
+export const searchHistory = pgTable("search_history", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  query: varchar("query", { length: 255 }).notNull(),
+  filters: jsonb("filters"),
+  resultCount: integer("result_count"),
+  clickedResults: jsonb("clicked_results"),
+  searchedAt: timestamp("searched_at").defaultNow().notNull(),
+});
+
+export const userPreferences = pgTable("user_preferences", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull().unique(),
+  preferredCategories: text("preferred_categories").array(),
+  preferredStyles: text("preferred_styles").array(),
+  preferredArtists: integer("preferred_artists").array(),
+  priceRange: jsonb("price_range"), // {min: number, max: number}
+  notificationSettings: jsonb("notification_settings"),
+  privacySettings: jsonb("privacy_settings"),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const portfolioSections = pgTable("portfolio_sections", {
+  id: serial("id").primaryKey(),
+  artistId: integer("artist_id").references(() => artists.id).notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  titleAr: varchar("title_ar", { length: 255 }),
+  content: text("content"),
+  contentAr: text("content_ar"),
+  sectionType: varchar("section_type", { length: 50 }).notNull(), // 'statement', 'cv', 'exhibitions', 'awards', 'press'
+  orderIndex: integer("order_index").default(0),
+  isVisible: boolean("is_visible").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ one, many }) => ({
   profile: one(userProfiles, { fields: [users.id], references: [userProfiles.userId] }),
@@ -479,6 +541,28 @@ export const userProfilesRelations = relations(userProfiles, ({ one }) => ({
   user: one(users, { fields: [userProfiles.userId], references: [users.id] }),
 }));
 
+// Analytics relations
+export const artworkViewsRelations = relations(artworkViews, ({ one }) => ({
+  artwork: one(artworks, { fields: [artworkViews.artworkId], references: [artworks.id] }),
+  user: one(users, { fields: [artworkViews.userId], references: [users.id] }),
+}));
+
+export const artistAnalyticsRelations = relations(artistAnalytics, ({ one }) => ({
+  artist: one(artists, { fields: [artistAnalytics.artistId], references: [artists.id] }),
+}));
+
+export const searchHistoryRelations = relations(searchHistory, ({ one }) => ({
+  user: one(users, { fields: [searchHistory.userId], references: [users.id] }),
+}));
+
+export const userPreferencesRelations = relations(userPreferences, ({ one }) => ({
+  user: one(users, { fields: [userPreferences.userId], references: [users.id] }),
+}));
+
+export const portfolioSectionsRelations = relations(portfolioSections, ({ one }) => ({
+  artist: one(artists, { fields: [portfolioSections.artistId], references: [artists.id] }),
+}));
+
 // Export types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -586,4 +670,16 @@ export const insertFollowSchema = createInsertSchema(follows).omit({ id: true, c
 export const insertCommentSchema = createInsertSchema(comments).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertLikeSchema = createInsertSchema(likes).omit({ id: true, createdAt: true });
 export const insertActivitySchema = createInsertSchema(activities).omit({ id: true, createdAt: true });
+
+// Analytics types
+export type ArtworkView = typeof artworkViews.$inferSelect;
+export type InsertArtworkView = typeof artworkViews.$inferInsert;
+export type ArtistAnalytics = typeof artistAnalytics.$inferSelect;
+export type InsertArtistAnalytics = typeof artistAnalytics.$inferInsert;
+export type SearchHistory = typeof searchHistory.$inferSelect;
+export type InsertSearchHistory = typeof searchHistory.$inferInsert;
+export type UserPreferences = typeof userPreferences.$inferSelect;
+export type InsertUserPreferences = typeof userPreferences.$inferInsert;
+export type PortfolioSection = typeof portfolioSections.$inferSelect;
+export type InsertPortfolioSection = typeof portfolioSections.$inferInsert;
 export const insertUserProfileSchema = createInsertSchema(userProfiles).omit({ id: true, createdAt: true, updatedAt: true });

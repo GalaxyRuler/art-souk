@@ -20,6 +20,8 @@ import GalleryProfile from "@/pages/GalleryProfile";
 import AuctionDetail from "@/pages/AuctionDetail";
 import Workshops from "@/pages/Workshops";
 import Events from "@/pages/Events";
+import Analytics from "@/pages/Analytics";
+import UserPreferences from "@/pages/UserPreferences";
 
 import Auth from "@/pages/Auth";
 import AdminSetup from "@/pages/AdminSetup";
@@ -49,6 +51,8 @@ function Router() {
           <Route path="/artwork/:id" component={ArtworkDetail} />
           <Route path="/search" component={Search} />
           <Route path="/dashboard" component={Dashboard} />
+          <Route path="/analytics" component={Analytics} />
+          <Route path="/preferences" component={UserPreferences} />
         </>
       )}
       {/* Public routes accessible to all users */}

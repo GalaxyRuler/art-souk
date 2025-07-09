@@ -11,13 +11,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Heart, MessageSquare, User, Settings, Eye, Calendar, MapPin, Phone, Mail, Edit2, Save, X } from "lucide-react";
+import { Heart, MessageSquare, User, Settings, Eye, Calendar, MapPin, Phone, Mail, Edit2, Save, X, BarChart3 } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { ArtworkCard } from "@/components/ArtworkCard";
+import { Link } from "wouter";
 
 interface UserProfile {
   id: string;
@@ -334,6 +335,16 @@ export default function Dashboard() {
                     <Badge variant="secondary">---</Badge>
                   </div>
                 </div>
+                
+                {/* Analytics Link for Artists/Galleries */}
+                {(user?.role === 'artist' || user?.role === 'gallery') && (
+                  <Link href="/analytics">
+                    <Button className="w-full mt-4 bg-brand-navy hover:bg-brand-steel">
+                      <BarChart3 className="h-4 w-4 mr-2" />
+                      View Analytics
+                    </Button>
+                  </Link>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -533,14 +544,32 @@ export default function Dashboard() {
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
+                        <h4 className="font-medium">Art Preferences & Recommendations</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Customize your interests for personalized recommendations
+                        </p>
+                      </div>
+                      <Link href="/preferences">
+                        <Button variant="outline" size="sm">
+                          Configure
+                        </Button>
+                      </Link>
+                    </div>
+                    
+                    <Separator />
+                    
+                    <div className="flex items-center justify-between">
+                      <div>
                         <h4 className="font-medium">Email Notifications</h4>
                         <p className="text-sm text-muted-foreground">
                           Receive updates about new artworks and auctions
                         </p>
                       </div>
-                      <Button variant="outline" size="sm">
-                        Configure
-                      </Button>
+                      <Link href="/preferences">
+                        <Button variant="outline" size="sm">
+                          Configure
+                        </Button>
+                      </Link>
                     </div>
                     
                     <Separator />
@@ -552,9 +581,11 @@ export default function Dashboard() {
                           Stay updated with art market news and insights
                         </p>
                       </div>
-                      <Button variant="outline" size="sm">
-                        Configure
-                      </Button>
+                      <Link href="/preferences">
+                        <Button variant="outline" size="sm">
+                          Configure
+                        </Button>
+                      </Link>
                     </div>
 
                     <Separator />
@@ -566,9 +597,11 @@ export default function Dashboard() {
                           Manage your data and privacy preferences
                         </p>
                       </div>
-                      <Button variant="outline" size="sm">
-                        Manage
-                      </Button>
+                      <Link href="/preferences">
+                        <Button variant="outline" size="sm">
+                          Manage
+                        </Button>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>

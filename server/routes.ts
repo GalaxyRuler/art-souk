@@ -1178,6 +1178,179 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Analytics routes
+  app.post('/api/analytics/artwork-views', async (req: any, res) => {
+    try {
+      const { artworkId, duration, source } = req.body;
+      const userId = req.isAuthenticated() ? req.user.claims.sub : null;
+      
+      const view = await storage.recordArtworkView({
+        artworkId,
+        userId,
+        duration,
+        source,
+      });
+      
+      res.json(view);
+    } catch (error) {
+      console.error("Error recording artwork view:", error);
+      res.status(500).json({ message: "Failed to record artwork view" });
+    }
+  });
+  
+  app.get('/api/analytics/artwork-views/:artworkId', async (req, res) => {
+    try {
+      const artworkId = parseInt(req.params.artworkId);
+      const days = parseInt(req.query.days as string) || 30;
+      const views = await storage.getArtworkViews(artworkId, days);
+      res.json(views);
+    } catch (error) {
+      console.error("Error fetching artwork views:", error);
+      res.status(500).json({ message: "Failed to fetch artwork views" });
+    }
+  });
+  
+  app.post('/api/analytics/artist/:artistId', isAuthenticated, async (req, res) => {
+    try {
+      const artistId = parseInt(req.params.artistId);
+      const date = req.body.date || new Date().toISOString().split('T')[0];
+      const analytics = await storage.updateArtistAnalytics(artistId, date);
+      res.json(analytics);
+    } catch (error) {
+      console.error("Error updating artist analytics:", error);
+      res.status(500).json({ message: "Failed to update artist analytics" });
+    }
+  });
+  
+  app.get('/api/analytics/artist/:artistId', async (req, res) => {
+    try {
+      const artistId = parseInt(req.params.artistId);
+      const { startDate, endDate } = req.query;
+      const analytics = await storage.getArtistAnalytics(
+        artistId,
+        startDate as string,
+        endDate as string
+      );
+      res.json(analytics);
+    } catch (error) {
+      console.error("Error fetching artist analytics:", error);
+      res.status(500).json({ message: "Failed to fetch artist analytics" });
+    }
+  });
+  
+  app.post('/api/analytics/search', async (req: any, res) => {
+    try {
+      const { query, filters, resultCount, clickedResults } = req.body;
+      const userId = req.isAuthenticated() ? req.user.claims.sub : null;
+      
+      if (userId) {
+        const search = await storage.recordSearchHistory({
+          userId,
+          query,
+          filters,
+          resultCount,
+          clickedResults,
+        });
+        res.json(search);
+      } else {
+        res.json({ message: "Search recorded without user" });
+      }
+    } catch (error) {
+      console.error("Error recording search:", error);
+      res.status(500).json({ message: "Failed to record search" });
+    }
+  });
+  
+  app.get('/api/analytics/search-history', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const limit = parseInt(req.query.limit as string) || 20;
+      const history = await storage.getSearchHistory(userId, limit);
+      res.json(history);
+    } catch (error) {
+      console.error("Error fetching search history:", error);
+      res.status(500).json({ message: "Failed to fetch search history" });
+    }
+  });
+  
+  app.get('/api/preferences', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const preferences = await storage.getUserPreferences(userId);
+      res.json(preferences || {});
+    } catch (error) {
+      console.error("Error fetching preferences:", error);
+      res.status(500).json({ message: "Failed to fetch preferences" });
+    }
+  });
+  
+  app.put('/api/preferences', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const preferences = await storage.upsertUserPreferences({
+        userId,
+        ...req.body,
+      });
+      res.json(preferences);
+    } catch (error) {
+      console.error("Error updating preferences:", error);
+      res.status(500).json({ message: "Failed to update preferences" });
+    }
+  });
+  
+  app.get('/api/artists/:artistId/portfolio', async (req, res) => {
+    try {
+      const artistId = parseInt(req.params.artistId);
+      const sections = await storage.getPortfolioSections(artistId);
+      res.json(sections);
+    } catch (error) {
+      console.error("Error fetching portfolio sections:", error);
+      res.status(500).json({ message: "Failed to fetch portfolio sections" });
+    }
+  });
+  
+  app.post('/api/artists/:artistId/portfolio', isAuthenticated, async (req: any, res) => {
+    try {
+      const artistId = parseInt(req.params.artistId);
+      // Verify the user owns this artist profile
+      const artist = await storage.getArtist(artistId);
+      if (!artist || artist.userId !== req.user.claims.sub) {
+        return res.status(403).json({ message: "Unauthorized" });
+      }
+      
+      const section = await storage.createPortfolioSection({
+        artistId,
+        ...req.body,
+      });
+      res.json(section);
+    } catch (error) {
+      console.error("Error creating portfolio section:", error);
+      res.status(500).json({ message: "Failed to create portfolio section" });
+    }
+  });
+  
+  app.put('/api/portfolio/:sectionId', isAuthenticated, async (req: any, res) => {
+    try {
+      const sectionId = parseInt(req.params.sectionId);
+      const section = await storage.updatePortfolioSection(sectionId, req.body);
+      res.json(section);
+    } catch (error) {
+      console.error("Error updating portfolio section:", error);
+      res.status(500).json({ message: "Failed to update portfolio section" });
+    }
+  });
+  
+  app.delete('/api/portfolio/:sectionId', isAuthenticated, async (req, res) => {
+    try {
+      const sectionId = parseInt(req.params.sectionId);
+      await storage.deletePortfolioSection(sectionId);
+      res.json({ message: "Portfolio section deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting portfolio section:", error);
+      res.status(500).json({ message: "Failed to delete portfolio section" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
