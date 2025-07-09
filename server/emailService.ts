@@ -313,7 +313,7 @@ export class EmailService {
       // Send welcome email
       await this.queueTemplatedEmail(
         email,
-        'newsletter_welcome',
+        'welcome',
         {
           firstName: options.firstName || 'Subscriber',
         },
