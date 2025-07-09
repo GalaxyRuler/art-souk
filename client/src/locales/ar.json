@@ -995,5 +995,17 @@
       "noResults": "لم يتم العثور على نتائج",
       "endOfResults": "نهاية النتائج"
     }
+  },
+  "common": {
+    "sending": "جاري الإرسال...",
+    "loading": "جاري التحميل...",
+    "siteName": "سوق آرت",
+    "siteNameAr": "سوق آرت",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "error": "خطأ",
+    "items": "عناصر"
   }
 }

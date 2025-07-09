@@ -74,8 +74,8 @@ export function HeroSection() {
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-8 z-20">
                 <p className="text-white/80 text-sm font-medium mb-2">{t("hero.featuredArtist")}</p>
-                <p className="text-white text-2xl font-bold">Ahmed Al-Rashid</p>
-                <p className="text-brand-gold text-sm mt-1 font-medium">Contemporary Saudi Artist</p>
+                <p className="text-white text-2xl font-bold">{isRTL ? "أحمد الراشد" : "Ahmed Al-Rashid"}</p>
+                <p className="text-brand-gold text-sm mt-1 font-medium">{isRTL ? "فنان سعودي معاصر" : "Contemporary Saudi Artist"}</p>
               </div>
             </div>
             

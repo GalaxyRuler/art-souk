@@ -174,7 +174,7 @@ export default function Dashboard() {
             {t("dashboard.title")}
           </h1>
           <p className="text-muted-foreground">
-            Welcome back, {userProfile?.firstName || user?.claims?.first_name}
+            {t("dashboard.welcomeBack", { name: userProfile?.firstName || user?.claims?.first_name })}
           </p>
         </div>
 
@@ -227,14 +227,14 @@ export default function Dashboard() {
                       onClick={handleEditProfile}
                     >
                       <Edit2 className="h-4 w-4 mr-2" />
-                      Edit Profile
+                      {t("dashboard.profile.edit")}
                     </Button>
                   </>
                 ) : (
                   <form onSubmit={handleProfileUpdate} className="space-y-4">
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <Label htmlFor="firstName" className="text-xs">First Name</Label>
+                        <Label htmlFor="firstName" className="text-xs">{t("dashboard.profile.firstName")}</Label>
                         <Input
                           id="firstName"
                           value={profileForm.firstName}
@@ -243,7 +243,7 @@ export default function Dashboard() {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="lastName" className="text-xs">Last Name</Label>
+                        <Label htmlFor="lastName" className="text-xs">{t("dashboard.profile.lastName")}</Label>
                         <Input
                           id="lastName"
                           value={profileForm.lastName}
@@ -254,7 +254,7 @@ export default function Dashboard() {
                     </div>
 
                     <div>
-                      <Label htmlFor="phone" className="text-xs">Phone</Label>
+                      <Label htmlFor="phone" className="text-xs">{t("dashboard.profile.phone")}</Label>
                       <Input
                         id="phone"
                         value={profileForm.phone}
@@ -264,7 +264,7 @@ export default function Dashboard() {
                     </div>
 
                     <div>
-                      <Label htmlFor="location" className="text-xs">Location</Label>
+                      <Label htmlFor="location" className="text-xs">{t("dashboard.profile.location")}</Label>
                       <Input
                         id="location"
                         value={profileForm.location}
@@ -274,7 +274,7 @@ export default function Dashboard() {
                     </div>
 
                     <div>
-                      <Label htmlFor="bio" className="text-xs">Bio</Label>
+                      <Label htmlFor="bio" className="text-xs">{t("dashboard.profile.bio")}</Label>
                       <Textarea
                         id="bio"
                         value={profileForm.bio}
@@ -291,7 +291,7 @@ export default function Dashboard() {
                         disabled={updateProfileMutation.isPending}
                       >
                         <Save className="h-3 w-3 mr-1" />
-                        Save
+                        {t("common.save")}
                       </Button>
                       <Button 
                         type="button" 
@@ -300,7 +300,7 @@ export default function Dashboard() {
                         onClick={() => setIsEditing(false)}
                       >
                         <X className="h-3 w-3 mr-1" />
-                        Cancel
+                        {t("common.cancel")}
                       </Button>
                     </div>
                   </form>
@@ -311,26 +311,26 @@ export default function Dashboard() {
             {/* Quick Stats */}
             <Card className="card-elevated">
               <CardContent className="p-6">
-                <h3 className="font-semibold text-brand-charcoal mb-4">Quick Stats</h3>
+                <h3 className="font-semibold text-brand-charcoal mb-4">{t("dashboard.quickStats.title")}</h3>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Heart className="h-4 w-4 text-brand-purple" />
-                      <span className="text-sm">Favorites</span>
+                      <span className="text-sm">{t("dashboard.quickStats.favorites")}</span>
                     </div>
                     <Badge variant="secondary">{favorites?.length || 0}</Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <MessageSquare className="h-4 w-4 text-brand-purple" />
-                      <span className="text-sm">Inquiries</span>
+                      <span className="text-sm">{t("dashboard.quickStats.inquiries")}</span>
                     </div>
                     <Badge variant="secondary">{inquiries?.length || 0}</Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Eye className="h-4 w-4 text-brand-purple" />
-                      <span className="text-sm">Views</span>
+                      <span className="text-sm">{t("dashboard.quickStats.views")}</span>
                     </div>
                     <Badge variant="secondary">---</Badge>
                   </div>
@@ -341,7 +341,7 @@ export default function Dashboard() {
                   <Link to="/analytics">
                     <Button className="w-full mt-4 bg-brand-navy hover:bg-brand-steel">
                       <BarChart3 className="h-4 w-4 mr-2" />
-                      View Analytics
+                      {t("dashboard.viewAnalytics")}
                     </Button>
                   </Link>
                 )}
@@ -350,7 +350,7 @@ export default function Dashboard() {
                 <Link to="/collector">
                   <Button className="w-full mt-4 bg-brand-navy hover:bg-brand-steel">
                     <Package className="h-4 w-4 mr-2" />
-                    Collector Dashboard
+                    {t("dashboard.collectorDashboard")}
                   </Button>
                 </Link>
                 
@@ -359,7 +359,7 @@ export default function Dashboard() {
                   <Link to="/seller">
                     <Button className="w-full mt-2 bg-brand-navy hover:bg-brand-steel">
                       <ShoppingBag className="h-4 w-4 mr-2" />
-                      Seller Dashboard
+                      {t("dashboard.sellerDashboard")}
                     </Button>
                   </Link>
                 )}
@@ -389,10 +389,10 @@ export default function Dashboard() {
               <TabsContent value="favorites" className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-semibold text-brand-charcoal">
-                    Your Favorites
+                    {t("dashboard.favorites.title")}
                   </h2>
                   <Badge variant="outline">
-                    {favorites?.length || 0} items
+                    {favorites?.length || 0} {t("common.items")}
                   </Badge>
                 </div>
 
@@ -430,13 +430,13 @@ export default function Dashboard() {
                     <CardContent className="p-12 text-center">
                       <Heart className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                       <h3 className="text-xl font-semibold text-brand-charcoal mb-2">
-                        No favorites yet
+                        {t("dashboard.favorites.empty")}
                       </h3>
                       <p className="text-muted-foreground mb-4">
-                        Start exploring artworks and save your favorites
+                        {t("dashboard.favorites.emptyDescription")}
                       </p>
                       <Button className="bg-brand-gradient">
-                        Browse Artworks
+                        {t("dashboard.favorites.browseArtworks")}
                       </Button>
                     </CardContent>
                   </Card>
@@ -447,10 +447,10 @@ export default function Dashboard() {
               <TabsContent value="inquiries" className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-semibold text-brand-charcoal">
-                    Your Inquiries
+                    {t("dashboard.inquiries.title")}
                   </h2>
                   <Badge variant="outline">
-                    {inquiries?.length || 0} inquiries
+                    {inquiries?.length || 0} {t("dashboard.inquiries.count")}
                   </Badge>
                 </div>
 
