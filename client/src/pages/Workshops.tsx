@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { Plus, MapPin, Calendar, Clock, Users, Search, Filter } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -103,54 +104,54 @@ export default function Workshops() {
   const getSkillLevelColor = (level: string) => {
     switch (level) {
       case "beginner":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800 border-green-200";
       case "intermediate":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
       case "advanced":
-        return "bg-red-100 text-red-800";
+        return "bg-red-100 text-red-800 border-red-200";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-mesh-gradient flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400 mx-auto"></div>
-          <p className="mt-4 text-white">Loading workshops...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-400 border-t-transparent mx-auto"></div>
+          <p className="mt-6 text-xl text-gray-700 font-medium">Loading workshops...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-mesh-gradient">
+      <div className="container mx-auto px-4 py-12">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            {t("workshops.title", "Art Workshops")}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-float">
+            <span className="text-gradient">{t("workshops.title", "Art Workshops")}</span>
           </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
             {t("workshops.subtitle", "Learn from skilled artists and galleries through hands-on workshops")}
           </p>
         </div>
 
         {/* Search and Filters */}
-        <div className="mb-8 bg-white/10 backdrop-blur-sm rounded-lg p-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="mb-10 card-glass rounded-2xl p-8 shadow-lg">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-purple-500" />
               <Input
                 placeholder={t("workshops.search", "Search workshops...")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-12 h-12 bg-white/80 border-purple-200 focus:border-purple-400 rounded-xl"
               />
             </div>
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger>
+              <SelectTrigger className="h-12 bg-white/80 border-purple-200 focus:border-purple-400 rounded-xl">
                 <SelectValue placeholder={t("workshops.category", "Category")} />
               </SelectTrigger>
               <SelectContent>
@@ -163,7 +164,7 @@ export default function Workshops() {
               </SelectContent>
             </Select>
             <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-              <SelectTrigger>
+              <SelectTrigger className="h-12 bg-white/80 border-purple-200 focus:border-purple-400 rounded-xl">
                 <SelectValue placeholder={t("workshops.level", "Skill Level")} />
               </SelectTrigger>
               <SelectContent>
@@ -173,8 +174,8 @@ export default function Workshops() {
                 <SelectItem value="advanced">Advanced</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" className="text-white border-white hover:bg-white hover:text-black">
-              <Filter className="h-4 w-4 mr-2" />
+            <Button className="h-12 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl">
+              <Filter className="h-5 w-5 mr-2" />
               {t("workshops.filter", "Filter")}
             </Button>
           </div>
@@ -183,55 +184,63 @@ export default function Workshops() {
         {/* Featured Workshops */}
         {featuredWorkshops && featuredWorkshops.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-white mb-6">
-              {t("workshops.featured", "Featured Workshops")}
+            <h2 className="text-3xl font-bold mb-8">
+              <span className="text-gradient">{t("workshops.featured", "Featured Workshops")}</span>
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredWorkshops.map((workshop: any) => (
-                <Card key={workshop.id} className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-colors">
-                  <CardHeader>
+                <Card key={workshop.id} className="card-glass hover-lift rounded-2xl overflow-hidden border-purple-200">
+                  <CardHeader className="bg-gradient-to-br from-purple-500/20 to-amber-500/20 pb-4">
                     <div className="flex justify-between items-start">
-                      <CardTitle className="text-white">
+                      <CardTitle className="text-2xl font-bold text-gray-800">
                         {language === "ar" && workshop.titleAr ? workshop.titleAr : workshop.title}
                       </CardTitle>
-                      <Badge className="bg-purple-600 text-white">Featured</Badge>
+                      <Badge className="bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg">Featured</Badge>
                     </div>
-                    <CardDescription className="text-gray-300">
+                    <CardDescription className="text-gray-600 mt-2">
                       {language === "ar" && workshop.descriptionAr ? workshop.descriptionAr : workshop.description}
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex items-center text-gray-300">
-                        <Calendar className="h-4 w-4 mr-2" />
-                        <span>{formatDate(workshop.startDate)}</span>
+                  <CardContent className="pt-6">
+                    <div className="space-y-4">
+                      <div className="flex items-center text-gray-700">
+                        <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                          <Calendar className="h-5 w-5 text-purple-600" />
+                        </div>
+                        <span className="font-medium">{formatDate(workshop.startDate)}</span>
                       </div>
-                      <div className="flex items-center text-gray-300">
-                        <Clock className="h-4 w-4 mr-2" />
-                        <span>{workshop.duration} hours</span>
+                      <div className="flex items-center text-gray-700">
+                        <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center mr-3">
+                          <Clock className="h-5 w-5 text-amber-600" />
+                        </div>
+                        <span className="font-medium">{workshop.duration} hours</span>
                       </div>
-                      <div className="flex items-center text-gray-300">
-                        <Users className="h-4 w-4 mr-2" />
-                        <span>{workshop.currentParticipants}/{workshop.maxParticipants} participants</span>
+                      <div className="flex items-center text-gray-700">
+                        <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                          <Users className="h-5 w-5 text-green-600" />
+                        </div>
+                        <span className="font-medium">{workshop.currentParticipants}/{workshop.maxParticipants} participants</span>
                       </div>
-                      <div className="flex items-center text-gray-300">
-                        <MapPin className="h-4 w-4 mr-2" />
-                        <span>{workshop.isOnline ? "Online" : workshop.location}</span>
+                      <div className="flex items-center text-gray-700">
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                          <MapPin className="h-5 w-5 text-blue-600" />
+                        </div>
+                        <span className="font-medium">{workshop.isOnline ? "Online" : workshop.location}</span>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <Badge className={getSkillLevelColor(workshop.skillLevel)}>
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                        <Badge className={cn("font-semibold", getSkillLevelColor(workshop.skillLevel))}>
                           {workshop.skillLevel}
                         </Badge>
-                        <span className="text-white font-semibold">
+                        <span className="text-2xl font-bold text-gradient">
                           {workshop.price ? `${workshop.price} ${workshop.currency}` : "Free"}
                         </span>
                       </div>
                       <Button
                         onClick={() => handleRegisterWorkshop(workshop.id)}
-                        className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                        className="w-full h-12 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-xl shadow-lg"
                         disabled={workshop.currentParticipants >= workshop.maxParticipants}
                       >
-                        {workshop.currentParticipants >= workshop.maxParticipants ? "Full" : "Register"}
+                        {workshop.currentParticipants >= workshop.maxParticipants ? "Workshop Full" : "Register Now"}
                       </Button>
                     </div>
                   </CardContent>
@@ -243,52 +252,60 @@ export default function Workshops() {
 
         {/* All Workshops */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-white mb-6">
-            {t("workshops.all", "All Workshops")}
+          <h2 className="text-3xl font-bold mb-8">
+            <span className="text-gradient">{t("workshops.all", "All Workshops")}</span>
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredWorkshops?.map((workshop: any) => (
-              <Card key={workshop.id} className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-colors">
-                <CardHeader>
-                  <CardTitle className="text-white">
+              <Card key={workshop.id} className="card-glass hover-lift rounded-2xl overflow-hidden">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-2xl font-bold text-gray-800">
                     {language === "ar" && workshop.titleAr ? workshop.titleAr : workshop.title}
                   </CardTitle>
-                  <CardDescription className="text-gray-300">
+                  <CardDescription className="text-gray-600 mt-2">
                     {language === "ar" && workshop.descriptionAr ? workshop.descriptionAr : workshop.description}
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center text-gray-300">
-                      <Calendar className="h-4 w-4 mr-2" />
-                      <span>{formatDate(workshop.startDate)}</span>
+                <CardContent className="pt-4">
+                  <div className="space-y-4">
+                    <div className="flex items-center text-gray-700">
+                      <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                        <Calendar className="h-5 w-5 text-purple-600" />
+                      </div>
+                      <span className="font-medium">{formatDate(workshop.startDate)}</span>
                     </div>
-                    <div className="flex items-center text-gray-300">
-                      <Clock className="h-4 w-4 mr-2" />
-                      <span>{workshop.duration} hours</span>
+                    <div className="flex items-center text-gray-700">
+                      <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center mr-3">
+                        <Clock className="h-5 w-5 text-amber-600" />
+                      </div>
+                      <span className="font-medium">{workshop.duration} hours</span>
                     </div>
-                    <div className="flex items-center text-gray-300">
-                      <Users className="h-4 w-4 mr-2" />
-                      <span>{workshop.currentParticipants}/{workshop.maxParticipants} participants</span>
+                    <div className="flex items-center text-gray-700">
+                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                        <Users className="h-5 w-5 text-green-600" />
+                      </div>
+                      <span className="font-medium">{workshop.currentParticipants}/{workshop.maxParticipants} participants</span>
                     </div>
-                    <div className="flex items-center text-gray-300">
-                      <MapPin className="h-4 w-4 mr-2" />
-                      <span>{workshop.isOnline ? "Online" : workshop.location}</span>
+                    <div className="flex items-center text-gray-700">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                        <MapPin className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <span className="font-medium">{workshop.isOnline ? "Online" : workshop.location}</span>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <Badge className={getSkillLevelColor(workshop.skillLevel)}>
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                      <Badge className={cn("font-semibold", getSkillLevelColor(workshop.skillLevel))}>
                         {workshop.skillLevel}
                       </Badge>
-                      <span className="text-white font-semibold">
+                      <span className="text-2xl font-bold text-gradient">
                         {workshop.price ? `${workshop.price} ${workshop.currency}` : "Free"}
                       </span>
                     </div>
                     <Button
                       onClick={() => handleRegisterWorkshop(workshop.id)}
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                      className="w-full h-12 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-xl shadow-lg"
                       disabled={workshop.currentParticipants >= workshop.maxParticipants}
                     >
-                      {workshop.currentParticipants >= workshop.maxParticipants ? "Full" : "Register"}
+                      {workshop.currentParticipants >= workshop.maxParticipants ? "Workshop Full" : "Register Now"}
                     </Button>
                   </div>
                 </CardContent>
@@ -299,8 +316,8 @@ export default function Workshops() {
 
         {/* Empty State */}
         {filteredWorkshops?.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-gray-400 text-lg">
+          <div className="text-center py-12 card-glass rounded-2xl p-16">
+            <div className="text-gray-600 text-xl font-medium">
               {t("workshops.empty", "No workshops found matching your criteria.")}
             </div>
           </div>

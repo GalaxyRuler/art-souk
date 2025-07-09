@@ -11,11 +11,14 @@ export default function Landing() {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-mesh-gradient">
       <Navbar />
-      <main>
+      <main className="overflow-hidden">
         <HeroSection />
-        <FeaturedCollections />
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white pointer-events-none" />
+          <FeaturedCollections />
+        </div>
         <CuratorsPicks />
         <EditorialSection />
         <AuctionSection />

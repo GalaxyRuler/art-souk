@@ -123,6 +123,15 @@
     background: linear-gradient(135deg, hsl(283, 86%, 60%) 0%, hsl(265, 91%, 35%) 50%, hsl(35, 85%, 62%) 100%);
   }
   
+  .bg-mesh-gradient {
+    background-color: hsl(283, 86%, 98%);
+    background-image: radial-gradient(at 40% 20%, hsl(283, 86%, 90%) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, hsl(35, 85%, 90%) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, hsl(265, 91%, 90%) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, hsl(35, 85%, 85%) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsl(283, 86%, 85%) 0px, transparent 50%);
+  }
+  
   /* Enhanced shadows */
   .shadow-brand {
     box-shadow: 0 10px 25px -5px hsla(283, 86%, 60%, 0.1), 0 10px 10px -5px hsla(283, 86%, 60%, 0.04);
@@ -130,6 +139,10 @@
   
   .shadow-gold {
     box-shadow: 0 10px 25px -5px hsla(35, 85%, 62%, 0.1), 0 10px 10px -5px hsla(35, 85%, 62%, 0.04);
+  }
+  
+  .shadow-glow {
+    box-shadow: 0 0 40px -10px hsla(283, 86%, 60%, 0.3);
   }
   
   /* Improved focus states */
@@ -140,10 +153,51 @@
   
   /* Card enhancements */
   .card-elevated {
-    @apply bg-card border shadow-lg hover:shadow-xl transition-all duration-300;
+    @apply bg-card backdrop-blur-sm border shadow-lg hover:shadow-xl transition-all duration-300 bg-opacity-80;
   }
   
   .card-brand {
     @apply bg-gradient-to-br from-purple-50 to-amber-50 dark:from-purple-900/20 dark:to-amber-900/20;
+  }
+  
+  .card-glass {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .dark .card-glass {
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(31, 41, 55, 0.2);
+  }
+  
+  /* Smooth animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  /* Interactive elements */
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+  
+  /* Gradient text */
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-purple to-brand-gold bg-clip-text text-transparent;
+  }
+  
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
   }
 }

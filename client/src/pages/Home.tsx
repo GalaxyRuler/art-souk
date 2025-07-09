@@ -35,17 +35,18 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-amber-50">
       <Navbar />
       <main>
         {/* Welcome Section */}
-        <section className="bg-white py-12 border-b">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className={cn("text-center", isRTL && "text-right")}>
-              <h1 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-                {t("home.welcome", { name: user?.firstName || t("home.user") })}
+        <section className="relative py-16 overflow-hidden">
+          <div className="absolute inset-0 bg-mesh-gradient opacity-30" />
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className={cn("text-center space-y-6", isRTL && "text-right")}>
+              <h1 className="text-4xl md:text-5xl font-bold animate-float">
+                <span className="text-gradient">{t("home.welcome", { name: user?.firstName || t("home.user") })}</span>
               </h1>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
                 {t("home.subtitle")}
               </p>
             </div>
@@ -53,36 +54,36 @@ export default function Home() {
         </section>
 
         {/* Quick Stats */}
-        <section className="py-8 bg-gray-50">
+        <section className="py-12 -mt-8 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="text-center">
-                <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-lg mx-auto mb-2">
-                  <Heart className="h-6 w-6 text-accent" />
+              <div className="card-glass rounded-2xl p-6 hover-lift">
+                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-pink-400 to-purple-400 rounded-xl mx-auto mb-4 shadow-glow">
+                  <Heart className="h-7 w-7 text-white" />
                 </div>
-                <div className="text-2xl font-bold text-primary">{userFavorites.length}</div>
-                <div className="text-sm text-gray-600">{t("home.stats.favorites")}</div>
+                <div className="text-3xl font-bold text-gradient mb-1">{userFavorites.length}</div>
+                <div className="text-sm text-gray-700 font-medium">{t("home.stats.favorites")}</div>
               </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg mx-auto mb-2">
-                  <TrendingUp className="h-6 w-6 text-primary" />
+              <div className="card-glass rounded-2xl p-6 hover-lift">
+                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-400 to-indigo-400 rounded-xl mx-auto mb-4 shadow-glow">
+                  <TrendingUp className="h-7 w-7 text-white" />
                 </div>
-                <div className="text-2xl font-bold text-primary">{featuredArtworks.length}</div>
-                <div className="text-sm text-gray-600">{t("home.stats.trending")}</div>
+                <div className="text-3xl font-bold text-gradient mb-1">{featuredArtworks.length}</div>
+                <div className="text-sm text-gray-700 font-medium">{t("home.stats.trending")}</div>
               </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-lg mx-auto mb-2">
-                  <Clock className="h-6 w-6 text-red-600" />
+              <div className="card-glass rounded-2xl p-6 hover-lift">
+                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-orange-400 to-red-400 rounded-xl mx-auto mb-4 shadow-glow">
+                  <Clock className="h-7 w-7 text-white" />
                 </div>
-                <div className="text-2xl font-bold text-primary">{liveAuctions.length}</div>
-                <div className="text-sm text-gray-600">{t("home.stats.liveAuctions")}</div>
+                <div className="text-3xl font-bold text-gradient mb-1">{liveAuctions.length}</div>
+                <div className="text-sm text-gray-700 font-medium">{t("home.stats.liveAuctions")}</div>
               </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg mx-auto mb-2">
-                  <Users className="h-6 w-6 text-green-600" />
+              <div className="card-glass rounded-2xl p-6 hover-lift">
+                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-amber-400 to-yellow-400 rounded-xl mx-auto mb-4 shadow-glow">
+                  <Users className="h-7 w-7 text-white" />
                 </div>
-                <div className="text-2xl font-bold text-primary">{featuredArtists.length}</div>
-                <div className="text-sm text-gray-600">{t("home.stats.artists")}</div>
+                <div className="text-3xl font-bold text-gradient mb-1">{featuredArtists.length}</div>
+                <div className="text-sm text-gray-700 font-medium">{t("home.stats.artists")}</div>
               </div>
             </div>
           </div>

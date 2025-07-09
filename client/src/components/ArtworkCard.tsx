@@ -75,7 +75,7 @@ export function ArtworkCard({
   return (
     <Card
       className={cn(
-        "overflow-hidden group cursor-pointer transition-all duration-500 hover:shadow-brand card-elevated bg-gradient-to-br from-white to-brand-light-gold/10 border-0",
+        "overflow-hidden group cursor-pointer transition-all duration-500 hover:shadow-2xl card-glass hover-lift",
         className
       )}
       onMouseEnter={() => setIsHovered(true)}
@@ -84,13 +84,13 @@ export function ArtworkCard({
       <Link href={`/artwork/${artwork.id}`}>
         <div className="relative">
           {/* Artwork Image */}
-          <div className="relative overflow-hidden rounded-t-xl">
+          <div className="relative overflow-hidden">
             <img
               src={getImageSrc()}
               alt={title}
               className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-deep-purple/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-deep-purple/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           </div>
 
           {/* Overlay with Actions */}
