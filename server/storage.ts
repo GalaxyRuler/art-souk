@@ -30,6 +30,21 @@ import {
   type InsertInquiry,
   type Favorite,
   type InsertFavorite,
+  follows,
+  type Follow,
+  type InsertFollow,
+  comments,
+  type Comment,
+  type InsertComment,
+  likes,
+  type Like,
+  type InsertLike,
+  activities,
+  type Activity,
+  type InsertActivity,
+  userProfiles,
+  type UserProfile,
+  type InsertUserProfile,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
@@ -122,6 +137,37 @@ export interface IStorage {
   deleteArtist(id: number): Promise<void>;
   deleteGallery(id: number): Promise<void>;
   deleteArtwork(id: number): Promise<void>;
+  
+  // Social features - Follow operations
+  createFollow(follow: InsertFollow): Promise<Follow>;
+  deleteFollow(userId: string, entityType: string, entityId: number): Promise<void>;
+  isFollowing(userId: string, entityType: string, entityId: number): Promise<boolean>;
+  getFollowers(entityType: string, entityId: number): Promise<Follow[]>;
+  getFollowing(userId: string, entityType?: string): Promise<Follow[]>;
+  getFollowCounts(entityType: string, entityId: number): Promise<{ followers: number }>;
+  
+  // Social features - Comment operations
+  createComment(comment: InsertComment): Promise<Comment>;
+  updateComment(id: number, comment: Partial<InsertComment>): Promise<Comment>;
+  deleteComment(id: number): Promise<void>;
+  getComments(entityType: string, entityId: number): Promise<Comment[]>;
+  getComment(id: number): Promise<Comment | undefined>;
+  
+  // Social features - Like operations
+  createLike(like: InsertLike): Promise<Like>;
+  deleteLike(userId: string, entityType: string, entityId: number): Promise<void>;
+  isLiked(userId: string, entityType: string, entityId: number): Promise<boolean>;
+  getLikeCounts(entityType: string, entityId: number): Promise<{ likes: number }>;
+  
+  // Social features - Activity operations
+  createActivity(activity: InsertActivity): Promise<Activity>;
+  getActivities(userId: string, limit?: number): Promise<Activity[]>;
+  getFollowingActivities(userId: string, limit?: number): Promise<Activity[]>;
+  
+  // Social features - User profile operations
+  getUserProfile(userId: string): Promise<UserProfile | undefined>;
+  createUserProfile(profile: InsertUserProfile): Promise<UserProfile>;
+  updateUserProfile(userId: string, profile: Partial<InsertUserProfile>): Promise<UserProfile>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -690,6 +736,222 @@ export class DatabaseStorage implements IStorage {
 
   async deleteArtwork(id: number): Promise<void> {
     await db.delete(artworks).where(eq(artworks.id, id));
+  }
+
+  // Social features - Follow operations
+  async createFollow(follow: InsertFollow): Promise<Follow> {
+    const [newFollow] = await db.insert(follows).values(follow).returning();
+    
+    // Create activity for follow
+    await this.createActivity({
+      userId: follow.userId,
+      type: "follow",
+      entityType: follow.entityType,
+      entityId: follow.entityId,
+      metadata: {}
+    });
+    
+    return newFollow;
+  }
+
+  async deleteFollow(userId: string, entityType: string, entityId: number): Promise<void> {
+    await db.delete(follows).where(
+      and(
+        eq(follows.userId, userId),
+        eq(follows.entityType, entityType),
+        eq(follows.entityId, entityId)
+      )
+    );
+  }
+
+  async isFollowing(userId: string, entityType: string, entityId: number): Promise<boolean> {
+    const [result] = await db.select().from(follows).where(
+      and(
+        eq(follows.userId, userId),
+        eq(follows.entityType, entityType),
+        eq(follows.entityId, entityId)
+      )
+    );
+    return !!result;
+  }
+
+  async getFollowers(entityType: string, entityId: number): Promise<Follow[]> {
+    return await db.select().from(follows).where(
+      and(
+        eq(follows.entityType, entityType),
+        eq(follows.entityId, entityId)
+      )
+    ).orderBy(desc(follows.createdAt));
+  }
+
+  async getFollowing(userId: string, entityType?: string): Promise<Follow[]> {
+    let query = db.select().from(follows).where(eq(follows.userId, userId));
+    
+    if (entityType) {
+      query = query.where(eq(follows.entityType, entityType));
+    }
+    
+    return await query.orderBy(desc(follows.createdAt));
+  }
+
+  async getFollowCounts(entityType: string, entityId: number): Promise<{ followers: number }> {
+    const [result] = await db.select({ count: count() }).from(follows).where(
+      and(
+        eq(follows.entityType, entityType),
+        eq(follows.entityId, entityId)
+      )
+    );
+    return { followers: result.count };
+  }
+
+  // Social features - Comment operations
+  async createComment(comment: InsertComment): Promise<Comment> {
+    const [newComment] = await db.insert(comments).values(comment).returning();
+    
+    // Create activity for comment
+    await this.createActivity({
+      userId: comment.userId,
+      type: "comment",
+      entityType: comment.entityType,
+      entityId: comment.entityId,
+      metadata: { commentId: newComment.id }
+    });
+    
+    return newComment;
+  }
+
+  async updateComment(id: number, comment: Partial<InsertComment>): Promise<Comment> {
+    const [updated] = await db
+      .update(comments)
+      .set({ ...comment, updatedAt: new Date() })
+      .where(eq(comments.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteComment(id: number): Promise<void> {
+    await db.delete(comments).where(eq(comments.id, id));
+  }
+
+  async getComments(entityType: string, entityId: number): Promise<Comment[]> {
+    return await db.select().from(comments).where(
+      and(
+        eq(comments.entityType, entityType),
+        eq(comments.entityId, entityId)
+      )
+    ).orderBy(desc(comments.createdAt));
+  }
+
+  async getComment(id: number): Promise<Comment | undefined> {
+    const [comment] = await db.select().from(comments).where(eq(comments.id, id));
+    return comment;
+  }
+
+  // Social features - Like operations
+  async createLike(like: InsertLike): Promise<Like> {
+    const [newLike] = await db.insert(likes).values(like).returning();
+    
+    // Create activity for like
+    await this.createActivity({
+      userId: like.userId,
+      type: "like",
+      entityType: like.entityType,
+      entityId: like.entityId,
+      metadata: {}
+    });
+    
+    return newLike;
+  }
+
+  async deleteLike(userId: string, entityType: string, entityId: number): Promise<void> {
+    await db.delete(likes).where(
+      and(
+        eq(likes.userId, userId),
+        eq(likes.entityType, entityType),
+        eq(likes.entityId, entityId)
+      )
+    );
+  }
+
+  async isLiked(userId: string, entityType: string, entityId: number): Promise<boolean> {
+    const [result] = await db.select().from(likes).where(
+      and(
+        eq(likes.userId, userId),
+        eq(likes.entityType, entityType),
+        eq(likes.entityId, entityId)
+      )
+    );
+    return !!result;
+  }
+
+  async getLikeCounts(entityType: string, entityId: number): Promise<{ likes: number }> {
+    const [result] = await db.select({ count: count() }).from(likes).where(
+      and(
+        eq(likes.entityType, entityType),
+        eq(likes.entityId, entityId)
+      )
+    );
+    return { likes: result.count };
+  }
+
+  // Social features - Activity operations
+  async createActivity(activity: InsertActivity): Promise<Activity> {
+    const [newActivity] = await db.insert(activities).values(activity).returning();
+    return newActivity;
+  }
+
+  async getActivities(userId: string, limit = 50): Promise<Activity[]> {
+    return await db.select().from(activities)
+      .where(eq(activities.userId, userId))
+      .orderBy(desc(activities.createdAt))
+      .limit(limit);
+  }
+
+  async getFollowingActivities(userId: string, limit = 50): Promise<Activity[]> {
+    // Get activities from users that the current user follows
+    const followingUsers = await db.select({ entityId: follows.entityId })
+      .from(follows)
+      .where(
+        and(
+          eq(follows.userId, userId),
+          eq(follows.entityType, "user")
+        )
+      );
+    
+    if (followingUsers.length === 0) {
+      return [];
+    }
+    
+    const followingUserIds = followingUsers.map(f => f.entityId.toString());
+    
+    return await db.select().from(activities)
+      .where(
+        or(
+          ...followingUserIds.map(id => eq(activities.userId, id))
+        )
+      )
+      .orderBy(desc(activities.createdAt))
+      .limit(limit);
+  }
+
+  // Social features - User profile operations
+  async getUserProfile(userId: string): Promise<UserProfile | undefined> {
+    const [profile] = await db.select().from(userProfiles).where(eq(userProfiles.userId, userId));
+    return profile;
+  }
+
+  async createUserProfile(profile: InsertUserProfile): Promise<UserProfile> {
+    const [newProfile] = await db.insert(userProfiles).values(profile).returning();
+    return newProfile;
+  }
+
+  async updateUserProfile(userId: string, profile: Partial<InsertUserProfile>): Promise<UserProfile> {
+    const [updated] = await db
+      .update(userProfiles)
+      .set({ ...profile, updatedAt: new Date() })
+      .where(eq(userProfiles.userId, userId))
+      .returning();
+    return updated;
   }
 }
 

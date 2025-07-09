@@ -195,14 +195,78 @@ export const favorites = pgTable("favorites", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Follows table - for following artists and galleries
+export const follows = pgTable("follows", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  entityType: varchar("entity_type").notNull(), // "artist" or "gallery"
+  entityId: integer("entity_id").notNull(), // ID of the artist or gallery
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Comments table - for commenting on artworks and articles
+export const comments = pgTable("comments", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  entityType: varchar("entity_type").notNull(), // "artwork" or "article"
+  entityId: integer("entity_id").notNull(), // ID of the artwork or article
+  content: text("content").notNull(),
+  parentId: integer("parent_id"), // For nested comments
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Likes table - for liking artworks, articles, and comments
+export const likes = pgTable("likes", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  entityType: varchar("entity_type").notNull(), // "artwork", "article", or "comment"
+  entityId: integer("entity_id").notNull(), // ID of the entity being liked
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Activity feed table - for tracking user activities
+export const activities = pgTable("activities", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  type: varchar("type").notNull(), // "follow", "like", "comment", "favorite", "bid", "inquiry"
+  entityType: varchar("entity_type").notNull(), // "artist", "gallery", "artwork", "article", "comment"
+  entityId: integer("entity_id").notNull(),
+  metadata: jsonb("metadata"), // Additional activity data
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// User profiles table - extended profile information
+export const userProfiles = pgTable("user_profiles", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).unique(),
+  bio: text("bio"),
+  bioAr: text("bio_ar"),
+  location: varchar("location"),
+  locationAr: varchar("location_ar"),
+  website: varchar("website"),
+  instagram: varchar("instagram"),
+  twitter: varchar("twitter"),
+  facebook: varchar("facebook"),
+  interests: jsonb("interests").default([]), // Array of art interests/categories
+  isPublic: boolean("is_public").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ one, many }) => ({
+  profile: one(userProfiles, { fields: [users.id], references: [userProfiles.userId] }),
   artists: many(artists),
   galleries: many(galleries),
   articles: many(articles),
   bids: many(bids),
   inquiries: many(inquiries),
   favorites: many(favorites),
+  follows: many(follows),
+  comments: many(comments),
+  likes: many(likes),
+  activities: many(activities),
 }));
 
 export const artistsRelations = relations(artists, ({ one, many }) => ({
@@ -222,6 +286,8 @@ export const artworksRelations = relations(artworks, ({ one, many }) => ({
   collectionArtworks: many(collectionArtworks),
   inquiries: many(inquiries),
   favorites: many(favorites),
+  comments: many(comments),
+  likes: many(likes),
 }));
 
 export const auctionsRelations = relations(auctions, ({ one, many }) => ({
@@ -243,8 +309,10 @@ export const collectionArtworksRelations = relations(collectionArtworks, ({ one 
   artwork: one(artworks, { fields: [collectionArtworks.artworkId], references: [artworks.id] }),
 }));
 
-export const articlesRelations = relations(articles, ({ one }) => ({
+export const articlesRelations = relations(articles, ({ one, many }) => ({
   author: one(users, { fields: [articles.authorId], references: [users.id] }),
+  comments: many(comments),
+  likes: many(likes),
 }));
 
 export const inquiriesRelations = relations(inquiries, ({ one }) => ({
@@ -255,6 +323,30 @@ export const inquiriesRelations = relations(inquiries, ({ one }) => ({
 export const favoritesRelations = relations(favorites, ({ one }) => ({
   user: one(users, { fields: [favorites.userId], references: [users.id] }),
   artwork: one(artworks, { fields: [favorites.artworkId], references: [artworks.id] }),
+}));
+
+// New table relations
+export const followsRelations = relations(follows, ({ one }) => ({
+  user: one(users, { fields: [follows.userId], references: [users.id] }),
+}));
+
+export const commentsRelations = relations(comments, ({ one, many }) => ({
+  user: one(users, { fields: [comments.userId], references: [users.id] }),
+  parent: one(comments, { fields: [comments.parentId], references: [comments.id] }),
+  replies: many(comments),
+  likes: many(likes),
+}));
+
+export const likesRelations = relations(likes, ({ one }) => ({
+  user: one(users, { fields: [likes.userId], references: [users.id] }),
+}));
+
+export const activitiesRelations = relations(activities, ({ one }) => ({
+  user: one(users, { fields: [activities.userId], references: [users.id] }),
+}));
+
+export const userProfilesRelations = relations(userProfiles, ({ one }) => ({
+  user: one(users, { fields: [userProfiles.userId], references: [users.id] }),
 }));
 
 // Export types
@@ -288,6 +380,21 @@ export type Inquiry = typeof inquiries.$inferSelect;
 export type InsertFavorite = typeof favorites.$inferInsert;
 export type Favorite = typeof favorites.$inferSelect;
 
+export type InsertFollow = typeof follows.$inferInsert;
+export type Follow = typeof follows.$inferSelect;
+
+export type InsertComment = typeof comments.$inferInsert;
+export type Comment = typeof comments.$inferSelect;
+
+export type InsertLike = typeof likes.$inferInsert;
+export type Like = typeof likes.$inferSelect;
+
+export type InsertActivity = typeof activities.$inferInsert;
+export type Activity = typeof activities.$inferSelect;
+
+export type InsertUserProfile = typeof userProfiles.$inferInsert;
+export type UserProfile = typeof userProfiles.$inferSelect;
+
 // Zod schemas
 export const insertArtistSchema = createInsertSchema(artists).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertGallerySchema = createInsertSchema(galleries).omit({ id: true, createdAt: true, updatedAt: true });
@@ -298,3 +405,8 @@ export const insertCollectionSchema = createInsertSchema(collections).omit({ id:
 export const insertArticleSchema = createInsertSchema(articles).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertInquirySchema = createInsertSchema(inquiries).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertFavoriteSchema = createInsertSchema(favorites).omit({ id: true, createdAt: true });
+export const insertFollowSchema = createInsertSchema(follows).omit({ id: true, createdAt: true });
+export const insertCommentSchema = createInsertSchema(comments).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertLikeSchema = createInsertSchema(likes).omit({ id: true, createdAt: true });
+export const insertActivitySchema = createInsertSchema(activities).omit({ id: true, createdAt: true });
+export const insertUserProfileSchema = createInsertSchema(userProfiles).omit({ id: true, createdAt: true, updatedAt: true });

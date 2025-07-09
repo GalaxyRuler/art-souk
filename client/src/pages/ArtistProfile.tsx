@@ -16,6 +16,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { ArtworkCard } from "@/components/ArtworkCard";
+import { FollowButton } from "@/components/SocialComponents";
 
 interface ArtistDetail {
   id: number;
@@ -254,20 +255,10 @@ export default function ArtistProfile() {
               </div>
 
               <div className="flex gap-2">
-                {isAuthenticated && (
-                  <Button
-                    variant={isFollowing?.isFollowing ? "secondary" : "default"}
-                    onClick={() => followMutation.mutate()}
-                    disabled={followMutation.isPending}
-                    className={isFollowing?.isFollowing 
-                      ? "bg-white/20 text-white hover:bg-white/30" 
-                      : "bg-brand-purple text-white hover:bg-brand-purple/90"
-                    }
-                  >
-                    <Users className="h-4 w-4 mr-2" />
-                    {isFollowing?.isFollowing ? "Following" : "Follow"}
-                  </Button>
-                )}
+                <FollowButton
+                  entityType="artist"
+                  entityId={artist.id}
+                />
                 
                 <Button
                   variant="secondary"

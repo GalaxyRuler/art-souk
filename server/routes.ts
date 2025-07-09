@@ -11,7 +11,11 @@ import {
   insertCollectionSchema,
   insertArticleSchema,
   insertInquirySchema,
-  insertFavoriteSchema
+  insertFavoriteSchema,
+  insertFollowSchema,
+  insertCommentSchema,
+  insertLikeSchema,
+  insertUserProfileSchema
 } from "@shared/schema";
 import { z } from "zod";
 
@@ -779,6 +783,279 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
 
+
+  // Social features - Follow routes
+  app.post('/api/follows', isAuthenticated, async (req: any, res) => {
+    try {
+      const followData = insertFollowSchema.parse({
+        ...req.body,
+        userId: req.user.claims.sub
+      });
+      const follow = await storage.createFollow(followData);
+      res.json(follow);
+    } catch (error) {
+      console.error("Error creating follow:", error);
+      res.status(500).json({ message: "Failed to create follow" });
+    }
+  });
+
+  app.delete('/api/follows/:entityType/:entityId', isAuthenticated, async (req: any, res) => {
+    try {
+      const entityType = req.params.entityType;
+      const entityId = parseInt(req.params.entityId);
+      const userId = req.user.claims.sub;
+      await storage.deleteFollow(userId, entityType, entityId);
+      res.json({ message: "Follow removed successfully" });
+    } catch (error) {
+      console.error("Error removing follow:", error);
+      res.status(500).json({ message: "Failed to remove follow" });
+    }
+  });
+
+  app.get('/api/follows/:entityType/:entityId/check', isAuthenticated, async (req: any, res) => {
+    try {
+      const entityType = req.params.entityType;
+      const entityId = parseInt(req.params.entityId);
+      const userId = req.user.claims.sub;
+      const isFollowing = await storage.isFollowing(userId, entityType, entityId);
+      res.json({ isFollowing });
+    } catch (error) {
+      console.error("Error checking follow:", error);
+      res.status(500).json({ message: "Failed to check follow" });
+    }
+  });
+
+  app.get('/api/follows/:entityType/:entityId/followers', async (req, res) => {
+    try {
+      const entityType = req.params.entityType;
+      const entityId = parseInt(req.params.entityId);
+      const followers = await storage.getFollowers(entityType, entityId);
+      res.json(followers);
+    } catch (error) {
+      console.error("Error fetching followers:", error);
+      res.status(500).json({ message: "Failed to fetch followers" });
+    }
+  });
+
+  app.get('/api/follows/:entityType/:entityId/counts', async (req, res) => {
+    try {
+      const entityType = req.params.entityType;
+      const entityId = parseInt(req.params.entityId);
+      const counts = await storage.getFollowCounts(entityType, entityId);
+      res.json(counts);
+    } catch (error) {
+      console.error("Error fetching follow counts:", error);
+      res.status(500).json({ message: "Failed to fetch follow counts" });
+    }
+  });
+
+  app.get('/api/following', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const entityType = req.query.entityType as string;
+      const following = await storage.getFollowing(userId, entityType);
+      res.json(following);
+    } catch (error) {
+      console.error("Error fetching following:", error);
+      res.status(500).json({ message: "Failed to fetch following" });
+    }
+  });
+
+  // Social features - Comment routes
+  app.post('/api/comments', isAuthenticated, async (req: any, res) => {
+    try {
+      const commentData = insertCommentSchema.parse({
+        ...req.body,
+        userId: req.user.claims.sub
+      });
+      const comment = await storage.createComment(commentData);
+      res.json(comment);
+    } catch (error) {
+      console.error("Error creating comment:", error);
+      res.status(500).json({ message: "Failed to create comment" });
+    }
+  });
+
+  app.put('/api/comments/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Check if user owns the comment
+      const existingComment = await storage.getComment(id);
+      if (!existingComment || existingComment.userId !== userId) {
+        return res.status(403).json({ message: "Not authorized to update this comment" });
+      }
+      
+      const commentData = insertCommentSchema.partial().parse(req.body);
+      const comment = await storage.updateComment(id, commentData);
+      res.json(comment);
+    } catch (error) {
+      console.error("Error updating comment:", error);
+      res.status(500).json({ message: "Failed to update comment" });
+    }
+  });
+
+  app.delete('/api/comments/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Check if user owns the comment
+      const existingComment = await storage.getComment(id);
+      if (!existingComment || existingComment.userId !== userId) {
+        return res.status(403).json({ message: "Not authorized to delete this comment" });
+      }
+      
+      await storage.deleteComment(id);
+      res.json({ message: "Comment deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      res.status(500).json({ message: "Failed to delete comment" });
+    }
+  });
+
+  app.get('/api/comments/:entityType/:entityId', async (req, res) => {
+    try {
+      const entityType = req.params.entityType;
+      const entityId = parseInt(req.params.entityId);
+      const comments = await storage.getComments(entityType, entityId);
+      res.json(comments);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      res.status(500).json({ message: "Failed to fetch comments" });
+    }
+  });
+
+  // Social features - Like routes
+  app.post('/api/likes', isAuthenticated, async (req: any, res) => {
+    try {
+      const likeData = insertLikeSchema.parse({
+        ...req.body,
+        userId: req.user.claims.sub
+      });
+      const like = await storage.createLike(likeData);
+      res.json(like);
+    } catch (error) {
+      console.error("Error creating like:", error);
+      res.status(500).json({ message: "Failed to create like" });
+    }
+  });
+
+  app.delete('/api/likes/:entityType/:entityId', isAuthenticated, async (req: any, res) => {
+    try {
+      const entityType = req.params.entityType;
+      const entityId = parseInt(req.params.entityId);
+      const userId = req.user.claims.sub;
+      await storage.deleteLike(userId, entityType, entityId);
+      res.json({ message: "Like removed successfully" });
+    } catch (error) {
+      console.error("Error removing like:", error);
+      res.status(500).json({ message: "Failed to remove like" });
+    }
+  });
+
+  app.get('/api/likes/:entityType/:entityId/check', isAuthenticated, async (req: any, res) => {
+    try {
+      const entityType = req.params.entityType;
+      const entityId = parseInt(req.params.entityId);
+      const userId = req.user.claims.sub;
+      const isLiked = await storage.isLiked(userId, entityType, entityId);
+      res.json({ isLiked });
+    } catch (error) {
+      console.error("Error checking like:", error);
+      res.status(500).json({ message: "Failed to check like" });
+    }
+  });
+
+  app.get('/api/likes/:entityType/:entityId/counts', async (req, res) => {
+    try {
+      const entityType = req.params.entityType;
+      const entityId = parseInt(req.params.entityId);
+      const counts = await storage.getLikeCounts(entityType, entityId);
+      res.json(counts);
+    } catch (error) {
+      console.error("Error fetching like counts:", error);
+      res.status(500).json({ message: "Failed to fetch like counts" });
+    }
+  });
+
+  // Social features - Activity routes
+  app.get('/api/activities', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const limit = parseInt(req.query.limit as string) || 50;
+      const activities = await storage.getActivities(userId, limit);
+      res.json(activities);
+    } catch (error) {
+      console.error("Error fetching activities:", error);
+      res.status(500).json({ message: "Failed to fetch activities" });
+    }
+  });
+
+  app.get('/api/activities/feed', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const limit = parseInt(req.query.limit as string) || 50;
+      const activities = await storage.getFollowingActivities(userId, limit);
+      res.json(activities);
+    } catch (error) {
+      console.error("Error fetching activity feed:", error);
+      res.status(500).json({ message: "Failed to fetch activity feed" });
+    }
+  });
+
+  // Social features - User profile routes
+  app.get('/api/profile', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const profile = await storage.getUserProfile(userId);
+      res.json(profile);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      res.status(500).json({ message: "Failed to fetch profile" });
+    }
+  });
+
+  app.get('/api/profile/:userId', async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const profile = await storage.getUserProfile(userId);
+      if (!profile) {
+        return res.status(404).json({ message: "Profile not found" });
+      }
+      res.json(profile);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      res.status(500).json({ message: "Failed to fetch profile" });
+    }
+  });
+
+  app.post('/api/profile', isAuthenticated, async (req: any, res) => {
+    try {
+      const profileData = insertUserProfileSchema.parse({
+        ...req.body,
+        userId: req.user.claims.sub
+      });
+      const profile = await storage.createUserProfile(profileData);
+      res.json(profile);
+    } catch (error) {
+      console.error("Error creating profile:", error);
+      res.status(500).json({ message: "Failed to create profile" });
+    }
+  });
+
+  app.put('/api/profile', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const profileData = insertUserProfileSchema.partial().parse(req.body);
+      const profile = await storage.updateUserProfile(userId, profileData);
+      res.json(profile);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
 
   const httpServer = createServer(app);
   return httpServer;

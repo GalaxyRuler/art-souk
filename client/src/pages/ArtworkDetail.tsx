@@ -17,6 +17,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { ArtworkCard } from "@/components/ArtworkCard";
+import { LikeButton, CommentsSection } from "@/components/SocialComponents";
 
 interface ArtworkDetail {
   id: number;
@@ -551,8 +552,32 @@ export default function ArtworkDetail() {
                 </div>
               </div>
             )}
+            
+            {/* Social Actions */}
+            <div className="flex items-center gap-4 pt-4 border-t">
+              <LikeButton
+                entityType="artwork"
+                entityId={artwork.id}
+                showCount={true}
+              />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleShare}
+                className="text-gray-600 hover:text-brand-purple"
+              >
+                <Share2 className="h-4 w-4 mr-2" />
+                Share
+              </Button>
+            </div>
           </div>
         </div>
+
+        {/* Comments Section */}
+        <CommentsSection
+          entityType="artwork"
+          entityId={artwork.id}
+        />
 
         {/* Similar Artworks */}
         {similarArtworks && similarArtworks.length > 0 && (
