@@ -180,3 +180,14 @@ Preferred communication style: Simple, everyday language.
 - July 06, 2025: Enhanced typography with Playfair Display for headings
 - July 06, 2025: Site name updated to "Art Souk" (Arabic: سوق آرت)
 - July 06, 2025: Database schema successfully deployed and initialized
+
+- July 09, 2025: Workshops and Events System Implementation
+  ✓ Removed editorial features (articles table and routes) based on user feedback
+  ✓ Added comprehensive workshop system with instructor management, registrations, and skill levels
+  ✓ Implemented social events platform with RSVP functionality and event categories
+  ✓ Created community discussions system with replies and category management
+  ✓ Updated database schema with workshops, events, discussions, and related tables
+  ✓ Added workshops, events, and community pages to navigation
+  ✓ Implemented complete API endpoints for workshops, events, and community features
+  ✓ Added bilingual support for all new features (Arabic/English)
+  ✓ Enhanced dashboard to include workshop management for artists and galleries

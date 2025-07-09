@@ -9,7 +9,12 @@ import {
   insertAuctionSchema,
   insertBidSchema,
   insertCollectionSchema,
-  insertArticleSchema,
+  insertWorkshopSchema,
+  insertWorkshopRegistrationSchema,
+  insertEventSchema,
+  insertEventRsvpSchema,
+  insertDiscussionSchema,
+  insertDiscussionReplySchema,
   insertInquirySchema,
   insertFavoriteSchema,
   insertFollowSchema,
@@ -655,42 +660,225 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/articles/featured', async (req, res) => {
+  // Workshop routes
+  app.get('/api/workshops', async (req, res) => {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const offset = (page - 1) * limit;
+      const workshops = await storage.getWorkshops(limit, offset);
+      res.json(workshops);
+    } catch (error) {
+      console.error('Error fetching workshops:', error);
+      res.status(500).json({ message: 'Failed to fetch workshops' });
+    }
+  });
+
+  app.get('/api/workshops/featured', async (req, res) => {
     try {
       const limit = parseInt(req.query.limit as string) || 10;
-      const articles = await storage.getFeaturedArticles(limit);
-      res.json(articles);
+      const workshops = await storage.getFeaturedWorkshops(limit);
+      res.json(workshops);
     } catch (error) {
-      console.error("Error fetching featured articles:", error);
-      res.status(500).json({ message: "Failed to fetch featured articles" });
+      console.error('Error fetching featured workshops:', error);
+      res.status(500).json({ message: 'Failed to fetch featured workshops' });
     }
   });
 
-  app.get('/api/articles/:id', async (req, res) => {
+  app.get('/api/workshops/:id', async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      const article = await storage.getArticle(id);
-      if (!article) {
-        return res.status(404).json({ message: "Article not found" });
+      const workshop = await storage.getWorkshop(id);
+      if (!workshop) {
+        return res.status(404).json({ message: 'Workshop not found' });
       }
-      res.json(article);
+      res.json(workshop);
     } catch (error) {
-      console.error("Error fetching article:", error);
-      res.status(500).json({ message: "Failed to fetch article" });
+      console.error('Error fetching workshop:', error);
+      res.status(500).json({ message: 'Failed to fetch workshop' });
     }
   });
 
-  app.post('/api/articles', isAuthenticated, async (req: any, res) => {
+  app.post('/api/workshops', isAuthenticated, async (req: any, res) => {
     try {
-      const articleData = insertArticleSchema.parse({
+      const workshopData = insertWorkshopSchema.parse({
+        ...req.body,
+        instructorId: req.user.claims.sub
+      });
+      const workshop = await storage.createWorkshop(workshopData);
+      res.json(workshop);
+    } catch (error) {
+      console.error('Error creating workshop:', error);
+      res.status(500).json({ message: 'Failed to create workshop' });
+    }
+  });
+
+  app.post('/api/workshops/:id/register', isAuthenticated, async (req: any, res) => {
+    try {
+      const workshopId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      const registration = await storage.createWorkshopRegistration({ workshopId, userId });
+      res.json(registration);
+    } catch (error) {
+      console.error('Error registering for workshop:', error);
+      res.status(500).json({ message: 'Failed to register for workshop' });
+    }
+  });
+
+  app.get('/api/user/workshops', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const registrations = await storage.getUserWorkshopRegistrations(userId);
+      res.json(registrations);
+    } catch (error) {
+      console.error('Error fetching user workshops:', error);
+      res.status(500).json({ message: 'Failed to fetch user workshops' });
+    }
+  });
+
+  // Event routes
+  app.get('/api/events', async (req, res) => {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const offset = (page - 1) * limit;
+      const events = await storage.getEvents(limit, offset);
+      res.json(events);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      res.status(500).json({ message: 'Failed to fetch events' });
+    }
+  });
+
+  app.get('/api/events/featured', async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 10;
+      const events = await storage.getFeaturedEvents(limit);
+      res.json(events);
+    } catch (error) {
+      console.error('Error fetching featured events:', error);
+      res.status(500).json({ message: 'Failed to fetch featured events' });
+    }
+  });
+
+  app.get('/api/events/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const event = await storage.getEvent(id);
+      if (!event) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+      res.json(event);
+    } catch (error) {
+      console.error('Error fetching event:', error);
+      res.status(500).json({ message: 'Failed to fetch event' });
+    }
+  });
+
+  app.post('/api/events', isAuthenticated, async (req: any, res) => {
+    try {
+      const eventData = insertEventSchema.parse({
+        ...req.body,
+        organizerId: req.user.claims.sub
+      });
+      const event = await storage.createEvent(eventData);
+      res.json(event);
+    } catch (error) {
+      console.error('Error creating event:', error);
+      res.status(500).json({ message: 'Failed to create event' });
+    }
+  });
+
+  app.post('/api/events/:id/rsvp', isAuthenticated, async (req: any, res) => {
+    try {
+      const eventId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      const { status } = req.body;
+      const rsvp = await storage.createEventRsvp({ eventId, userId, status });
+      res.json(rsvp);
+    } catch (error) {
+      console.error('Error creating event RSVP:', error);
+      res.status(500).json({ message: 'Failed to create RSVP' });
+    }
+  });
+
+  app.get('/api/user/events', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const rsvps = await storage.getUserEventRsvps(userId);
+      res.json(rsvps);
+    } catch (error) {
+      console.error('Error fetching user events:', error);
+      res.status(500).json({ message: 'Failed to fetch user events' });
+    }
+  });
+
+  // Community discussion routes
+  app.get('/api/discussions', async (req, res) => {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const offset = (page - 1) * limit;
+      const discussions = await storage.getDiscussions(limit, offset);
+      res.json(discussions);
+    } catch (error) {
+      console.error('Error fetching discussions:', error);
+      res.status(500).json({ message: 'Failed to fetch discussions' });
+    }
+  });
+
+  app.get('/api/discussions/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const discussion = await storage.getDiscussion(id);
+      if (!discussion) {
+        return res.status(404).json({ message: 'Discussion not found' });
+      }
+      res.json(discussion);
+    } catch (error) {
+      console.error('Error fetching discussion:', error);
+      res.status(500).json({ message: 'Failed to fetch discussion' });
+    }
+  });
+
+  app.post('/api/discussions', isAuthenticated, async (req: any, res) => {
+    try {
+      const discussionData = insertDiscussionSchema.parse({
         ...req.body,
         authorId: req.user.claims.sub
       });
-      const article = await storage.createArticle(articleData);
-      res.json(article);
+      const discussion = await storage.createDiscussion(discussionData);
+      res.json(discussion);
     } catch (error) {
-      console.error("Error creating article:", error);
-      res.status(500).json({ message: "Failed to create article" });
+      console.error('Error creating discussion:', error);
+      res.status(500).json({ message: 'Failed to create discussion' });
+    }
+  });
+
+  app.get('/api/discussions/:id/replies', async (req, res) => {
+    try {
+      const discussionId = parseInt(req.params.id);
+      const replies = await storage.getDiscussionReplies(discussionId);
+      res.json(replies);
+    } catch (error) {
+      console.error('Error fetching discussion replies:', error);
+      res.status(500).json({ message: 'Failed to fetch replies' });
+    }
+  });
+
+  app.post('/api/discussions/:id/replies', isAuthenticated, async (req: any, res) => {
+    try {
+      const discussionId = parseInt(req.params.id);
+      const replyData = insertDiscussionReplySchema.parse({
+        ...req.body,
+        authorId: req.user.claims.sub,
+        discussionId
+      });
+      const reply = await storage.createDiscussionReply(replyData);
+      res.json(reply);
+    } catch (error) {
+      console.error('Error creating discussion reply:', error);
+      res.status(500).json({ message: 'Failed to create reply' });
     }
   });
 

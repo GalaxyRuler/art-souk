@@ -12,14 +12,15 @@ import Home from "@/pages/Home";
 import Artists from "@/pages/Artists";
 import Galleries from "@/pages/Galleries";
 import Auctions from "@/pages/Auctions";
-import Editorial from "@/pages/Editorial";
 import ArtworkDetail from "@/pages/ArtworkDetail";
 import ArtistProfile from "@/pages/ArtistProfile";
 import Search from "@/pages/Search";
 import Dashboard from "@/pages/Dashboard";
 import GalleryProfile from "@/pages/GalleryProfile";
 import AuctionDetail from "@/pages/AuctionDetail";
-import ArticleDetail from "@/pages/ArticleDetail";
+import Workshops from "@/pages/Workshops";
+import Events from "@/pages/Events";
+import Community from "@/pages/Community";
 import Auth from "@/pages/Auth";
 import AdminSetup from "@/pages/AdminSetup";
 import AdminDashboard from "@/pages/AdminDashboard";
@@ -42,8 +43,9 @@ function Router() {
           <Route path="/galleries/:id" component={GalleryProfile} />
           <Route path="/auctions" component={Auctions} />
           <Route path="/auctions/:id" component={AuctionDetail} />
-          <Route path="/editorial" component={Editorial} />
-          <Route path="/editorial/:id" component={ArticleDetail} />
+          <Route path="/workshops" component={Workshops} />
+          <Route path="/events" component={Events} />
+          <Route path="/community" component={Community} />
           <Route path="/artwork/:id" component={ArtworkDetail} />
           <Route path="/search" component={Search} />
           <Route path="/dashboard" component={Dashboard} />
@@ -56,8 +58,9 @@ function Router() {
       <Route path="/galleries/:id" component={GalleryProfile} />
       <Route path="/auctions" component={Auctions} />
       <Route path="/auctions/:id" component={AuctionDetail} />
-      <Route path="/editorial" component={Editorial} />
-      <Route path="/editorial/:id" component={ArticleDetail} />
+      <Route path="/workshops" component={Workshops} />
+      <Route path="/events" component={Events} />
+      <Route path="/community" component={Community} />
       <Route path="/artwork/:id" component={ArtworkDetail} />
       <Route path="/search" component={Search} />
       <Route path="/auth" component={Auth} />

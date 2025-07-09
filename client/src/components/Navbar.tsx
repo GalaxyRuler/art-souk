@@ -19,7 +19,9 @@ export function Navbar() {
     { key: "artists", href: "/artists" },
     { key: "galleries", href: "/galleries" },
     { key: "auctions", href: "/auctions" },
-    { key: "editorial", href: "/editorial" },
+    { key: "workshops", href: "/workshops" },
+    { key: "events", href: "/events" },
+    { key: "community", href: "/community" },
   ];
 
   return (

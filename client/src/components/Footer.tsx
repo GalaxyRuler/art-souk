@@ -50,8 +50,18 @@ export function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/editorial" className="hover:text-white transition-colors">
-                    {t("nav.editorial")}
+                  <Link href="/workshops" className="hover:text-white transition-colors">
+                    {t("nav.workshops")}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/events" className="hover:text-white transition-colors">
+                    {t("nav.events")}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/community" className="hover:text-white transition-colors">
+                    {t("nav.community")}
                   </Link>
                 </li>
               </ul>

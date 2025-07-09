@@ -154,22 +154,125 @@ export const collectionArtworks = pgTable("collection_artworks", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-// Articles table
-export const articles = pgTable("articles", {
+// Workshops system
+export const workshops = pgTable("workshops", {
   id: serial("id").primaryKey(),
   title: varchar("title").notNull(),
   titleAr: varchar("title_ar"),
-  slug: varchar("slug").notNull().unique(),
-  content: text("content"),
-  contentAr: text("content_ar"),
-  excerpt: text("excerpt"),
-  excerptAr: text("excerpt_ar"),
-  coverImage: varchar("cover_image"),
-  category: varchar("category"), // art, interview, guide, news
+  description: text("description").notNull(),
+  descriptionAr: text("description_ar"),
+  instructorId: varchar("instructor_id").notNull(),
+  instructorType: varchar("instructor_type").notNull(), // 'artist' or 'gallery'
+  category: varchar("category").notNull(),
   categoryAr: varchar("category_ar"),
-  authorId: varchar("author_id").references(() => users.id),
-  published: boolean("published").default(false),
+  skillLevel: varchar("skill_level").notNull(), // 'beginner', 'intermediate', 'advanced'
+  duration: integer("duration").notNull(), // in hours
+  maxParticipants: integer("max_participants").notNull(),
+  currentParticipants: integer("current_participants").default(0),
+  price: decimal("price", { precision: 10, scale: 2 }),
+  currency: varchar("currency").default("SAR"),
+  location: varchar("location"),
+  locationAr: varchar("location_ar"),
+  isOnline: boolean("is_online").default(false),
+  meetingLink: varchar("meeting_link"),
+  materials: text("materials").array(),
+  materialsAr: text("materials_ar").array(),
+  images: text("images").array(),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date").notNull(),
+  registrationDeadline: timestamp("registration_deadline"),
+  status: varchar("status").default("draft"), // 'draft', 'published', 'cancelled', 'completed'
   featured: boolean("featured").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Workshop registrations
+export const workshopRegistrations = pgTable("workshop_registrations", {
+  id: serial("id").primaryKey(),
+  workshopId: integer("workshop_id").references(() => workshops.id),
+  userId: varchar("user_id").references(() => users.id),
+  registeredAt: timestamp("registered_at").defaultNow(),
+  status: varchar("status").default("confirmed"), // 'confirmed', 'waitlist', 'cancelled'
+  paymentStatus: varchar("payment_status").default("pending"), // 'pending', 'paid', 'refunded'
+  notes: text("notes"),
+});
+
+// Social events
+export const events = pgTable("events", {
+  id: serial("id").primaryKey(),
+  title: varchar("title").notNull(),
+  titleAr: varchar("title_ar"),
+  description: text("description").notNull(),
+  descriptionAr: text("description_ar"),
+  organizerId: varchar("organizer_id").notNull(),
+  organizerType: varchar("organizer_type").notNull(), // 'gallery', 'artist', 'platform'
+  category: varchar("category").notNull(), // 'exhibition', 'workshop', 'talk', 'networking'
+  categoryAr: varchar("category_ar"),
+  venue: varchar("venue"),
+  venueAr: varchar("venue_ar"),
+  address: text("address"),
+  addressAr: text("address_ar"),
+  isOnline: boolean("is_online").default(false),
+  meetingLink: varchar("meeting_link"),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date").notNull(),
+  maxAttendees: integer("max_attendees"),
+  currentAttendees: integer("current_attendees").default(0),
+  ticketPrice: decimal("ticket_price", { precision: 10, scale: 2 }),
+  currency: varchar("currency").default("SAR"),
+  images: text("images").array(),
+  tags: text("tags").array(),
+  tagsAr: text("tags_ar").array(),
+  status: varchar("status").default("draft"), // 'draft', 'published', 'cancelled', 'completed'
+  featured: boolean("featured").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Event RSVPs
+export const eventRsvps = pgTable("event_rsvps", {
+  id: serial("id").primaryKey(),
+  eventId: integer("event_id").references(() => events.id),
+  userId: varchar("user_id").references(() => users.id),
+  status: varchar("status").default("attending"), // 'attending', 'maybe', 'not_attending'
+  rsvpedAt: timestamp("rsvped_at").defaultNow(),
+  notes: text("notes"),
+});
+
+// Community discussions
+export const discussions = pgTable("discussions", {
+  id: serial("id").primaryKey(),
+  title: varchar("title").notNull(),
+  titleAr: varchar("title_ar"),
+  content: text("content").notNull(),
+  contentAr: text("content_ar"),
+  authorId: varchar("author_id").references(() => users.id),
+  category: varchar("category").notNull(),
+  categoryAr: varchar("category_ar"),
+  tags: text("tags").array(),
+  tagsAr: text("tags_ar").array(),
+  isPinned: boolean("is_pinned").default(false),
+  isLocked: boolean("is_locked").default(false),
+  viewCount: integer("view_count").default(0),
+  replyCount: integer("reply_count").default(0),
+  lastReplyAt: timestamp("last_reply_at"),
+  lastReplyBy: varchar("last_reply_by"),
+  status: varchar("status").default("active"), // 'active', 'closed', 'archived'
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Discussion replies
+export const discussionReplies = pgTable("discussion_replies", {
+  id: serial("id").primaryKey(),
+  discussionId: integer("discussion_id").references(() => discussions.id),
+  authorId: varchar("author_id").references(() => users.id),
+  content: text("content").notNull(),
+  contentAr: text("content_ar"),
+  parentReplyId: integer("parent_reply_id"),
+  isAccepted: boolean("is_accepted").default(false),
+  likeCount: integer("like_count").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -204,23 +307,23 @@ export const follows = pgTable("follows", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-// Comments table - for commenting on artworks and articles
+// Comments table - for commenting on artworks, workshops, and events
 export const comments = pgTable("comments", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").references(() => users.id),
-  entityType: varchar("entity_type").notNull(), // "artwork" or "article"
-  entityId: integer("entity_id").notNull(), // ID of the artwork or article
+  entityType: varchar("entity_type").notNull(), // "artwork", "workshop", "event"
+  entityId: integer("entity_id").notNull(), // ID of the artwork, workshop, or event
   content: text("content").notNull(),
   parentId: integer("parent_id"), // For nested comments
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Likes table - for liking artworks, articles, and comments
+// Likes table - for liking artworks, workshops, events, and comments
 export const likes = pgTable("likes", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").references(() => users.id),
-  entityType: varchar("entity_type").notNull(), // "artwork", "article", or "comment"
+  entityType: varchar("entity_type").notNull(), // "artwork", "workshop", "event", or "comment"
   entityId: integer("entity_id").notNull(), // ID of the entity being liked
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -229,8 +332,8 @@ export const likes = pgTable("likes", {
 export const activities = pgTable("activities", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").references(() => users.id),
-  type: varchar("type").notNull(), // "follow", "like", "comment", "favorite", "bid", "inquiry"
-  entityType: varchar("entity_type").notNull(), // "artist", "gallery", "artwork", "article", "comment"
+  type: varchar("type").notNull(), // "follow", "like", "comment", "favorite", "bid", "inquiry", "workshop_register", "event_rsvp"
+  entityType: varchar("entity_type").notNull(), // "artist", "gallery", "artwork", "workshop", "event", "comment", "discussion"
   entityId: integer("entity_id").notNull(),
   metadata: jsonb("metadata"), // Additional activity data
   createdAt: timestamp("created_at").defaultNow(),
@@ -259,7 +362,10 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   profile: one(userProfiles, { fields: [users.id], references: [userProfiles.userId] }),
   artists: many(artists),
   galleries: many(galleries),
-  articles: many(articles),
+  workshops: many(workshops),
+  events: many(events),
+  discussions: many(discussions),
+  discussionReplies: many(discussionReplies),
   bids: many(bids),
   inquiries: many(inquiries),
   favorites: many(favorites),
@@ -309,10 +415,34 @@ export const collectionArtworksRelations = relations(collectionArtworks, ({ one 
   artwork: one(artworks, { fields: [collectionArtworks.artworkId], references: [artworks.id] }),
 }));
 
-export const articlesRelations = relations(articles, ({ one, many }) => ({
-  author: one(users, { fields: [articles.authorId], references: [users.id] }),
-  comments: many(comments),
-  likes: many(likes),
+export const workshopsRelations = relations(workshops, ({ one, many }) => ({
+  registrations: many(workshopRegistrations),
+}));
+
+export const workshopRegistrationsRelations = relations(workshopRegistrations, ({ one }) => ({
+  workshop: one(workshops, { fields: [workshopRegistrations.workshopId], references: [workshops.id] }),
+  user: one(users, { fields: [workshopRegistrations.userId], references: [users.id] }),
+}));
+
+export const eventsRelations = relations(events, ({ one, many }) => ({
+  rsvps: many(eventRsvps),
+}));
+
+export const eventRsvpsRelations = relations(eventRsvps, ({ one }) => ({
+  event: one(events, { fields: [eventRsvps.eventId], references: [events.id] }),
+  user: one(users, { fields: [eventRsvps.userId], references: [users.id] }),
+}));
+
+export const discussionsRelations = relations(discussions, ({ one, many }) => ({
+  author: one(users, { fields: [discussions.authorId], references: [users.id] }),
+  replies: many(discussionReplies),
+}));
+
+export const discussionRepliesRelations = relations(discussionReplies, ({ one, many }) => ({
+  discussion: one(discussions, { fields: [discussionReplies.discussionId], references: [discussions.id] }),
+  author: one(users, { fields: [discussionReplies.authorId], references: [users.id] }),
+  parent: one(discussionReplies, { fields: [discussionReplies.parentReplyId], references: [discussionReplies.id] }),
+  replies: many(discussionReplies),
 }));
 
 export const inquiriesRelations = relations(inquiries, ({ one }) => ({
@@ -352,6 +482,48 @@ export const userProfilesRelations = relations(userProfiles, ({ one }) => ({
 // Export types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
+
+// Workshop types
+export type Workshop = typeof workshops.$inferSelect;
+export type InsertWorkshop = typeof workshops.$inferInsert;
+
+// Workshop registration types
+export type WorkshopRegistration = typeof workshopRegistrations.$inferSelect;
+export type InsertWorkshopRegistration = typeof workshopRegistrations.$inferInsert;
+
+// Event types
+export type Event = typeof events.$inferSelect;
+export type InsertEvent = typeof events.$inferInsert;
+
+// Event RSVP types
+export type EventRsvp = typeof eventRsvps.$inferSelect;
+export type InsertEventRsvp = typeof eventRsvps.$inferInsert;
+
+// Discussion types
+export type Discussion = typeof discussions.$inferSelect;
+export type InsertDiscussion = typeof discussions.$inferInsert;
+
+// Discussion reply types
+export type DiscussionReply = typeof discussionReplies.$inferSelect;
+export type InsertDiscussionReply = typeof discussionReplies.$inferInsert;
+
+// Workshop types
+export type Workshop = typeof workshops.$inferSelect;
+export type InsertWorkshop = typeof workshops.$inferInsert;
+export type WorkshopRegistration = typeof workshopRegistrations.$inferSelect;
+export type InsertWorkshopRegistration = typeof workshopRegistrations.$inferInsert;
+
+// Event types
+export type Event = typeof events.$inferSelect;
+export type InsertEvent = typeof events.$inferInsert;
+export type EventRsvp = typeof eventRsvps.$inferSelect;
+export type InsertEventRsvp = typeof eventRsvps.$inferInsert;
+
+// Community types
+export type Discussion = typeof discussions.$inferSelect;
+export type InsertDiscussion = typeof discussions.$inferInsert;
+export type DiscussionReply = typeof discussionReplies.$inferSelect;
+export type InsertDiscussionReply = typeof discussionReplies.$inferInsert;
 
 export type InsertArtist = typeof artists.$inferInsert;
 export type Artist = typeof artists.$inferSelect;
@@ -402,7 +574,12 @@ export const insertArtworkSchema = createInsertSchema(artworks).omit({ id: true,
 export const insertAuctionSchema = createInsertSchema(auctions).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertBidSchema = createInsertSchema(bids).omit({ id: true, createdAt: true });
 export const insertCollectionSchema = createInsertSchema(collections).omit({ id: true, createdAt: true, updatedAt: true });
-export const insertArticleSchema = createInsertSchema(articles).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertWorkshopSchema = createInsertSchema(workshops).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertWorkshopRegistrationSchema = createInsertSchema(workshopRegistrations).omit({ id: true, registeredAt: true });
+export const insertEventSchema = createInsertSchema(events).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertEventRsvpSchema = createInsertSchema(eventRsvps).omit({ id: true, rsvpedAt: true });
+export const insertDiscussionSchema = createInsertSchema(discussions).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertDiscussionReplySchema = createInsertSchema(discussionReplies).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertInquirySchema = createInsertSchema(inquiries).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertFavoriteSchema = createInsertSchema(favorites).omit({ id: true, createdAt: true });
 export const insertFollowSchema = createInsertSchema(follows).omit({ id: true, createdAt: true });

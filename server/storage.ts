@@ -7,7 +7,12 @@ import {
   bids,
   collections,
   collectionArtworks,
-  articles,
+  workshops,
+  workshopRegistrations,
+  events,
+  eventRsvps,
+  discussions,
+  discussionReplies,
   inquiries,
   favorites,
   type User,
@@ -24,8 +29,18 @@ import {
   type InsertBid,
   type Collection,
   type InsertCollection,
-  type Article,
-  type InsertArticle,
+  type Workshop,
+  type InsertWorkshop,
+  type WorkshopRegistration,
+  type InsertWorkshopRegistration,
+  type Event,
+  type InsertEvent,
+  type EventRsvp,
+  type InsertEventRsvp,
+  type Discussion,
+  type InsertDiscussion,
+  type DiscussionReply,
+  type InsertDiscussionReply,
   type Inquiry,
   type InsertInquiry,
   type Favorite,
@@ -102,13 +117,51 @@ export interface IStorage {
   getCollectionArtworks(collectionId: number): Promise<Artwork[]>;
   createCollection(collection: InsertCollection): Promise<Collection>;
   
-  // Article operations
-  getArticles(limit?: number, offset?: number): Promise<Article[]>;
-  getArticle(id: number): Promise<Article | undefined>;
-  getFeaturedArticles(limit?: number): Promise<Article[]>;
-  getArticlesByCategory(category: string, limit?: number): Promise<Article[]>;
-  createArticle(article: InsertArticle): Promise<Article>;
-  updateArticle(id: number, article: Partial<InsertArticle>): Promise<Article>;
+  // Workshop operations
+  getWorkshops(limit?: number, offset?: number): Promise<Workshop[]>;
+  getWorkshop(id: number): Promise<Workshop | undefined>;
+  getFeaturedWorkshops(limit?: number): Promise<Workshop[]>;
+  getWorkshopsByInstructor(instructorId: string, instructorType: string, limit?: number): Promise<Workshop[]>;
+  createWorkshop(workshop: InsertWorkshop): Promise<Workshop>;
+  updateWorkshop(id: number, workshop: Partial<InsertWorkshop>): Promise<Workshop>;
+  deleteWorkshop(id: number): Promise<boolean>;
+  
+  // Workshop registration operations
+  getWorkshopRegistrations(workshopId: number): Promise<WorkshopRegistration[]>;
+  createWorkshopRegistration(registration: InsertWorkshopRegistration): Promise<WorkshopRegistration>;
+  updateWorkshopRegistration(id: number, registration: Partial<InsertWorkshopRegistration>): Promise<WorkshopRegistration>;
+  deleteWorkshopRegistration(id: number): Promise<boolean>;
+  getUserWorkshopRegistrations(userId: string): Promise<WorkshopRegistration[]>;
+  
+  // Event operations
+  getEvents(limit?: number, offset?: number): Promise<Event[]>;
+  getEvent(id: number): Promise<Event | undefined>;
+  getFeaturedEvents(limit?: number): Promise<Event[]>;
+  getEventsByOrganizer(organizerId: string, organizerType: string, limit?: number): Promise<Event[]>;
+  createEvent(event: InsertEvent): Promise<Event>;
+  updateEvent(id: number, event: Partial<InsertEvent>): Promise<Event>;
+  deleteEvent(id: number): Promise<boolean>;
+  
+  // Event RSVP operations
+  getEventRsvps(eventId: number): Promise<EventRsvp[]>;
+  createEventRsvp(rsvp: InsertEventRsvp): Promise<EventRsvp>;
+  updateEventRsvp(id: number, rsvp: Partial<InsertEventRsvp>): Promise<EventRsvp>;
+  deleteEventRsvp(id: number): Promise<boolean>;
+  getUserEventRsvps(userId: string): Promise<EventRsvp[]>;
+  
+  // Discussion operations
+  getDiscussions(limit?: number, offset?: number): Promise<Discussion[]>;
+  getDiscussion(id: number): Promise<Discussion | undefined>;
+  getDiscussionsByCategory(category: string, limit?: number): Promise<Discussion[]>;
+  createDiscussion(discussion: InsertDiscussion): Promise<Discussion>;
+  updateDiscussion(id: number, discussion: Partial<InsertDiscussion>): Promise<Discussion>;
+  deleteDiscussion(id: number): Promise<boolean>;
+  
+  // Discussion reply operations
+  getDiscussionReplies(discussionId: number): Promise<DiscussionReply[]>;
+  createDiscussionReply(reply: InsertDiscussionReply): Promise<DiscussionReply>;
+  updateDiscussionReply(id: number, reply: Partial<InsertDiscussionReply>): Promise<DiscussionReply>;
+  deleteDiscussionReply(id: number): Promise<boolean>;
   
   // Inquiry operations
   getInquiries(limit?: number, offset?: number): Promise<Inquiry[]>;
@@ -129,7 +182,9 @@ export interface IStorage {
   getGalleryCount(): Promise<number>;
   getArtworkCount(): Promise<number>;
   getAuctionCount(): Promise<number>;
-  getArticleCount(): Promise<number>;
+  getWorkshopCount(): Promise<number>;
+  getEventCount(): Promise<number>;
+  getDiscussionCount(): Promise<number>;
   getInquiryCount(): Promise<number>;
   getFavoriteCount(): Promise<number>;
   
@@ -952,6 +1007,249 @@ export class DatabaseStorage implements IStorage {
       .where(eq(userProfiles.userId, userId))
       .returning();
     return updated;
+  }
+
+  // Workshop operations
+  async getWorkshops(limit = 20, offset = 0): Promise<Workshop[]> {
+    return await db.select().from(workshops)
+      .orderBy(desc(workshops.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async getWorkshop(id: number): Promise<Workshop | undefined> {
+    const [workshop] = await db.select().from(workshops).where(eq(workshops.id, id));
+    return workshop;
+  }
+
+  async getFeaturedWorkshops(limit = 10): Promise<Workshop[]> {
+    return await db.select().from(workshops)
+      .where(eq(workshops.featured, true))
+      .orderBy(desc(workshops.createdAt))
+      .limit(limit);
+  }
+
+  async getWorkshopsByInstructor(instructorId: string, instructorType: string, limit = 20): Promise<Workshop[]> {
+    return await db.select().from(workshops)
+      .where(and(
+        eq(workshops.instructorId, instructorId),
+        eq(workshops.instructorType, instructorType)
+      ))
+      .orderBy(desc(workshops.createdAt))
+      .limit(limit);
+  }
+
+  async createWorkshop(workshop: InsertWorkshop): Promise<Workshop> {
+    const [newWorkshop] = await db.insert(workshops).values(workshop).returning();
+    return newWorkshop;
+  }
+
+  async updateWorkshop(id: number, workshop: Partial<InsertWorkshop>): Promise<Workshop> {
+    const [updated] = await db
+      .update(workshops)
+      .set({ ...workshop, updatedAt: new Date() })
+      .where(eq(workshops.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteWorkshop(id: number): Promise<boolean> {
+    const result = await db.delete(workshops).where(eq(workshops.id, id));
+    return result.rowCount > 0;
+  }
+
+  // Workshop registration operations
+  async getWorkshopRegistrations(workshopId: number): Promise<WorkshopRegistration[]> {
+    return await db.select().from(workshopRegistrations)
+      .where(eq(workshopRegistrations.workshopId, workshopId))
+      .orderBy(desc(workshopRegistrations.registeredAt));
+  }
+
+  async createWorkshopRegistration(registration: InsertWorkshopRegistration): Promise<WorkshopRegistration> {
+    const [newRegistration] = await db.insert(workshopRegistrations).values(registration).returning();
+    return newRegistration;
+  }
+
+  async updateWorkshopRegistration(id: number, registration: Partial<InsertWorkshopRegistration>): Promise<WorkshopRegistration> {
+    const [updated] = await db
+      .update(workshopRegistrations)
+      .set(registration)
+      .where(eq(workshopRegistrations.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteWorkshopRegistration(id: number): Promise<boolean> {
+    const result = await db.delete(workshopRegistrations).where(eq(workshopRegistrations.id, id));
+    return result.rowCount > 0;
+  }
+
+  async getUserWorkshopRegistrations(userId: string): Promise<WorkshopRegistration[]> {
+    return await db.select().from(workshopRegistrations)
+      .where(eq(workshopRegistrations.userId, userId))
+      .orderBy(desc(workshopRegistrations.registeredAt));
+  }
+
+  // Event operations
+  async getEvents(limit = 20, offset = 0): Promise<Event[]> {
+    return await db.select().from(events)
+      .orderBy(desc(events.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async getEvent(id: number): Promise<Event | undefined> {
+    const [event] = await db.select().from(events).where(eq(events.id, id));
+    return event;
+  }
+
+  async getFeaturedEvents(limit = 10): Promise<Event[]> {
+    return await db.select().from(events)
+      .where(eq(events.featured, true))
+      .orderBy(desc(events.createdAt))
+      .limit(limit);
+  }
+
+  async getEventsByOrganizer(organizerId: string, organizerType: string, limit = 20): Promise<Event[]> {
+    return await db.select().from(events)
+      .where(and(
+        eq(events.organizerId, organizerId),
+        eq(events.organizerType, organizerType)
+      ))
+      .orderBy(desc(events.createdAt))
+      .limit(limit);
+  }
+
+  async createEvent(event: InsertEvent): Promise<Event> {
+    const [newEvent] = await db.insert(events).values(event).returning();
+    return newEvent;
+  }
+
+  async updateEvent(id: number, event: Partial<InsertEvent>): Promise<Event> {
+    const [updated] = await db
+      .update(events)
+      .set({ ...event, updatedAt: new Date() })
+      .where(eq(events.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteEvent(id: number): Promise<boolean> {
+    const result = await db.delete(events).where(eq(events.id, id));
+    return result.rowCount > 0;
+  }
+
+  // Event RSVP operations
+  async getEventRsvps(eventId: number): Promise<EventRsvp[]> {
+    return await db.select().from(eventRsvps)
+      .where(eq(eventRsvps.eventId, eventId))
+      .orderBy(desc(eventRsvps.rsvpedAt));
+  }
+
+  async createEventRsvp(rsvp: InsertEventRsvp): Promise<EventRsvp> {
+    const [newRsvp] = await db.insert(eventRsvps).values(rsvp).returning();
+    return newRsvp;
+  }
+
+  async updateEventRsvp(id: number, rsvp: Partial<InsertEventRsvp>): Promise<EventRsvp> {
+    const [updated] = await db
+      .update(eventRsvps)
+      .set(rsvp)
+      .where(eq(eventRsvps.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteEventRsvp(id: number): Promise<boolean> {
+    const result = await db.delete(eventRsvps).where(eq(eventRsvps.id, id));
+    return result.rowCount > 0;
+  }
+
+  async getUserEventRsvps(userId: string): Promise<EventRsvp[]> {
+    return await db.select().from(eventRsvps)
+      .where(eq(eventRsvps.userId, userId))
+      .orderBy(desc(eventRsvps.rsvpedAt));
+  }
+
+  // Discussion operations
+  async getDiscussions(limit = 20, offset = 0): Promise<Discussion[]> {
+    return await db.select().from(discussions)
+      .orderBy(desc(discussions.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async getDiscussion(id: number): Promise<Discussion | undefined> {
+    const [discussion] = await db.select().from(discussions).where(eq(discussions.id, id));
+    return discussion;
+  }
+
+  async getDiscussionsByCategory(category: string, limit = 20): Promise<Discussion[]> {
+    return await db.select().from(discussions)
+      .where(eq(discussions.category, category))
+      .orderBy(desc(discussions.createdAt))
+      .limit(limit);
+  }
+
+  async createDiscussion(discussion: InsertDiscussion): Promise<Discussion> {
+    const [newDiscussion] = await db.insert(discussions).values(discussion).returning();
+    return newDiscussion;
+  }
+
+  async updateDiscussion(id: number, discussion: Partial<InsertDiscussion>): Promise<Discussion> {
+    const [updated] = await db
+      .update(discussions)
+      .set({ ...discussion, updatedAt: new Date() })
+      .where(eq(discussions.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteDiscussion(id: number): Promise<boolean> {
+    const result = await db.delete(discussions).where(eq(discussions.id, id));
+    return result.rowCount > 0;
+  }
+
+  // Discussion reply operations
+  async getDiscussionReplies(discussionId: number): Promise<DiscussionReply[]> {
+    return await db.select().from(discussionReplies)
+      .where(eq(discussionReplies.discussionId, discussionId))
+      .orderBy(asc(discussionReplies.createdAt));
+  }
+
+  async createDiscussionReply(reply: InsertDiscussionReply): Promise<DiscussionReply> {
+    const [newReply] = await db.insert(discussionReplies).values(reply).returning();
+    return newReply;
+  }
+
+  async updateDiscussionReply(id: number, reply: Partial<InsertDiscussionReply>): Promise<DiscussionReply> {
+    const [updated] = await db
+      .update(discussionReplies)
+      .set({ ...reply, updatedAt: new Date() })
+      .where(eq(discussionReplies.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteDiscussionReply(id: number): Promise<boolean> {
+    const result = await db.delete(discussionReplies).where(eq(discussionReplies.id, id));
+    return result.rowCount > 0;
+  }
+
+  // Count operations updates
+  async getWorkshopCount(): Promise<number> {
+    const [result] = await db.select({ count: count() }).from(workshops);
+    return result.count;
+  }
+
+  async getEventCount(): Promise<number> {
+    const [result] = await db.select({ count: count() }).from(events);
+    return result.count;
+  }
+
+  async getDiscussionCount(): Promise<number> {
+    const [result] = await db.select({ count: count() }).from(discussions);
+    return result.count;
   }
 }
 
