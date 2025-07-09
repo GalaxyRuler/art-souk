@@ -219,9 +219,9 @@ export default function CollectorDashboard() {
                 <Heart className="h-4 w-4" />
                 {t("collector.tabs.wishlist", "Wishlist")}
               </TabsTrigger>
-              <TabsTrigger value="payments" className="flex items-center gap-2">
+              <TabsTrigger value="purchases" className="flex items-center gap-2">
                 <CreditCard className="h-4 w-4" />
-                {t("collector.tabs.payments", "Payments")}
+                {t("collector.tabs.purchases", "Purchase History")}
               </TabsTrigger>
             </TabsList>
 
@@ -277,9 +277,16 @@ export default function CollectorDashboard() {
                                   {format(new Date(order.createdAt), "MMM dd, yyyy")}
                                 </span>
                               </div>
-                              <Button variant="outline" size="sm">
-                                {t("collector.viewDetails", "View Details")}
-                              </Button>
+                              <div className="flex items-center gap-2">
+                                {order.status === "pending" && (
+                                  <p className="text-xs text-gray-500">
+                                    {t("collector.pendingPayment", "Awaiting payment arrangement")}
+                                  </p>
+                                )}
+                                <Button variant="outline" size="sm">
+                                  {t("collector.viewDetails", "View Details")}
+                                </Button>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -434,66 +441,79 @@ export default function CollectorDashboard() {
               )}
             </TabsContent>
 
-            {/* Payments Tab */}
-            <TabsContent value="payments" className="space-y-4">
-              {orders?.filter(o => o.installmentPlan).map((order) => (
-                <Card key={order.id} className="bg-white/70 backdrop-blur-sm border-gray-200/50">
-                  <CardHeader>
-                    <CardTitle className="text-lg">
-                      {isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
-                    </CardTitle>
-                    <CardDescription>
-                      {t("collector.payment.installmentPlan", "Installment Plan")}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div>
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm text-gray-600">
-                            {t("collector.payment.progress", "Payment Progress")}
-                          </span>
-                          <span className="text-sm font-medium">
-                            {order.installmentPlan?.completedInstallments} / {order.installmentPlan?.numberOfInstallments}
-                          </span>
+            {/* Purchase History Tab */}
+            <TabsContent value="purchases" className="space-y-4">
+              <div className="mb-4">
+                <p className="text-sm text-gray-600">
+                  {t("collector.purchases.note", "All payments are handled directly between you and the artist/gallery")}
+                </p>
+              </div>
+              {ordersLoading ? (
+                <div className="space-y-4">
+                  {[...Array(3)].map((_, i) => (
+                    <Card key={i} className="animate-pulse">
+                      <CardContent className="h-32"></CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : orders && orders.length > 0 ? (
+                <div className="space-y-4">
+                  {orders.filter(o => o.status === 'delivered' || o.paymentStatus === 'completed').map((order) => (
+                    <Card key={order.id} className="bg-white/70 backdrop-blur-sm border-gray-200/50">
+                      <CardHeader>
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <CardTitle className="text-lg">
+                              {isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
+                            </CardTitle>
+                            <CardDescription>
+                              {t("collector.purchases.purchased", "Purchased on")} {format(new Date(order.createdAt), "MMM dd, yyyy")}
+                            </CardDescription>
+                          </div>
+                          <Badge className="bg-green-100 text-green-800">
+                            {t("collector.purchases.completed", "Completed")}
+                          </Badge>
                         </div>
-                        <Progress 
-                          value={(order.installmentPlan?.completedInstallments! / order.installmentPlan?.numberOfInstallments!) * 100}
-                          className="h-2"
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <span className="text-gray-600">
-                            {t("collector.payment.totalAmount", "Total Amount")}
-                          </span>
-                          <p className="font-medium">
-                            {language === "ar" ? "ر.س" : order.currency} {parseFloat(order.installmentPlan?.totalAmount!).toLocaleString()}
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <span className="text-gray-600">
+                              {t("collector.purchases.orderNumber", "Order Number")}
+                            </span>
+                            <p className="font-medium font-mono">{order.orderNumber}</p>
+                          </div>
+                          <div>
+                            <span className="text-gray-600">
+                              {t("collector.purchases.amount", "Amount")}
+                            </span>
+                            <p className="font-medium">
+                              {language === "ar" ? "ر.س" : order.currency} {parseFloat(order.totalAmount).toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="mt-4 pt-4 border-t">
+                          <p className="text-sm text-gray-600">
+                            {t("collector.purchases.paymentNote", "Payment was arranged directly with the seller")}
                           </p>
                         </div>
-                        <div>
-                          <span className="text-gray-600">
-                            {t("collector.payment.installmentAmount", "Per Installment")}
-                          </span>
-                          <p className="font-medium">
-                            {language === "ar" ? "ر.س" : order.currency} {parseFloat(order.installmentPlan?.installmentAmount!).toLocaleString()}
-                          </p>
-                        </div>
-                      </div>
-                      {order.installmentPlan?.nextPaymentDate && (
-                        <div className="bg-blue-50 p-3 rounded-lg">
-                          <p className="text-sm text-blue-800">
-                            {t("collector.payment.nextPayment", "Next payment due on")} {format(new Date(order.installmentPlan.nextPaymentDate), "MMM dd, yyyy")}
-                          </p>
-                        </div>
-                      )}
-                      <Button className="w-full bg-brand-navy hover:bg-brand-steel">
-                        {t("collector.payment.makePayment", "Make Payment")}
-                      </Button>
-                    </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Card className="bg-white/70 backdrop-blur-sm border-gray-200/50">
+                  <CardContent className="text-center py-12">
+                    <CreditCard className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold mb-2">
+                      {t("collector.purchases.noPurchases", "No completed purchases yet")}
+                    </h3>
+                    <p className="text-gray-600">
+                      {t("collector.purchases.startBuying", "Your completed purchases will appear here")}
+                    </p>
                   </CardContent>
                 </Card>
-              ))}
+              )}
             </TabsContent>
           </Tabs>
         </div>

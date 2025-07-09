@@ -53,6 +53,7 @@ Art Souk is a bilingual art marketplace web application focused on the Saudi Ara
 - **Artist Profiles**: Complete portfolios with biography, exhibitions, statistics, and social features
 - **Gallery Profiles**: Gallery information, represented artists, current/upcoming exhibitions, and contact details
 - **User Dashboard**: Personal space for managing favorites, inquiries, profile settings, and activity tracking
+- **External Payment Processing**: All payments are handled directly between buyers and sellers outside the platform
 
 ### Auction Platform
 - **Live Bidding**: Real-time auction participation with auto-refresh and bid validation
@@ -261,7 +262,7 @@ Preferred communication style: Simple, everyday language.
     • Orders Tab: Complete purchase history with status tracking
     • Tracking Tab: Real-time shipment tracking with estimated delivery
     • Wishlist Tab: Prioritized saved items with price alerts
-    • Payments Tab: Installment plan management and payment schedules
+    • Purchase History Tab: Completed purchases with external payment notation
   ✓ Implemented collector API endpoints:
     • GET/POST/DELETE endpoints for wishlist management
     • Order retrieval with artwork and shipping details
@@ -269,4 +270,5 @@ Preferred communication style: Simple, everyday language.
     • Collector profile CRUD operations
   ✓ Added Collector Dashboard link to main Dashboard
   ✓ Successfully created all database tables using SQL execution
-  ✓ Platform now serves complete e-commerce functionality for art collectors
+  ✓ Platform now serves as a marketplace facilitator with payments handled externally
+  ✓ Updated UI to reflect that all payments are arranged directly between buyers and sellers
