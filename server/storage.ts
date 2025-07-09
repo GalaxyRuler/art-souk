@@ -75,6 +75,14 @@ import {
   portfolioSections,
   type PortfolioSection,
   type InsertPortfolioSection,
+  purchaseOrders,
+  shippingTracking,
+  collectorProfiles,
+  priceAlerts,
+  artworkCertificates,
+  collectorWishlist,
+  installmentPlans,
+  collectorReviews,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";

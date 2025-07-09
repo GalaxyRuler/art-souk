@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Heart, MessageSquare, User, Settings, Eye, Calendar, MapPin, Phone, Mail, Edit2, Save, X, BarChart3 } from "lucide-react";
+import { Heart, MessageSquare, User, Settings, Eye, Calendar, MapPin, Phone, Mail, Edit2, Save, X, BarChart3, Package } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
@@ -345,6 +345,14 @@ export default function Dashboard() {
                     </Button>
                   </Link>
                 )}
+                
+                {/* Collector Dashboard Link */}
+                <Link href="/collector">
+                  <Button className="w-full mt-4 bg-brand-navy hover:bg-brand-steel">
+                    <Package className="h-4 w-4 mr-2" />
+                    Collector Dashboard
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>

@@ -2,6 +2,8 @@ import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { db } from "./db";
+import { eq, desc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
 import { 
   insertArtistSchema, 
   insertGallerySchema, 
@@ -20,7 +22,15 @@ import {
   insertFollowSchema,
   insertCommentSchema,
   insertLikeSchema,
-  insertUserProfileSchema
+  insertUserProfileSchema,
+  purchaseOrders,
+  shippingTracking,
+  collectorProfiles,
+  priceAlerts,
+  collectorWishlist,
+  installmentPlans,
+  artworks,
+  artists
 } from "@shared/schema";
 import { z } from "zod";
 
@@ -814,6 +824,224 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
 
+
+  // Collector Dashboard Routes
+  app.get('/api/collector/orders', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const orders = await db
+        .select({
+          id: purchaseOrders.id,
+          orderNumber: purchaseOrders.orderNumber,
+          status: purchaseOrders.status,
+          totalAmount: purchaseOrders.totalAmount,
+          currency: purchaseOrders.currency,
+          paymentStatus: purchaseOrders.paymentStatus,
+          createdAt: purchaseOrders.createdAt,
+          artwork: {
+            id: artworks.id,
+            title: artworks.title,
+            titleAr: artworks.titleAr,
+            images: artworks.images,
+            artist: {
+              name: artists.name,
+              nameAr: artists.nameAr,
+            }
+          },
+          shippingTracking: {
+            trackingNumber: shippingTracking.trackingNumber,
+            carrier: shippingTracking.carrier,
+            status: shippingTracking.status,
+            estimatedDelivery: shippingTracking.estimatedDelivery,
+          },
+          installmentPlan: {
+            totalAmount: installmentPlans.totalAmount,
+            completedInstallments: installmentPlans.completedInstallments,
+            numberOfInstallments: installmentPlans.numberOfInstallments,
+            nextPaymentDate: installmentPlans.nextPaymentDate,
+            installmentAmount: installmentPlans.installmentAmount,
+          }
+        })
+        .from(purchaseOrders)
+        .innerJoin(artworks, eq(purchaseOrders.artworkId, artworks.id))
+        .innerJoin(artists, eq(artworks.artistId, artists.id))
+        .leftJoin(shippingTracking, eq(purchaseOrders.id, shippingTracking.orderId))
+        .leftJoin(installmentPlans, eq(purchaseOrders.id, installmentPlans.orderId))
+        .where(eq(purchaseOrders.userId, userId))
+        .orderBy(desc(purchaseOrders.createdAt));
+      
+      res.json(orders);
+    } catch (error) {
+      console.error("Error fetching collector orders:", error);
+      res.status(500).json({ message: "Failed to fetch orders" });
+    }
+  });
+
+  app.get('/api/collector/wishlist', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const wishlistItems = await db
+        .select({
+          id: collectorWishlist.id,
+          priority: collectorWishlist.priority,
+          priceAtTimeOfAdding: collectorWishlist.priceAtTimeOfAdding,
+          notifyOnPriceChange: collectorWishlist.notifyOnPriceChange,
+          artwork: {
+            id: artworks.id,
+            title: artworks.title,
+            titleAr: artworks.titleAr,
+            images: artworks.images,
+            price: artworks.price,
+            currency: artworks.currency,
+            artist: {
+              name: artists.name,
+              nameAr: artists.nameAr,
+            }
+          }
+        })
+        .from(collectorWishlist)
+        .innerJoin(artworks, eq(collectorWishlist.artworkId, artworks.id))
+        .innerJoin(artists, eq(artworks.artistId, artists.id))
+        .where(eq(collectorWishlist.userId, userId))
+        .orderBy(desc(collectorWishlist.priority));
+      
+      res.json(wishlistItems);
+    } catch (error) {
+      console.error("Error fetching wishlist:", error);
+      res.status(500).json({ message: "Failed to fetch wishlist" });
+    }
+  });
+
+  app.post('/api/collector/wishlist', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { artworkId, priority = 0, notes, notifyOnPriceChange = true } = req.body;
+      
+      // Get current artwork price
+      const [artwork] = await db.select({ price: artworks.price }).from(artworks).where(eq(artworks.id, artworkId));
+      
+      const [wishlistItem] = await db
+        .insert(collectorWishlist)
+        .values({
+          userId,
+          artworkId,
+          priority,
+          notes,
+          priceAtTimeOfAdding: artwork?.price,
+          notifyOnPriceChange,
+        })
+        .returning();
+      
+      res.json(wishlistItem);
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+      res.status(500).json({ message: "Failed to add to wishlist" });
+    }
+  });
+
+  app.delete('/api/collector/wishlist/:artworkId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const artworkId = parseInt(req.params.artworkId);
+      
+      await db
+        .delete(collectorWishlist)
+        .where(and(
+          eq(collectorWishlist.userId, userId),
+          eq(collectorWishlist.artworkId, artworkId)
+        ));
+      
+      res.json({ message: "Removed from wishlist" });
+    } catch (error) {
+      console.error("Error removing from wishlist:", error);
+      res.status(500).json({ message: "Failed to remove from wishlist" });
+    }
+  });
+
+  app.get('/api/collector/price-alerts', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const alerts = await db
+        .select()
+        .from(priceAlerts)
+        .where(and(
+          eq(priceAlerts.userId, userId),
+          eq(priceAlerts.isActive, true)
+        ))
+        .orderBy(desc(priceAlerts.createdAt));
+      
+      res.json(alerts);
+    } catch (error) {
+      console.error("Error fetching price alerts:", error);
+      res.status(500).json({ message: "Failed to fetch price alerts" });
+    }
+  });
+
+  app.post('/api/collector/price-alerts', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const alertData = {
+        userId,
+        ...req.body
+      };
+      
+      const [alert] = await db
+        .insert(priceAlerts)
+        .values(alertData)
+        .returning();
+      
+      res.json(alert);
+    } catch (error) {
+      console.error("Error creating price alert:", error);
+      res.status(500).json({ message: "Failed to create price alert" });
+    }
+  });
+
+  app.get('/api/collector/profile', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const [profile] = await db
+        .select()
+        .from(collectorProfiles)
+        .where(eq(collectorProfiles.userId, userId));
+      
+      res.json(profile || null);
+    } catch (error) {
+      console.error("Error fetching collector profile:", error);
+      res.status(500).json({ message: "Failed to fetch collector profile" });
+    }
+  });
+
+  app.put('/api/collector/profile', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const profileData = req.body;
+      
+      const [existingProfile] = await db
+        .select()
+        .from(collectorProfiles)
+        .where(eq(collectorProfiles.userId, userId));
+      
+      let profile;
+      if (existingProfile) {
+        [profile] = await db
+          .update(collectorProfiles)
+          .set({ ...profileData, updatedAt: new Date() })
+          .where(eq(collectorProfiles.userId, userId))
+          .returning();
+      } else {
+        [profile] = await db
+          .insert(collectorProfiles)
+          .values({ userId, ...profileData })
+          .returning();
+      }
+      
+      res.json(profile);
+    } catch (error) {
+      console.error("Error updating collector profile:", error);
+      res.status(500).json({ message: "Failed to update collector profile" });
+    }
+  });
 
   // Inquiry routes
   app.get('/api/inquiries', isAuthenticated, async (req: any, res) => {

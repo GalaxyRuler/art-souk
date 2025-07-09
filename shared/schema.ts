@@ -419,9 +419,128 @@ export const portfolioSections = pgTable("portfolio_sections", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Collector-specific tables
+export const purchaseOrders = pgTable("purchase_orders", {
+  id: serial("id").primaryKey(),
+  orderNumber: varchar("order_number").unique().notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  artworkId: integer("artwork_id").references(() => artworks.id).notNull(),
+  status: varchar("status").default("pending"), // pending, confirmed, processing, shipped, delivered, cancelled
+  totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
+  currency: varchar("currency").default("SAR"),
+  shippingMethod: varchar("shipping_method"),
+  shippingAddress: jsonb("shipping_address"), // {street, city, state, country, postalCode}
+  billingAddress: jsonb("billing_address"),
+  paymentMethod: varchar("payment_method"), // card, bank_transfer, cash_on_delivery
+  paymentStatus: varchar("payment_status").default("pending"), // pending, paid, failed, refunded
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const shippingTracking = pgTable("shipping_tracking", {
+  id: serial("id").primaryKey(),
+  orderId: integer("order_id").references(() => purchaseOrders.id).notNull(),
+  trackingNumber: varchar("tracking_number"),
+  carrier: varchar("carrier"),
+  status: varchar("status"), // in_transit, out_for_delivery, delivered, returned
+  estimatedDelivery: date("estimated_delivery"),
+  actualDelivery: timestamp("actual_delivery"),
+  trackingHistory: jsonb("tracking_history").default([]), // [{date, status, location, notes}]
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const collectorProfiles = pgTable("collector_profiles", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).unique().notNull(),
+  collectorType: varchar("collector_type"), // individual, corporate, institutional
+  collectionFocus: text("collection_focus").array(), // contemporary, traditional, emerging, etc.
+  budgetRange: jsonb("budget_range"), // {min, max, currency}
+  preferredMediums: text("preferred_mediums").array(),
+  shippingAddresses: jsonb("shipping_addresses").default([]), // array of addresses
+  paymentMethods: jsonb("payment_methods").default([]), // saved payment methods
+  artAdvisorContact: jsonb("art_advisor_contact"), // {name, email, phone}
+  publicProfile: boolean("public_profile").default(false),
+  verifiedCollector: boolean("verified_collector").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const priceAlerts = pgTable("price_alerts", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  artistId: integer("artist_id").references(() => artists.id),
+  artworkId: integer("artwork_id").references(() => artworks.id),
+  category: varchar("category"),
+  priceThreshold: decimal("price_threshold", { precision: 10, scale: 2 }),
+  alertType: varchar("alert_type"), // price_drop, new_artwork, auction_starting
+  isActive: boolean("is_active").default(true),
+  lastTriggered: timestamp("last_triggered"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const artworkCertificates = pgTable("artwork_certificates", {
+  id: serial("id").primaryKey(),
+  artworkId: integer("artwork_id").references(() => artworks.id).unique().notNull(),
+  certificateNumber: varchar("certificate_number").unique().notNull(),
+  issueDate: date("issue_date").notNull(),
+  authenticatedBy: varchar("authenticated_by"),
+  certificateUrl: varchar("certificate_url"),
+  provenanceDetails: jsonb("provenance_details"), // ownership history
+  conditionReport: text("condition_report"),
+  additionalDocuments: jsonb("additional_documents").default([]), // [{title, url, type}]
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const collectorWishlist = pgTable("collector_wishlist", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  artworkId: integer("artwork_id").references(() => artworks.id).notNull(),
+  priority: integer("priority").default(0), // 0-5, higher is more important
+  notes: text("notes"),
+  priceAtTimeOfAdding: decimal("price_at_time_of_adding", { precision: 10, scale: 2 }),
+  notifyOnPriceChange: boolean("notify_on_price_change").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  unique("unique_user_artwork_wishlist").on(table.userId, table.artworkId),
+]);
+
+export const installmentPlans = pgTable("installment_plans", {
+  id: serial("id").primaryKey(),
+  orderId: integer("order_id").references(() => purchaseOrders.id).unique().notNull(),
+  totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
+  downPayment: decimal("down_payment", { precision: 10, scale: 2 }).notNull(),
+  numberOfInstallments: integer("number_of_installments").notNull(),
+  installmentAmount: decimal("installment_amount", { precision: 10, scale: 2 }).notNull(),
+  interestRate: decimal("interest_rate", { precision: 5, scale: 2 }).default("0"),
+  status: varchar("status").default("active"), // active, completed, defaulted
+  nextPaymentDate: date("next_payment_date"),
+  completedInstallments: integer("completed_installments").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const collectorReviews = pgTable("collector_reviews", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  artworkId: integer("artwork_id").references(() => artworks.id),
+  galleryId: integer("gallery_id").references(() => galleries.id),
+  orderId: integer("order_id").references(() => purchaseOrders.id),
+  rating: integer("rating").notNull(), // 1-5
+  review: text("review"),
+  reviewAr: text("review_ar"),
+  verifiedPurchase: boolean("verified_purchase").default(false),
+  isPublic: boolean("is_public").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ one, many }) => ({
   profile: one(userProfiles, { fields: [users.id], references: [userProfiles.userId] }),
+  collectorProfile: one(collectorProfiles, { fields: [users.id], references: [collectorProfiles.userId] }),
   artists: many(artists),
   galleries: many(galleries),
   workshops: many(workshops),
@@ -435,6 +554,10 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   comments: many(comments),
   likes: many(likes),
   activities: many(activities),
+  purchaseOrders: many(purchaseOrders),
+  priceAlerts: many(priceAlerts),
+  wishlistItems: many(collectorWishlist),
+  reviews: many(collectorReviews),
 }));
 
 export const artistsRelations = relations(artists, ({ one, many }) => ({
@@ -456,6 +579,10 @@ export const artworksRelations = relations(artworks, ({ one, many }) => ({
   favorites: many(favorites),
   comments: many(comments),
   likes: many(likes),
+  purchaseOrders: many(purchaseOrders),
+  certificate: one(artworkCertificates, { fields: [artworks.id], references: [artworkCertificates.artworkId] }),
+  wishlistItems: many(collectorWishlist),
+  reviews: many(collectorReviews),
 }));
 
 export const auctionsRelations = relations(auctions, ({ one, many }) => ({
@@ -561,6 +688,49 @@ export const userPreferencesRelations = relations(userPreferences, ({ one }) => 
 
 export const portfolioSectionsRelations = relations(portfolioSections, ({ one }) => ({
   artist: one(artists, { fields: [portfolioSections.artistId], references: [artists.id] }),
+}));
+
+// Collector table relations
+export const purchaseOrdersRelations = relations(purchaseOrders, ({ one, many }) => ({
+  user: one(users, { fields: [purchaseOrders.userId], references: [users.id] }),
+  artwork: one(artworks, { fields: [purchaseOrders.artworkId], references: [artworks.id] }),
+  shippingTracking: one(shippingTracking, { fields: [purchaseOrders.id], references: [shippingTracking.orderId] }),
+  installmentPlan: one(installmentPlans, { fields: [purchaseOrders.id], references: [installmentPlans.orderId] }),
+  review: one(collectorReviews, { fields: [purchaseOrders.id], references: [collectorReviews.orderId] }),
+}));
+
+export const shippingTrackingRelations = relations(shippingTracking, ({ one }) => ({
+  order: one(purchaseOrders, { fields: [shippingTracking.orderId], references: [purchaseOrders.id] }),
+}));
+
+export const collectorProfilesRelations = relations(collectorProfiles, ({ one }) => ({
+  user: one(users, { fields: [collectorProfiles.userId], references: [users.id] }),
+}));
+
+export const priceAlertsRelations = relations(priceAlerts, ({ one }) => ({
+  user: one(users, { fields: [priceAlerts.userId], references: [users.id] }),
+  artist: one(artists, { fields: [priceAlerts.artistId], references: [artists.id] }),
+  artwork: one(artworks, { fields: [priceAlerts.artworkId], references: [artworks.id] }),
+}));
+
+export const artworkCertificatesRelations = relations(artworkCertificates, ({ one }) => ({
+  artwork: one(artworks, { fields: [artworkCertificates.artworkId], references: [artworks.id] }),
+}));
+
+export const collectorWishlistRelations = relations(collectorWishlist, ({ one }) => ({
+  user: one(users, { fields: [collectorWishlist.userId], references: [users.id] }),
+  artwork: one(artworks, { fields: [collectorWishlist.artworkId], references: [artworks.id] }),
+}));
+
+export const installmentPlansRelations = relations(installmentPlans, ({ one }) => ({
+  order: one(purchaseOrders, { fields: [installmentPlans.orderId], references: [purchaseOrders.id] }),
+}));
+
+export const collectorReviewsRelations = relations(collectorReviews, ({ one }) => ({
+  user: one(users, { fields: [collectorReviews.userId], references: [users.id] }),
+  artwork: one(artworks, { fields: [collectorReviews.artworkId], references: [artworks.id] }),
+  gallery: one(galleries, { fields: [collectorReviews.galleryId], references: [galleries.id] }),
+  order: one(purchaseOrders, { fields: [collectorReviews.orderId], references: [purchaseOrders.id] }),
 }));
 
 // Export types

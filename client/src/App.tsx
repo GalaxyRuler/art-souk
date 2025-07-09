@@ -22,6 +22,7 @@ import Workshops from "@/pages/Workshops";
 import Events from "@/pages/Events";
 import Analytics from "@/pages/Analytics";
 import UserPreferences from "@/pages/UserPreferences";
+import CollectorDashboard from "@/pages/CollectorDashboard";
 
 import Auth from "@/pages/Auth";
 import AdminSetup from "@/pages/AdminSetup";
@@ -53,6 +54,7 @@ function Router() {
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/analytics" component={Analytics} />
           <Route path="/preferences" component={UserPreferences} />
+          <Route path="/collector" component={CollectorDashboard} />
         </>
       )}
       {/* Public routes accessible to all users */}
