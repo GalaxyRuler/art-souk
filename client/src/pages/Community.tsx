@@ -21,7 +21,7 @@ export default function Community() {
   const { toast } = useToast();
   
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [showNewDiscussion, setShowNewDiscussion] = useState(false);
   const [newDiscussion, setNewDiscussion] = useState({
     title: "",
@@ -95,7 +95,7 @@ export default function Community() {
   const filteredDiscussions = discussions?.filter((discussion: any) => {
     const matchesSearch = discussion.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          discussion.content.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !selectedCategory || discussion.category === selectedCategory;
+    const matchesCategory = !selectedCategory || selectedCategory === "all" || discussion.category === selectedCategory;
     
     return matchesSearch && matchesCategory;
   });
@@ -166,7 +166,7 @@ export default function Community() {
                 <SelectValue placeholder={t("community.category", "Category")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="general">General</SelectItem>
                 <SelectItem value="technique">Technique</SelectItem>
                 <SelectItem value="critique">Critique</SelectItem>
