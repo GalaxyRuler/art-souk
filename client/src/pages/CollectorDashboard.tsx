@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -79,7 +80,8 @@ interface WishlistItem {
 
 export default function CollectorDashboard() {
   const { user } = useAuth();
-  const { t, language, isRTL } = useLanguage();
+  const { t } = useTranslation();
+  const { language, isRTL } = useLanguage();
   const [activeTab, setActiveTab] = useState("orders");
 
   const { data: orders, isLoading: ordersLoading } = useQuery<PurchaseOrder[]>({
