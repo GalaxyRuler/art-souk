@@ -121,6 +121,17 @@
       "minutes": "{{count}} minutes"
     },
     "endingSoon": "Ending Soon",
+    "timeEnded": "Ended",
+    "timeDays": "{{count}} days",
+    "timeHours": "{{count}} hours",
+    "endsIn": "Ends in",
+    "startsIn": "Starts in",
+    "status": {
+      "live": "Live",
+      "upcoming": "Upcoming",
+      "ended": "Ended",
+      "unknown": "Unknown"
+    },
     "tabs": {
       "live": "Live Auctions",
       "upcoming": "Upcoming",
@@ -144,7 +155,17 @@
       "title": "No Auctions Available",
       "description": "Check back later for new auction listings."
     },
-    "viewAll": "View All Auctions"
+    "viewAll": "View All Auctions",
+    "auctionEnded": "Auction Ended",
+    "finalBid": "Final bid",
+    "liveBidding": "Live bidding",
+    "updatesAutomatically": "Updates automatically",
+    "biddingActivity": "Bidding Activity",
+    "leading": "Leading",
+    "noBidsYet": "No bids yet",
+    "beFirstToBid": "Be the first to bid!",
+    "auctionDetails": "Auction Details",
+    "termsAndConditions": "Terms & Conditions"
   },
   "artists": {
     "title": "Artists",
@@ -501,7 +522,8 @@
     "lastYear": "Last Year",
     "nextYear": "Next Year",
     "retry": "Try Again",
-    "goBack": "Go Back"
+    "goBack": "Go Back",
+    "anonymous": "Anonymous"
   },
   "dashboard": {
     "title": "Dashboard",

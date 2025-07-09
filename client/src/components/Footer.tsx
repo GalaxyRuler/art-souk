@@ -93,7 +93,7 @@ export function Footer() {
         <div className="border-t border-gray-700 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <div className="flex items-center space-x-6 mb-4 sm:mb-0">
             <div className="text-xl font-bold">
-              <span className="text-accent">Artisan</span>
+              <span className="text-accent">{t("common.siteName")}</span>
             </div>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">

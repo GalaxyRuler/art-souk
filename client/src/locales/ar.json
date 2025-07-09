@@ -121,6 +121,17 @@
       "minutes": "{{count}} دقائق"
     },
     "endingSoon": "ينتهي قريباً",
+    "timeEnded": "انتهى",
+    "timeDays": "{{count}} أيام",
+    "timeHours": "{{count}} ساعات",
+    "endsIn": "ينتهي في",
+    "startsIn": "يبدأ في",
+    "status": {
+      "live": "مباشر",
+      "upcoming": "قادم",
+      "ended": "انتهى",
+      "unknown": "غير معروف"
+    },
     "tabs": {
       "live": "مزادات مباشرة",
       "upcoming": "قادمة",
@@ -144,7 +155,17 @@
       "title": "لا توجد مزادات متاحة",
       "description": "تحقق مرة أخرى لاحقاً لقوائم المزادات الجديدة."
     },
-    "viewAll": "عرض جميع المزادات"
+    "viewAll": "عرض جميع المزادات",
+    "auctionEnded": "انتهى المزاد",
+    "finalBid": "العرض النهائي",
+    "liveBidding": "مزايدة مباشرة",
+    "updatesAutomatically": "التحديث تلقائياً",
+    "biddingActivity": "نشاط المزايدة",
+    "leading": "رائد",
+    "noBidsYet": "لا توجد عروض بعد",
+    "beFirstToBid": "كن أول من يقدم عرضاً!",
+    "auctionDetails": "تفاصيل المزاد",
+    "termsAndConditions": "الشروط والأحكام"
   },
   "artists": {
     "title": "الفنانون",
@@ -499,7 +520,8 @@
     "lastYear": "العام الماضي",
     "nextYear": "العام القادم",
     "retry": "المحاولة مرة أخرى",
-    "goBack": "العودة"
+    "goBack": "العودة",
+    "anonymous": "مجهول"
   },
   "social": {
     "follow": "متابعة",

@@ -205,9 +205,9 @@ export default function AuctionDetail() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">Auction not found</h1>
+          <h1 className="text-2xl font-bold text-foreground mb-4">{t("auctions.notFound")}</h1>
           <Link href="/auctions">
-            <Button>Browse Auctions</Button>
+            <Button>{t("auctions.browseAuctions")}</Button>
           </Link>
         </div>
       </div>
@@ -226,8 +226,8 @@ export default function AuctionDetail() {
     e.preventDefault();
     if (!bidAmount || isNaN(parseFloat(bidAmount))) {
       toast({
-        title: "Invalid bid amount",
-        description: "Please enter a valid bid amount",
+        title: t("auctions.bidding.invalidAmount"),
+        description: t("auctions.bidding.invalidAmountDesc"),
         variant: "destructive",
       });
       return;
@@ -239,8 +239,8 @@ export default function AuctionDetail() {
 
     if (newBidAmount <= currentBidAmount) {
       toast({
-        title: "Bid too low",
-        description: `Bid must be higher than current bid of ${formatPrice(currentBidAmount, auction.currency, isRTL ? 'ar' : 'en')}`,
+        title: t("auctions.bidding.bidTooLow"),
+        description: t("auctions.bidding.bidTooLowDesc", { amount: formatPrice(currentBidAmount, auction.currency, isRTL ? 'ar' : 'en') }),
         variant: "destructive",
       });
       return;
@@ -248,8 +248,8 @@ export default function AuctionDetail() {
 
     if (newBidAmount < currentBidAmount + minBidIncrement) {
       toast({
-        title: "Bid increment too small",
-        description: `Minimum bid increment is ${formatPrice(minBidIncrement, auction.currency, isRTL ? 'ar' : 'en')}`,
+        title: t("auctions.bidding.incrementTooSmall"),
+        description: t("auctions.bidding.incrementTooSmallDesc", { amount: formatPrice(minBidIncrement, auction.currency, isRTL ? 'ar' : 'en') }),
         variant: "destructive",
       });
       return;
@@ -263,7 +263,7 @@ export default function AuctionDetail() {
       try {
         await navigator.share({
           title: title,
-          text: `${title} - Live Auction`,
+          text: `${title} - ${t("auctions.liveAuction")}`,
           url: window.location.href,
         });
       } catch (error) {
@@ -272,8 +272,8 @@ export default function AuctionDetail() {
     } else {
       navigator.clipboard.writeText(window.location.href);
       toast({
-        title: "Link copied",
-        description: "Auction link copied to clipboard",
+        title: t("common.linkCopied"),
+        description: t("auctions.linkCopiedDesc"),
       });
     }
   };
@@ -289,9 +289,9 @@ export default function AuctionDetail() {
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'live': return 'Live Now';
-      case 'upcoming': return 'Starting Soon';
-      case 'ended': return 'Ended';
+      case 'live': return t("auctions.statusText.liveNow");
+      case 'upcoming': return t("auctions.statusText.startingSoon");
+      case 'ended': return t("auctions.statusText.ended");
       default: return status;
     }
   };
@@ -303,7 +303,7 @@ export default function AuctionDetail() {
         <Link href="/auctions">
           <Button variant="ghost" className="mb-6 hover:bg-brand-light-gold">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Auctions
+            {t("auctions.backToAuctions")}
           </Button>
         </Link>
 
@@ -357,28 +357,28 @@ export default function AuctionDetail() {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   {auction.artwork?.year && (
                     <div>
-                      <span className="text-muted-foreground">Year:</span>
+                      <span className="text-muted-foreground">{t("artwork.year")}:</span>
                       <p className="font-medium">{auction.artwork?.year}</p>
                     </div>
                   )}
                   
                   {medium && (
                     <div>
-                      <span className="text-muted-foreground">Medium:</span>
+                      <span className="text-muted-foreground">{t("artwork.medium")}:</span>
                       <p className="font-medium">{medium}</p>
                     </div>
                   )}
                   
                   {auction.artwork?.dimensions && (
                     <div>
-                      <span className="text-muted-foreground">Dimensions:</span>
+                      <span className="text-muted-foreground">{t("artwork.dimensions")}:</span>
                       <p className="font-medium">{auction.artwork?.dimensions}</p>
                     </div>
                   )}
 
                   {galleryName && (
                     <div>
-                      <span className="text-muted-foreground">Gallery:</span>
+                      <span className="text-muted-foreground">{t("artwork.gallery")}:</span>
                       <Link href={`/galleries/${auction.artwork?.gallery?.id}`}>
                         <p className="font-medium text-brand-purple hover:underline">{galleryName}</p>
                       </Link>
@@ -388,7 +388,7 @@ export default function AuctionDetail() {
 
                 {(auction.estimateLow || auction.estimateHigh) && (
                   <div className="mt-4 pt-4 border-t">
-                    <span className="text-sm text-muted-foreground">Estimate:</span>
+                    <span className="text-sm text-muted-foreground">{t("auctions.estimate")}:</span>
                     <p className="font-semibold text-brand-gold">
                       {auction.estimateLow && formatPrice(auction.estimateLow, auction.currency, isRTL ? 'ar' : 'en')}
                       {auction.estimateHigh && ` - ${formatPrice(auction.estimateHigh, auction.currency, isRTL ? 'ar' : 'en')}`}
@@ -416,19 +416,19 @@ export default function AuctionDetail() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="text-center">
-                  <p className="text-sm text-muted-foreground mb-2">Current Bid</p>
+                  <p className="text-sm text-muted-foreground mb-2">{t("auctions.currentBid")}</p>
                   <p className="text-4xl font-bold text-brand-gold">
                     {formatPrice(auction.currentBid, auction.currency, isRTL ? 'ar' : 'en')}
                   </p>
                   <div className="flex items-center justify-center gap-4 mt-2 text-sm text-muted-foreground">
                     <div className="flex items-center gap-1">
                       <Users className="h-4 w-4" />
-                      <span>{auction.bidCount} bids</span>
+                      <span>{auction.bidCount} {t("auctions.bids")}</span>
                     </div>
                     {auction.viewCount && (
                       <div className="flex items-center gap-1">
                         <Eye className="h-4 w-4" />
-                        <span>{auction.viewCount} views</span>
+                        <span>{auction.viewCount} {t("common.views")}</span>
                       </div>
                     )}
                   </div>
@@ -440,13 +440,13 @@ export default function AuctionDetail() {
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="bidAmount" className="text-sm font-medium">
-                        Your Bid ({isRTL ? 'ر.س' : 'SAR'})
+                        {t("auctions.yourBid")} ({isRTL ? 'ر.س' : 'SAR'})
                       </Label>
                       <form onSubmit={handlePlaceBid} className="flex gap-2 mt-2">
                         <Input
                           id="bidAmount"
                           type="number"
-                          placeholder="Enter bid amount"
+                          placeholder={t("auctions.enterBidAmount")}
                           value={bidAmount}
                           onChange={(e) => setBidAmount(e.target.value)}
                           className="flex-1"
@@ -457,42 +457,42 @@ export default function AuctionDetail() {
                           disabled={placeBidMutation.isPending || !bidAmount}
                         >
                           <Gavel className="h-4 w-4 mr-2" />
-                          {placeBidMutation.isPending ? "Placing..." : "Place Bid"}
+                          {placeBidMutation.isPending ? t("auctions.placingBid") : t("auctions.placeBid")}
                         </Button>
                       </form>
                     </div>
 
                     <div className="text-xs text-muted-foreground space-y-1">
-                      <p>• Minimum bid: {formatPrice(parseInt(auction.currentBid) + 100, auction.currency, isRTL ? 'ar' : 'en')}</p>
-                      <p>• Bidding increments: {formatPrice(100, auction.currency, isRTL ? 'ar' : 'en')}</p>
-                      {auction.hasReserve && <p>• This lot has a reserve price</p>}
+                      <p>• {t("auctions.minimumBid")}: {formatPrice(parseInt(auction.currentBid) + 100, auction.currency, isRTL ? 'ar' : 'en')}</p>
+                      <p>• {t("auctions.biddingIncrements")}: {formatPrice(100, auction.currency, isRTL ? 'ar' : 'en')}</p>
+                      {auction.hasReserve && <p>• {t("auctions.hasReserve")}</p>}
                     </div>
                   </div>
                 ) : auction.status === 'live' && !isAuthenticated ? (
                   <div className="text-center py-4">
                     <AlertCircle className="h-12 w-12 text-brand-purple mx-auto mb-3" />
-                    <p className="text-brand-charcoal font-medium mb-2">Sign in to bid</p>
+                    <p className="text-brand-charcoal font-medium mb-2">{t("auctions.signInToBid")}</p>
                     <p className="text-sm text-muted-foreground mb-4">
-                      You need to be logged in to participate in auctions
+                      {t("auctions.signInToBidDesc")}
                     </p>
                     <Button className="bg-brand-gradient" onClick={() => window.location.href = '/api/login'}>
-                      Sign In to Bid
+                      {t("auctions.signInToBidButton")}
                     </Button>
                   </div>
                 ) : auction.status === 'upcoming' ? (
                   <div className="text-center py-4">
                     <Timer className="h-12 w-12 text-brand-purple mx-auto mb-3" />
-                    <p className="text-brand-charcoal font-medium mb-2">Auction Starting Soon</p>
+                    <p className="text-brand-charcoal font-medium mb-2">{t("auctions.auctionStartingSoon")}</p>
                     <p className="text-sm text-muted-foreground">
-                      Starts: {new Date(auction.startDate).toLocaleString()}
+                      {t("auctions.starts")}: {new Date(auction.startDate).toLocaleString()}
                     </p>
                   </div>
                 ) : (
                   <div className="text-center py-4">
                     <Gavel className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
-                    <p className="text-brand-charcoal font-medium mb-2">Auction Ended</p>
+                    <p className="text-brand-charcoal font-medium mb-2">{t("auctions.auctionEnded")}</p>
                     <p className="text-sm text-muted-foreground">
-                      Final bid: {formatPrice(auction.currentBid, auction.currency, isRTL ? 'ar' : 'en')}
+                      {t("auctions.finalBid")}: {formatPrice(auction.currentBid, auction.currency, isRTL ? 'ar' : 'en')}
                     </p>
                   </div>
                 )}
@@ -500,7 +500,7 @@ export default function AuctionDetail() {
                 {auction.status === 'live' && (
                   <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                    <span>Live bidding • Updates automatically</span>
+                    <span>{t("auctions.liveBidding")} • {t("auctions.updatesAutomatically")}</span>
                   </div>
                 )}
               </CardContent>
@@ -511,7 +511,7 @@ export default function AuctionDetail() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-brand-purple" />
-                  Bidding Activity
+                  {t("auctions.biddingActivity")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -525,12 +525,12 @@ export default function AuctionDetail() {
                               {formatPrice(bid.amount, bid.currency, isRTL ? 'ar' : 'en')}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              {bid.bidderName || "Anonymous"} • {new Date(bid.createdAt).toLocaleTimeString()}
+                              {bid.bidderName || t("common.anonymous")} • {new Date(bid.createdAt).toLocaleTimeString()}
                             </p>
                           </div>
                           {bid.isWinning && (
                             <Badge variant="default" className="bg-brand-gold text-brand-charcoal text-xs">
-                              Leading
+                              {t("auctions.leading")}
                             </Badge>
                           )}
                         </div>
@@ -539,8 +539,8 @@ export default function AuctionDetail() {
                   ) : (
                     <div className="text-center py-8">
                       <Gavel className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
-                      <p className="text-sm text-muted-foreground">No bids yet</p>
-                      <p className="text-xs text-muted-foreground">Be the first to bid!</p>
+                      <p className="text-sm text-muted-foreground">{t("auctions.noBidsYet")}</p>
+                      <p className="text-xs text-muted-foreground">{t("auctions.beFirstToBid")}</p>
                     </div>
                   )}
                 </ScrollArea>
@@ -551,7 +551,7 @@ export default function AuctionDetail() {
             {description && (
               <Card className="card-elevated">
                 <CardHeader>
-                  <CardTitle>Auction Details</CardTitle>
+                  <CardTitle>{t("auctions.auctionDetails")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground leading-relaxed">
@@ -565,7 +565,7 @@ export default function AuctionDetail() {
             {terms && (
               <Card className="card-elevated">
                 <CardHeader>
-                  <CardTitle>Terms & Conditions</CardTitle>
+                  <CardTitle>{t("auctions.termsAndConditions")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ScrollArea className="h-32">

@@ -159,13 +159,13 @@ export function AuctionSection() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "live":
-        return <Badge variant="destructive" className="text-xs">Live</Badge>;
+        return <Badge variant="destructive" className="text-xs">{t("auctions.status.live")}</Badge>;
       case "upcoming":
-        return <Badge variant="secondary" className="text-xs">Upcoming</Badge>;
+        return <Badge variant="secondary" className="text-xs">{t("auctions.status.upcoming")}</Badge>;
       case "ended":
-        return <Badge variant="outline" className="text-xs">Ended</Badge>;
+        return <Badge variant="outline" className="text-xs">{t("auctions.status.ended")}</Badge>;
       default:
-        return <Badge variant="outline" className="text-xs">Unknown</Badge>;
+        return <Badge variant="outline" className="text-xs">{t("auctions.status.unknown")}</Badge>;
     }
   };
 
@@ -174,14 +174,14 @@ export function AuctionSection() {
     const end = new Date(endDate).getTime();
     const difference = end - now;
 
-    if (difference <= 0) return "Ended";
+    if (difference <= 0) return t("auctions.timeEnded");
 
     const days = Math.floor(difference / (1000 * 60 * 60 * 24));
     const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 
-    if (days > 0) return `${days} days`;
-    if (hours > 0) return `${hours} hours`;
-    return "Ending soon";
+    if (days > 0) return t("auctions.timeDays", { count: days });
+    if (hours > 0) return t("auctions.timeHours", { count: hours });
+    return t("auctions.endingSoon");
   };
 
   return (
@@ -223,7 +223,7 @@ export function AuctionSection() {
                   </div>
                   <div className="absolute bottom-3 right-3">
                     <Badge variant="secondary" className="text-xs bg-black/70 text-white">
-                      {auction.bidCount} bids
+                      {auction.bidCount} {t("auctions.bids")}
                     </Badge>
                   </div>
                 </div>
@@ -241,9 +241,9 @@ export function AuctionSection() {
                     {formatPrice(auction.currentBid, auction.currency, isRTL ? 'ar' : 'en')}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {auction.status === "live" ? `Ends in ${getTimeRemaining(auction.endDate)}` : 
-                     auction.status === "upcoming" ? `Starts ${getTimeRemaining(auction.endDate)}` : 
-                     "Ended"}
+                    {auction.status === "live" ? `${t("auctions.endsIn")} ${getTimeRemaining(auction.endDate)}` : 
+                     auction.status === "upcoming" ? `${t("auctions.startsIn")} ${getTimeRemaining(auction.endDate)}` : 
+                     t("auctions.timeEnded")}
                   </p>
                 </CardContent>
               </Card>
