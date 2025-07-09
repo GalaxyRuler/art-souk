@@ -7,7 +7,8 @@
     "artists": "Artists",
     "galleries": "Galleries",
     "auctions": "Auctions",
-    "editorial": "Editorial"
+    "workshops": "Workshops",
+    "events": "Events"
   },
   "auth": {
     "signin": "Sign In",

@@ -7,7 +7,8 @@
     "artists": "الفنانون",
     "galleries": "المعارض",
     "auctions": "المزادات",
-    "editorial": "المقالات"
+    "workshops": "ورش العمل",
+    "events": "الفعاليات"
   },
   "auth": {
     "signin": "تسجيل الدخول",
