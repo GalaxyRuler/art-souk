@@ -2,6 +2,7 @@ import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { emailService } from "./emailService";
 import { db } from "./db";
 import { eq, desc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
 import { 
@@ -23,6 +24,8 @@ import {
   insertCommentSchema,
   insertLikeSchema,
   insertUserProfileSchema,
+  insertNewsletterSubscriberSchema,
+  insertEmailTemplateSchema,
   purchaseOrders,
   shippingTracking,
   collectorProfiles,
@@ -1696,6 +1699,235 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating order:", error);
       res.status(500).json({ message: "Failed to update order" });
+    }
+  });
+
+  // Newsletter subscription routes
+  app.post('/api/newsletter/subscribe', async (req, res) => {
+    try {
+      const { email, firstName, lastName, language, categories, frequency } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      // Check if authenticated
+      let userId = undefined;
+      if ((req as any).isAuthenticated && (req as any).isAuthenticated()) {
+        userId = (req as any).user.claims.sub;
+      }
+
+      const subscriber = await emailService.subscribeToNewsletter(email, {
+        userId,
+        firstName,
+        lastName,
+        language,
+        categories,
+        frequency
+      });
+
+      res.json({ message: "Successfully subscribed to newsletter", subscriber });
+    } catch (error) {
+      console.error("Error subscribing to newsletter:", error);
+      res.status(500).json({ message: "Failed to subscribe to newsletter" });
+    }
+  });
+
+  app.post('/api/newsletter/unsubscribe', async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      await emailService.unsubscribeFromNewsletter(email);
+      res.json({ message: "Successfully unsubscribed from newsletter" });
+    } catch (error) {
+      console.error("Error unsubscribing from newsletter:", error);
+      res.status(500).json({ message: "Failed to unsubscribe" });
+    }
+  });
+
+  app.get('/api/newsletter/subscription', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const subscription = await storage.getNewsletterSubscriberByUserId(userId);
+      res.json(subscription);
+    } catch (error) {
+      console.error("Error fetching subscription:", error);
+      res.status(500).json({ message: "Failed to fetch subscription" });
+    }
+  });
+
+  // Email template management routes (admin only)
+  app.get('/api/email-templates', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const templates = await storage.getEmailTemplates();
+      res.json(templates);
+    } catch (error) {
+      console.error("Error fetching email templates:", error);
+      res.status(500).json({ message: "Failed to fetch templates" });
+    }
+  });
+
+  app.get('/api/email-templates/:code', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const { code } = req.params;
+      const template = await storage.getEmailTemplate(code);
+      
+      if (!template) {
+        return res.status(404).json({ message: 'Template not found' });
+      }
+
+      res.json(template);
+    } catch (error) {
+      console.error("Error fetching email template:", error);
+      res.status(500).json({ message: "Failed to fetch template" });
+    }
+  });
+
+  app.post('/api/email-templates', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const validation = insertEmailTemplateSchema.safeParse(req.body);
+      if (!validation.success) {
+        return res.status(400).json({ message: "Invalid template data", errors: validation.error.errors });
+      }
+
+      const template = await storage.createEmailTemplate(validation.data);
+      res.json(template);
+    } catch (error) {
+      console.error("Error creating email template:", error);
+      res.status(500).json({ message: "Failed to create template" });
+    }
+  });
+
+  app.patch('/api/email-templates/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const { id } = req.params;
+      const template = await storage.updateEmailTemplate(parseInt(id), req.body);
+      res.json(template);
+    } catch (error) {
+      console.error("Error updating email template:", error);
+      res.status(500).json({ message: "Failed to update template" });
+    }
+  });
+
+  app.delete('/api/email-templates/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const { id } = req.params;
+      await storage.deleteEmailTemplate(parseInt(id));
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting email template:", error);
+      res.status(500).json({ message: "Failed to delete template" });
+    }
+  });
+
+  // Email notification monitoring (admin only)
+  app.get('/api/email-notifications/queue', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const { status, limit } = req.query;
+      const queue = await storage.getEmailNotificationQueue(
+        status as string, 
+        limit ? parseInt(limit as string) : undefined
+      );
+      res.json(queue);
+    } catch (error) {
+      console.error("Error fetching email queue:", error);
+      res.status(500).json({ message: "Failed to fetch queue" });
+    }
+  });
+
+  app.get('/api/email-notifications/log', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const { email, limit } = req.query;
+      const logs = await storage.getEmailNotificationLog(
+        email as string,
+        limit ? parseInt(limit as string) : undefined
+      );
+      res.json(logs);
+    } catch (error) {
+      console.error("Error fetching email logs:", error);
+      res.status(500).json({ message: "Failed to fetch logs" });
+    }
+  });
+
+  // Send test email (admin only)
+  app.post('/api/email-notifications/test', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const { recipientEmail, templateCode, variables, language } = req.body;
+      
+      const queued = await emailService.queueTemplatedEmail(
+        recipientEmail,
+        templateCode,
+        variables || {},
+        {
+          priority: 1,
+          language
+        }
+      );
+
+      res.json({ message: "Test email queued", queued });
+    } catch (error) {
+      console.error("Error sending test email:", error);
+      res.status(500).json({ message: "Failed to send test email" });
     }
   });
 

@@ -83,6 +83,18 @@ import {
   collectorWishlist,
   installmentPlans,
   collectorReviews,
+  newsletterSubscribers,
+  type NewsletterSubscriber,
+  type InsertNewsletterSubscriber,
+  emailTemplates,
+  type EmailTemplate,
+  type InsertEmailTemplate,
+  emailNotificationQueue,
+  type EmailNotificationQueue,
+  type InsertEmailNotificationQueue,
+  emailNotificationLog,
+  type EmailNotificationLog,
+  type InsertEmailNotificationLog,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
@@ -270,6 +282,17 @@ export interface IStorage {
   deleteSellerPaymentMethod(userId: string, methodId: string): Promise<void>;
   getSellerOrders(userId: string): Promise<any[]>;
   updateSellerOrder(userId: string, orderId: number, update: any): Promise<any>;
+  
+  // Email notification operations
+  getNewsletterSubscriber(email: string): Promise<NewsletterSubscriber | undefined>;
+  getNewsletterSubscriberByUserId(userId: string): Promise<NewsletterSubscriber | undefined>;
+  createEmailTemplate(template: InsertEmailTemplate): Promise<EmailTemplate>;
+  getEmailTemplate(templateCode: string): Promise<EmailTemplate | undefined>;
+  getEmailTemplates(): Promise<EmailTemplate[]>;
+  updateEmailTemplate(id: number, template: Partial<InsertEmailTemplate>): Promise<EmailTemplate>;
+  deleteEmailTemplate(id: number): Promise<void>;
+  getEmailNotificationQueue(status?: string, limit?: number): Promise<EmailNotificationQueue[]>;
+  getEmailNotificationLog(recipientEmail?: string, limit?: number): Promise<EmailNotificationLog[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1684,6 +1707,78 @@ export class DatabaseStorage implements IStorage {
     }
     
     return updatedOrder;
+  }
+  
+  // Email notification operations
+  async getNewsletterSubscriber(email: string): Promise<NewsletterSubscriber | undefined> {
+    const [subscriber] = await db.select()
+      .from(newsletterSubscribers)
+      .where(eq(newsletterSubscribers.email, email));
+    return subscriber;
+  }
+  
+  async getNewsletterSubscriberByUserId(userId: string): Promise<NewsletterSubscriber | undefined> {
+    const [subscriber] = await db.select()
+      .from(newsletterSubscribers)
+      .where(eq(newsletterSubscribers.userId, userId));
+    return subscriber;
+  }
+  
+  async createEmailTemplate(template: InsertEmailTemplate): Promise<EmailTemplate> {
+    const [newTemplate] = await db.insert(emailTemplates)
+      .values(template)
+      .returning();
+    return newTemplate;
+  }
+  
+  async getEmailTemplate(templateCode: string): Promise<EmailTemplate | undefined> {
+    const [template] = await db.select()
+      .from(emailTemplates)
+      .where(eq(emailTemplates.templateCode, templateCode));
+    return template;
+  }
+  
+  async getEmailTemplates(): Promise<EmailTemplate[]> {
+    return await db.select()
+      .from(emailTemplates)
+      .orderBy(desc(emailTemplates.createdAt));
+  }
+  
+  async updateEmailTemplate(id: number, template: Partial<InsertEmailTemplate>): Promise<EmailTemplate> {
+    const [updated] = await db.update(emailTemplates)
+      .set({ ...template, updatedAt: new Date() })
+      .where(eq(emailTemplates.id, id))
+      .returning();
+    return updated;
+  }
+  
+  async deleteEmailTemplate(id: number): Promise<void> {
+    await db.delete(emailTemplates)
+      .where(eq(emailTemplates.id, id));
+  }
+  
+  async getEmailNotificationQueue(status?: string, limit = 50): Promise<EmailNotificationQueue[]> {
+    let query = db.select().from(emailNotificationQueue);
+    
+    if (status) {
+      query = query.where(eq(emailNotificationQueue.status, status));
+    }
+    
+    return await query
+      .orderBy(desc(emailNotificationQueue.createdAt))
+      .limit(limit);
+  }
+  
+  async getEmailNotificationLog(recipientEmail?: string, limit = 100): Promise<EmailNotificationLog[]> {
+    let query = db.select().from(emailNotificationLog);
+    
+    if (recipientEmail) {
+      query = query.where(eq(emailNotificationLog.recipientEmail, recipientEmail));
+    }
+    
+    return await query
+      .orderBy(desc(emailNotificationLog.sentAt))
+      .limit(limit);
   }
 }
 

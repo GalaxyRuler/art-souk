@@ -542,6 +542,75 @@ export const collectorReviews = pgTable("collector_reviews", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Email Newsletter Subscribers
+export const newsletterSubscribers = pgTable("newsletter_subscribers", {
+  id: serial("id").primaryKey(),
+  email: varchar("email").notNull().unique(),
+  userId: varchar("user_id").references(() => users.id),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  language: varchar("language").default("en"),
+  subscriptionStatus: varchar("subscription_status").default("active"), // active, unsubscribed, bounced
+  categories: jsonb("categories").default([]), // art categories of interest
+  frequency: varchar("frequency").default("weekly"), // daily, weekly, monthly
+  subscribedAt: timestamp("subscribed_at").defaultNow(),
+  unsubscribedAt: timestamp("unsubscribed_at"),
+  lastEmailSentAt: timestamp("last_email_sent_at"),
+});
+
+// Email Templates
+export const emailTemplates = pgTable("email_templates", {
+  id: serial("id").primaryKey(),
+  templateCode: varchar("template_code").notNull().unique(), // order_confirmation, newsletter, price_alert, etc.
+  name: varchar("name").notNull(),
+  nameAr: varchar("name_ar"),
+  subject: varchar("subject").notNull(),
+  subjectAr: varchar("subject_ar"),
+  bodyHtml: text("body_html").notNull(),
+  bodyHtmlAr: text("body_html_ar"),
+  bodyText: text("body_text"),
+  bodyTextAr: text("body_text_ar"),
+  variables: jsonb("variables").default([]), // list of variable names used in template
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Email Notification Queue
+export const emailNotificationQueue = pgTable("email_notification_queue", {
+  id: serial("id").primaryKey(),
+  recipientEmail: varchar("recipient_email").notNull(),
+  recipientUserId: varchar("recipient_user_id").references(() => users.id),
+  templateCode: varchar("template_code").references(() => emailTemplates.templateCode),
+  subject: varchar("subject").notNull(),
+  bodyHtml: text("body_html").notNull(),
+  bodyText: text("body_text"),
+  variables: jsonb("variables").default({}), // template variables
+  priority: integer("priority").default(5), // 1-10, 1 is highest
+  status: varchar("status").default("pending"), // pending, sending, sent, failed, bounced
+  attempts: integer("attempts").default(0),
+  sentAt: timestamp("sent_at"),
+  failedAt: timestamp("failed_at"),
+  errorMessage: text("error_message"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Email Notification Log
+export const emailNotificationLog = pgTable("email_notification_log", {
+  id: serial("id").primaryKey(),
+  queueId: integer("queue_id").references(() => emailNotificationQueue.id),
+  recipientEmail: varchar("recipient_email").notNull(),
+  recipientUserId: varchar("recipient_user_id").references(() => users.id),
+  templateCode: varchar("template_code"),
+  subject: varchar("subject").notNull(),
+  status: varchar("status").notNull(), // sent, failed, bounced, opened, clicked
+  sendgridMessageId: varchar("sendgrid_message_id"),
+  sendgridResponse: jsonb("sendgrid_response"),
+  openedAt: timestamp("opened_at"),
+  clickedAt: timestamp("clicked_at"),
+  sentAt: timestamp("sent_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ one, many }) => ({
   profile: one(userProfiles, { fields: [users.id], references: [userProfiles.userId] }),
@@ -563,6 +632,9 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   priceAlerts: many(priceAlerts),
   wishlistItems: many(collectorWishlist),
   reviews: many(collectorReviews),
+  newsletterSubscription: one(newsletterSubscribers, { fields: [users.id], references: [newsletterSubscribers.userId] }),
+  emailNotifications: many(emailNotificationQueue),
+  emailLogs: many(emailNotificationLog),
 }));
 
 export const artistsRelations = relations(artists, ({ one, many }) => ({
@@ -738,6 +810,22 @@ export const collectorReviewsRelations = relations(collectorReviews, ({ one }) =
   order: one(purchaseOrders, { fields: [collectorReviews.orderId], references: [purchaseOrders.id] }),
 }));
 
+// Email table relations
+export const newsletterSubscribersRelations = relations(newsletterSubscribers, ({ one }) => ({
+  user: one(users, { fields: [newsletterSubscribers.userId], references: [users.id] }),
+}));
+
+export const emailNotificationQueueRelations = relations(emailNotificationQueue, ({ one, many }) => ({
+  user: one(users, { fields: [emailNotificationQueue.recipientUserId], references: [users.id] }),
+  template: one(emailTemplates, { fields: [emailNotificationQueue.templateCode], references: [emailTemplates.templateCode] }),
+  logs: many(emailNotificationLog),
+}));
+
+export const emailNotificationLogRelations = relations(emailNotificationLog, ({ one }) => ({
+  user: one(users, { fields: [emailNotificationLog.recipientUserId], references: [users.id] }),
+  queue: one(emailNotificationQueue, { fields: [emailNotificationLog.queueId], references: [emailNotificationQueue.id] }),
+}));
+
 // Export types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -826,6 +914,16 @@ export type Activity = typeof activities.$inferSelect;
 export type InsertUserProfile = typeof userProfiles.$inferInsert;
 export type UserProfile = typeof userProfiles.$inferSelect;
 
+// Email types
+export type NewsletterSubscriber = typeof newsletterSubscribers.$inferSelect;
+export type InsertNewsletterSubscriber = typeof newsletterSubscribers.$inferInsert;
+export type EmailTemplate = typeof emailTemplates.$inferSelect;
+export type InsertEmailTemplate = typeof emailTemplates.$inferInsert;
+export type EmailNotificationQueue = typeof emailNotificationQueue.$inferSelect;
+export type InsertEmailNotificationQueue = typeof emailNotificationQueue.$inferInsert;
+export type EmailNotificationLog = typeof emailNotificationLog.$inferSelect;
+export type InsertEmailNotificationLog = typeof emailNotificationLog.$inferInsert;
+
 // Zod schemas
 export const insertArtistSchema = createInsertSchema(artists).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertGallerySchema = createInsertSchema(galleries).omit({ id: true, createdAt: true, updatedAt: true });
@@ -858,3 +956,7 @@ export type InsertUserPreferences = typeof userPreferences.$inferInsert;
 export type PortfolioSection = typeof portfolioSections.$inferSelect;
 export type InsertPortfolioSection = typeof portfolioSections.$inferInsert;
 export const insertUserProfileSchema = createInsertSchema(userProfiles).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertNewsletterSubscriberSchema = createInsertSchema(newsletterSubscribers).omit({ id: true, subscribedAt: true });
+export const insertEmailTemplateSchema = createInsertSchema(emailTemplates).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertEmailNotificationQueueSchema = createInsertSchema(emailNotificationQueue).omit({ id: true, createdAt: true });
+export const insertEmailNotificationLogSchema = createInsertSchema(emailNotificationLog).omit({ id: true, sentAt: true });
