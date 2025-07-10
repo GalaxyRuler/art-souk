@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
+import "./FeaturedCollections.css";
 
 interface Collection {
   id: number;
@@ -98,20 +99,17 @@ export function FeaturedCollections() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+          gap: '32px'
+        }}>
           {displayCollections.map((collection) => {
             const name = isRTL && collection.nameAr ? collection.nameAr : collection.name;
             const description = isRTL && collection.descriptionAr ? collection.descriptionAr : collection.description;
 
             return (
-              <div key={collection.id} style={{ 
-                cursor: 'pointer',
-                overflow: 'hidden',
-                backgroundColor: '#ffffff',
-                borderRadius: '8px',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                border: '1px solid #e5e7eb'
-              }}>
+              <div key={collection.id} className="featured-collection-card">
                 <div style={{ position: 'relative' }}>
                   <img
                     src={collection.coverImage}
@@ -127,22 +125,8 @@ export function FeaturedCollections() {
                   padding: '24px',
                   backgroundColor: '#ffffff'
                 }}>
-                  <h3 style={{
-                    fontSize: '20px',
-                    fontWeight: '600',
-                    color: 'hsl(217, 91%, 35%)',
-                    marginBottom: '8px',
-                    margin: '0 0 8px 0'
-                  }}>{name}</h3>
-                  <span style={{ 
-                    color: '#000000',
-                    fontWeight: '600',
-                    fontSize: '14px',
-                    lineHeight: '1.4',
-                    margin: '0',
-                    display: 'block',
-                    WebkitTextFillColor: '#000000'
-                  }}>{description}</span>
+                  <h3 className="featured-collection-title">{name}</h3>
+                  <span className="featured-collection-description">{description}</span>
                 </div>
               </div>
             );

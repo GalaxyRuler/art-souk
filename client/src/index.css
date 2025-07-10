@@ -208,13 +208,9 @@
     text-rendering: optimizeLegibility !important;
   }
 
-  /* Override transparency issues for non-gradient text */
-  body, p:not(.text-gradient), span:not(.text-gradient), 
-  div:not(.text-gradient), h1:not(.text-gradient), 
-  h2:not(.text-gradient), h3:not(.text-gradient), 
-  h4:not(.text-gradient), h5:not(.text-gradient), 
-  h6:not(.text-gradient) {
-    -webkit-text-fill-color: currentColor;
+  /* Reset webkit text fill for all elements */
+  * {
+    -webkit-text-fill-color: unset;
   }
 
   /* Ensure text gradient doesn't affect regular text */
@@ -225,12 +221,5 @@
     -webkit-text-fill-color: transparent;
   }
 
-  /* Specific fix for featured collections text */
-  .featured-collections-text {
-    color: #000000 !important;
-    opacity: 1 !important;
-    -webkit-text-fill-color: #000000 !important;
-    -webkit-background-clip: initial !important;
-    background-clip: initial !important;
-  }
+
 }
