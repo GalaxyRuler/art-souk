@@ -150,7 +150,7 @@ export default function Home() {
                 </div>
                 <Link href="/auctions">
                   <Button variant="outline">
-                    {t("common.viewAll")}
+                    {t("auctions.viewAll")}
                   </Button>
                 </Link>
               </div>
@@ -192,7 +192,7 @@ export default function Home() {
               </div>
               <Link href="/artists">
                 <Button variant="outline">
-                  {t("common.viewAll")}
+                  {t("artists.viewAll")}
                 </Button>
               </Link>
             </div>

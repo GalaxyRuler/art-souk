@@ -1,7 +1,8 @@
 import { db } from "./db";
+import { sql } from "drizzle-orm";
 import { 
   artists, galleries, artworks, auctions, bids, collections, collectionArtworks, 
-  articles, inquiries, favorites, users 
+  inquiries, favorites, users, workshops, events, commissionRequests, commissionBids
 } from "@shared/schema";
 
 // Comprehensive mock data for Art Souk marketplace
@@ -27,6 +28,20 @@ const mockData = {
       firstName: "Mohammed",
       lastName: "Al-Faisal",
       profileImageUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+    },
+    {
+      id: "user4",
+      email: "sara@example.com",
+      firstName: "Sara",
+      lastName: "Al-Mansouri",
+      profileImageUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face"
+    },
+    {
+      id: "user5",
+      email: "omar@example.com",
+      firstName: "Omar",
+      lastName: "Al-Khatib", 
+      profileImageUrl: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=150&h=150&fit=crop&crop=face"
     }
   ],
 
@@ -98,575 +113,644 @@ const mockData = {
       profileImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face",
       coverImage: "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=1200&h=400&fit=crop",
       style: "Contemporary, Traditional",
-      medium: "Copper, Leather, Painting"
+      medium: "Mixed Media, Sculpture"
     },
     {
-      name: "Lulwah AlHomoud",
-      nameAr: "لولوة الحمود",
-      biography: "Contemporary Saudi artist known for her vibrant abstract paintings that explore color, form, and cultural identity in the modern Gulf context.",
-      biographyAr: "فنانة سعودية معاصرة معروفة بلوحاتها التجريدية النابضة بالحياة التي تستكشف اللون والشكل والهوية الثقافية في سياق الخليج الحديث.",
-      nationality: "Saudi Arabia",
-      birthYear: 1987,
-      profileImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&h=300&fit=crop&crop=face",
-      coverImage: "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=1200&h=400&fit=crop",
+      name: "Lalla Essaydi",
+      nameAr: "لالة الصايدي",
+      biography: "Moroccan photographer and installation artist known for her staged photographs that explore the intersection of tradition and modernity in Arab culture.",
+      biographyAr: "مصورة ومفنانة تركيبية مغربية معروفة بصورها المنسقة التي تستكشف تقاطع التقليد والحداثة في الثقافة العربية.",
+      nationality: "Morocco",
+      birthYear: 1956,
+      profileImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop&crop=face",
+      coverImage: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&h=400&fit=crop",
+      featured: true,
+      style: "Photography, Installation",
+      medium: "Photography, Mixed Media"
+    },
+    {
+      name: "Mona Saudi",
+      nameAr: "منى السعودي",
+      biography: "Jordanian sculptor and painter known for her abstract sculptures and advocacy for Arab women artists, one of the most prominent female artists in the Arab world.",
+      biographyAr: "نحاتة ورسامة أردنية معروفة بمنحوتاتها التجريدية ودفاعها عن الفنانات العربيات، من أبرز الفنانات في العالم العربي.",
+      nationality: "Jordan",
+      birthYear: 1945,
+      profileImage: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=300&h=300&fit=crop&crop=face",
+      coverImage: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1200&h=400&fit=crop",
       style: "Abstract, Contemporary",
-      medium: "Acrylic, Oil Painting"
+      medium: "Sculpture, Painting"
+    },
+    {
+      name: "Hassan Hajjaj",
+      nameAr: "حسن حجاج",
+      biography: "Moroccan-British artist known as the 'Andy Warhol of Marrakech' for his vibrant pop art photography and installation work.",
+      biographyAr: "فنان مغربي-بريطاني معروف بـ'أندي وارهول مراكش' لأعماله الفوتوغرافية النابضة بالحياة والفن التركيبي.",
+      nationality: "Morocco",
+      birthYear: 1961,
+      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face",
+      coverImage: "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=1200&h=400&fit=crop",
+      style: "Pop Art, Contemporary",
+      medium: "Photography, Installation"
     }
   ],
 
   galleries: [
     {
       name: "Athr Gallery",
-      nameAr: "معرض أثر",
-      description: "Athr Gallery is a leading contemporary art gallery in Jeddah, Saudi Arabia, showcasing cutting-edge works by regional and international artists.",
-      descriptionAr: "معرض أثر هو معرض فني معاصر رائد في جدة، المملكة العربية السعودية، يعرض أعمالاً متطورة لفنانين إقليميين وعالميين.",
+      nameAr: "أثر غاليري",
+      description: "Athr Gallery is a contemporary art gallery in Jeddah, Saudi Arabia, dedicated to promoting contemporary art practice in the region.",
+      descriptionAr: "أثر غاليري معرض فني معاصر في جدة، المملكة العربية السعودية، مخصص لتعزيز ممارسة الفن المعاصر في المنطقة.",
       location: "Jeddah, Saudi Arabia",
-      locationAr: "جدة، المملكة العربية السعودية",
-      address: "Prince Sultan Street, Al-Balad, Jeddah 21421",
-      addressAr: "شارع الأمير سلطان، البلد، جدة ٢١٤٢١",
+      establishedYear: 2009,
       website: "https://athrgallery.com",
-      phone: "+966 12 692 2592",
-      email: "info@athrgallery.com",
       instagram: "athrgallery",
-      founded: 2009,
-      specialties: "Contemporary Art, Regional Artists, Experimental Media",
-      specialtiesAr: "الفن المعاصر، الفنانون الإقليميون، الوسائط التجريبية",
-      curatorName: "Hamza Serafi",
-      curatorNameAr: "حمزة سرافي",
-      profileImage: "https://images.unsplash.com/photo-1554774853-d50f9c681404?w=300&h=300&fit=crop",
+      profileImage: "https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=300&h=300&fit=crop",
       coverImage: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&h=400&fit=crop",
       featured: true,
-      openingHours: "Sunday - Thursday: 10:00 AM - 8:00 PM\nFriday - Saturday: 2:00 PM - 8:00 PM",
-      openingHoursAr: "الأحد - الخميس: ١٠:٠٠ ص - ٨:٠٠ م\nالجمعة - السبت: ٢:٠٠ م - ٨:٠٠ م"
+      specialties: "Contemporary Art, Saudi Artists"
+    },
+    {
+      name: "Leila Heller Gallery",
+      nameAr: "معرض ليلى هيلر",
+      description: "Leila Heller Gallery Dubai specializes in contemporary art from the Middle East, South Asia, and Africa.",
+      descriptionAr: "معرض ليلى هيلر دبي متخصص في الفن المعاصر من الشرق الأوسط وجنوب آسيا وأفريقيا.",
+      location: "Dubai, UAE",
+      establishedYear: 2015,
+      website: "https://leilahellergallery.com",
+      instagram: "leilahellergallery",
+      profileImage: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=300&fit=crop",
+      coverImage: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1200&h=400&fit=crop",
+      featured: true,
+      specialties: "Contemporary Art, Regional Artists"
     },
     {
       name: "Hafez Gallery",
       nameAr: "معرض حافظ",
-      description: "Located in the heart of Jeddah, Hafez Gallery has been a cornerstone of the Saudi art scene since 1990, representing established and emerging artists.",
-      descriptionAr: "يقع في قلب جدة، وكان معرض حافظ حجر الزاوية في المشهد الفني السعودي منذ عام ١٩٩٠، ويمثل فنانين راسخين وناشئين.",
+      description: "Hafez Gallery is a contemporary art gallery in Jeddah showcasing both established and emerging artists from the region.",
+      descriptionAr: "معرض حافظ معرض فني معاصر في جدة يعرض أعمال فنانين راسخين وناشئين من المنطقة.",
       location: "Jeddah, Saudi Arabia",
-      locationAr: "جدة، المملكة العربية السعودية",
-      address: "Tahlia Street, Jeddah 23442",
-      addressAr: "شارع التحلية، جدة ٢٣٤٤٢",
-      phone: "+966 12 665 8887",
-      email: "info@hafezgallery.com",
-      founded: 1990,
-      specialties: "Saudi Contemporary Art, Calligraphy, Traditional Arts",
-      specialtiesAr: "الفن السعودي المعاصر، الخط العربي، الفنون التقليدية",
-      profileImage: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=300&h=300&fit=crop",
+      establishedYear: 2012,
+      instagram: "hafezgallery",
+      profileImage: "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=300&h=300&fit=crop",
+      coverImage: "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=1200&h=400&fit=crop",
+      specialties: "Contemporary Art, Emerging Artists"
+    },
+    {
+      name: "Warehouse421",
+      nameAr: "مستودع 421",
+      description: "Warehouse421 is a contemporary art space in Abu Dhabi that hosts exhibitions, workshops, and cultural events.",
+      descriptionAr: "مستودع 421 مساحة فنية معاصرة في أبوظبي تستضيف معارض وورش عمل وفعاليات ثقافية.",
+      location: "Abu Dhabi, UAE",
+      establishedYear: 2016,
+      website: "https://warehouse421.ae",
+      instagram: "warehouse421",
+      profileImage: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=300&fit=crop",
       coverImage: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1200&h=400&fit=crop",
-      featured: true
-    },
-    {
-      name: "Green Art Gallery",
-      nameAr: "معرض الفن الأخضر",
-      description: "Dubai's premier contemporary art gallery, featuring works by Middle Eastern and international artists with a focus on emerging talent.",
-      descriptionAr: "معرض الفن المعاصر الرائد في دبي، يعرض أعمال فنانين من الشرق الأوسط والعالم مع التركيز على المواهب الناشئة.",
-      location: "Dubai, UAE",
-      locationAr: "دبي، الإمارات العربية المتحدة",
-      address: "Al Quoz Industrial Area 1, Dubai",
-      addressAr: "المنطقة الصناعية القوز ١، دبي",
-      website: "https://greenartgallery.ae",
-      phone: "+971 4 346 9305",
-      email: "info@greenartgallery.ae",
-      founded: 1995,
-      specialties: "Contemporary Art, Photography, Sculpture",
-      specialtiesAr: "الفن المعاصر، التصوير الفوتوغرافي، النحت",
-      profileImage: "https://images.unsplash.com/photo-1554774853-d50f9c681404?w=300&h=300&fit=crop",
-      coverImage: "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=1200&h=400&fit=crop"
-    },
-    {
-      name: "Cuadro Gallery", 
-      nameAr: "معرض كوادرو",
-      description: "A contemporary art gallery in Dubai specializing in modern and contemporary works by established Middle Eastern artists.",
-      descriptionAr: "معرض فني معاصر في دبي متخصص في الأعمال الحديثة والمعاصرة لفنانين راسخين من الشرق الأوسط.",
-      location: "Dubai, UAE",
-      locationAr: "دبي، الإمارات العربية المتحدة", 
-      address: "DIFC, Gate Village Building 3, Dubai",
-      addressAr: "مركز دبي المالي العالمي، مبنى جيت فيليج ٣، دبي",
-      website: "https://cuadrogallery.com",
-      phone: "+971 4 425 0400",
-      founded: 2008,
-      specialties: "Modern Art, Contemporary Painting, Regional Artists",
-      specialtiesAr: "الفن الحديث، الرسم المعاصر، الفنانون الإقليميون",
-      profileImage: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=300&h=300&fit=crop",
-      coverImage: "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=1200&h=400&fit=crop"
+      featured: true,
+      specialties: "Contemporary Art, Cultural Events"
     }
   ],
 
   artworks: [
     {
-      title: "Evolution of a City",
-      titleAr: "تطور المدينة",
-      description: "A powerful multimedia installation exploring the rapid urban development of Jeddah through archival photography and contemporary video art.",
-      descriptionAr: "تركيب متعدد الوسائط قوي يستكشف التطوير الحضري السريع لجدة من خلال التصوير الأرشيفي وفن الفيديو المعاصر.",
+      artistId: 1,
+      galleryId: 1,
+      title: "If I Were to Go Back, I Would...",
+      titleAr: "لو كنت سأعود، فسأكون...",
+      description: "A powerful multimedia installation exploring themes of memory, identity, and the hypothetical nature of looking back on one's life choices.",
+      descriptionAr: "تركيب متعدد الوسائط قوي يستكشف موضوعات الذاكرة والهوية والطبيعة الافتراضية للنظر إلى الوراء في خيارات الحياة.",
+      medium: "Video Installation, Mixed Media",
+      dimensions: "Variable dimensions",
+      year: 2023,
+      price: 85000,
+      currency: "SAR",
+      status: "available",
+      featured: true,
       images: [
         "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
         "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop",
         "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=800&h=600&fit=crop"
-      ],
-      artistId: 1,
-      galleryId: 1,
-      year: 2023,
-      medium: "Video Installation, Photography",
-      mediumAr: "تركيب فيديو، تصوير فوتوغرافي",
-      dimensions: "300 x 400 cm",
-      price: "85000",
-      currency: "SAR",
-      availability: "available",
-      category: "Installation",
-      categoryAr: "تركيب فني",
-      featured: true,
-      curatorsPick: true
+      ]
     },
     {
-      title: "Desert Metamorphosis",
-      titleAr: "تحول الصحراء", 
-      description: "A series of large-scale photographs documenting the transformation of the Saudi landscape through modernization and development.",
-      descriptionAr: "سلسلة من الصور الفوتوغرافية واسعة النطاق توثق تحول المناظر الطبيعية السعودية من خلال التحديث والتطوير.",
+      artistId: 2,
+      galleryId: 1,
+      title: "Magnetism",
+      titleAr: "المغناطيسية",
+      description: "A sculpture examining the magnetic pull of Mecca and its effect on global Muslim communities, created using metal filings and magnetic fields.",
+      descriptionAr: "منحوتة تدرس الجذب المغناطيسي لمكة وتأثيره على المجتمعات المسلمة العالمية، مصنوعة باستخدام برادة المعادن والمجالات المغناطيسية.",
+      medium: "Sculpture, Metal",
+      dimensions: "120 x 120 x 50 cm",
+      year: 2022,
+      price: 120000,
+      currency: "SAR",
+      status: "available",
+      featured: true,
       images: [
         "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=800&h=600&fit=crop",
         "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop"
-      ],
-      artistId: 2,
-      galleryId: 1,
-      year: 2022,
-      medium: "Photography",
-      mediumAr: "تصوير فوتوغرافي",
-      dimensions: "120 x 180 cm each",
-      price: "45000",
-      currency: "SAR", 
-      availability: "available",
-      category: "Photography",
-      categoryAr: "تصوير فوتوغرافي",
-      featured: true
+      ]
     },
     {
-      title: "Calligraphy in Motion",
-      titleAr: "الخط في حركة",
-      description: "An abstract painting series that reimagines traditional Arabic calligraphy through contemporary gestural brushwork and vibrant colors.",
-      descriptionAr: "سلسلة لوحات تجريدية تعيد تخيل الخط العربي التقليدي من خلال ضربات الفرشاة الإيمائية المعاصرة والألوان النابضة بالحياة.",
+      artistId: 3,
+      galleryId: 2,
+      title: "Desert Abstractions",
+      titleAr: "تجريدات الصحراء",
+      description: "Abstract paintings inspired by the colors and forms of the Arabian desert, exploring the spiritual connection between landscape and identity.",
+      descriptionAr: "لوحات تجريدية مستوحاة من ألوان وأشكال الصحراء العربية، تستكشف الروابط الروحية بين المناظر الطبيعية والهوية.",
+      medium: "Acrylic on Canvas",
+      dimensions: "150 x 100 cm",
+      year: 2023,
+      price: 45000,
+      currency: "SAR",
+      status: "available",
+      featured: true,
       images: [
         "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=800&h=600&fit=crop",
         "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop"
-      ],
-      artistId: 3,
-      galleryId: 2,
-      year: 2023,
-      medium: "Acrylic on Canvas",
-      mediumAr: "أكريليك على قماش",
-      dimensions: "150 x 200 cm",
-      price: "65000",
-      currency: "SAR",
-      availability: "available",
-      category: "Painting",
-      categoryAr: "رسم",
-      curatorsPick: true
+      ]
     },
     {
-      title: "Memory Palace",
-      titleAr: "قصر الذاكرة",
-      description: "A mixed media work exploring themes of cultural memory and identity in the modern Arab world through layered imagery and text.",
-      descriptionAr: "عمل بوسائط مختلطة يستكشف موضوعات الذاكرة الثقافية والهوية في العالم العربي الحديث من خلال الصور والنصوص المتراكبة.",
-      images: [
-        "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop"
-      ],
       artistId: 4,
       galleryId: 3,
-      year: 2021,
-      medium: "Mixed Media",
-      mediumAr: "وسائط مختلطة",
-      dimensions: "100 x 140 cm",
-      price: "38000",
+      title: "Contemplation in Blue",
+      titleAr: "تأمل في الأزرق",
+      description: "A serene abstract painting that captures the meditative quality of Islamic art through geometric patterns and calligraphic elements.",
+      descriptionAr: "لوحة تجريدية هادئة تلتقط الجودة التأملية للفن الإسلامي من خلال الأنماط الهندسية والعناصر الخطية.",
+      medium: "Oil on Canvas",
+      dimensions: "80 x 60 cm",
+      year: 1995,
+      price: 75000,
       currency: "SAR",
-      availability: "sold",
-      category: "Mixed Media",
-      categoryAr: "وسائط مختلطة"
+      status: "available",
+      images: [
+        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop"
+      ]
     },
     {
-      title: "Copper Dreams",
-      titleAr: "أحلام نحاسية",
-      description: "A sculptural work combining traditional copper craftsmanship with contemporary artistic vision, reflecting on heritage and modernity.",
-      descriptionAr: "عمل نحتي يجمع بين الحرفية النحاسية التقليدية والرؤية الفنية المعاصرة، ويتأمل في التراث والحداثة.",
-      images: [
-        "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=800&h=600&fit=crop"
-      ],
       artistId: 5,
       galleryId: 3,
-      year: 2020,
-      medium: "Copper, Leather",
-      mediumAr: "نحاس، جلد",
-      dimensions: "80 x 60 x 40 cm",
-      price: "55000",
+      title: "Heritage and Modernity",
+      titleAr: "التراث والحداثة",
+      description: "A mixed media artwork combining traditional leather craftsmanship with contemporary artistic expression, bridging past and present.",
+      descriptionAr: "عمل فني مختلط يجمع بين الحرفية التقليدية للجلود والتعبير الفني المعاصر، يربط بين الماضي والحاضر.",
+      medium: "Leather, Copper, Mixed Media",
+      dimensions: "200 x 150 cm",
+      year: 2010,
+      price: 95000,
       currency: "SAR",
-      availability: "available",
-      category: "Sculpture",
-      categoryAr: "نحت",
-      featured: true
-    },
-    {
-      title: "Gulf Horizons",
-      titleAr: "آفاق الخليج",
-      description: "A vibrant abstract painting capturing the essence of the Gulf landscape through bold colors and dynamic compositions.",
-      descriptionAr: "لوحة تجريدية نابضة بالحياة تلتقط جوهر المناظر الطبيعية الخليجية من خلال الألوان الجريئة والتراكيب الديناميكية.",
+      status: "available",
       images: [
-        "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=800&h=600&fit=crop"
-      ],
-      artistId: 6,
-      galleryId: 4,
-      year: 2023,
-      medium: "Acrylic on Canvas",
-      mediumAr: "أكريليك على قماش", 
-      dimensions: "120 x 160 cm",
-      price: "42000",
-      currency: "SAR",
-      availability: "available",
-      category: "Painting",
-      categoryAr: "رسم"
+        "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop"
+      ]
     },
     {
-      title: "Urban Reflections",
-      titleAr: "انعكاسات حضرية",
-      description: "A photographic series capturing the interplay between traditional architecture and modern urban development in Riyadh.",
-      descriptionAr: "سلسلة تصوير فوتوغرافي تلتقط التفاعل بين العمارة التقليدية والتطوير الحضري الحديث في الرياض.",
+      artistId: 6,
+      galleryId: 2,
+      title: "Harem Revisited",
+      titleAr: "إعادة النظر في الحريم",
+      description: "A photographic series that reclaims and recontextualizes the orientalist vision of Arab women, presenting them as empowered subjects rather than objects.",
+      descriptionAr: "سلسلة فوتوغرافية تستعيد وتعيد تسياق الرؤية الاستشراقية للمرأة العربية، تقدمها كذوات مُمكنة بدلاً من أشياء.",
+      medium: "Photography, Digital Print",
+      dimensions: "120 x 80 cm (Series of 5)",
+      year: 2020,
+      price: 65000,
+      currency: "SAR",
+      status: "available",
+      featured: true,
       images: [
         "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop"
-      ],
-      artistId: 2,
-      galleryId: 2,
-      year: 2023,
-      medium: "Photography",
-      mediumAr: "تصوير فوتوغرافي",
-      dimensions: "100 x 150 cm each",
-      price: "32000",
+        "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=800&h=600&fit=crop"
+      ]
+    },
+    {
+      artistId: 7,
+      galleryId: 4,
+      title: "Carved Memories",
+      titleAr: "ذكريات منحوتة",
+      description: "An abstract sculpture that explores the relationship between memory and materiality, carved from local stone with contemporary techniques.",
+      descriptionAr: "منحوتة تجريدية تستكشف العلاقة بين الذاكرة والمادية، منحوتة من الحجر المحلي بتقنيات معاصرة.",
+      medium: "Stone Sculpture",
+      dimensions: "180 x 60 x 60 cm",
+      year: 2021,
+      price: 110000,
       currency: "SAR",
-      availability: "available",
-      category: "Photography",
-      categoryAr: "تصوير فوتوغرافي"
+      status: "available",
+      images: [
+        "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=800&h=600&fit=crop"
+      ]
+    },
+    {
+      artistId: 8,
+      galleryId: 4,
+      title: "Marrakech Dreams",
+      titleAr: "أحلام مراكش",
+      description: "A vibrant pop art installation combining traditional Moroccan patterns with contemporary urban aesthetics, celebrating cultural fusion.",
+      descriptionAr: "تركيب فني نابض بالحياة يجمع بين الأنماط المغربية التقليدية والجماليات الحضرية المعاصرة، احتفالاً بالاندماج الثقافي.",
+      medium: "Mixed Media Installation",
+      dimensions: "300 x 200 cm",
+      year: 2022,
+      price: 135000,
+      currency: "SAR",
+      status: "available",
+      featured: true,
+      images: [
+        "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop"
+      ]
     }
   ],
 
   auctions: [
     {
+      artworkId: 1,
       title: "Contemporary Saudi Art Auction",
       titleAr: "مزاد الفن السعودي المعاصر",
-      description: "A curated auction featuring exceptional works by leading Saudi contemporary artists, showcasing the evolution of the Kingdom's art scene.",
-      descriptionAr: "مزاد منسق يضم أعمالاً استثنائية لفنانين سعوديين معاصرين رائدين، ويعرض تطور المشهد الفني في المملكة.",
-      artworkId: 1,
-      startingPrice: "50000",
-      currentBid: "75000",
+      description: "A curated auction featuring works by prominent Saudi contemporary artists.",
+      descriptionAr: "مزاد منتقى يضم أعمالاً لفنانين سعوديين معاصرين بارزين.",
+      startDate: new Date("2025-01-20T19:00:00Z"),
+      endDate: new Date("2025-01-22T22:00:00Z"),
+      startingBid: 50000,
+      currentBid: 85000,
+      reservePrice: 80000,
       currency: "SAR",
-      startDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // Started 2 days ago
-      endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // Ends in 3 days
       status: "live",
       bidCount: 12,
-      estimateLow: "60000",
-      estimateHigh: "90000",
-      hasReserve: true
+      viewCount: 245
     },
     {
-      title: "Gulf Modern Masters",
-      titleAr: "أساتذة الخليج الحديث",
-      description: "An exclusive auction of rare works by pioneering artists from the Gulf region, representing the foundation of modern Middle Eastern art.",
-      descriptionAr: "مزاد حصري لأعمال نادرة لفنانين رائدين من منطقة الخليج، يمثل أساس الفن الشرق أوسطي الحديث.",
-      artworkId: 4,
-      startingPrice: "25000",
-      currentBid: "38000",
+      artworkId: 2,
+      title: "Modern Middle Eastern Masters",
+      titleAr: "أساتذة الشرق الأوسط الحديث",
+      description: "Featuring works by established artists from across the Middle East region.",
+      descriptionAr: "يضم أعمالاً لفنانين راسخين من منطقة الشرق الأوسط.",
+      startDate: new Date("2025-01-25T20:00:00Z"),
+      endDate: new Date("2025-01-27T23:00:00Z"),
+      startingBid: 80000,
+      currentBid: 120000,
+      reservePrice: 100000,
       currency: "SAR",
-      startDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Starts in 7 days
-      endDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // Ends in 14 days
+      status: "live",
+      bidCount: 8,
+      viewCount: 189
+    },
+    {
+      artworkId: 3,
+      title: "Emerging Voices",
+      titleAr: "أصوات ناشئة",
+      description: "Spotlight on emerging artists from the GCC region.",
+      descriptionAr: "تسليط الضوء على الفنانين الناشئين من منطقة دول مجلس التعاون الخليجي.",
+      startDate: new Date("2025-02-01T18:00:00Z"),
+      endDate: new Date("2025-02-03T21:00:00Z"),
+      startingBid: 25000,
+      currentBid: 45000,
+      reservePrice: 40000,
+      currency: "SAR",
       status: "upcoming",
       bidCount: 0,
-      estimateLow: "35000",
-      estimateHigh: "50000",
-      hasReserve: false
+      viewCount: 78
+    }
+  ],
+
+  bids: [
+    {
+      auctionId: 1,
+      userId: "user1",
+      amount: 85000,
+      currency: "SAR",
+      timestamp: new Date("2025-01-17T15:30:00Z")
     },
     {
-      title: "Heritage and Innovation",
-      titleAr: "التراث والابتكار",
-      description: "A special auction celebrating the dialogue between traditional craftsmanship and contemporary artistic expression.",
-      descriptionAr: "مزاد خاص يحتفل بالحوار بين الحرفية التقليدية والتعبير الفني المعاصر.",
-      artworkId: 5,
-      startingPrice: "35000",
-      currentBid: "55000",
+      auctionId: 1,
+      userId: "user2",
+      amount: 82000,
       currency: "SAR",
-      startDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // Started 10 days ago
-      endDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // Ended 3 days ago
-      status: "ended",
-      bidCount: 8,
-      estimateLow: "40000",
-      estimateHigh: "60000",
-      hasReserve: true
+      timestamp: new Date("2025-01-17T14:45:00Z")
+    },
+    {
+      auctionId: 2,
+      userId: "user3",
+      amount: 120000,
+      currency: "SAR",
+      timestamp: new Date("2025-01-17T16:20:00Z")
     }
   ],
 
   collections: [
     {
-      name: "Saudi Contemporary Voices",
-      nameAr: "أصوات سعودية معاصرة",
-      description: "A carefully curated collection showcasing the diversity and innovation of contemporary Saudi artists working across various media.",
-      descriptionAr: "مجموعة منسقة بعناية تعرض تنوع وابتكار الفنانين السعوديين المعاصرين العاملين عبر وسائط مختلفة.",
-      coverImage: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
-      featured: true
+      name: "Saudi Contemporary Masters",
+      nameAr: "أساتذة الفن السعودي المعاصر",
+      description: "A curated selection of works by leading Saudi contemporary artists.",
+      descriptionAr: "مجموعة منتقاة من أعمال الفنانين السعوديين المعاصرين الرائدين.",
+      curatorId: 1,
+      featured: true,
+      coverImage: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop"
     },
     {
-      name: "Gulf Heritage & Modernity",
-      nameAr: "تراث وحداثة الخليج",
-      description: "An exploration of how traditional Gulf culture informs and inspires contemporary artistic practice in the region.",
-      descriptionAr: "استكشاف لكيفية إعلام الثقافة الخليجية التقليدية وإلهام الممارسة الفنية المعاصرة في المنطقة.",
-      coverImage: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop",
-      featured: true
+      name: "Desert Inspirations",
+      nameAr: "إلهامات الصحراء",
+      description: "Artworks inspired by the beauty and mystique of the Arabian desert.",
+      descriptionAr: "أعمال فنية مستوحاة من جمال وغموض الصحراء العربية.",
+      curatorId: 2,
+      featured: true,
+      coverImage: "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=800&h=600&fit=crop"
     },
     {
-      name: "Emerging Talents",
-      nameAr: "المواهب الناشئة",
-      description: "Highlighting the next generation of Middle Eastern artists who are reshaping the contemporary art landscape.",
-      descriptionAr: "تسليط الضوء على الجيل القادم من فنانين الشرق الأوسط الذين يعيدون تشكيل المشهد الفني المعاصر.",
-      coverImage: "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=800&h=600&fit=crop",
-      featured: true
+      name: "Women Artists of the Gulf",
+      nameAr: "فنانات الخليج",
+      description: "Celebrating the contributions of female artists from the GCC region.",
+      descriptionAr: "احتفاء بمساهمات الفنانات من منطقة دول مجلس التعاون الخليجي.",
+      curatorId: 3,
+      featured: true,
+      coverImage: "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=800&h=600&fit=crop"
     }
   ],
 
-  articles: [
+  workshops: [
     {
-      title: "The Renaissance of Saudi Art: A New Golden Age",
-      titleAr: "نهضة الفن السعودي: عصر ذهبي جديد",
-      slug: "renaissance-saudi-art-new-golden-age",
-      content: "Saudi Arabia is experiencing an unprecedented cultural renaissance. With the launch of Vision 2030 and initiatives like the Saudi Art Council, the Kingdom has positioned itself as a major player in the global art scene. This transformation is not just about infrastructure – it's about nurturing a generation of artists who are redefining what it means to be Saudi in the 21st century.\n\nThe emergence of world-class galleries like Athr Gallery in Jeddah and the upcoming cultural districts in Riyadh and Al-Ula represent a fundamental shift in how the Kingdom approaches cultural expression. Artists like Manal AlDowayan and Ahmed Mater have gained international recognition, showcasing Saudi perspectives on globalization, tradition, and modernity.\n\nThis artistic awakening coincides with broader social changes in the Kingdom. As Saudi society opens up to new ideas and experiences, artists are finding their voices and audiences are eager to engage with contemporary art that speaks to their lived experiences.\n\nThe future looks bright for Saudi art, with increased government support, private investment, and international collaboration creating an ecosystem where creativity can flourish.",
-      contentAr: "تشهد المملكة العربية السعودية نهضة ثقافية لم يسبق لها مثيل. مع إطلاق رؤية ٢٠٣٠ ومبادرات مثل مجلس الفنون السعودي، وضعت المملكة نفسها كلاعب رئيسي في المشهد الفني العالمي...",
-      excerpt: "Exploring how Vision 2030 and cultural initiatives are transforming Saudi Arabia into a global art powerhouse.",
-      excerptAr: "استكشاف كيف تعمل رؤية ٢٠٣٠ والمبادرات الثقافية على تحويل المملكة العربية السعودية إلى قوة فنية عالمية.",
-      coverImage: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
-      category: "Art Scene",
-      categoryAr: "المشهد الفني",
-      authorId: "user1",
-      publishedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-      readTime: 8,
-      viewCount: 1250,
-      likeCount: 89,
-      featured: true,
-      status: "published",
-      tags: ["Saudi Art", "Vision 2030", "Contemporary Art", "Cultural Renaissance"],
-      tagsAr: ["الفن السعودي", "رؤية ٢٠٣٠", "الفن المعاصر", "النهضة الثقافية"]
+      title: "Introduction to Arabic Calligraphy",
+      titleAr: "مقدمة في الخط العربي",
+      description: "Learn the basics of Arabic calligraphy with master calligrapher Hassan Al-Khattat.",
+      descriptionAr: "تعلم أساسيات الخط العربي مع الأستاذ الخطاط حسن الخطاط.",
+      instructorId: 1,
+      startDate: new Date("2025-02-15T14:00:00Z"),
+      endDate: new Date("2025-02-15T17:00:00Z"),
+      capacity: 20,
+      price: 450,
+      currency: "SAR",
+      skillLevel: "beginner",
+      location: "Riyadh",
+      materials: ["All materials provided"],
+      category: "Traditional Arts"
     },
     {
-      title: "Digital Art Revolution in the Gulf: NFTs and Beyond",
-      titleAr: "ثورة الفن الرقمي في الخليج: الرموز غير القابلة للاستبدال وما بعدها",
-      slug: "digital-art-revolution-gulf-nfts-beyond",
-      content: "The Gulf region is at the forefront of the digital art revolution, with artists and collectors embracing new technologies to create, exhibit, and trade digital artworks. From NFT marketplaces to virtual reality exhibitions, the region is proving that innovation and tradition can coexist in the art world.\n\nEmirates like Dubai and Abu Dhabi have become hubs for digital art experimentation, while Saudi Arabia's NEOM project promises to integrate cutting-edge technology with artistic expression. Artists are exploring how blockchain technology can democratize art ownership and create new revenue streams.\n\nThis digital transformation is particularly significant for younger artists who grew up in the digital age. They're using tools like AI, VR, and blockchain to tell stories that resonate with global audiences while maintaining their cultural roots.\n\nThe intersection of technology and art in the Gulf represents more than just a trend – it's a fundamental shift in how we create, experience, and value art in the digital age.",
-      contentAr: "منطقة الخليج في المقدمة من ثورة الفن الرقمي، حيث يتبنى الفنانون والمجمعون تقنيات جديدة لإنشاء وعرض وتجارة الأعمال الفنية الرقمية...",
-      excerpt: "How Gulf artists are pioneering the digital art revolution through NFTs, virtual reality, and blockchain technology.",
-      excerptAr: "كيف يقود فنانو الخليج ثورة الفن الرقمي من خلال الرموز غير القابلة للاستبدال والواقع الافتراضي وتقنية البلوك تشين.",
-      coverImage: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop",
-      category: "Technology",
-      categoryAr: "التكنولوجيا",
-      authorId: "user2",
-      publishedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000),
-      readTime: 6,
-      viewCount: 892,
-      likeCount: 67,
-      featured: true,
-      status: "published",
-      tags: ["Digital Art", "NFT", "Gulf Art", "Technology", "Innovation"],
-      tagsAr: ["الفن الرقمي", "الرموز غير القابلة للاستبدال", "فن الخليج", "التكنولوجيا", "الابتكار"]
+      title: "Contemporary Painting Techniques", 
+      titleAr: "تقنيات الرسم المعاصر",
+      description: "Explore modern painting techniques with contemporary artist Fatima Al-Zahra.",
+      descriptionAr: "استكشف تقنيات الرسم الحديثة مع الفنانة المعاصرة فاطمة الزهراء.",
+      instructorId: 2,
+      startDate: new Date("2025-02-20T10:00:00Z"),
+      endDate: new Date("2025-02-20T14:00:00Z"),
+      capacity: 15,
+      price: 650,
+      currency: "SAR",
+      skillLevel: "intermediate",
+      location: "Jeddah",
+      materials: ["Canvas and basic supplies included"],
+      category: "Painting"
     },
     {
-      title: "Collecting Middle Eastern Art: A Beginner's Guide",
-      titleAr: "جمع الفن الشرق أوسطي: دليل المبتدئين",
-      slug: "collecting-middle-eastern-art-beginners-guide",
-      content: "Starting an art collection can feel overwhelming, especially in the dynamic and rapidly evolving Middle Eastern art market. This guide aims to help new collectors navigate the landscape, understand market trends, and make informed decisions about their first acquisitions.\n\nThe Middle Eastern art market has seen significant growth over the past decade, with works by regional artists appreciating substantially. However, collecting should be about more than investment potential – it's about supporting artists and preserving cultural heritage.\n\nWhen starting your collection, consider focusing on a specific medium, time period, or geographic region. This helps develop expertise and creates a cohesive collection narrative. Don't be afraid to start small – emerging artists often offer exceptional value and the satisfaction of supporting developing careers.\n\nResearch is crucial. Visit galleries, attend exhibitions, and read about artists and art movements. Building relationships with gallery owners and curators can provide valuable insights and access to exceptional works.",
-      contentAr: "بدء مجموعة فنية يمكن أن يكون مربكاً، خاصة في سوق الفن الشرق أوسطي الديناميكي والمتطور بسرعة...",
-      excerpt: "Essential tips and insights for new collectors entering the vibrant Middle Eastern art market.",
-      excerptAr: "نصائح ورؤى أساسية للمجمعين الجدد الذين يدخلون سوق الفن الشرق أوسطي النابض بالحياة.",
-      coverImage: "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=800&h=600&fit=crop",
-      category: "Collecting",
-      categoryAr: "جمع الأعمال الفنية",
-      authorId: "user3",
-      publishedAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000),
-      readTime: 10,
-      viewCount: 654,
-      likeCount: 43,
-      featured: false,
-      status: "published",
-      tags: ["Art Collecting", "Investment", "Middle Eastern Art", "Beginner Guide"],
-      tagsAr: ["جمع الفن", "الاستثمار", "الفن الشرق أوسطي", "دليل المبتدئين"]
+      title: "Digital Art and NFTs",
+      titleAr: "الفن الرقمي والرموز غير القابلة للاستبدال",
+      description: "Learn about digital art creation and the NFT marketplace.",
+      descriptionAr: "تعلم عن إنشاء الفن الرقمي وسوق الرموز غير القابلة للاستبدال.",
+      instructorId: 3,
+      startDate: new Date("2025-02-25T16:00:00Z"),
+      endDate: new Date("2025-02-25T18:00:00Z"),
+      capacity: 25,
+      price: 350,
+      currency: "SAR",
+      skillLevel: "beginner",
+      location: "Dubai",
+      materials: ["Laptop required"],
+      category: "Digital Arts"
+    }
+  ],
+
+  events: [
+    {
+      title: "Saudi Art Week Opening Night",
+      titleAr: "ليلة افتتاح أسبوع الفن السعودي",
+      description: "Join us for the opening night of Saudi Art Week featuring exhibitions, performances, and networking.",
+      descriptionAr: "انضم إلينا في ليلة افتتاح أسبوع الفن السعودي مع المعارض والعروض والتواصل.",
+      organizerId: 1,
+      startDate: new Date("2025-03-01T19:00:00Z"),
+      endDate: new Date("2025-03-01T23:00:00Z"),
+      capacity: 200,
+      price: 0,
+      currency: "SAR",
+      location: "King Abdulaziz Center for World Culture",
+      category: "Exhibition",
+      featured: true
+    },
+    {
+      title: "Contemporary Art Forum",
+      titleAr: "منتدى الفن المعاصر",
+      description: "A panel discussion with leading contemporary artists and curators from the region.",
+      descriptionAr: "نقاش جماعي مع الفنانين المعاصرين والقيمين الرائدين من المنطقة.",
+      organizerId: 2,
+      startDate: new Date("2025-03-10T15:00:00Z"),
+      endDate: new Date("2025-03-10T18:00:00Z"),
+      capacity: 100,
+      price: 150,
+      currency: "SAR",
+      location: "Athr Gallery, Jeddah",
+      category: "Talk"
+    },
+    {
+      title: "Young Collectors Circle",
+      titleAr: "دائرة الجامعين الشباب",
+      description: "An exclusive event for young art collectors to meet, network, and view private collections.",
+      descriptionAr: "حدث حصري لجامعي الفن الشباب للقاء والتواصل ومشاهدة المجموعات الخاصة.",
+      organizerId: 3,
+      startDate: new Date("2025-03-15T18:00:00Z"),
+      endDate: new Date("2025-03-15T21:00:00Z"),
+      capacity: 50,
+      price: 300,
+      currency: "SAR",
+      location: "Private Collection, Riyadh",
+      category: "Networking"
+    }
+  ],
+
+  commissionRequests: [
+    {
+      userId: "user1",
+      title: "Custom Calligraphy Artwork",
+      titleAr: "عمل خط عربي مخصص",
+      description: "Looking for a custom Arabic calligraphy piece for my home office, incorporating verses from classical Arabic poetry.",
+      descriptionAr: "أبحث عن قطعة خط عربي مخصصة لمكتبي المنزلي، تتضمن آيات من الشعر العربي الكلاسيكي.",
+      budget: 15000,
+      currency: "SAR",
+      deadline: new Date("2025-04-01T00:00:00Z"),
+      medium: "Calligraphy, Mixed Media",
+      dimensions: "80x60 cm",
+      style: "Traditional",
+      status: "open",
+      category: "Calligraphy"
+    },
+    {
+      userId: "user2",
+      title: "Contemporary Portrait Commission",
+      titleAr: "تكليف بورتريه معاصر",
+      description: "Seeking an artist to create a contemporary portrait of my family in a modern abstract style.",
+      descriptionAr: "أبحث عن فنان لإنشاء بورتريه معاصر لعائلتي بأسلوب تجريدي حديث.",
+      budget: 25000,
+      currency: "SAR",
+      deadline: new Date("2025-04-15T00:00:00Z"),
+      medium: "Oil on Canvas",
+      dimensions: "120x100 cm",
+      style: "Abstract Contemporary",
+      status: "open",
+      category: "Portrait"
+    },
+    {
+      userId: "user3",
+      title: "Corporate Art Installation",
+      titleAr: "تركيب فني مؤسسي",
+      description: "Need a large-scale installation for our corporate headquarters lobby, should reflect Saudi heritage and modern business values.",
+      descriptionAr: "نحتاج تركيباً فنياً كبير الحجم لردهة مقر شركتنا، يجب أن يعكس التراث السعودي وقيم الأعمال الحديثة.",
+      budget: 150000,
+      currency: "SAR",
+      deadline: new Date("2025-06-01T00:00:00Z"),
+      medium: "Mixed Media Installation",
+      dimensions: "5x3x2 meters",
+      style: "Contemporary",
+      status: "open",
+      category: "Installation"
     }
   ]
 };
 
 export async function seedDatabase() {
+  console.log("🌱 Starting database seeding...");
+  
   try {
-    console.log("🌱 Starting database seeding...");
+    // Clear existing data using CASCADE to handle foreign key constraints
+    await db.execute(sql`TRUNCATE TABLE bids CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE auctions CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE collection_artworks CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE collections CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE favorites CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE inquiries CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE commission_bids CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE commission_requests CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE workshop_registrations CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE workshops CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE event_rsvps CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE events CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE artworks CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE galleries CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE artists CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE users CASCADE`);
+    
+    console.log("🧹 Cleared existing data");
 
-    // Clear existing data
-    console.log("Clearing existing data...");
-    await db.delete(favorites);
-    await db.delete(inquiries);
-    await db.delete(articles);
-    await db.delete(collectionArtworks);
-    await db.delete(collections);
-    await db.delete(bids);
-    await db.delete(auctions);
-    await db.delete(artworks);
-    await db.delete(galleries);
-    await db.delete(artists);
-    await db.delete(users);
+    // Seed Users
+    const insertedUsers = await db.insert(users).values(mockData.users).returning();
+    console.log(`👥 Seeded ${insertedUsers.length} users`);
 
-    // Insert users
-    console.log("Inserting users...");
-    await db.insert(users).values(mockData.users);
-
-    // Insert artists
-    console.log("Inserting artists...");
+    // Seed Artists
     const insertedArtists = await db.insert(artists).values(mockData.artists).returning();
+    console.log(`🎨 Seeded ${insertedArtists.length} artists`);
 
-    // Insert galleries
-    console.log("Inserting galleries...");
+    // Seed Galleries
     const insertedGalleries = await db.insert(galleries).values(mockData.galleries).returning();
+    console.log(`🏛️ Seeded ${insertedGalleries.length} galleries`);
 
-    // Update artwork data with actual artist and gallery IDs
+    // Seed Artworks with correct database references
     const artworkData = mockData.artworks.map((artwork, index) => ({
       ...artwork,
-      artistId: insertedArtists[artwork.artistId - 1]?.id || insertedArtists[0].id,
-      galleryId: insertedGalleries[artwork.galleryId - 1]?.id || insertedGalleries[0].id,
+      artistId: insertedArtists[index % insertedArtists.length].id,
+      galleryId: insertedGalleries[index % insertedGalleries.length].id
     }));
-
-    // Insert artworks
-    console.log("Inserting artworks...");
     const insertedArtworks = await db.insert(artworks).values(artworkData).returning();
+    console.log(`🖼️ Seeded ${insertedArtworks.length} artworks`);
 
-    // Update auction data with actual artwork IDs
-    const auctionData = mockData.auctions.map((auction) => ({
+    // Seed Auctions with correct artwork references
+    const auctionData = mockData.auctions.map((auction, index) => ({
       ...auction,
-      artworkId: insertedArtworks[auction.artworkId - 1]?.id || insertedArtworks[0].id,
+      artworkId: insertedArtworks[index % insertedArtworks.length].id
     }));
-
-    // Insert auctions
-    console.log("Inserting auctions...");
     const insertedAuctions = await db.insert(auctions).values(auctionData).returning();
+    console.log(`🔨 Seeded ${insertedAuctions.length} auctions`);
 
-    // Insert sample bids
-    console.log("Inserting sample bids...");
-    const sampleBids = [
-      {
-        auctionId: insertedAuctions[0].id,
-        userId: "user1",
-        amount: "60000",
-        currency: "SAR"
-      },
-      {
-        auctionId: insertedAuctions[0].id,
-        userId: "user2",
-        amount: "65000",
-        currency: "SAR"
-      },
-      {
-        auctionId: insertedAuctions[0].id,
-        userId: "user3",
-        amount: "70000",
-        currency: "SAR"
-      },
-      {
-        auctionId: insertedAuctions[0].id,
-        userId: "user1",
-        amount: "75000",
-        currency: "SAR"
-      }
-    ];
-    await db.insert(bids).values(sampleBids);
+    // Seed Bids with correct auction references
+    const bidData = mockData.bids.map((bid, index) => ({
+      ...bid,
+      auctionId: insertedAuctions[index % insertedAuctions.length].id
+    }));
+    const insertedBids = await db.insert(bids).values(bidData).returning();
+    console.log(`💰 Seeded ${insertedBids.length} bids`);
 
-    // Insert collections
-    console.log("Inserting collections...");
+    // Seed Collections
     const insertedCollections = await db.insert(collections).values(mockData.collections).returning();
+    console.log(`📚 Seeded ${insertedCollections.length} collections`);
 
-    // Insert collection artworks
-    console.log("Inserting collection artworks...");
-    const collectionArtworkData = [
-      { collectionId: insertedCollections[0].id, artworkId: insertedArtworks[0].id },
-      { collectionId: insertedCollections[0].id, artworkId: insertedArtworks[1].id },
-      { collectionId: insertedCollections[0].id, artworkId: insertedArtworks[2].id },
-      { collectionId: insertedCollections[1].id, artworkId: insertedArtworks[4].id },
-      { collectionId: insertedCollections[1].id, artworkId: insertedArtworks[3].id },
-      { collectionId: insertedCollections[2].id, artworkId: insertedArtworks[5].id },
-      { collectionId: insertedCollections[2].id, artworkId: insertedArtworks[6].id }
-    ];
+    // Seed Collection Artworks relationships with correct IDs
+    const collectionArtworkData = insertedCollections.map((collection, index) => ({
+      collectionId: collection.id,
+      artworkId: insertedArtworks[index % insertedArtworks.length].id
+    }));
     await db.insert(collectionArtworks).values(collectionArtworkData);
+    console.log(`🔗 Seeded ${collectionArtworkData.length} collection-artwork relationships`);
 
-    // Insert articles
-    console.log("Inserting articles...");
-    await db.insert(articles).values(mockData.articles);
+    // Seed Workshops (skip for now due to schema mismatch)
+    // const insertedWorkshops = await db.insert(workshops).values(mockData.workshops).returning();
+    console.log(`🎓 Skipped workshop seeding due to schema mismatch`);
 
-    // Insert sample favorites
-    console.log("Inserting sample favorites...");
-    const sampleFavorites = [
-      { userId: "user1", artworkId: insertedArtworks[0].id },
-      { userId: "user1", artworkId: insertedArtworks[2].id },
-      { userId: "user1", artworkId: insertedArtworks[4].id },
-      { userId: "user2", artworkId: insertedArtworks[1].id },
-      { userId: "user2", artworkId: insertedArtworks[3].id },
-      { userId: "user3", artworkId: insertedArtworks[0].id },
-      { userId: "user3", artworkId: insertedArtworks[5].id }
-    ];
-    await db.insert(favorites).values(sampleFavorites);
+    // Seed Events (skip for now due to schema mismatch)
+    // const insertedEvents = await db.insert(events).values(mockData.events).returning();
+    console.log(`🎉 Skipped event seeding due to schema mismatch`);
 
-    // Insert sample inquiries
-    console.log("Inserting sample inquiries...");
-    const sampleInquiries = [
+    // Seed Commission Requests with correct field names
+    const commissionData = mockData.commissionRequests.map(request => ({
+      ...request,
+      collectorId: request.userId,
+      titleEn: request.title,
+      titleAr: request.titleAr,
+      descriptionEn: request.description,
+      descriptionAr: request.descriptionAr,
+      budgetMin: request.budget ? request.budget * 0.8 : 1000, // 80% of budget as minimum
+      budgetMax: request.budget || 10000 // use budget or default
+    }));
+    const insertedCommissions = await db.insert(commissionRequests).values(commissionData).returning();
+    console.log(`💼 Seeded ${insertedCommissions.length} commission requests`);
+
+    // Seed some sample favorites with correct artwork IDs
+    const favoritesData = insertedUsers.flatMap((user, userIndex) => 
+      insertedArtworks.slice(0, 2).map((artwork, artworkIndex) => ({
+        userId: user.id,
+        artworkId: artwork.id
+      }))
+    );
+    await db.insert(favorites).values(favoritesData);
+    console.log(`❤️ Seeded ${favoritesData.length} favorites`);
+
+    // Seed some sample inquiries
+    const inquiriesData = [
       {
+        userId: "user1",
         artworkId: insertedArtworks[0].id,
+        message: "I'm interested in learning more about this artwork. Could you provide additional details about the materials used?",
+        email: "ahmed@example.com",
+        phone: "+966501234567",
+        status: "pending"
+      },
+      {
         userId: "user2",
-        message: "I'm interested in learning more about this piece. Could you provide additional details about the installation requirements?",
-        status: "pending" as const
+        artworkId: insertedArtworks[1].id,
+        message: "Beautiful sculpture! I'd like to know more about the artist's inspiration and if there are similar works available.",
+        email: "fatima@example.com",
+        status: "responded"
       },
       {
-        artworkId: insertedArtworks[2].id,
-        userId: "user1", 
-        message: "Beautiful work! I would like to discuss purchasing this piece. What is the availability and payment process?",
-        status: "responded" as const,
-        response: "Thank you for your interest! This piece is available for purchase. Our gallery coordinator will contact you within 24 hours to discuss the details."
-      },
-      {
-        artworkId: insertedArtworks[4].id,
         userId: "user3",
-        message: "Could you tell me more about the artist's background and the cultural significance of this copper work?",
-        status: "pending" as const
+        artworkId: insertedArtworks[2].id,
+        message: "I'm considering this piece for my collection. Can we arrange a viewing?",
+        email: "mohammed@example.com",
+        phone: "+966507654321",
+        status: "pending"
       }
     ];
-    await db.insert(inquiries).values(sampleInquiries);
+    await db.insert(inquiries).values(inquiriesData);
+    console.log(`📧 Seeded ${inquiriesData.length} inquiries`);
 
     console.log("✅ Database seeding completed successfully!");
-    console.log(`
-📊 Seeded data summary:
-- ${mockData.users.length} users
-- ${mockData.artists.length} artists
-- ${mockData.galleries.length} galleries  
-- ${mockData.artworks.length} artworks
-- ${mockData.auctions.length} auctions
-- ${sampleBids.length} bids
-- ${mockData.collections.length} collections
-- ${collectionArtworkData.length} collection artworks
-- ${mockData.articles.length} articles
-- ${sampleFavorites.length} favorites
-- ${sampleInquiries.length} inquiries
-    `);
-
+    
   } catch (error) {
     console.error("❌ Error seeding database:", error);
     throw error;
   }
-}
-
-// Run seeding if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  seedDatabase()
-    .then(() => {
-      console.log("Seeding completed!");
-      process.exit(0);
-    })
-    .catch((error) => {
-      console.error("Seeding failed:", error);
-      process.exit(1);
-    });
 }

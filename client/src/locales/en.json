@@ -304,12 +304,14 @@
     "noBidsYet": "No bids yet",
     "beFirstToBid": "Be the first to bid!",
     "auctionDetails": "Auction Details",
-    "termsAndConditions": "Terms & Conditions"
+    "termsAndConditions": "Terms & Conditions",
+    "viewAll": "View All Auctions"
   },
   "artists": {
     "title": "Artists",
     "subtitle": "Discover talented artists from Saudi Arabia and the GCC region, from emerging voices to established masters.",
     "featured": "Featured Artists",
+    "viewAll": "View All Artists",
     "search": {
       "placeholder": "Search artists by name..."
     },

@@ -149,6 +149,7 @@
   },
   "artists": {
     "featured": "فنانون مميزون",
+    "viewAll": "عرض جميع الفنانين",
     "filters": {
       "allCountries": "جميع البلدان",
       "nationality": "الجنسية"
