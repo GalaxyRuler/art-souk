@@ -33,9 +33,9 @@ export function SoukkNavbar() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/">
-            <a className="flex items-center">
+            <div className="flex items-center cursor-pointer">
               <SoukkLogo variant="wordmark" size="md" bilingual={isRTL} />
-            </a>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -44,14 +44,14 @@ export function SoukkNavbar() {
               if (item.requireAuth && !user) return null;
               return (
                 <Link key={item.href} href={item.href}>
-                  <a
+                  <span
                     className={cn(
-                      "soukk-nav-link",
+                      "soukk-nav-link cursor-pointer",
                       location === item.href && "active"
                     )}
                   >
                     {item.label}
-                  </a>
+                  </span>
                 </Link>
               );
             })}
