@@ -1,81 +1,71 @@
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cairo:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* Soukk.art Brand Colors - Gulf Souk Inspired */
-  --soukk-majorelle-blue: #5A4FCF;
-  --soukk-majorelle-dark: #4039A3;
-  --soukk-majorelle-light: #7B71E0;
-  --soukk-terracotta: #D2775D;
-  --soukk-terracotta-dark: #B85A3C;
-  --soukk-terracotta-light: #E09981;
-  --soukk-gold: #D4A574;
-  --soukk-gold-dark: #B88A4E;
-  --soukk-gold-light: #E6C19C;
-  --soukk-sand: #F4E8D8;
-  --soukk-sand-light: #FAF6F0;
-  --soukk-sand-dark: #E6D4BC;
-  --soukk-charcoal: #2C2825;
-  --soukk-charcoal-light: #4A433E;
-  --soukk-charcoal-dark: #1A1714;
+  /* Dark masculine color palette */
+  --background: hsl(0, 0%, 8%);
+  --foreground: hsl(0, 0%, 95%);
+  --muted: hsl(0, 0%, 15%);
+  --muted-foreground: hsl(0, 0%, 85%);
+  --popover: hsl(0, 0%, 12%);
+  --popover-foreground: hsl(0, 0%, 95%);
+  --card: hsl(0, 0%, 12%);
+  --card-foreground: hsl(0, 0%, 95%);
+  --border: hsl(0, 0%, 20%);
+  --input: hsl(0, 0%, 20%);
+  --primary: hsl(30, 100%, 50%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(0, 0%, 15%);
+  --secondary-foreground: hsl(0, 0%, 95%);
+  --accent: hsl(30, 70%, 40%);
+  --accent-foreground: hsl(0, 0%, 95%);
+  --destructive: hsl(0, 84%, 50%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(30, 100%, 50%);
+  --radius: 0.125rem;
   
-  /* UI Colors */
-  --soukk-background: var(--soukk-sand-light);
-  --soukk-surface: #FFFFFF;
-  --soukk-text-primary: var(--soukk-charcoal);
-  --soukk-text-secondary: var(--soukk-charcoal-light);
-  --soukk-border: var(--soukk-sand-dark);
-  
-  /* Standard shadcn colors mapped to Soukk palette */
-  --background: var(--soukk-background);
-  --foreground: var(--soukk-text-primary);
-  --muted: var(--soukk-sand);
-  --muted-foreground: var(--soukk-text-secondary);
-  --popover: var(--soukk-surface);
-  --popover-foreground: var(--soukk-text-primary);
-  --card: var(--soukk-surface);
-  --card-foreground: var(--soukk-text-primary);
-  --border: var(--soukk-border);
-  --input: var(--soukk-border);
-  --primary: var(--soukk-majorelle-blue);
-  --primary-foreground: #FFFFFF;
-  --secondary: var(--soukk-terracotta);
-  --secondary-foreground: #FFFFFF;
-  --accent: var(--soukk-gold);
-  --accent-foreground: var(--soukk-charcoal);
-  --destructive: #E57373;
-  --destructive-foreground: #FFFFFF;
-  --ring: var(--soukk-majorelle-blue);
-  --radius: 0.5rem;
+  /* Custom brand colors - masculine art gallery */
+  --brand-gold: hsl(30, 100%, 50%);
+  --brand-navy: hsl(0, 0%, 20%);
+  --brand-deep-navy: hsl(0, 0%, 10%);
+  --brand-steel: hsl(0, 0%, 30%);
+  --brand-charcoal: hsl(0, 0%, 95%);
+  --brand-light-gold: hsl(30, 70%, 60%);
 }
 
 .dark {
-  /* Dark mode - Soukk palette */
-  --soukk-background: var(--soukk-charcoal-dark);
-  --soukk-surface: var(--soukk-charcoal);
-  --soukk-text-primary: var(--soukk-sand-light);
-  --soukk-text-secondary: var(--soukk-sand);
-  --soukk-border: var(--soukk-charcoal-light);
+  /* Dark mode is default - same as root */
+  --background: hsl(0, 0%, 8%);
+  --foreground: hsl(0, 0%, 95%);
+  --muted: hsl(0, 0%, 15%);
+  --muted-foreground: hsl(0, 0%, 85%);
+  --popover: hsl(0, 0%, 12%);
+  --popover-foreground: hsl(0, 0%, 95%);
+  --card: hsl(0, 0%, 12%);
+  --card-foreground: hsl(0, 0%, 95%);
+  --border: hsl(0, 0%, 20%);
+  --input: hsl(0, 0%, 20%);
+  --primary: hsl(30, 100%, 50%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(0, 0%, 15%);
+  --secondary-foreground: hsl(0, 0%, 95%);
+  --accent: hsl(30, 70%, 40%);
+  --accent-foreground: hsl(0, 0%, 95%);
+  --destructive: hsl(0, 84%, 50%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(30, 100%, 50%);
+  --radius: 0.125rem;
   
-  --background: var(--soukk-background);
-  --foreground: var(--soukk-text-primary);
-  --muted: var(--soukk-charcoal);
-  --muted-foreground: var(--soukk-text-secondary);
-  --popover: var(--soukk-charcoal);
-  --popover-foreground: var(--soukk-text-primary);
-  --card: var(--soukk-charcoal);
-  --card-foreground: var(--soukk-text-primary);
-  --border: var(--soukk-border);
-  --input: var(--soukk-border);
+  /* Custom brand colors - masculine art gallery */
+  --brand-gold: hsl(30, 100%, 50%);
+  --brand-navy: hsl(0, 0%, 20%);
+  --brand-deep-navy: hsl(0, 0%, 10%);
+  --brand-steel: hsl(0, 0%, 30%);
+  --brand-charcoal: hsl(0, 0%, 95%);
+  --brand-light-gold: hsl(30, 70%, 60%);
 }
 
-
-
-/* Soukk.art Custom Properties */
 @layer base {
   * {
     @apply border-border;
@@ -83,249 +73,31 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    font-family: 'Poppins', -apple-system, sans-serif;
+    font-feature-settings: "cv05", "cv11";
   }
   
-  /* RTL Support */
-  [dir="rtl"] body {
-    font-family: 'Cairo', 'Segoe UI Arabic', sans-serif;
-  }
-  
-  /* Typography - Soukk Brand */
+  /* Typography improvements - Masculine Art Gallery Style */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold;
+    @apply tracking-wide font-bold uppercase;
+    letter-spacing: 0.05em;
   }
-}
-
-/* Soukk.art Component Classes */
-@layer components {
-  /* Typography Classes */
-  .heading-1 {
-    @apply text-5xl font-bold leading-tight tracking-tight;
+  
+  h1 {
+    @apply text-5xl md:text-6xl lg:text-7xl font-black;
+    font-family: "Bebas Neue", "Inter", sans-serif;
+    letter-spacing: 0.08em;
   }
-
-  .heading-2 {
-    @apply text-4xl font-semibold leading-tight;
+  
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl font-black;
+    font-family: "Bebas Neue", "Inter", sans-serif;
+    letter-spacing: 0.06em;
   }
-
-  .heading-3 {
-    @apply text-3xl font-semibold leading-normal;
-  }
-
-  .heading-4 {
-    @apply text-2xl font-medium leading-normal;
-  }
-
-  .body-large {
-    @apply text-lg leading-relaxed;
-  }
-
-  .body-base {
-    @apply text-base leading-normal;
-  }
-
-  .body-small {
-    @apply text-sm leading-normal;
-  }
-
-  .caption {
-    @apply text-xs leading-normal tracking-wide;
-  }
-
-  /* Soukk Buttons */
-  .soukk-button {
-    @apply font-medium px-6 py-3 rounded-md transition-all duration-200 uppercase tracking-wider text-sm;
-  }
-
-  .soukk-button-primary {
-    background-color: var(--soukk-majorelle-blue);
-    @apply text-white border-2 border-transparent;
-  }
-
-  .soukk-button-primary:hover {
-    background-color: var(--soukk-majorelle-dark);
-    @apply -translate-y-0.5 shadow-lg;
-  }
-
-  .soukk-button-secondary {
-    @apply bg-transparent border-2;
-    color: var(--soukk-terracotta);
-    border-color: var(--soukk-terracotta);
-  }
-
-  .soukk-button-secondary:hover {
-    background-color: var(--soukk-terracotta);
-    @apply text-white;
-  }
-
-  .soukk-button-gold {
-    background-color: var(--soukk-gold);
-    color: var(--soukk-charcoal);
-    @apply border-2 border-transparent;
-  }
-
-  .soukk-button-gold:hover {
-    background-color: var(--soukk-gold-dark);
-    @apply -translate-y-0.5 shadow-lg;
-  }
-
-  /* Soukk Cards */
-  .soukk-card {
-    background-color: var(--soukk-surface);
-    border: 1px solid var(--soukk-border);
-    @apply rounded-xl p-6 transition-all duration-300 relative overflow-hidden;
-  }
-
-  .soukk-card::before {
-    content: '';
-    @apply absolute top-0 left-0 right-0 h-1;
-    background: linear-gradient(90deg, 
-      var(--soukk-majorelle-blue) 0%,
-      var(--soukk-terracotta) 50%,
-      var(--soukk-gold) 100%
-    );
-  }
-
-  .soukk-card:hover {
-    @apply -translate-y-1 shadow-xl;
-  }
-
-  /* Arch Frame */
-  .soukk-arch-frame {
-    clip-path: path('M 0,100 L 0,30 Q 0,0 30,0 L 70,0 Q 100,0 100,30 L 100,100 Z');
-  }
-
-  /* Mashrabiya Pattern */
-  .soukk-mashrabiya {
-    background-image: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 10px,
-      var(--soukk-sand-dark) 10px,
-      var(--soukk-sand-dark) 12px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 10px,
-      var(--soukk-sand-dark) 10px,
-      var(--soukk-sand-dark) 12px
-    );
-    @apply opacity-10;
-  }
-
-  /* 8-Point Star */
-  .soukk-star {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40 Z' fill='%23D4A574' /%3E%3C/svg%3E");
-  }
-
-  /* Zellige Pattern */
-  .soukk-zellige {
-    background-color: var(--soukk-sand-light);
-    background-image: 
-      repeating-conic-gradient(
-        from 45deg at 20% 20%,
-        var(--soukk-majorelle-blue) 0deg 90deg,
-        var(--soukk-terracotta) 90deg 180deg,
-        var(--soukk-gold) 180deg 270deg,
-        var(--soukk-sand) 270deg 360deg
-      );
-    background-size: 60px 60px;
-    @apply opacity-5;
-  }
-
-  /* Section Dividers */
-  .soukk-divider {
-    @apply h-0.5 my-12 relative;
-    background: linear-gradient(90deg, 
-      transparent 0%,
-      var(--soukk-gold) 50%,
-      transparent 100%
-    );
-  }
-
-  .soukk-divider::after {
-    content: '';
-    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40 Z' fill='%23D4A574' /%3E%3C/svg%3E");
-    background-size: contain;
-  }
-
-  /* Badges */
-  .soukk-badge {
-    @apply inline-flex items-center px-3 py-1 text-xs font-medium rounded-full uppercase tracking-wider;
-  }
-
-  .soukk-badge-gold {
-    background-color: var(--soukk-gold-light);
-    color: var(--soukk-gold-dark);
-  }
-
-  .soukk-badge-blue {
-    background-color: rgba(90, 79, 207, 0.1);
-    color: var(--soukk-majorelle-blue);
-  }
-
-  /* Navigation Links */
-  .soukk-nav-link {
-    color: var(--soukk-text-secondary);
-    @apply font-medium no-underline relative transition-colors duration-200;
-  }
-
-  .soukk-nav-link:hover {
-    color: var(--soukk-majorelle-blue);
-  }
-
-  .soukk-nav-link.active {
-    color: var(--soukk-majorelle-blue);
-  }
-
-  .soukk-nav-link.active::after {
-    content: '';
-    @apply absolute -bottom-1 left-0 right-0 h-0.5;
-    background-color: var(--soukk-majorelle-blue);
-  }
-
-  /* Form Elements */
-  .soukk-input {
-    @apply w-full py-3 px-4 text-base rounded-lg transition-all duration-200;
-    border: 2px solid var(--soukk-border);
-    background-color: var(--soukk-surface);
-    color: var(--soukk-text-primary);
-  }
-
-  .soukk-input:focus {
-    @apply outline-none;
-    border-color: var(--soukk-majorelle-blue);
-    box-shadow: 0 0 0 3px rgba(90, 79, 207, 0.1);
-  }
-
-  /* Animations */
-  .soukk-animate-fade-in {
-    animation: soukk-fade-in 0.5s ease-out;
-  }
-
-  .soukk-animate-float {
-    animation: soukk-float 3s ease-in-out infinite;
-  }
-
-  @keyframes soukk-fade-in {
-    from {
-      @apply opacity-0 translate-y-2;
-    }
-    to {
-      @apply opacity-100 translate-y-0;
-    }
-  }
-
-  @keyframes soukk-float {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl font-bold;
+    font-family: "Inter", sans-serif;
+    letter-spacing: 0.04em;
   }
   
   h4 {
@@ -468,3 +240,6 @@
     background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
   }
+  
+  /* Removed overly broad selectors */
+}

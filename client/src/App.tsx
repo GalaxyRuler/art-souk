@@ -9,10 +9,6 @@ import { i18n } from "@/lib/i18n";
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/Landing";
 import Home from "@/pages/Home";
-import SoukkHome from "@/pages/SoukkHome";
-import SimpleLanding from "@/pages/SimpleLanding";
-import SimpleHome from "@/pages/SimpleHome";
-import BrandGuide from "@/pages/BrandGuide";
 import Artists from "@/pages/Artists";
 import Galleries from "@/pages/Galleries";
 import Auctions from "@/pages/Auctions";
@@ -48,10 +44,10 @@ function Router() {
   return (
     <Switch>
       {isLoading || !isAuthenticated ? (
-        <Route path="/" component={SimpleLanding} />
+        <Route path="/" component={Landing} />
       ) : (
         <>
-          <Route path="/" component={SimpleHome} />
+          <Route path="/" component={Home} />
           <Route path="/artists" component={Artists} />
           <Route path="/artists/:id" component={ArtistProfile} />
           <Route path="/galleries" component={Galleries} />
@@ -94,9 +90,6 @@ function Router() {
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/auth/test" component={AuthTest} />
       <Route path="/email/test" component={EmailTest} />
-      <Route path="/soukk" component={SoukkHome} />
-      <Route path="/brand-guide" component={BrandGuide} />
-      <Route path="/simple-brand" component={SimpleLanding} />
       <Route component={NotFound} />
     </Switch>
   );
