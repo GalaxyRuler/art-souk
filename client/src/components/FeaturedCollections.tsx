@@ -105,25 +105,44 @@ export function FeaturedCollections() {
             const description = isRTL && collection.descriptionAr ? collection.descriptionAr : collection.description;
 
             return (
-              <div key={collection.id} className="group cursor-pointer overflow-hidden bg-white rounded-lg shadow-sm border border-gray-200">
-                <div className="relative">
+              <div key={collection.id} style={{ 
+                cursor: 'pointer',
+                overflow: 'hidden',
+                backgroundColor: '#ffffff',
+                borderRadius: '8px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                border: '1px solid #e5e7eb'
+              }}>
+                <div style={{ position: 'relative' }}>
                   <img
                     src={collection.coverImage}
                     alt={name}
-                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    style={{
+                      width: '100%',
+                      height: '256px',
+                      objectFit: 'cover'
+                    }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
-                <div className="p-6 bg-white">
-                  <h3 className="text-xl font-semibold text-primary mb-2">{name}</h3>
+                <div style={{ 
+                  padding: '24px',
+                  backgroundColor: '#ffffff'
+                }}>
+                  <h3 style={{
+                    fontSize: '20px',
+                    fontWeight: '600',
+                    color: 'hsl(217, 91%, 35%)',
+                    marginBottom: '8px',
+                    margin: '0 0 8px 0'
+                  }}>{name}</h3>
                   <p style={{ 
                     color: '#000000',
-                    fontWeight: '600',
-                    fontSize: '14px',
-                    opacity: 1,
-                    textShadow: 'none',
-                    filter: 'none'
-                  }}>{description}</p>
+                    fontWeight: '900',
+                    fontSize: '16px',
+                    lineHeight: '1.4',
+                    margin: '0',
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                  }}>TEST TEXT: {description}</p>
                 </div>
               </div>
             );
