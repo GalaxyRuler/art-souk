@@ -87,7 +87,14 @@ export function FeaturedCollections() {
           <h2 className="text-3xl font-bold text-primary mb-4">
             {t("collections.featured.title")}
           </h2>
-          <p className="text-black max-w-2xl mx-auto font-medium opacity-100" style={{ color: '#000000 !important', opacity: 1 }}>
+          <p className="max-w-2xl mx-auto" style={{ 
+            color: '#000000',
+            fontWeight: '500',
+            fontSize: '16px',
+            opacity: 1,
+            textShadow: 'none',
+            filter: 'none'
+          }}>
             {t("collections.featured.description")}
           </p>
         </div>
@@ -98,7 +105,7 @@ export function FeaturedCollections() {
             const description = isRTL && collection.descriptionAr ? collection.descriptionAr : collection.description;
 
             return (
-              <Card key={collection.id} className="group cursor-pointer overflow-hidden">
+              <div key={collection.id} className="group cursor-pointer overflow-hidden bg-white rounded-lg shadow-sm border border-gray-200">
                 <div className="relative">
                   <img
                     src={collection.coverImage}
@@ -107,11 +114,18 @@ export function FeaturedCollections() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
-                <CardContent className="p-6">
+                <div className="p-6 bg-white">
                   <h3 className="text-xl font-semibold text-primary mb-2">{name}</h3>
-                  <p className="text-black text-sm font-medium opacity-100" style={{ color: '#000000 !important', opacity: 1 }}>{description}</p>
-                </CardContent>
-              </Card>
+                  <p style={{ 
+                    color: '#000000',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    opacity: 1,
+                    textShadow: 'none',
+                    filter: 'none'
+                  }}>{description}</p>
+                </div>
+              </div>
             );
           })}
         </div>
