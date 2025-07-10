@@ -226,6 +226,15 @@
     color: #000000 !important;
     -webkit-text-fill-color: #000000 !important;
   }
+  
+  /* Override any inherited text colors */
+  .text-foreground {
+    color: hsl(230, 24%, 12%) !important;
+  }
+  
+  .text-muted-foreground {
+    color: hsl(230, 24%, 12%) !important;
+  }
 
 
 }

@@ -85,15 +85,22 @@ export function FeaturedCollections() {
     <section style={{ paddingTop: '64px', paddingBottom: '64px', backgroundColor: '#ffffff' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 16px' }}>
         <div style={{ textAlign: isRTL ? 'right' : 'center', marginBottom: '48px' }}>
-          <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#1a1a1a', marginBottom: '16px' }}>
+          <h2 style={{ 
+            fontSize: '30px', 
+            fontWeight: 'bold', 
+            color: '#000000 !important', 
+            marginBottom: '16px',
+            WebkitTextFillColor: '#000000 !important'
+          }}>
             {t("collections.featured.title")}
           </h2>
           <p style={{ 
             maxWidth: '672px',
             margin: '0 auto',
-            color: '#000000',
+            color: '#000000 !important',
             fontWeight: '500',
-            fontSize: '16px'
+            fontSize: '16px',
+            WebkitTextFillColor: '#000000 !important'
           }}>
             {t("collections.featured.description")}
           </p>
@@ -128,17 +135,19 @@ export function FeaturedCollections() {
                   <h3 style={{ 
                     fontSize: '20px',
                     fontWeight: '700',
-                    color: '#000000',
+                    color: 'black !important',
                     margin: '0 0 8px 0',
-                    WebkitTextFillColor: '#000000'
+                    WebkitTextFillColor: 'black !important',
+                    opacity: '1 !important'
                   }}>{name}</h3>
                   <p style={{ 
-                    color: '#000000',
+                    color: 'black !important',
                     fontWeight: '600',
                     fontSize: '14px',
                     lineHeight: '1.4',
                     margin: '0',
-                    WebkitTextFillColor: '#000000'
+                    WebkitTextFillColor: 'black !important',
+                    opacity: '1 !important'
                   }}>{description}</p>
                 </div>
               </div>

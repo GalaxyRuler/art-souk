@@ -7,6 +7,7 @@ import { ArtworkCard } from "@/components/ArtworkCard";
 import { ArtistCard } from "@/components/ArtistCard";
 import { Badge } from "@/components/ui/badge";
 import { FeaturedCollections } from "@/components/FeaturedCollections";
+import { TestText } from "@/components/TestText";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
 import { cn, formatPrice } from "@/lib/utils";
@@ -181,6 +182,9 @@ export default function Home() {
           </section>
         )}
 
+        {/* Test Text */}
+        <TestText />
+        
         {/* Featured Collections */}
         <FeaturedCollections />
 
