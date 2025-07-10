@@ -130,6 +130,22 @@
       "sign": "Sign Contract"
     }
   },
+  "commissions": {
+    "requests": {
+      "title": "Commission Requests",
+      "subtitle": "Browse custom artwork requests from collectors",
+      "noRequests": "No commission requests found",
+      "noRequestsDescription": "Be the first to post a commission request or check back later for new opportunities"
+    },
+    "post": {
+      "title": "Post Commission Request",
+      "subtitle": "Request custom artwork from talented artists"
+    },
+    "detail": {
+      "title": "Commission Details",
+      "subtitle": "Review request details and place your bid"
+    }
+  },
   "auth": {
     "signin": "Sign In",
     "signup": "Sign Up",
