@@ -87,7 +87,7 @@ export function FeaturedCollections() {
           <h2 className="text-3xl font-bold text-primary mb-4">
             {t("collections.featured.title")}
           </h2>
-          <p className="text-black max-w-2xl mx-auto">
+          <p className="text-black max-w-2xl mx-auto font-medium opacity-100" style={{ color: '#000000 !important', opacity: 1 }}>
             {t("collections.featured.description")}
           </p>
         </div>
@@ -109,7 +109,7 @@ export function FeaturedCollections() {
                 </div>
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold text-primary mb-2">{name}</h3>
-                  <p className="text-black text-sm">{description}</p>
+                  <p className="text-black text-sm font-medium opacity-100" style={{ color: '#000000 !important', opacity: 1 }}>{description}</p>
                 </CardContent>
               </Card>
             );
