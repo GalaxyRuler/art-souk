@@ -49,7 +49,7 @@ function Router() {
         <Route path="/" component={Landing} />
       ) : (
         <>
-          <Route path="/" component={Home} />
+          <Route path="/" component={SoukkHome} />
           <Route path="/artists" component={Artists} />
           <Route path="/artists/:id" component={ArtistProfile} />
           <Route path="/galleries" component={Galleries} />

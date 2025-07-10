@@ -3,7 +3,8 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, LogOut } from "lucide-react";
+import { SoukkLogo } from "@/components/SoukkLogo";
+import { Menu, X, User, LogOut, Globe } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -26,19 +27,15 @@ export function NavbarRedesigned() {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between items-center h-20">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-soukk-surface/95 backdrop-blur-md border-b border-soukk-border">
+      <div className="soukk-mashrabiya absolute inset-0 pointer-events-none"></div>
+      <div className="relative max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-orange-500 flex items-center justify-center">
-                <span className="text-black font-black text-xl">AS</span>
-              </div>
-              <h1 className="text-2xl font-black text-white uppercase tracking-wider hidden sm:block">
-                {t("site.name")}
-              </h1>
-            </div>
+            <a className="flex items-center">
+              <SoukkLogo variant="wordmark" size="md" bilingual={isRTL} />
+            </a>
           </Link>
 
           {/* Desktop Navigation */}
@@ -49,10 +46,8 @@ export function NavbarRedesigned() {
                 <Link key={item.href} href={item.href}>
                   <a
                     className={cn(
-                      "text-sm font-bold uppercase tracking-wider transition-colors duration-200",
-                      location === item.href
-                        ? "text-orange-500"
-                        : "text-gray-300 hover:text-white"
+                      "soukk-nav-link",
+                      location === item.href && "active"
                     )}
                   >
                     {item.label}
@@ -62,35 +57,40 @@ export function NavbarRedesigned() {
             })}
           </div>
 
-          {/* Right Section */}
-          <div className="flex items-center space-x-4">
+          {/* Actions */}
+          <div className="flex items-center gap-4">
             {/* Language Toggle */}
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={toggleLanguage}
-              className="text-gray-300 hover:text-white font-bold uppercase text-sm tracking-wider transition-colors"
+              className="hidden md:flex items-center gap-2 text-soukk-text-secondary hover:text-soukk-majorelle-blue"
             >
-              {currentLanguage === "en" ? "عربي" : "EN"}
-            </button>
+              <Globe className="h-4 w-4" />
+              <span className="text-sm font-medium">{currentLanguage === 'en' ? 'AR' : 'EN'}</span>
+            </Button>
 
-            {/* Auth Buttons */}
+            {/* User Menu */}
             {user ? (
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center gap-4">
                 <Link href="/dashboard">
-                  <Button variant="ghost" className="text-gray-300 hover:text-white">
-                    <User className="w-5 h-5" />
+                  <Button className="soukk-button soukk-button-primary">
+                    <User className="h-4 w-4 mr-2" />
+                    {t("nav.dashboard")}
                   </Button>
                 </Link>
                 <Button
+                  onClick={logout}
                   variant="ghost"
-                  onClick={() => logout()}
-                  className="text-gray-300 hover:text-white"
+                  size="sm"
+                  className="text-soukk-text-secondary hover:text-soukk-terracotta"
                 >
-                  <LogOut className="w-5 h-5" />
+                  <LogOut className="h-4 w-4" />
                 </Button>
               </div>
             ) : (
               <Link href="/auth">
-                <Button className="bg-orange-500 hover:bg-orange-600 text-black font-bold uppercase tracking-wider">
+                <Button className="soukk-button soukk-button-gold">
                   {t("nav.login")}
                 </Button>
               </Link>
@@ -99,26 +99,24 @@ export function NavbarRedesigned() {
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden text-white"
+              className="lg:hidden p-2 text-soukk-text-secondary hover:text-soukk-majorelle-blue"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-zinc-800">
+          <div className="lg:hidden py-4 border-t border-soukk-border">
             {navItems.map((item) => {
               if (item.requireAuth && !user) return null;
               return (
                 <Link key={item.href} href={item.href}>
                   <a
                     className={cn(
-                      "block py-3 text-sm font-bold uppercase tracking-wider transition-colors",
-                      location === item.href
-                        ? "text-orange-500"
-                        : "text-gray-300 hover:text-white"
+                      "block py-3 soukk-nav-link",
+                      location === item.href && "active"
                     )}
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -127,6 +125,17 @@ export function NavbarRedesigned() {
                 </Link>
               );
             })}
+            <div className="mt-4 pt-4 border-t border-soukk-border">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleLanguage}
+                className="flex items-center gap-2 text-soukk-text-secondary hover:text-soukk-majorelle-blue"
+              >
+                <Globe className="h-4 w-4" />
+                <span className="text-sm font-medium">{currentLanguage === 'en' ? 'العربية' : 'English'}</span>
+              </Button>
+            </div>
           </div>
         )}
       </div>

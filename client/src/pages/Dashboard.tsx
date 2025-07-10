@@ -151,14 +151,14 @@ export default function Dashboard() {
 
   if (profileLoading) {
     return (
-      <div className="min-h-screen bg-black">
+      <div className="min-h-screen bg-soukk-background">
         <NavbarRedesigned />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-28">
           <div className="animate-pulse space-y-8">
-            <div className="h-8 bg-zinc-800 rounded w-1/4"></div>
+            <div className="h-8 bg-soukk-sand rounded w-1/4"></div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="h-96 bg-zinc-800 rounded"></div>
-              <div className="lg:col-span-2 h-96 bg-zinc-800 rounded"></div>
+              <div className="h-96 bg-soukk-sand rounded"></div>
+              <div className="lg:col-span-2 h-96 bg-soukk-sand rounded"></div>
             </div>
           </div>
         </div>
@@ -169,16 +169,16 @@ export default function Dashboard() {
 
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-soukk-background">
       <NavbarRedesigned />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-28">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-5xl font-black text-white uppercase tracking-wider mb-2">
+          <h1 className="heading-1 text-soukk-text-primary mb-2">
             {t("dashboard.title")}
           </h1>
-          <div className="w-24 h-1 bg-orange-500 mb-4"></div>
-          <p className="text-gray-400 text-lg">
+          <div className="soukk-divider mb-4"></div>
+          <p className="body-large text-soukk-text-secondary">
             {t("dashboard.welcomeBack", { name: userProfile?.firstName || user?.claims?.first_name })}
           </p>
         </div>
@@ -186,49 +186,48 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Profile Sidebar */}
           <div className="space-y-6">
-            <Card className="bg-zinc-900 border border-zinc-800">
-              <CardHeader className="text-center">
-                <Avatar className="w-24 h-24 mx-auto mb-4 border-2 border-orange-500">
+            <div className="soukk-card">
+              <div className="text-center mb-6">
+                <Avatar className="w-24 h-24 mx-auto mb-4 border-2 border-soukk-gold">
                   <AvatarImage src={userProfile?.profileImageUrl || user?.claims?.profile_image_url} />
-                  <AvatarFallback className="text-2xl bg-zinc-800 text-white">
+                  <AvatarFallback className="text-2xl bg-soukk-sand text-soukk-text-primary">
                     {(userProfile?.firstName?.[0] || user?.claims?.first_name?.[0] || 'U')}
                   </AvatarFallback>
                 </Avatar>
-                <CardTitle className="text-xl text-white font-bold uppercase tracking-wider">
+                <h2 className="heading-4 text-soukk-text-primary">
                   {userProfile?.firstName || user?.claims?.first_name} {userProfile?.lastName || user?.claims?.last_name}
-                </CardTitle>
-                <p className="text-gray-400 text-sm">
+                </h2>
+                <p className="body-small text-soukk-text-secondary">
                   {userProfile?.email || user?.claims?.email}
                 </p>
-              </CardHeader>
-              <CardContent className="space-y-4">
+              </div>
+              <div className="space-y-4">
                 {!isEditing ? (
                   <>
                     {userProfile?.phone && (
                       <div className="flex items-center gap-3">
-                        <Phone className="h-4 w-4 text-orange-500" />
-                        <span className="text-sm text-gray-300">{userProfile.phone}</span>
+                        <Phone className="h-4 w-4 text-soukk-gold" />
+                        <span className="body-small text-soukk-text-secondary">{userProfile.phone}</span>
                       </div>
                     )}
                     
                     {userProfile?.location && (
                       <div className="flex items-center gap-3">
-                        <MapPin className="h-4 w-4 text-orange-500" />
-                        <span className="text-sm text-gray-300">{userProfile.location}</span>
+                        <MapPin className="h-4 w-4 text-soukk-gold" />
+                        <span className="body-small text-soukk-text-secondary">{userProfile.location}</span>
                       </div>
                     )}
 
                     {userProfile?.bio && (
                       <div className="pt-2">
-                        <p className="text-sm text-gray-400 leading-relaxed">
+                        <p className="body-small text-soukk-text-secondary leading-relaxed">
                           {userProfile.bio}
                         </p>
                       </div>
                     )}
 
                     <Button 
-                      variant="outline" 
-                      className="w-full border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-black font-bold uppercase tracking-wider"
+                      className="soukk-button soukk-button-primary w-full"
                       onClick={handleEditProfile}
                     >
                       <Edit2 className="h-4 w-4 mr-2" />
@@ -292,7 +291,7 @@ export default function Dashboard() {
                     <div className="flex gap-2">
                       <Button 
                         type="submit" 
-                        className="flex-1 bg-brand-gradient text-xs h-8"
+                        className="flex-1 soukk-button soukk-button-primary text-xs h-8"
                         disabled={updateProfileMutation.isPending}
                       >
                         <Save className="h-3 w-3 mr-1" />
@@ -310,8 +309,8 @@ export default function Dashboard() {
                     </div>
                   </form>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Quick Stats */}
             <Card className="bg-zinc-900 border border-zinc-800">
