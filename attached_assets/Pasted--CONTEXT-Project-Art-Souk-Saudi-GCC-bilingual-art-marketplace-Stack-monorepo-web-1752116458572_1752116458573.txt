@@ -1,0 +1,86 @@
+# CONTEXT
+Project: **Art Souk** – Saudi/GCC bilingual art marketplace  
+Stack (monorepo):
+│─ /web  → React 18 + TypeScript + Tailwind + Wouter + TanStack Query  
+│─ /api  → Node.js 20 + Express + Drizzle ORM (PostgreSQL)  
+│─ /db   → schema.*.ts migrations + seed scripts  
+│─ /infra → Docker, nginx, AWS CDK (S3, CloudFront, RDS, SES­/SendGrid)  
+Important libraries already in use: shadcn/ui, Radix UI, OpenTelemetry.  
+Everything runs on Replit Nix + Docker Compose.
+
+**Goal**: Implement (1) PDPL-only privacy controls, (2) feature-abuse guard-rails, (3) seller/ gallery KYC – WITHOUT taking custody of payments or shipments.
+
+# DELIVERABLES
+Create one pull-request titled `feat/trust-safety-pdpl` that contains:
+
+## 1 | PDPL COMPLIANCE
+1. **Privacy Notice pages**  
+   * `/privacy` (English) & `/الخصوصية` (Arabic).  
+   * Content lives in `/content/privacy.en.md` and `/content/privacy.ar.md`.  
+   * Use MDX layout with RTL/LTR switch based on `i18n.ts`.
+
+2. **DSAR Endpoints & Self-service Portal**  
+   * Express routes `/v1/privacy/request-data`, `/v1/privacy/delete`, `/v1/privacy/correct`, guarded by JWT.  
+   * Controller writes DSAR record to `dsar_requests` table (id, user_id, type, status, created_at, resolved_at).  
+   * React page in **Collector Dashboard → “Privacy” tab** that calls these endpoints and shows status.
+
+3. **Data-Retention Jobs**  
+   * Partition `seller_kyc_docs`, `shipping_addresses` by `expires_at`.  
+   * Nightly cron (`node scripts/retention.ts`) deletes partitions older than:  
+     - seller KYC docs: 5 years post account delete  
+     - buyer shipping data: 12 months post delivery
+
+4. **Breach-Notification Playbook**  
+   * Markdown playbook `/docs/security/breach_runbook.md` (detect → triage → notify SDAIA ≤72h).  
+   * Wire OpenTelemetry alerts to Slack via `@replit/slack-alerts`.
+
+## 2 | FEATURE MISUSE GUARD-RAILS
+1. **Maker-Checker on Auction Updates**  
+   * New table `auction_update_requests` (columns: id, auction_id, old_data JSONB, new_data JSONB, requested_by, approved_by, approved_at).  
+   * `PATCH /v1/auctions/:id` now writes to the request table if action is “admin”.  
+   * Separate endpoint `/v1/auction-update-requests/:id/approve` – must be called by a *different* admin.
+
+2. **Immutable Audit Log**  
+   * Enable `pgaudit` on RDS; pipe to `s3://art-souk-audit-logs` with ObjectLock (WORM).  
+   * Fallback JS shim (`/api/middleware/audit.ts`) writes critical actions to `audit_logs` if pgaudit unavailable in dev.
+
+3. **Content & Comment Abuse Controls**  
+   * Integrate `@hive/api` image-moderation in upload service.  
+   * Add `express-rate-limit` (per-IP 10 comments / h for unverified, 60 / h verified).  
+   * “Report” button on artwork & comments POSTs to `/v1/reports` -> stored in `reports` table; admin panel view + status update.
+
+## 3 | SELLER / GALLERY KYC FLOW
+1. **Sumsub SDK integration**  
+   * Add environment vars:  
+     ```
+     SUMSUB_SECRET=***
+     SUMSUB_APP_TOKEN=***
+     ```  
+   * New React modal `KYCWizard` (launch from profile if role in ["ARTIST","GALLERY"] and kyc_status!=="verified").  
+   * For galleries, collect CR number & authorised-signatory ID; verify via Sumsub “company” flow.
+
+2. **Database Changes**  
+   * Extend `users` table: `kyc_status ENUM('unverified','pending','verified','rejected')`, `risk_score INT DEFAULT 0`.  
+   * Nightly job `/scripts/kyc_rescreen.ts` – pull Sumsub `GET /applicants?changedAfter=` diff, update risk_score, flag≥70.
+
+3. **Trust Badges**  
+   * In card components (`ArtworkCard`, `GalleryCard`), show  
+     - ✅ “ID-Verified Artist” if `kyc_status==='verified'`  
+     - 🏢 “Licensed Gallery” if role==='GALLERY' && verified  
+   * Tooltip explaining verification.
+
+## 4 | TESTS & DOCS
+* Jest tests for: DSAR endpoints (auth, SLA), maker-checker logic, risk_score escalation.  
+* Cypress E2E: unverified artist uploads → blocked publish → completes KYC → publish succeeds.  
+* Update `/README.md` → add **Trust & Safety** section with env-var list & runbooks.
+
+# HOW TO WORK
+1. Use incremental Drizzle migrations (`npm run db:migrate --name=...`).  
+2. Keep Arabic strings in `/i18n/ar.json`; English in `/i18n/en.json`.  
+3. Re-run `npm run typegen` after schema edits.  
+4. After coding, run full CI (`npm run lint && npm test && npm run e2e`) before pushing PR.  
+5. In PR description, include checklist confirming each deliverable above is complete.
+
+# OUTPUT
+Return **only** the git diff summary plus any new files’ content that cannot be inferred (e.g., privacy notice MD). Use ```diff fenced blocks for code, ```md for markdown, and a paragraph explaining manual post-merge actions (setting env vars, enabling pgaudit).
+

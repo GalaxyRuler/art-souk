@@ -128,6 +128,24 @@ import {
   waitlistEntries,
   type WaitlistEntry,
   type InsertWaitlistEntry,
+  dsarRequests,
+  type DsarRequest,
+  type InsertDsarRequest,
+  auditLogs,
+  type AuditLog,
+  type InsertAuditLog,
+  reports,
+  type Report,
+  type InsertReport,
+  auctionUpdateRequests,
+  type AuctionUpdateRequest,
+  type InsertAuctionUpdateRequest,
+  sellerKycDocs,
+  type SellerKycDoc,
+  type InsertSellerKycDoc,
+  shippingAddresses,
+  type ShippingAddress,
+  type InsertShippingAddress,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
@@ -379,6 +397,45 @@ export interface IStorage {
   promoteFromWaitlist(id: number): Promise<void>;
   getWaitlistPosition(entityType: string, entityId: number, userId: string): Promise<number | null>;
   removeFromWaitlist(entityType: string, entityId: number, userId: string): Promise<void>;
+  
+  // Privacy and Trust/Safety operations
+  // DSAR (Data Subject Access Requests)
+  getDsarRequests(status?: string): Promise<DsarRequest[]>;
+  getDsarRequest(id: number): Promise<DsarRequest | undefined>;
+  getUserDsarRequests(userId: string): Promise<DsarRequest[]>;
+  createDsarRequest(request: InsertDsarRequest): Promise<DsarRequest>;
+  updateDsarRequest(id: number, update: Partial<InsertDsarRequest>): Promise<DsarRequest>;
+  
+  // Audit Logs
+  createAuditLog(log: InsertAuditLog): Promise<AuditLog>;
+  getAuditLogs(userId?: string, entityType?: string, limit?: number): Promise<AuditLog[]>;
+  getAuditLogsForEntity(entityType: string, entityId: string): Promise<AuditLog[]>;
+  
+  // Content Reporting
+  createReport(report: InsertReport): Promise<Report>;
+  getReports(status?: string, reportType?: string): Promise<Report[]>;
+  getReport(id: number): Promise<Report | undefined>;
+  updateReport(id: number, update: Partial<InsertReport>): Promise<Report>;
+  getReportsForEntity(entityType: string, entityId: number): Promise<Report[]>;
+  getUserReports(userId: string): Promise<Report[]>;
+  
+  // Auction Update Requests
+  createAuctionUpdateRequest(request: InsertAuctionUpdateRequest): Promise<AuctionUpdateRequest>;
+  getAuctionUpdateRequests(auctionId?: number, status?: string): Promise<AuctionUpdateRequest[]>;
+  updateAuctionUpdateRequest(id: number, update: Partial<InsertAuctionUpdateRequest>): Promise<AuctionUpdateRequest>;
+  
+  // Seller KYC
+  createSellerKycDoc(doc: InsertSellerKycDoc): Promise<SellerKycDoc>;
+  getSellerKycDocs(sellerType: string, sellerId: number): Promise<SellerKycDoc[]>;
+  updateSellerKycDoc(id: number, update: Partial<InsertSellerKycDoc>): Promise<SellerKycDoc>;
+  
+  // Shipping Addresses
+  getUserShippingAddresses(userId: string): Promise<ShippingAddress[]>;
+  getShippingAddress(id: number): Promise<ShippingAddress | undefined>;
+  createShippingAddress(address: InsertShippingAddress): Promise<ShippingAddress>;
+  updateShippingAddress(id: number, address: Partial<InsertShippingAddress>): Promise<ShippingAddress>;
+  deleteShippingAddress(id: number): Promise<void>;
+  setDefaultShippingAddress(userId: string, addressId: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -2659,6 +2716,381 @@ export class DatabaseStorage implements IStorage {
         eq(schedulingConflicts.entityId, entityId)
       ))
       .orderBy(desc(schedulingConflicts.createdAt));
+  }
+
+  // Privacy and Trust/Safety operations
+  
+  // DSAR (Data Subject Access Requests)
+  async getDsarRequests(status?: string): Promise<DsarRequest[]> {
+    let query = db.select().from(dsarRequests);
+    
+    if (status) {
+      query = query.where(eq(dsarRequests.status, status as any));
+    }
+    
+    return await query.orderBy(desc(dsarRequests.createdAt));
+  }
+
+  async getDsarRequest(id: number): Promise<DsarRequest | undefined> {
+    const [request] = await db.select()
+      .from(dsarRequests)
+      .where(eq(dsarRequests.id, id));
+    return request;
+  }
+
+  async getUserDsarRequests(userId: string): Promise<DsarRequest[]> {
+    return await db.select()
+      .from(dsarRequests)
+      .where(eq(dsarRequests.userId, userId))
+      .orderBy(desc(dsarRequests.createdAt));
+  }
+
+  async createDsarRequest(request: InsertDsarRequest): Promise<DsarRequest> {
+    const [newRequest] = await db.insert(dsarRequests)
+      .values(request)
+      .returning();
+    
+    // Create audit log for DSAR request
+    await this.createAuditLog({
+      userId: request.userId,
+      action: 'dsar_request_created',
+      entityType: 'dsar_request',
+      entityId: newRequest.id.toString(),
+      details: { requestType: request.requestType }
+    });
+    
+    return newRequest;
+  }
+
+  async updateDsarRequest(id: number, update: Partial<InsertDsarRequest>): Promise<DsarRequest> {
+    const [updated] = await db.update(dsarRequests)
+      .set({ ...update, updatedAt: new Date() })
+      .where(eq(dsarRequests.id, id))
+      .returning();
+    
+    // Create audit log for DSAR update
+    await this.createAuditLog({
+      userId: update.processedBy || 'system',
+      action: 'dsar_request_updated',
+      entityType: 'dsar_request',
+      entityId: id.toString(),
+      details: { status: update.status }
+    });
+    
+    return updated;
+  }
+
+  // Audit Logs
+  async createAuditLog(log: InsertAuditLog): Promise<AuditLog> {
+    const [newLog] = await db.insert(auditLogs)
+      .values(log)
+      .returning();
+    return newLog;
+  }
+
+  async getAuditLogs(userId?: string, entityType?: string, limit: number = 100): Promise<AuditLog[]> {
+    let query = db.select().from(auditLogs);
+    
+    const conditions = [];
+    if (userId) conditions.push(eq(auditLogs.userId, userId));
+    if (entityType) conditions.push(eq(auditLogs.entityType, entityType));
+    
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions));
+    }
+    
+    return await query
+      .orderBy(desc(auditLogs.createdAt))
+      .limit(limit);
+  }
+
+  async getAuditLogsForEntity(entityType: string, entityId: string): Promise<AuditLog[]> {
+    return await db.select()
+      .from(auditLogs)
+      .where(and(
+        eq(auditLogs.entityType, entityType),
+        eq(auditLogs.entityId, entityId)
+      ))
+      .orderBy(desc(auditLogs.createdAt));
+  }
+
+  // Content Reporting
+  async createReport(report: InsertReport): Promise<Report> {
+    const [newReport] = await db.insert(reports)
+      .values(report)
+      .returning();
+    
+    // Create audit log for report creation
+    await this.createAuditLog({
+      userId: report.reportedBy,
+      action: 'content_reported',
+      entityType: report.entityType,
+      entityId: report.entityId.toString(),
+      details: { reportType: report.reportType, reason: report.reason }
+    });
+    
+    return newReport;
+  }
+
+  async getReports(status?: string, reportType?: string): Promise<Report[]> {
+    let query = db.select().from(reports);
+    
+    const conditions = [];
+    if (status) conditions.push(eq(reports.status, status as any));
+    if (reportType) conditions.push(eq(reports.reportType, reportType as any));
+    
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions));
+    }
+    
+    return await query.orderBy(desc(reports.createdAt));
+  }
+
+  async getReport(id: number): Promise<Report | undefined> {
+    const [report] = await db.select()
+      .from(reports)
+      .where(eq(reports.id, id));
+    return report;
+  }
+
+  async updateReport(id: number, update: Partial<InsertReport>): Promise<Report> {
+    const [updated] = await db.update(reports)
+      .set({ ...update, updatedAt: new Date() })
+      .where(eq(reports.id, id))
+      .returning();
+    
+    // Create audit log for report update
+    await this.createAuditLog({
+      userId: update.reviewedBy || 'system',
+      action: 'report_reviewed',
+      entityType: 'report',
+      entityId: id.toString(),
+      details: { status: update.status, resolution: update.resolution }
+    });
+    
+    return updated;
+  }
+
+  async getReportsForEntity(entityType: string, entityId: number): Promise<Report[]> {
+    return await db.select()
+      .from(reports)
+      .where(and(
+        eq(reports.entityType, entityType),
+        eq(reports.entityId, entityId)
+      ))
+      .orderBy(desc(reports.createdAt));
+  }
+
+  async getUserReports(userId: string): Promise<Report[]> {
+    return await db.select()
+      .from(reports)
+      .where(eq(reports.reportedBy, userId))
+      .orderBy(desc(reports.createdAt));
+  }
+
+  // Auction Update Requests
+  async createAuctionUpdateRequest(request: InsertAuctionUpdateRequest): Promise<AuctionUpdateRequest> {
+    const [newRequest] = await db.insert(auctionUpdateRequests)
+      .values(request)
+      .returning();
+    
+    await this.createAuditLog({
+      userId: request.requestedBy,
+      action: 'auction_update_requested',
+      entityType: 'auction',
+      entityId: request.auctionId.toString(),
+      details: { updateType: request.updateType }
+    });
+    
+    return newRequest;
+  }
+
+  async getAuctionUpdateRequests(auctionId?: number, status?: string): Promise<AuctionUpdateRequest[]> {
+    let query = db.select().from(auctionUpdateRequests);
+    
+    const conditions = [];
+    if (auctionId) conditions.push(eq(auctionUpdateRequests.auctionId, auctionId));
+    if (status) conditions.push(eq(auctionUpdateRequests.status, status as any));
+    
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions));
+    }
+    
+    return await query.orderBy(desc(auctionUpdateRequests.createdAt));
+  }
+
+  async updateAuctionUpdateRequest(id: number, update: Partial<InsertAuctionUpdateRequest>): Promise<AuctionUpdateRequest> {
+    const [updated] = await db.update(auctionUpdateRequests)
+      .set({ ...update, updatedAt: new Date() })
+      .where(eq(auctionUpdateRequests.id, id))
+      .returning();
+    
+    await this.createAuditLog({
+      userId: update.reviewedBy || 'system',
+      action: 'auction_update_reviewed',
+      entityType: 'auction_update_request',
+      entityId: id.toString(),
+      details: { status: update.status }
+    });
+    
+    return updated;
+  }
+
+  // Seller KYC
+  async createSellerKycDoc(doc: InsertSellerKycDoc): Promise<SellerKycDoc> {
+    const [newDoc] = await db.insert(sellerKycDocs)
+      .values(doc)
+      .returning();
+    
+    await this.createAuditLog({
+      userId: doc.uploadedBy,
+      action: 'kyc_document_uploaded',
+      entityType: doc.sellerType,
+      entityId: doc.sellerId.toString(),
+      details: { documentType: doc.documentType }
+    });
+    
+    return newDoc;
+  }
+
+  async getSellerKycDocs(sellerType: string, sellerId: number): Promise<SellerKycDoc[]> {
+    return await db.select()
+      .from(sellerKycDocs)
+      .where(and(
+        eq(sellerKycDocs.sellerType, sellerType),
+        eq(sellerKycDocs.sellerId, sellerId)
+      ))
+      .orderBy(desc(sellerKycDocs.uploadedAt));
+  }
+
+  async updateSellerKycDoc(id: number, update: Partial<InsertSellerKycDoc>): Promise<SellerKycDoc> {
+    const [updated] = await db.update(sellerKycDocs)
+      .set({ ...update, updatedAt: new Date() })
+      .where(eq(sellerKycDocs.id, id))
+      .returning();
+    
+    await this.createAuditLog({
+      userId: update.reviewedBy || 'system',
+      action: 'kyc_document_reviewed',
+      entityType: 'kyc_document',
+      entityId: id.toString(),
+      details: { status: update.status }
+    });
+    
+    return updated;
+  }
+
+  // Shipping Addresses
+  async getUserShippingAddresses(userId: string): Promise<ShippingAddress[]> {
+    return await db.select()
+      .from(shippingAddresses)
+      .where(eq(shippingAddresses.userId, userId))
+      .orderBy(desc(shippingAddresses.isDefault), desc(shippingAddresses.createdAt));
+  }
+
+  async getShippingAddress(id: number): Promise<ShippingAddress | undefined> {
+    const [address] = await db.select()
+      .from(shippingAddresses)
+      .where(eq(shippingAddresses.id, id));
+    return address;
+  }
+
+  async createShippingAddress(address: InsertShippingAddress): Promise<ShippingAddress> {
+    // If this is set as default, unset other default addresses
+    if (address.isDefault) {
+      await db.update(shippingAddresses)
+        .set({ isDefault: false })
+        .where(eq(shippingAddresses.userId, address.userId));
+    }
+    
+    const [newAddress] = await db.insert(shippingAddresses)
+      .values(address)
+      .returning();
+    
+    await this.createAuditLog({
+      userId: address.userId,
+      action: 'shipping_address_added',
+      entityType: 'shipping_address',
+      entityId: newAddress.id.toString(),
+      details: { isDefault: address.isDefault }
+    });
+    
+    return newAddress;
+  }
+
+  async updateShippingAddress(id: number, address: Partial<InsertShippingAddress>): Promise<ShippingAddress> {
+    // If setting as default, unset other defaults
+    if (address.isDefault) {
+      const [existingAddress] = await db.select()
+        .from(shippingAddresses)
+        .where(eq(shippingAddresses.id, id));
+      
+      if (existingAddress) {
+        await db.update(shippingAddresses)
+          .set({ isDefault: false })
+          .where(and(
+            eq(shippingAddresses.userId, existingAddress.userId),
+            ne(shippingAddresses.id, id)
+          ));
+      }
+    }
+    
+    const [updated] = await db.update(shippingAddresses)
+      .set({ ...address, updatedAt: new Date() })
+      .where(eq(shippingAddresses.id, id))
+      .returning();
+    
+    await this.createAuditLog({
+      userId: updated.userId,
+      action: 'shipping_address_updated',
+      entityType: 'shipping_address',
+      entityId: id.toString(),
+      details: { isDefault: address.isDefault }
+    });
+    
+    return updated;
+  }
+
+  async deleteShippingAddress(id: number): Promise<void> {
+    const [address] = await db.select()
+      .from(shippingAddresses)
+      .where(eq(shippingAddresses.id, id));
+    
+    if (address) {
+      await db.delete(shippingAddresses)
+        .where(eq(shippingAddresses.id, id));
+      
+      await this.createAuditLog({
+        userId: address.userId,
+        action: 'shipping_address_deleted',
+        entityType: 'shipping_address',
+        entityId: id.toString(),
+        details: { addressLine1: address.addressLine1 }
+      });
+    }
+  }
+
+  async setDefaultShippingAddress(userId: string, addressId: number): Promise<void> {
+    // Unset all defaults for user
+    await db.update(shippingAddresses)
+      .set({ isDefault: false })
+      .where(eq(shippingAddresses.userId, userId));
+    
+    // Set new default
+    await db.update(shippingAddresses)
+      .set({ isDefault: true, updatedAt: new Date() })
+      .where(and(
+        eq(shippingAddresses.id, addressId),
+        eq(shippingAddresses.userId, userId)
+      ));
+    
+    await this.createAuditLog({
+      userId,
+      action: 'default_shipping_address_changed',
+      entityType: 'shipping_address',
+      entityId: addressId.toString(),
+      details: {}
+    });
   }
 
 

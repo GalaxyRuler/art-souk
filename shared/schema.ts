@@ -1248,3 +1248,6 @@ export const insertEventReminderSchema = createInsertSchema(eventReminders).omit
 export const insertCalendarIntegrationSchema = createInsertSchema(calendarIntegrations).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertParticipantListSchema = createInsertSchema(participantLists).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertWaitlistEntrySchema = createInsertSchema(waitlistEntries).omit({ id: true, createdAt: true, updatedAt: true });
+
+// Privacy and Trust/Safety exports
+export * from './schema/privacy';

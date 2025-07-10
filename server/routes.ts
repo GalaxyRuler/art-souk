@@ -36,7 +36,12 @@ import {
   collectorWishlist,
   installmentPlans,
   artworks,
-  artists
+  artists,
+  insertDsarRequestSchema,
+  insertReportSchema,
+  insertAuctionUpdateRequestSchema,
+  insertSellerKycDocSchema,
+  insertShippingAddressSchema
 } from "@shared/schema";
 import { z } from "zod";
 
@@ -2603,6 +2608,485 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting calendar integration:", error);
       res.status(500).json({ message: "Failed to delete integration" });
+    }
+  });
+
+  // Privacy and Trust/Safety Routes
+  
+  // DSAR (Data Subject Access Request) Routes
+  app.get('/api/privacy/dsar', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      // Only admin users can view all requests
+      if (user?.role === 'admin') {
+        const { status } = req.query;
+        const requests = await storage.getDsarRequests(status as string);
+        res.json(requests);
+      } else {
+        // Regular users can only see their own requests
+        const requests = await storage.getUserDsarRequests(userId);
+        res.json(requests);
+      }
+    } catch (error) {
+      console.error('Error fetching DSAR requests:', error);
+      res.status(500).json({ message: 'Failed to fetch DSAR requests' });
+    }
+  });
+
+  app.get('/api/privacy/dsar/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { id } = req.params;
+      const request = await storage.getDsarRequest(parseInt(id));
+      
+      if (!request) {
+        return res.status(404).json({ message: 'DSAR request not found' });
+      }
+      
+      const user = await storage.getUser(userId);
+      
+      // Only admin or the requester can view details
+      if (user?.role !== 'admin' && request.userId !== userId) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+      
+      res.json(request);
+    } catch (error) {
+      console.error('Error fetching DSAR request:', error);
+      res.status(500).json({ message: 'Failed to fetch DSAR request' });
+    }
+  });
+
+  app.post('/api/privacy/dsar', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const parsed = insertDsarRequestSchema.parse({
+        ...req.body,
+        userId
+      });
+      
+      const request = await storage.createDsarRequest(parsed);
+      res.status(201).json(request);
+    } catch (error) {
+      console.error('Error creating DSAR request:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Invalid request data', errors: error.errors });
+      }
+      res.status(500).json({ message: 'Failed to create DSAR request' });
+    }
+  });
+
+  app.patch('/api/privacy/dsar/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+      
+      const { id } = req.params;
+      const update = {
+        ...req.body,
+        processedBy: userId
+      };
+      
+      const request = await storage.updateDsarRequest(parseInt(id), update);
+      res.json(request);
+    } catch (error) {
+      console.error('Error updating DSAR request:', error);
+      res.status(500).json({ message: 'Failed to update DSAR request' });
+    }
+  });
+
+  // Audit Logs Routes
+  app.get('/api/privacy/audit-logs', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        // Regular users can only see their own audit logs
+        const logs = await storage.getAuditLogs(userId);
+        return res.json(logs);
+      }
+      
+      // Admins can filter by user and entity type
+      const { userId: filterUserId, entityType, limit = 100 } = req.query;
+      const logs = await storage.getAuditLogs(
+        filterUserId as string,
+        entityType as string,
+        parseInt(limit as string)
+      );
+      res.json(logs);
+    } catch (error) {
+      console.error('Error fetching audit logs:', error);
+      res.status(500).json({ message: 'Failed to fetch audit logs' });
+    }
+  });
+
+  app.get('/api/privacy/audit-logs/:entityType/:entityId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+      
+      const { entityType, entityId } = req.params;
+      const logs = await storage.getAuditLogsForEntity(entityType, entityId);
+      res.json(logs);
+    } catch (error) {
+      console.error('Error fetching entity audit logs:', error);
+      res.status(500).json({ message: 'Failed to fetch audit logs' });
+    }
+  });
+
+  // Reports Routes
+  app.post('/api/privacy/reports', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const parsed = insertReportSchema.parse({
+        ...req.body,
+        reporterId: userId
+      });
+      
+      const report = await storage.createReport(parsed);
+      res.status(201).json(report);
+    } catch (error) {
+      console.error('Error creating report:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Invalid report data', errors: error.errors });
+      }
+      res.status(500).json({ message: 'Failed to create report' });
+    }
+  });
+
+  app.get('/api/privacy/reports', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        // Regular users can only see their own reports
+        const reports = await storage.getUserReports(userId);
+        return res.json(reports);
+      }
+      
+      // Admins can filter by status and type
+      const { status, type } = req.query;
+      const reports = await storage.getReports(status as string, type as string);
+      res.json(reports);
+    } catch (error) {
+      console.error('Error fetching reports:', error);
+      res.status(500).json({ message: 'Failed to fetch reports' });
+    }
+  });
+
+  app.get('/api/privacy/reports/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { id } = req.params;
+      const report = await storage.getReport(parseInt(id));
+      
+      if (!report) {
+        return res.status(404).json({ message: 'Report not found' });
+      }
+      
+      const user = await storage.getUser(userId);
+      
+      // Only admin or the reporter can view details
+      if (user?.role !== 'admin' && report.reporterId !== userId) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+      
+      res.json(report);
+    } catch (error) {
+      console.error('Error fetching report:', error);
+      res.status(500).json({ message: 'Failed to fetch report' });
+    }
+  });
+
+  app.patch('/api/privacy/reports/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+      
+      const { id } = req.params;
+      const update = {
+        ...req.body,
+        reviewedBy: userId
+      };
+      
+      const report = await storage.updateReport(parseInt(id), update);
+      res.json(report);
+    } catch (error) {
+      console.error('Error updating report:', error);
+      res.status(500).json({ message: 'Failed to update report' });
+    }
+  });
+
+  app.get('/api/privacy/reports/:entityType/:entityId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+      
+      const { entityType, entityId } = req.params;
+      const reports = await storage.getReportsForEntity(entityType, parseInt(entityId));
+      res.json(reports);
+    } catch (error) {
+      console.error('Error fetching entity reports:', error);
+      res.status(500).json({ message: 'Failed to fetch reports' });
+    }
+  });
+
+  // Auction Update Requests Routes
+  app.post('/api/privacy/auction-updates', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const parsed = insertAuctionUpdateRequestSchema.parse({
+        ...req.body,
+        requestedBy: userId
+      });
+      
+      const request = await storage.createAuctionUpdateRequest(parsed);
+      res.status(201).json(request);
+    } catch (error) {
+      console.error('Error creating auction update request:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Invalid request data', errors: error.errors });
+      }
+      res.status(500).json({ message: 'Failed to create auction update request' });
+    }
+  });
+
+  app.get('/api/privacy/auction-updates', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+      
+      const { auctionId, status } = req.query;
+      const requests = await storage.getAuctionUpdateRequests(
+        auctionId ? parseInt(auctionId as string) : undefined,
+        status as string
+      );
+      res.json(requests);
+    } catch (error) {
+      console.error('Error fetching auction update requests:', error);
+      res.status(500).json({ message: 'Failed to fetch requests' });
+    }
+  });
+
+  app.patch('/api/privacy/auction-updates/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+      
+      const { id } = req.params;
+      const update = {
+        ...req.body,
+        reviewedBy: userId
+      };
+      
+      const request = await storage.updateAuctionUpdateRequest(parseInt(id), update);
+      res.json(request);
+    } catch (error) {
+      console.error('Error updating auction update request:', error);
+      res.status(500).json({ message: 'Failed to update request' });
+    }
+  });
+
+  // Seller KYC Routes
+  app.post('/api/privacy/kyc', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const parsed = insertSellerKycDocSchema.parse({
+        ...req.body,
+        userId
+      });
+      
+      const doc = await storage.createSellerKycDoc(parsed);
+      res.status(201).json(doc);
+    } catch (error) {
+      console.error('Error creating KYC document:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Invalid document data', errors: error.errors });
+      }
+      res.status(500).json({ message: 'Failed to create KYC document' });
+    }
+  });
+
+  app.get('/api/privacy/kyc/:sellerType/:sellerId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      const { sellerType, sellerId } = req.params;
+      
+      // Check if user is admin or the seller
+      if (user?.role !== 'admin') {
+        if (sellerType === 'artist') {
+          const artist = await storage.getArtist(parseInt(sellerId));
+          if (artist?.userId !== userId) {
+            return res.status(403).json({ message: 'Access denied' });
+          }
+        } else if (sellerType === 'gallery') {
+          const gallery = await storage.getGallery(parseInt(sellerId));
+          if (gallery?.userId !== userId) {
+            return res.status(403).json({ message: 'Access denied' });
+          }
+        }
+      }
+      
+      const docs = await storage.getSellerKycDocs(sellerType, parseInt(sellerId));
+      res.json(docs);
+    } catch (error) {
+      console.error('Error fetching KYC documents:', error);
+      res.status(500).json({ message: 'Failed to fetch KYC documents' });
+    }
+  });
+
+  app.patch('/api/privacy/kyc/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+      
+      const { id } = req.params;
+      const update = {
+        ...req.body,
+        reviewedBy: userId
+      };
+      
+      const doc = await storage.updateSellerKycDoc(parseInt(id), update);
+      res.json(doc);
+    } catch (error) {
+      console.error('Error updating KYC document:', error);
+      res.status(500).json({ message: 'Failed to update KYC document' });
+    }
+  });
+
+  // Shipping Address Routes
+  app.get('/api/user/shipping-addresses', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const addresses = await storage.getUserShippingAddresses(userId);
+      res.json(addresses);
+    } catch (error) {
+      console.error('Error fetching shipping addresses:', error);
+      res.status(500).json({ message: 'Failed to fetch shipping addresses' });
+    }
+  });
+
+  app.get('/api/user/shipping-addresses/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { id } = req.params;
+      const address = await storage.getShippingAddress(parseInt(id));
+      
+      if (!address) {
+        return res.status(404).json({ message: 'Address not found' });
+      }
+      
+      if (address.userId !== userId) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+      
+      res.json(address);
+    } catch (error) {
+      console.error('Error fetching shipping address:', error);
+      res.status(500).json({ message: 'Failed to fetch shipping address' });
+    }
+  });
+
+  app.post('/api/user/shipping-addresses', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const parsed = insertShippingAddressSchema.parse({
+        ...req.body,
+        userId
+      });
+      
+      const address = await storage.createShippingAddress(parsed);
+      res.status(201).json(address);
+    } catch (error) {
+      console.error('Error creating shipping address:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Invalid address data', errors: error.errors });
+      }
+      res.status(500).json({ message: 'Failed to create shipping address' });
+    }
+  });
+
+  app.patch('/api/user/shipping-addresses/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { id } = req.params;
+      
+      // Verify ownership
+      const address = await storage.getShippingAddress(parseInt(id));
+      if (!address || address.userId !== userId) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+      
+      const updated = await storage.updateShippingAddress(parseInt(id), req.body);
+      res.json(updated);
+    } catch (error) {
+      console.error('Error updating shipping address:', error);
+      res.status(500).json({ message: 'Failed to update shipping address' });
+    }
+  });
+
+  app.delete('/api/user/shipping-addresses/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { id } = req.params;
+      
+      // Verify ownership
+      const address = await storage.getShippingAddress(parseInt(id));
+      if (!address || address.userId !== userId) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+      
+      await storage.deleteShippingAddress(parseInt(id));
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting shipping address:', error);
+      res.status(500).json({ message: 'Failed to delete shipping address' });
+    }
+  });
+
+  app.post('/api/user/shipping-addresses/:id/set-default', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { id } = req.params;
+      
+      await storage.setDefaultShippingAddress(userId, parseInt(id));
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error setting default address:', error);
+      res.status(500).json({ message: 'Failed to set default address' });
     }
   });
 
