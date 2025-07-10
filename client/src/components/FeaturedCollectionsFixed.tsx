@@ -21,32 +21,82 @@ export function FeaturedCollectionsFixed() {
   });
 
   return (
-    <section className="py-16" style={{ backgroundColor: '#ffffff' }}>
-      <div className="max-w-7xl mx-auto px-4">
-        <div className={`mb-12 ${isRTL ? 'text-right' : 'text-center'}`}>
-          <h2 className="text-3xl font-bold mb-4" style={{ color: 'rgb(0, 0, 0)' }}>
+    <section style={{ 
+      paddingTop: '64px', 
+      paddingBottom: '64px', 
+      backgroundColor: '#ffffff' 
+    }}>
+      <div style={{ 
+        maxWidth: '1280px', 
+        margin: '0 auto', 
+        padding: '0 16px' 
+      }}>
+        <div style={{ 
+          textAlign: isRTL ? 'right' : 'center', 
+          marginBottom: '48px' 
+        }}>
+          <h2 style={{ 
+            fontSize: '30px', 
+            fontWeight: 'bold', 
+            color: '#000000 !important', 
+            marginBottom: '16px' 
+          }}>
             {t("collections.featured.title")}
           </h2>
-          <p className="max-w-2xl mx-auto font-medium" style={{ color: 'rgb(0, 0, 0)' }}>
+          <p style={{ 
+            maxWidth: '672px', 
+            margin: '0 auto', 
+            color: '#000000 !important', 
+            fontWeight: '500', 
+            fontSize: '16px' 
+          }}>
             {t("collections.featured.description")}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
+          gap: '32px' 
+        }}>
           {collections.map((collection) => {
             const name = isRTL && collection.nameAr ? collection.nameAr : collection.name;
             const description = isRTL && collection.descriptionAr ? collection.descriptionAr : collection.description;
 
             return (
-              <div key={collection.id} className="rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow cursor-pointer" style={{ backgroundColor: '#ffffff' }}>
+              <div key={collection.id} style={{ 
+                borderRadius: '8px', 
+                overflow: 'hidden', 
+                backgroundColor: '#ffffff', 
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)', 
+                cursor: 'pointer' 
+              }}>
                 <img
                   src={collection.coverImage}
                   alt={name}
-                  className="w-full h-64 object-cover"
+                  style={{ 
+                    width: '100%', 
+                    height: '256px', 
+                    objectFit: 'cover' 
+                  }}
                 />
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2" style={{ color: 'rgb(0, 0, 0)' }}>{name}</h3>
-                  <p className="font-medium text-sm leading-relaxed" style={{ color: 'rgb(0, 0, 0)' }}>{description}</p>
+                <div style={{ 
+                  padding: '24px', 
+                  backgroundColor: '#ffffff' 
+                }}>
+                  <h3 style={{ 
+                    fontSize: '20px', 
+                    fontWeight: '700', 
+                    color: '#000000 !important', 
+                    margin: '0 0 8px 0' 
+                  }}>{name}</h3>
+                  <p style={{ 
+                    color: '#000000 !important', 
+                    fontWeight: '600', 
+                    fontSize: '14px', 
+                    lineHeight: '1.4', 
+                    margin: '0' 
+                  }}>{description}</p>
                 </div>
               </div>
             );
