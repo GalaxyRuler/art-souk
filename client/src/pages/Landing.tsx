@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { HeroSection } from "@/components/HeroSection";
-import { FeaturedCollections } from "@/components/FeaturedCollections";
+import { FeaturedCollectionsRedesigned } from "@/components/FeaturedCollectionsRedesigned";
 import { CuratorsPicks } from "@/components/CuratorsPicks";
 import { EditorialSection } from "@/components/EditorialSection";
 import { AuctionSection } from "@/components/AuctionSection";
@@ -17,7 +17,7 @@ export default function Landing() {
         <HeroSection />
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white pointer-events-none" />
-          <FeaturedCollections />
+          <FeaturedCollectionsRedesigned />
         </div>
         <CuratorsPicks />
         <EditorialSection />

@@ -1,17 +1,17 @@
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { Navbar } from "@/components/Navbar";
+import { NavbarRedesigned } from "@/components/NavbarRedesigned";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { ArtworkCard } from "@/components/ArtworkCard";
 import { ArtistCard } from "@/components/ArtistCard";
 import { Badge } from "@/components/ui/badge";
-import { FeaturedCollectionsFixed } from "@/components/FeaturedCollectionsFixed";
+import { FeaturedCollectionsRedesigned } from "@/components/FeaturedCollectionsRedesigned";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
 import { cn, formatPrice } from "@/lib/utils";
 import { Link } from "wouter";
-import { Heart, TrendingUp, Clock, Users } from "lucide-react";
+import { Heart, TrendingUp, Clock, Users, ChevronRight, ChevronDown } from "lucide-react";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -36,72 +36,65 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
-      <Navbar />
-      <main>
-        {/* Welcome Section */}
-        <section className="relative py-16 overflow-hidden">
-          <div className="absolute inset-0 bg-mesh-gradient opacity-10" />
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className={cn("text-center space-y-6", isRTL && "text-right")}>
-              <h1 className="text-4xl md:text-5xl font-bold animate-float">
-                <span className="text-gradient">{t("home.welcome", { name: user?.firstName || t("home.user") })}</span>
-              </h1>
-              <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-                {t("home.subtitle")}
-              </p>
-            </div>
+    <div className="min-h-screen bg-black">
+      <NavbarRedesigned />
+      <main className="pt-20">
+        {/* Hero Section */}
+        <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-zinc-900">
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-50"></div>
+          </div>
+          <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-wider mb-6">
+              {t("home.welcome", { name: user?.firstName || t("home.user") })}
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-300 font-light max-w-3xl mx-auto">
+              {t("home.subtitle")}
+            </p>
           </div>
         </section>
 
         {/* Quick Stats */}
-        <section className="py-12 -mt-8 relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="card-glass rounded-2xl p-6 hover-lift">
-                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-xl mx-auto mb-4 shadow-glow">
-                  <Heart className="h-7 w-7 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-gradient mb-1">{userFavorites.length}</div>
-                <div className="text-sm text-gray-700 font-medium">{t("home.stats.favorites")}</div>
+        <section className="py-16 bg-black border-t border-zinc-800">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-zinc-900 border border-zinc-800 p-6 text-center hover:border-orange-500 transition-colors">
+                <Heart className="h-8 w-8 text-orange-500 mx-auto mb-4" />
+                <div className="text-3xl font-black text-white mb-2">{userFavorites.length}</div>
+                <div className="text-sm text-gray-400 uppercase tracking-wider">{t("home.stats.favorites")}</div>
               </div>
-              <div className="card-glass rounded-2xl p-6 hover-lift">
-                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl mx-auto mb-4 shadow-glow">
-                  <TrendingUp className="h-7 w-7 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-gradient mb-1">{featuredArtworks.length}</div>
-                <div className="text-sm text-gray-700 font-medium">{t("home.stats.trending")}</div>
+              <div className="bg-zinc-900 border border-zinc-800 p-6 text-center hover:border-orange-500 transition-colors">
+                <TrendingUp className="h-8 w-8 text-orange-500 mx-auto mb-4" />
+                <div className="text-3xl font-black text-white mb-2">{featuredArtworks.length}</div>
+                <div className="text-sm text-gray-400 uppercase tracking-wider">{t("home.stats.trending")}</div>
               </div>
-              <div className="card-glass rounded-2xl p-6 hover-lift">
-                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-orange-400 to-red-400 rounded-xl mx-auto mb-4 shadow-glow">
-                  <Clock className="h-7 w-7 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-gradient mb-1">{liveAuctions.length}</div>
-                <div className="text-sm text-gray-700 font-medium">{t("home.stats.liveAuctions")}</div>
+              <div className="bg-zinc-900 border border-zinc-800 p-6 text-center hover:border-orange-500 transition-colors">
+                <Clock className="h-8 w-8 text-orange-500 mx-auto mb-4" />
+                <div className="text-3xl font-black text-white mb-2">{liveAuctions.length}</div>
+                <div className="text-sm text-gray-400 uppercase tracking-wider">{t("home.stats.liveAuctions")}</div>
               </div>
-              <div className="card-glass rounded-2xl p-6 hover-lift">
-                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-gray-600 to-gray-700 rounded-xl mx-auto mb-4 shadow-glow">
-                  <Users className="h-7 w-7 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-gradient mb-1">{featuredArtists.length}</div>
-                <div className="text-sm text-gray-700 font-medium">{t("home.stats.artists")}</div>
+              <div className="bg-zinc-900 border border-zinc-800 p-6 text-center hover:border-orange-500 transition-colors">
+                <Users className="h-8 w-8 text-orange-500 mx-auto mb-4" />
+                <div className="text-3xl font-black text-white mb-2">{featuredArtists.length}</div>
+                <div className="text-sm text-gray-400 uppercase tracking-wider">{t("home.stats.artists")}</div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Personalized Recommendations */}
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className={cn("flex justify-between items-center mb-8", isRTL && "flex-row-reverse")}>
+        <section className="py-24 bg-zinc-900">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className={cn("flex justify-between items-center mb-12", isRTL && "flex-row-reverse")}>
               <div className={cn(isRTL && "text-right")}>
-                <h2 className="text-2xl font-bold text-primary mb-2">
+                <h2 className="text-4xl font-black text-white uppercase tracking-wider mb-2">
                   {t("home.recommendations.title")}
                 </h2>
-                <p className="text-gray-600">{t("home.recommendations.subtitle")}</p>
+                <div className="w-24 h-1 bg-orange-500 mb-4"></div>
+                <p className="text-gray-400 text-lg">{t("home.recommendations.subtitle")}</p>
               </div>
               <Link href="/artists">
-                <Button variant="outline">
+                <Button className="bg-transparent border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-black font-bold uppercase tracking-wider">
                   {t("home.recommendations.exploreArtists")}
                 </Button>
               </Link>
@@ -182,7 +175,7 @@ export default function Home() {
         )}
 
         {/* Featured Collections */}
-        <FeaturedCollectionsFixed />
+        <FeaturedCollectionsRedesigned />
 
         {/* Featured Artists */}
         <section className="py-16 bg-gray-50">
