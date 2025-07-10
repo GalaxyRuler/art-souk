@@ -1,0 +1,81 @@
+# CONTEXT
+Repo: **Art Souk** (React 18 + Node/Express + PostgreSQL/Drizzle)  
+Goal: Enable collectors to post bespoke commission briefs (size, style, budget, deadline) and allow **verified artists** to bid. Platform only matches parties—no payment custody or shipping.
+
+# DELIVERABLE
+Create one pull-request **`feat/commissions-marketplace`** containing:
+
+## 1 | DATABASE (Drizzle migrations)
+1. `commission_requests`
+   - id UUID PK
+   - collector_id FK→users.id
+   - title VARCHAR(120)
+   - description TEXT
+   - width_cm, height_cm NUMERIC(5,2)
+   - style_tag VARCHAR(60)  -- e.g. "abstract coastal"
+   - budget_min, budget_max MONEY
+   - deadline_date DATE
+   - status ENUM('open','in_negotiation','awarded','cancelled','completed') DEFAULT 'open'
+   - created_at, updated_at TIMESTAMPTZ
+2. `commission_bids`
+   - id UUID PK
+   - request_id FK→commission_requests.id   ON DELETE CASCADE
+   - artist_id FK→users.id
+   - proposal_text TEXT
+   - price_quote MONEY
+   - est_delivery_date DATE
+   - status ENUM('pending','accepted','rejected','withdrawn') DEFAULT 'pending'
+   - created_at, updated_at TIMESTAMPTZ
+3. Indexes: `idx_commreq_status`, `idx_commbid_request_artist`.
+
+## 2 | API (Express v1 routes, JWT-guarded)
+| Method & Path | Role | Action |
+|---------------|------|--------|
+| `POST /v1/commissions` | collector | Create request |
+| `GET /v1/commissions/mine` | collector | List own requests & bids |
+| `PATCH /v1/commissions/:id` | collector | Edit/cancel (status→cancelled) |
+| `GET /v1/commissions` | verified artist | Browse `status='open'` requests w/ filters (style, budget, deadline) |
+| `POST /v1/commissions/:id/bids` | verified artist | Submit bid |
+| `GET /v1/commission-bids/mine` | artist | View own bids |
+| `POST /v1/commissions/:id/award/:bidId` | collector | Accept bid → sets request.status='awarded', bid.status='accepted', all others 'rejected' |
+
+Controllers emit **web-socket + email** events:
+- `NEW_BID` → owner collector
+- `BID_ACCEPTED / BID_REJECTED` → artist
+Use existing SendGrid util; queue priority *normal*.
+
+## 3 | FRONTEND (React + TanStack Query)
+1. **Collector Flow**
+   * `CommissionForm` (`/commissions/new`) – controlled inputs, RTL/LTR toggle.
+   * `MyCommissionsPage` – list cards; status chips; modal to review bids & award.
+2. **Artist Flow**
+   * `CommissionsMarket` (`/commissions`) – filter sidebar, infinite scroll.
+   * `BidModal` – proposal textarea, price input, delivery date picker.
+3. **Shared**
+   * `RequestCard` component – shows dimensions (e.g. “120 × 90 cm”), style tag, budget range.
+   * Trust badge (✅ **Verified Artist Only**) banner if artist not verified → disable bid button.
+4. Navigation: add “Commissions” link under “Discover”.
+
+## 4 | GUARD-RAILS & PDPL
+* **Role checks** in middleware – only `role==='ARTIST' && kyc_status==='verified'` may POST bids.  
+* **Data minimisation** – Request list endpoint returns **only** city (if provided) & anonymised user alias until award.  
+* **Audit trail** – Log `commissions.*` mutations in existing `audit_logs` middleware.  
+* **Retention** – Re-use nightly TTL job: delete closed/expired commissions >5 y old.
+
+## 5 | TESTS
+* Jest unit tests for controller happy / sad paths.  
+* Cypress E2E: collector creates request → artist bids → collector awards → status transitions validated.
+
+## 6 | DOCS
+* `/docs/commissions.md` – feature overview, API spec, PDPL minimisation note.  
+* Update README feature matrix.
+
+# HOW TO WORK
+1. Run `npm run db:migrate --name=commissions`.  
+2. Re-generate types: `npm run typegen`.  
+3. Commit in logical chunks; ensure `npm test && npm run e2e` green.  
+4. In PR description include GIF demo + checklist.
+
+# OUTPUT
+Return **only** the git-diff summary plus contents of new files that can’t be inferred (e.g. commissions.md), wrapped in proper ```diff / ```md blocks. Also list any ENV vars to add (none expected).
+
