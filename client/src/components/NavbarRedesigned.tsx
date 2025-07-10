@@ -22,6 +22,7 @@ export function NavbarRedesigned() {
     { href: "/auctions", label: t("nav.auctions") },
     { href: "/workshops", label: t("nav.workshops") },
     { href: "/events", label: t("nav.events") },
+    { href: "/dashboard", label: t("nav.dashboard"), requireAuth: true },
   ];
 
   return (
@@ -42,20 +43,23 @@ export function NavbarRedesigned() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
-                <a
-                  className={cn(
-                    "text-sm font-bold uppercase tracking-wider transition-colors duration-200",
-                    location === item.href
-                      ? "text-orange-500"
-                      : "text-gray-300 hover:text-white"
-                  )}
-                >
-                  {item.label}
-                </a>
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              if (item.requireAuth && !user) return null;
+              return (
+                <Link key={item.href} href={item.href}>
+                  <a
+                    className={cn(
+                      "text-sm font-bold uppercase tracking-wider transition-colors duration-200",
+                      location === item.href
+                        ? "text-orange-500"
+                        : "text-gray-300 hover:text-white"
+                    )}
+                  >
+                    {item.label}
+                  </a>
+                </Link>
+              );
+            })}
           </div>
 
           {/* Right Section */}
@@ -105,21 +109,24 @@ export function NavbarRedesigned() {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="lg:hidden py-4 border-t border-zinc-800">
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
-                <a
-                  className={cn(
-                    "block py-3 text-sm font-bold uppercase tracking-wider transition-colors",
-                    location === item.href
-                      ? "text-orange-500"
-                      : "text-gray-300 hover:text-white"
-                  )}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.label}
-                </a>
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              if (item.requireAuth && !user) return null;
+              return (
+                <Link key={item.href} href={item.href}>
+                  <a
+                    className={cn(
+                      "block py-3 text-sm font-bold uppercase tracking-wider transition-colors",
+                      location === item.href
+                        ? "text-orange-500"
+                        : "text-gray-300 hover:text-white"
+                    )}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>
