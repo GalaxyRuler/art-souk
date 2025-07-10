@@ -509,3 +509,11 @@ Preferred communication style: Simple, everyday language.
   ✓ Translation system fully functional with proper fallbacks
     • Navigation displays "Login" in English and "تسجيل الدخول" in Arabic
     • All UI text properly translated across bilingual interface
+  ✓ Auth page completely redesigned with dark masculine theme
+    • Background changed from purple/white/amber to black/zinc-900/zinc-800 gradients
+    • All purple branding replaced with orange accent colors
+    • Header logo and site name updated to use orange gradients
+    • Feature cards redesigned with dark zinc backgrounds and orange icons
+    • Auth card updated with dark zinc background and orange accents
+    • Login buttons redesigned with orange gradients
+    • Trust signals and dividers updated for dark theme consistency
