@@ -740,6 +740,103 @@ export const emailNotificationLog = pgTable("email_notification_log", {
   sentAt: timestamp("sent_at").defaultNow(),
 });
 
+// Workshop/Event Scheduling Conflicts
+export const schedulingConflicts = pgTable("scheduling_conflicts", {
+  id: serial("id").primaryKey(),
+  entityType: varchar("entity_type").notNull(), // 'workshop' or 'event'
+  entityId: integer("entity_id").notNull(),
+  conflictType: varchar("conflict_type").notNull(), // 'venue', 'instructor', 'time_overlap'
+  conflictingEntityType: varchar("conflicting_entity_type").notNull(),
+  conflictingEntityId: integer("conflicting_entity_id").notNull(),
+  description: text("description"),
+  descriptionAr: text("description_ar"),
+  severity: varchar("severity").default("warning"), // 'warning', 'error'
+  resolved: boolean("resolved").default(false),
+  resolvedAt: timestamp("resolved_at"),
+  resolvedBy: varchar("resolved_by").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Workshop/Event Reminders
+export const eventReminders = pgTable("event_reminders", {
+  id: serial("id").primaryKey(),
+  entityType: varchar("entity_type").notNull(), // 'workshop' or 'event'
+  entityId: integer("entity_id").notNull(),
+  reminderType: varchar("reminder_type").notNull(), // 'registration_deadline', 'event_start', 'custom'
+  sendBefore: integer("send_before").notNull(), // minutes before event
+  recipientType: varchar("recipient_type").notNull(), // 'all_registered', 'waitlist', 'custom'
+  customRecipients: jsonb("custom_recipients").default([]), // array of user ids
+  subject: varchar("subject").notNull(),
+  subjectAr: varchar("subject_ar"),
+  message: text("message").notNull(),
+  messageAr: text("message_ar"),
+  status: varchar("status").default("scheduled"), // 'scheduled', 'sent', 'failed', 'cancelled'
+  scheduledFor: timestamp("scheduled_for").notNull(),
+  sentAt: timestamp("sent_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Calendar Integrations
+export const calendarIntegrations = pgTable("calendar_integrations", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  provider: varchar("provider").notNull(), // 'google', 'outlook', 'apple'
+  accessToken: text("access_token"),
+  refreshToken: text("refresh_token"),
+  calendarId: varchar("calendar_id"),
+  syncEnabled: boolean("sync_enabled").default(true),
+  lastSyncedAt: timestamp("last_synced_at"),
+  settings: jsonb("settings").default({}), // provider-specific settings
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  unique("unique_user_provider").on(table.userId, table.provider),
+]);
+
+// Participant Lists
+export const participantLists = pgTable("participant_lists", {
+  id: serial("id").primaryKey(),
+  entityType: varchar("entity_type").notNull(), // 'workshop' or 'event'
+  entityId: integer("entity_id").notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  registrationId: integer("registration_id"), // reference to workshop_registrations or event_rsvps
+  status: varchar("status").notNull(), // 'confirmed', 'waitlist', 'cancelled', 'attended', 'no_show'
+  checkInTime: timestamp("check_in_time"),
+  checkInMethod: varchar("check_in_method"), // 'manual', 'qr_code', 'self'
+  seatNumber: varchar("seat_number"),
+  specialRequirements: text("special_requirements"),
+  emergencyContact: jsonb("emergency_contact"), // {name, phone, relationship}
+  dietaryRestrictions: text("dietary_restrictions").array(),
+  accessibilityNeeds: text("accessibility_needs"),
+  certificateIssued: boolean("certificate_issued").default(false),
+  certificateIssuedAt: timestamp("certificate_issued_at"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  unique("unique_entity_user").on(table.entityType, table.entityId, table.userId),
+]);
+
+// Waitlist Management
+export const waitlistEntries = pgTable("waitlist_entries", {
+  id: serial("id").primaryKey(),
+  entityType: varchar("entity_type").notNull(), // 'workshop' or 'event'
+  entityId: integer("entity_id").notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  position: integer("position").notNull(),
+  priority: integer("priority").default(0), // higher number = higher priority
+  addedAt: timestamp("added_at").defaultNow(),
+  notifiedAt: timestamp("notified_at"),
+  notificationExpiresAt: timestamp("notification_expires_at"),
+  status: varchar("status").default("waiting"), // 'waiting', 'notified', 'registered', 'expired', 'cancelled'
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  unique("unique_waitlist_entry").on(table.entityType, table.entityId, table.userId),
+]);
+
 // Relations
 export const usersRelations = relations(users, ({ one, many }) => ({
   profile: one(userProfiles, { fields: [users.id], references: [userProfiles.userId] }),
@@ -1132,3 +1229,22 @@ export const insertAchievementBadgeSchema = createInsertSchema(achievementBadges
 export const insertArtistAchievementSchema = createInsertSchema(artistAchievements).omit({ id: true, earnedAt: true });
 export const insertArtistStatsSchema = createInsertSchema(artistStats).omit({ id: true, updatedAt: true });
 export const insertBadgeProgressSchema = createInsertSchema(badgeProgress).omit({ id: true, updatedAt: true });
+
+// Scheduling and Participant Management types
+export type SchedulingConflict = typeof schedulingConflicts.$inferSelect;
+export type InsertSchedulingConflict = typeof schedulingConflicts.$inferInsert;
+export type EventReminder = typeof eventReminders.$inferSelect;
+export type InsertEventReminder = typeof eventReminders.$inferInsert;
+export type CalendarIntegration = typeof calendarIntegrations.$inferSelect;
+export type InsertCalendarIntegration = typeof calendarIntegrations.$inferInsert;
+export type ParticipantList = typeof participantLists.$inferSelect;
+export type InsertParticipantList = typeof participantLists.$inferInsert;
+export type WaitlistEntry = typeof waitlistEntries.$inferSelect;
+export type InsertWaitlistEntry = typeof waitlistEntries.$inferInsert;
+
+// Scheduling and Participant Management schemas
+export const insertSchedulingConflictSchema = createInsertSchema(schedulingConflicts).omit({ id: true, createdAt: true });
+export const insertEventReminderSchema = createInsertSchema(eventReminders).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertCalendarIntegrationSchema = createInsertSchema(calendarIntegrations).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertParticipantListSchema = createInsertSchema(participantLists).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertWaitlistEntrySchema = createInsertSchema(waitlistEntries).omit({ id: true, createdAt: true, updatedAt: true });

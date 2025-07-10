@@ -2325,6 +2325,287 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Scheduling and Participant Management Routes
+  
+  // Get participant list for a workshop or event
+  app.get('/api/:entityType(workshops|events)/:entityId/participants', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { entityType, entityId } = req.params;
+      const { status } = req.query;
+      
+      // Check if user is the host
+      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
+      if (!isHost) {
+        return res.status(403).json({ message: 'Not authorized' });
+      }
+      
+      const participants = await storage.getParticipantList(
+        entityType as 'workshops' | 'events',
+        parseInt(entityId),
+        status as string
+      );
+      
+      res.json(participants);
+    } catch (error) {
+      console.error("Error fetching participants:", error);
+      res.status(500).json({ message: "Failed to fetch participants" });
+    }
+  });
+
+  // Export participants as CSV
+  app.get('/api/:entityType(workshops|events)/:entityId/participants/export', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { entityType, entityId } = req.params;
+      
+      // Check if user is the host
+      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
+      if (!isHost) {
+        return res.status(403).json({ message: 'Not authorized' });
+      }
+      
+      const participants = await storage.getParticipantList(
+        entityType as 'workshops' | 'events',
+        parseInt(entityId)
+      );
+      
+      // Convert to CSV format
+      const csv = await storage.exportParticipantsCSV(participants);
+      
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', `attachment; filename="${entityType}_${entityId}_participants.csv"`);
+      res.send(csv);
+    } catch (error) {
+      console.error("Error exporting participants:", error);
+      res.status(500).json({ message: "Failed to export participants" });
+    }
+  });
+
+  // Check in participant
+  app.post('/api/:entityType(workshops|events)/:entityId/participants/:participantId/checkin', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { entityType, entityId, participantId } = req.params;
+      const { method, seatNumber } = req.body;
+      
+      // Check if user is the host
+      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
+      if (!isHost) {
+        return res.status(403).json({ message: 'Not authorized' });
+      }
+      
+      const participant = await storage.checkInParticipant(
+        parseInt(participantId),
+        method || 'manual',
+        seatNumber
+      );
+      
+      res.json(participant);
+    } catch (error) {
+      console.error("Error checking in participant:", error);
+      res.status(500).json({ message: "Failed to check in participant" });
+    }
+  });
+
+  // Send bulk notifications to participants
+  app.post('/api/:entityType(workshops|events)/:entityId/participants/notify', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { entityType, entityId } = req.params;
+      const { subject, message, recipientFilter } = req.body;
+      
+      // Check if user is the host
+      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
+      if (!isHost) {
+        return res.status(403).json({ message: 'Not authorized' });
+      }
+      
+      const result = await storage.sendBulkNotification(
+        entityType as 'workshops' | 'events',
+        parseInt(entityId),
+        {
+          subject,
+          message,
+          recipientFilter
+        }
+      );
+      
+      res.json(result);
+    } catch (error) {
+      console.error("Error sending bulk notification:", error);
+      res.status(500).json({ message: "Failed to send notifications" });
+    }
+  });
+
+  // Get waitlist for a workshop or event
+  app.get('/api/:entityType(workshops|events)/:entityId/waitlist', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { entityType, entityId } = req.params;
+      
+      // Check if user is the host
+      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
+      if (!isHost) {
+        return res.status(403).json({ message: 'Not authorized' });
+      }
+      
+      const waitlist = await storage.getWaitlist(
+        entityType as 'workshops' | 'events',
+        parseInt(entityId)
+      );
+      
+      res.json(waitlist);
+    } catch (error) {
+      console.error("Error fetching waitlist:", error);
+      res.status(500).json({ message: "Failed to fetch waitlist" });
+    }
+  });
+
+  // Move waitlist entry to registered
+  app.post('/api/:entityType(workshops|events)/:entityId/waitlist/:waitlistId/promote', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { entityType, entityId, waitlistId } = req.params;
+      
+      // Check if user is the host
+      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
+      if (!isHost) {
+        return res.status(403).json({ message: 'Not authorized' });
+      }
+      
+      const result = await storage.promoteFromWaitlist(parseInt(waitlistId));
+      res.json(result);
+    } catch (error) {
+      console.error("Error promoting from waitlist:", error);
+      res.status(500).json({ message: "Failed to promote from waitlist" });
+    }
+  });
+
+  // Get scheduling conflicts
+  app.get('/api/:entityType(workshops|events)/:entityId/conflicts', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { entityType, entityId } = req.params;
+      
+      // Check if user is the host
+      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
+      if (!isHost) {
+        return res.status(403).json({ message: 'Not authorized' });
+      }
+      
+      const conflicts = await storage.getSchedulingConflicts(
+        entityType as 'workshops' | 'events',
+        parseInt(entityId)
+      );
+      
+      res.json(conflicts);
+    } catch (error) {
+      console.error("Error fetching conflicts:", error);
+      res.status(500).json({ message: "Failed to fetch conflicts" });
+    }
+  });
+
+  // Resolve scheduling conflict
+  app.patch('/api/conflicts/:conflictId/resolve', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { conflictId } = req.params;
+      
+      const conflict = await storage.resolveSchedulingConflict(
+        parseInt(conflictId),
+        userId
+      );
+      
+      res.json(conflict);
+    } catch (error) {
+      console.error("Error resolving conflict:", error);
+      res.status(500).json({ message: "Failed to resolve conflict" });
+    }
+  });
+
+  // Schedule reminder
+  app.post('/api/:entityType(workshops|events)/:entityId/reminders', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { entityType, entityId } = req.params;
+      const { reminderType, scheduledFor, deliveryMethod, customMessage } = req.body;
+      
+      const reminder = await storage.scheduleReminder({
+        entityType: entityType as 'workshops' | 'events',
+        entityId: parseInt(entityId),
+        userId,
+        reminderType,
+        scheduledFor: new Date(scheduledFor),
+        deliveryMethod,
+        customMessage
+      });
+      
+      res.json(reminder);
+    } catch (error) {
+      console.error("Error scheduling reminder:", error);
+      res.status(500).json({ message: "Failed to schedule reminder" });
+    }
+  });
+
+  // Get user's reminders
+  app.get('/api/user/reminders', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const reminders = await storage.getUserReminders(userId);
+      res.json(reminders);
+    } catch (error) {
+      console.error("Error fetching reminders:", error);
+      res.status(500).json({ message: "Failed to fetch reminders" });
+    }
+  });
+
+  // Calendar integration routes
+  app.post('/api/calendar/connect', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { provider, accessToken, refreshToken, calendarId, settings } = req.body;
+      
+      const integration = await storage.createCalendarIntegration({
+        userId,
+        provider,
+        accessToken,
+        refreshToken,
+        calendarId,
+        settings
+      });
+      
+      res.json(integration);
+    } catch (error) {
+      console.error("Error connecting calendar:", error);
+      res.status(500).json({ message: "Failed to connect calendar" });
+    }
+  });
+
+  app.get('/api/calendar/integrations', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const integrations = await storage.getUserCalendarIntegrations(userId);
+      res.json(integrations);
+    } catch (error) {
+      console.error("Error fetching calendar integrations:", error);
+      res.status(500).json({ message: "Failed to fetch integrations" });
+    }
+  });
+
+  app.delete('/api/calendar/integrations/:integrationId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { integrationId } = req.params;
+      
+      await storage.deleteCalendarIntegration(userId, parseInt(integrationId));
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting calendar integration:", error);
+      res.status(500).json({ message: "Failed to delete integration" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

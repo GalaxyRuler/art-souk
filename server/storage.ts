@@ -113,6 +113,21 @@ import {
   badgeProgress,
   type BadgeProgress,
   type InsertBadgeProgress,
+  schedulingConflicts,
+  type SchedulingConflict,
+  type InsertSchedulingConflict,
+  eventReminders,
+  type EventReminder,
+  type InsertEventReminder,
+  calendarIntegrations,
+  type CalendarIntegration,
+  type InsertCalendarIntegration,
+  participantLists,
+  type ParticipantList,
+  type InsertParticipantList,
+  waitlistEntries,
+  type WaitlistEntry,
+  type InsertWaitlistEntry,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
@@ -326,6 +341,43 @@ export interface IStorage {
   deleteEmailTemplate(id: number): Promise<void>;
   getEmailNotificationQueue(status?: string, limit?: number): Promise<EmailNotificationQueue[]>;
   getEmailNotificationLog(recipientEmail?: string, limit?: number): Promise<EmailNotificationLog[]>;
+  
+  // Scheduling Features
+  checkSchedulingConflicts(entityType: string, entityId: number, startDate: Date, endDate: Date): Promise<SchedulingConflict[]>;
+  createSchedulingConflict(conflict: InsertSchedulingConflict): Promise<SchedulingConflict>;
+  resolveSchedulingConflict(id: number, resolvedBy: string): Promise<void>;
+  getUnresolvedConflicts(entityType?: string): Promise<SchedulingConflict[]>;
+  
+  // Event Reminders
+  createEventReminder(reminder: InsertEventReminder): Promise<EventReminder>;
+  updateEventReminder(id: number, reminder: Partial<InsertEventReminder>): Promise<EventReminder>;
+  deleteEventReminder(id: number): Promise<void>;
+  getEventReminders(entityType: string, entityId: number): Promise<EventReminder[]>;
+  getUpcomingReminders(limit?: number): Promise<EventReminder[]>;
+  markReminderSent(id: number): Promise<void>;
+  
+  // Calendar Integration
+  getCalendarIntegration(userId: string, provider: string): Promise<CalendarIntegration | undefined>;
+  createCalendarIntegration(integration: InsertCalendarIntegration): Promise<CalendarIntegration>;
+  updateCalendarIntegration(id: number, integration: Partial<InsertCalendarIntegration>): Promise<CalendarIntegration>;
+  deleteCalendarIntegration(userId: string, provider: string): Promise<void>;
+  getUserCalendarIntegrations(userId: string): Promise<CalendarIntegration[]>;
+  
+  // Participant Management
+  getParticipantList(entityType: string, entityId: number): Promise<ParticipantList[]>;
+  addParticipant(participant: InsertParticipantList): Promise<ParticipantList>;
+  updateParticipant(id: number, participant: Partial<InsertParticipantList>): Promise<ParticipantList>;
+  checkInParticipant(id: number, method: string): Promise<void>;
+  getParticipantDetails(entityType: string, entityId: number, userId: string): Promise<ParticipantList | undefined>;
+  exportParticipantList(entityType: string, entityId: number): Promise<ParticipantList[]>;
+  
+  // Waitlist Management
+  addToWaitlist(entry: InsertWaitlistEntry): Promise<WaitlistEntry>;
+  updateWaitlistEntry(id: number, entry: Partial<InsertWaitlistEntry>): Promise<WaitlistEntry>;
+  getWaitlist(entityType: string, entityId: number): Promise<WaitlistEntry[]>;
+  promoteFromWaitlist(id: number): Promise<void>;
+  getWaitlistPosition(entityType: string, entityId: number, userId: string): Promise<number | null>;
+  removeFromWaitlist(entityType: string, entityId: number, userId: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -2160,6 +2212,273 @@ export class DatabaseStorage implements IStorage {
         });
       }
     }
+  }
+
+  // Scheduling Features
+  async checkSchedulingConflicts(entityType: string, entityId: number, startDate: Date, endDate: Date): Promise<SchedulingConflict[]> {
+    return await db.select()
+      .from(schedulingConflicts)
+      .where(and(
+        eq(schedulingConflicts.entityType, entityType),
+        eq(schedulingConflicts.entityId, entityId),
+        eq(schedulingConflicts.resolved, false)
+      ));
+  }
+
+  async createSchedulingConflict(conflict: InsertSchedulingConflict): Promise<SchedulingConflict> {
+    const [newConflict] = await db.insert(schedulingConflicts)
+      .values(conflict)
+      .returning();
+    return newConflict;
+  }
+
+  async resolveSchedulingConflict(id: number, resolvedBy: string): Promise<void> {
+    await db.update(schedulingConflicts)
+      .set({ 
+        resolved: true, 
+        resolvedAt: new Date(),
+        resolvedBy 
+      })
+      .where(eq(schedulingConflicts.id, id));
+  }
+
+  async getUnresolvedConflicts(entityType?: string): Promise<SchedulingConflict[]> {
+    if (entityType) {
+      return await db.select()
+        .from(schedulingConflicts)
+        .where(and(
+          eq(schedulingConflicts.resolved, false),
+          eq(schedulingConflicts.entityType, entityType)
+        ))
+        .orderBy(desc(schedulingConflicts.createdAt));
+    }
+    
+    return await db.select()
+      .from(schedulingConflicts)
+      .where(eq(schedulingConflicts.resolved, false))
+      .orderBy(desc(schedulingConflicts.createdAt));
+  }
+
+  // Event Reminders
+  async createEventReminder(reminder: InsertEventReminder): Promise<EventReminder> {
+    const [newReminder] = await db.insert(eventReminders)
+      .values(reminder)
+      .returning();
+    return newReminder;
+  }
+
+  async updateEventReminder(id: number, reminder: Partial<InsertEventReminder>): Promise<EventReminder> {
+    const [updated] = await db.update(eventReminders)
+      .set({ ...reminder, updatedAt: new Date() })
+      .where(eq(eventReminders.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteEventReminder(id: number): Promise<void> {
+    await db.delete(eventReminders).where(eq(eventReminders.id, id));
+  }
+
+  async getEventReminders(entityType: string, entityId: number): Promise<EventReminder[]> {
+    return await db.select()
+      .from(eventReminders)
+      .where(and(
+        eq(eventReminders.entityType, entityType),
+        eq(eventReminders.entityId, entityId)
+      ))
+      .orderBy(asc(eventReminders.scheduledFor));
+  }
+
+  async getUpcomingReminders(limit = 50): Promise<EventReminder[]> {
+    return await db.select()
+      .from(eventReminders)
+      .where(and(
+        eq(eventReminders.status, 'scheduled'),
+        lte(eventReminders.scheduledFor, new Date())
+      ))
+      .orderBy(asc(eventReminders.scheduledFor))
+      .limit(limit);
+  }
+
+  async markReminderSent(id: number): Promise<void> {
+    await db.update(eventReminders)
+      .set({ 
+        status: 'sent',
+        sentAt: new Date(),
+        updatedAt: new Date()
+      })
+      .where(eq(eventReminders.id, id));
+  }
+
+  // Calendar Integration
+  async getCalendarIntegration(userId: string, provider: string): Promise<CalendarIntegration | undefined> {
+    const [integration] = await db.select()
+      .from(calendarIntegrations)
+      .where(and(
+        eq(calendarIntegrations.userId, userId),
+        eq(calendarIntegrations.provider, provider)
+      ));
+    return integration;
+  }
+
+  async createCalendarIntegration(integration: InsertCalendarIntegration): Promise<CalendarIntegration> {
+    const [newIntegration] = await db.insert(calendarIntegrations)
+      .values(integration)
+      .returning();
+    return newIntegration;
+  }
+
+  async updateCalendarIntegration(id: number, integration: Partial<InsertCalendarIntegration>): Promise<CalendarIntegration> {
+    const [updated] = await db.update(calendarIntegrations)
+      .set({ ...integration, updatedAt: new Date() })
+      .where(eq(calendarIntegrations.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteCalendarIntegration(userId: string, provider: string): Promise<void> {
+    await db.delete(calendarIntegrations)
+      .where(and(
+        eq(calendarIntegrations.userId, userId),
+        eq(calendarIntegrations.provider, provider)
+      ));
+  }
+
+  async getUserCalendarIntegrations(userId: string): Promise<CalendarIntegration[]> {
+    return await db.select()
+      .from(calendarIntegrations)
+      .where(eq(calendarIntegrations.userId, userId));
+  }
+
+  // Participant Management
+  async getParticipantList(entityType: string, entityId: number): Promise<ParticipantList[]> {
+    return await db.select()
+      .from(participantLists)
+      .where(and(
+        eq(participantLists.entityType, entityType),
+        eq(participantLists.entityId, entityId)
+      ))
+      .orderBy(asc(participantLists.createdAt));
+  }
+
+  async addParticipant(participant: InsertParticipantList): Promise<ParticipantList> {
+    const [newParticipant] = await db.insert(participantLists)
+      .values(participant)
+      .returning();
+    return newParticipant;
+  }
+
+  async updateParticipant(id: number, participant: Partial<InsertParticipantList>): Promise<ParticipantList> {
+    const [updated] = await db.update(participantLists)
+      .set({ ...participant, updatedAt: new Date() })
+      .where(eq(participantLists.id, id))
+      .returning();
+    return updated;
+  }
+
+  async checkInParticipant(id: number, method: string): Promise<void> {
+    await db.update(participantLists)
+      .set({ 
+        status: 'attended',
+        checkInTime: new Date(),
+        checkInMethod: method,
+        updatedAt: new Date()
+      })
+      .where(eq(participantLists.id, id));
+  }
+
+  async getParticipantDetails(entityType: string, entityId: number, userId: string): Promise<ParticipantList | undefined> {
+    const [participant] = await db.select()
+      .from(participantLists)
+      .where(and(
+        eq(participantLists.entityType, entityType),
+        eq(participantLists.entityId, entityId),
+        eq(participantLists.userId, userId)
+      ));
+    return participant;
+  }
+
+  async exportParticipantList(entityType: string, entityId: number): Promise<ParticipantList[]> {
+    return await db.select()
+      .from(participantLists)
+      .where(and(
+        eq(participantLists.entityType, entityType),
+        eq(participantLists.entityId, entityId)
+      ))
+      .orderBy(asc(participantLists.createdAt));
+  }
+
+  // Waitlist Management
+  async addToWaitlist(entry: InsertWaitlistEntry): Promise<WaitlistEntry> {
+    // Get the next position in the waitlist
+    const [maxPosition] = await db.select({ max: sql`COALESCE(MAX(${waitlistEntries.position}), 0)` })
+      .from(waitlistEntries)
+      .where(and(
+        eq(waitlistEntries.entityType, entry.entityType),
+        eq(waitlistEntries.entityId, entry.entityId)
+      ));
+    
+    const nextPosition = (maxPosition?.max as number || 0) + 1;
+    
+    const [newEntry] = await db.insert(waitlistEntries)
+      .values({ ...entry, position: nextPosition })
+      .returning();
+    return newEntry;
+  }
+
+  async updateWaitlistEntry(id: number, entry: Partial<InsertWaitlistEntry>): Promise<WaitlistEntry> {
+    const [updated] = await db.update(waitlistEntries)
+      .set({ ...entry, updatedAt: new Date() })
+      .where(eq(waitlistEntries.id, id))
+      .returning();
+    return updated;
+  }
+
+  async getWaitlist(entityType: string, entityId: number): Promise<WaitlistEntry[]> {
+    return await db.select()
+      .from(waitlistEntries)
+      .where(and(
+        eq(waitlistEntries.entityType, entityType),
+        eq(waitlistEntries.entityId, entityId),
+        eq(waitlistEntries.status, 'waiting')
+      ))
+      .orderBy(asc(waitlistEntries.position));
+  }
+
+  async promoteFromWaitlist(id: number): Promise<void> {
+    await db.update(waitlistEntries)
+      .set({ 
+        status: 'registered',
+        notifiedAt: new Date(),
+        updatedAt: new Date()
+      })
+      .where(eq(waitlistEntries.id, id));
+  }
+
+  async getWaitlistPosition(entityType: string, entityId: number, userId: string): Promise<number | null> {
+    const [entry] = await db.select()
+      .from(waitlistEntries)
+      .where(and(
+        eq(waitlistEntries.entityType, entityType),
+        eq(waitlistEntries.entityId, entityId),
+        eq(waitlistEntries.userId, userId),
+        eq(waitlistEntries.status, 'waiting')
+      ));
+    
+    return entry?.position || null;
+  }
+
+  async removeFromWaitlist(entityType: string, entityId: number, userId: string): Promise<void> {
+    await db.update(waitlistEntries)
+      .set({ 
+        status: 'cancelled',
+        updatedAt: new Date()
+      })
+      .where(and(
+        eq(waitlistEntries.entityType, entityType),
+        eq(waitlistEntries.entityId, entityId),
+        eq(waitlistEntries.userId, userId)
+      ));
   }
 }
 
