@@ -4,12 +4,15 @@
     "tagline": "Saudi & GCC Art"
   },
   "nav": {
+    "home": "Home",
+    "artworks": "Artworks",
     "artists": "Artists",
     "galleries": "Galleries",
     "auctions": "Auctions",
     "workshops": "Workshops",
     "events": "Events",
     "commissions": "Commissions",
+    "dashboard": "Dashboard",
     "login": "Login",
     "logout": "Logout",
     "commissionsTitle": "Commission Requests",
