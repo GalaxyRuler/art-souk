@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArtworkCard } from "@/components/ArtworkCard";
 import { ArtistCard } from "@/components/ArtistCard";
 import { Badge } from "@/components/ui/badge";
-import { FeaturedCollections } from "@/components/FeaturedCollections";
-import { TestText } from "@/components/TestText";
+import { FeaturedCollectionsFixed } from "@/components/FeaturedCollectionsFixed";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
 import { cn, formatPrice } from "@/lib/utils";
@@ -182,11 +181,8 @@ export default function Home() {
           </section>
         )}
 
-        {/* Test Text */}
-        <TestText />
-        
         {/* Featured Collections */}
-        <FeaturedCollections />
+        <FeaturedCollectionsFixed />
 
         {/* Featured Artists */}
         <section className="py-16 bg-gray-50">

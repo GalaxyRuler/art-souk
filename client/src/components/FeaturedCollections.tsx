@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
-import "./FeaturedCollections.css";
+// Removed CSS import to avoid conflicts
 
 interface Collection {
   id: number;
@@ -116,7 +116,14 @@ export function FeaturedCollections() {
             const description = isRTL && collection.descriptionAr ? collection.descriptionAr : collection.description;
 
             return (
-              <div key={collection.id} className="featured-collection-card">
+              <div key={collection.id} style={{
+                borderRadius: '8px',
+                overflow: 'hidden',
+                backgroundColor: '#ffffff',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
+              }}>
                 <div style={{ position: 'relative' }}>
                   <img
                     src={collection.coverImage}
@@ -135,19 +142,17 @@ export function FeaturedCollections() {
                   <h3 style={{ 
                     fontSize: '20px',
                     fontWeight: '700',
-                    color: 'black !important',
+                    color: '#000000',
                     margin: '0 0 8px 0',
-                    WebkitTextFillColor: 'black !important',
-                    opacity: '1 !important'
+                    opacity: 1
                   }}>{name}</h3>
                   <p style={{ 
-                    color: 'black !important',
+                    color: '#000000',
                     fontWeight: '600',
                     fontSize: '14px',
                     lineHeight: '1.4',
                     margin: '0',
-                    WebkitTextFillColor: 'black !important',
-                    opacity: '1 !important'
+                    opacity: 1
                   }}>{description}</p>
                 </div>
               </div>
