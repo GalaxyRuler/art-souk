@@ -11,6 +11,7 @@ import {
   workshopRegistrations,
   events,
   eventRsvps,
+  workshopEventReviews,
   discussions,
   discussionReplies,
   inquiries,
@@ -40,6 +41,8 @@ import {
   type InsertEvent,
   type EventRsvp,
   type InsertEventRsvp,
+  type WorkshopEventReview,
+  type InsertWorkshopEventReview,
   type Discussion,
   type InsertDiscussion,
   type DiscussionReply,
@@ -806,56 +809,7 @@ export class DatabaseStorage implements IStorage {
     return newCollection;
   }
 
-  // Article operations
-  async getArticles(limit = 20, offset = 0): Promise<Article[]> {
-    return await db
-      .select()
-      .from(articles)
-      .where(eq(articles.published, true))
-      .orderBy(desc(articles.createdAt))
-      .limit(limit)
-      .offset(offset);
-  }
 
-  async getArticle(id: number): Promise<Article | undefined> {
-    const [article] = await db
-      .select()
-      .from(articles)
-      .where(and(eq(articles.id, id), eq(articles.published, true)));
-    return article;
-  }
-
-  async getFeaturedArticles(limit = 10): Promise<Article[]> {
-    return await db
-      .select()
-      .from(articles)
-      .where(and(eq(articles.featured, true), eq(articles.published, true)))
-      .orderBy(desc(articles.createdAt))
-      .limit(limit);
-  }
-
-  async getArticlesByCategory(category: string, limit = 10): Promise<Article[]> {
-    return await db
-      .select()
-      .from(articles)
-      .where(and(eq(articles.category, category), eq(articles.published, true)))
-      .orderBy(desc(articles.createdAt))
-      .limit(limit);
-  }
-
-  async createArticle(article: InsertArticle): Promise<Article> {
-    const [newArticle] = await db.insert(articles).values(article).returning();
-    return newArticle;
-  }
-
-  async updateArticle(id: number, article: Partial<InsertArticle>): Promise<Article> {
-    const [updatedArticle] = await db
-      .update(articles)
-      .set({ ...article, updatedAt: new Date() })
-      .where(eq(articles.id, id))
-      .returning();
-    return updatedArticle;
-  }
 
   // Inquiry operations
   async getInquiries(limit = 20, offset = 0): Promise<Inquiry[]> {
@@ -948,10 +902,7 @@ export class DatabaseStorage implements IStorage {
     return result.count;
   }
 
-  async getArticleCount(): Promise<number> {
-    const [result] = await db.select({ count: count() }).from(articles);
-    return result.count;
-  }
+
 
   async getInquiryCount(): Promise<number> {
     const [result] = await db.select({ count: count() }).from(inquiries);
@@ -1222,16 +1173,6 @@ export class DatabaseStorage implements IStorage {
       .limit(limit);
   }
 
-  async getWorkshopsByInstructor(instructorId: string, instructorType: string, limit = 20): Promise<Workshop[]> {
-    return await db.select().from(workshops)
-      .where(and(
-        eq(workshops.instructorId, instructorId),
-        eq(workshops.instructorType, instructorType)
-      ))
-      .orderBy(desc(workshops.createdAt))
-      .limit(limit);
-  }
-
   async createWorkshop(workshop: InsertWorkshop): Promise<Workshop> {
     const [newWorkshop] = await db.insert(workshops).values(workshop).returning();
     return newWorkshop;
@@ -1362,6 +1303,69 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(eventRsvps)
       .where(eq(eventRsvps.userId, userId))
       .orderBy(desc(eventRsvps.rsvpedAt));
+  }
+
+  // Workshop/Event Review operations
+  async getWorkshopEventReviews(entityType: string, entityId: number): Promise<WorkshopEventReview[]> {
+    return await db.select().from(workshopEventReviews)
+      .where(and(
+        eq(workshopEventReviews.entityType, entityType),
+        eq(workshopEventReviews.entityId, entityId)
+      ))
+      .orderBy(desc(workshopEventReviews.createdAt));
+  }
+
+  async getUserWorkshopEventReviews(userId: string): Promise<WorkshopEventReview[]> {
+    return await db.select().from(workshopEventReviews)
+      .where(eq(workshopEventReviews.userId, userId))
+      .orderBy(desc(workshopEventReviews.createdAt));
+  }
+
+  async createWorkshopEventReview(review: InsertWorkshopEventReview): Promise<WorkshopEventReview> {
+    const [newReview] = await db.insert(workshopEventReviews).values(review).returning();
+    
+    // Create activity for review
+    await this.createActivity({
+      userId: review.userId,
+      type: "review",
+      entityType: review.entityType,
+      entityId: review.entityId,
+      metadata: { rating: review.rating }
+    });
+    
+    return newReview;
+  }
+
+  async updateWorkshopEventReview(id: number, review: Partial<InsertWorkshopEventReview>): Promise<WorkshopEventReview> {
+    const [updated] = await db
+      .update(workshopEventReviews)
+      .set({ ...review, updatedAt: new Date() })
+      .where(eq(workshopEventReviews.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteWorkshopEventReview(id: number): Promise<boolean> {
+    const result = await db.delete(workshopEventReviews).where(eq(workshopEventReviews.id, id));
+    return result.rowCount !== null && result.rowCount > 0;
+  }
+
+  async getAverageRating(entityType: string, entityId: number): Promise<{ avgRating: number; reviewCount: number }> {
+    const [result] = await db
+      .select({
+        avgRating: sql<number>`AVG(${workshopEventReviews.rating})`,
+        reviewCount: count()
+      })
+      .from(workshopEventReviews)
+      .where(and(
+        eq(workshopEventReviews.entityType, entityType),
+        eq(workshopEventReviews.entityId, entityId)
+      ));
+    
+    return {
+      avgRating: result.avgRating || 0,
+      reviewCount: result.reviewCount
+    };
   }
 
   // Discussion operations

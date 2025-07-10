@@ -272,6 +272,15 @@ export const workshops = pgTable("workshops", {
   registrationDeadline: timestamp("registration_deadline"),
   status: varchar("status").default("draft"), // 'draft', 'published', 'cancelled', 'completed'
   featured: boolean("featured").default(false),
+  // Scheduling features
+  isRecurring: boolean("is_recurring").default(false),
+  recurrencePattern: varchar("recurrence_pattern"), // 'daily', 'weekly', 'monthly'
+  recurrenceInterval: integer("recurrence_interval"), // e.g., every 2 weeks
+  recurrenceEndDate: timestamp("recurrence_end_date"),
+  timezone: varchar("timezone").default("Asia/Riyadh"),
+  // Review metrics
+  averageRating: decimal("average_rating", { precision: 3, scale: 2 }),
+  totalReviews: integer("total_reviews").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -284,7 +293,10 @@ export const workshopRegistrations = pgTable("workshop_registrations", {
   registeredAt: timestamp("registered_at").defaultNow(),
   status: varchar("status").default("confirmed"), // 'confirmed', 'waitlist', 'cancelled'
   paymentStatus: varchar("payment_status").default("pending"), // 'pending', 'paid', 'refunded'
+  attended: boolean("attended").default(false),
   notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Social events
@@ -315,6 +327,15 @@ export const events = pgTable("events", {
   tagsAr: text("tags_ar").array(),
   status: varchar("status").default("draft"), // 'draft', 'published', 'cancelled', 'completed'
   featured: boolean("featured").default(false),
+  // Scheduling features
+  isRecurring: boolean("is_recurring").default(false),
+  recurrencePattern: varchar("recurrence_pattern"), // 'daily', 'weekly', 'monthly'
+  recurrenceInterval: integer("recurrence_interval"), // e.g., every 2 weeks
+  recurrenceEndDate: timestamp("recurrence_end_date"),
+  timezone: varchar("timezone").default("Asia/Riyadh"),
+  // Review metrics
+  averageRating: decimal("average_rating", { precision: 3, scale: 2 }),
+  totalReviews: integer("total_reviews").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -327,6 +348,29 @@ export const eventRsvps = pgTable("event_rsvps", {
   status: varchar("status").default("attending"), // 'attending', 'maybe', 'not_attending'
   rsvpedAt: timestamp("rsvped_at").defaultNow(),
   notes: text("notes"),
+  attended: boolean("attended").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Workshop and Event Reviews
+export const workshopEventReviews = pgTable("workshop_event_reviews", {
+  id: serial("id").primaryKey(),
+  entityType: varchar("entity_type").notNull(), // 'workshop' or 'event'
+  entityId: integer("entity_id").notNull(),
+  userId: varchar("user_id").references(() => users.id),
+  rating: integer("rating").notNull(), // 1-5 stars
+  title: varchar("title"),
+  titleAr: varchar("title_ar"),
+  content: text("content").notNull(),
+  contentAr: text("content_ar"),
+  instructorResponse: text("instructor_response"),
+  instructorResponseAr: text("instructor_response_ar"),
+  isVerified: boolean("is_verified").default(false), // Verified attendee
+  isFeatured: boolean("is_featured").default(false), // Featured testimonial
+  helpfulCount: integer("helpful_count").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Community discussions
@@ -788,6 +832,10 @@ export const eventRsvpsRelations = relations(eventRsvps, ({ one }) => ({
   user: one(users, { fields: [eventRsvps.userId], references: [users.id] }),
 }));
 
+export const workshopEventReviewsRelations = relations(workshopEventReviews, ({ one }) => ({
+  user: one(users, { fields: [workshopEventReviews.userId], references: [users.id] }),
+}));
+
 export const discussionsRelations = relations(discussions, ({ one, many }) => ({
   author: one(users, { fields: [discussions.authorId], references: [users.id] }),
   replies: many(discussionReplies),
@@ -963,29 +1011,15 @@ export type InsertEvent = typeof events.$inferInsert;
 export type EventRsvp = typeof eventRsvps.$inferSelect;
 export type InsertEventRsvp = typeof eventRsvps.$inferInsert;
 
+// Review types
+export type WorkshopEventReview = typeof workshopEventReviews.$inferSelect;
+export type InsertWorkshopEventReview = typeof workshopEventReviews.$inferInsert;
+
 // Discussion types
 export type Discussion = typeof discussions.$inferSelect;
 export type InsertDiscussion = typeof discussions.$inferInsert;
 
 // Discussion reply types
-export type DiscussionReply = typeof discussionReplies.$inferSelect;
-export type InsertDiscussionReply = typeof discussionReplies.$inferInsert;
-
-// Workshop types
-export type Workshop = typeof workshops.$inferSelect;
-export type InsertWorkshop = typeof workshops.$inferInsert;
-export type WorkshopRegistration = typeof workshopRegistrations.$inferSelect;
-export type InsertWorkshopRegistration = typeof workshopRegistrations.$inferInsert;
-
-// Event types
-export type Event = typeof events.$inferSelect;
-export type InsertEvent = typeof events.$inferInsert;
-export type EventRsvp = typeof eventRsvps.$inferSelect;
-export type InsertEventRsvp = typeof eventRsvps.$inferInsert;
-
-// Community types
-export type Discussion = typeof discussions.$inferSelect;
-export type InsertDiscussion = typeof discussions.$inferInsert;
 export type DiscussionReply = typeof discussionReplies.$inferSelect;
 export type InsertDiscussionReply = typeof discussionReplies.$inferInsert;
 
@@ -1065,7 +1099,8 @@ export const insertCollectionSchema = createInsertSchema(collections).omit({ id:
 export const insertWorkshopSchema = createInsertSchema(workshops).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertWorkshopRegistrationSchema = createInsertSchema(workshopRegistrations).omit({ id: true, registeredAt: true });
 export const insertEventSchema = createInsertSchema(events).omit({ id: true, createdAt: true, updatedAt: true });
-export const insertEventRsvpSchema = createInsertSchema(eventRsvps).omit({ id: true, rsvpedAt: true });
+export const insertEventRsvpSchema = createInsertSchema(eventRsvps).omit({ id: true, rsvpedAt: true, createdAt: true, updatedAt: true });
+export const insertWorkshopEventReviewSchema = createInsertSchema(workshopEventReviews).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertDiscussionSchema = createInsertSchema(discussions).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertDiscussionReplySchema = createInsertSchema(discussionReplies).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertInquirySchema = createInsertSchema(inquiries).omit({ id: true, createdAt: true, updatedAt: true });

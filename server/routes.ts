@@ -17,6 +17,7 @@ import {
   insertWorkshopRegistrationSchema,
   insertEventSchema,
   insertEventRsvpSchema,
+  insertWorkshopEventReviewSchema,
   insertDiscussionSchema,
   insertDiscussionReplySchema,
   insertInquirySchema,
@@ -1118,6 +1119,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error fetching user events:', error);
       res.status(500).json({ message: 'Failed to fetch user events' });
+    }
+  });
+
+  // Workshop and Event Review Routes
+  app.post('/api/reviews', isAuthenticated, async (req: any, res) => {
+    try {
+      const reviewData = insertWorkshopEventReviewSchema.parse({
+        ...req.body,
+        userId: req.user.claims.sub
+      });
+      const review = await storage.createWorkshopEventReview(reviewData);
+      res.json(review);
+    } catch (error) {
+      console.error('Error creating review:', error);
+      res.status(500).json({ message: 'Failed to create review' });
+    }
+  });
+
+  app.get('/api/reviews/:entityType/:entityId', async (req, res) => {
+    try {
+      const entityType = req.params.entityType as 'workshop' | 'event';
+      const entityId = parseInt(req.params.entityId);
+      const reviews = await storage.getWorkshopEventReviews(entityType, entityId);
+      res.json(reviews);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+      res.status(500).json({ message: 'Failed to fetch reviews' });
+    }
+  });
+
+  app.put('/api/reviews/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Check if user owns the review
+      const existingReview = await storage.getWorkshopEventReview(id);
+      if (!existingReview || existingReview.userId !== userId) {
+        return res.status(403).json({ message: 'Not authorized to update this review' });
+      }
+      
+      const updates = insertWorkshopEventReviewSchema.partial().parse(req.body);
+      const review = await storage.updateWorkshopEventReview(id, updates);
+      res.json(review);
+    } catch (error) {
+      console.error('Error updating review:', error);
+      res.status(500).json({ message: 'Failed to update review' });
+    }
+  });
+
+  app.delete('/api/reviews/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Check if user owns the review
+      const existingReview = await storage.getWorkshopEventReview(id);
+      if (!existingReview || existingReview.userId !== userId) {
+        return res.status(403).json({ message: 'Not authorized to delete this review' });
+      }
+      
+      await storage.deleteWorkshopEventReview(id);
+      res.json({ message: 'Review deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting review:', error);
+      res.status(500).json({ message: 'Failed to delete review' });
+    }
+  });
+
+  app.get('/api/reviews/check/:entityType/:entityId', isAuthenticated, async (req: any, res) => {
+    try {
+      const entityType = req.params.entityType as 'workshop' | 'event';
+      const entityId = parseInt(req.params.entityId);
+      const userId = req.user.claims.sub;
+      
+      const hasReviewed = await storage.hasUserReviewed(userId, entityType, entityId);
+      res.json({ hasReviewed });
+    } catch (error) {
+      console.error('Error checking review status:', error);
+      res.status(500).json({ message: 'Failed to check review status' });
     }
   });
 
