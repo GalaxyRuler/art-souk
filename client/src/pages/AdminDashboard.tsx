@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -1323,7 +1323,7 @@ export default function AdminDashboard() {
                     <div className="space-y-2">
                       <Label>Sender Email</Label>
                       <div className="flex items-center gap-2">
-                        <Input value={process.env.SENDGRID_FROM_EMAIL || 'no-reply@soukk.art'} readOnly />
+                        <Input value="no-reply@soukk.art" readOnly />
                         <Badge variant="outline">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Verified

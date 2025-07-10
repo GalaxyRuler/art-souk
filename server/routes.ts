@@ -114,7 +114,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         totalGalleries: await storage.getGalleryCount(),
         totalArtworks: await storage.getArtworkCount(),
         totalAuctions: await storage.getAuctionCount(),
-        totalArticles: await storage.getArticleCount(),
+        totalArticles: 0, // Articles feature removed
         totalInquiries: await storage.getInquiryCount(),
         totalFavorites: await storage.getFavoriteCount(),
         recentUsers: 0,
