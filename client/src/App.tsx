@@ -9,6 +9,8 @@ import { i18n } from "@/lib/i18n";
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/Landing";
 import Home from "@/pages/Home";
+import SoukkHome from "@/pages/SoukkHome";
+import BrandGuide from "@/pages/BrandGuide";
 import Artists from "@/pages/Artists";
 import Galleries from "@/pages/Galleries";
 import Auctions from "@/pages/Auctions";
@@ -90,6 +92,8 @@ function Router() {
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/auth/test" component={AuthTest} />
       <Route path="/email/test" component={EmailTest} />
+      <Route path="/soukk" component={SoukkHome} />
+      <Route path="/brand-guide" component={BrandGuide} />
       <Route component={NotFound} />
     </Switch>
   );
