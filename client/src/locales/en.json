@@ -10,6 +10,8 @@
     "workshops": "Workshops",
     "events": "Events",
     "commissions": "Commissions",
+    "login": "Login",
+    "logout": "Logout",
     "commissionsTitle": "Commission Requests",
     "newCommission": "New Commission",
     "postCommission": "Post Commission Request",

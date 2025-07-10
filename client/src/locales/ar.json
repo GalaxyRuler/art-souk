@@ -771,6 +771,8 @@
     "alreadyBid": "لقد قدمت عرضاً بالفعل",
     "artists": "الفنانون",
     "auctions": "المزادات",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
     "bidAccepted": "تم قبول العرض",
     "bidAmount": "مبلغ العرض",
     "bidCount": "{{count}} عرض",
