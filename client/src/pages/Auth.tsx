@@ -60,10 +60,10 @@ export default function Auth() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-amber-50 dark:from-purple-950 dark:via-background dark:to-amber-950">
+    <div className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-zinc-800">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-40">
-        <div className="h-full w-full bg-[radial-gradient(circle_at_50%_50%,rgba(147,51,234,0.1),transparent_50%)]"></div>
+      <div className="absolute inset-0 opacity-20">
+        <div className="h-full w-full bg-[radial-gradient(circle_at_50%_50%,rgba(251,146,60,0.1),transparent_50%)]"></div>
       </div>
       
       <div className="relative">
@@ -71,19 +71,19 @@ export default function Auth() {
         <header className="px-4 py-6">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <Link href="/" className="flex items-center group">
-              <div className="w-10 h-10 bg-brand-gradient rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
+              <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
                 <Palette className="h-6 w-6 text-white" />
               </div>
               <div className={cn("ml-3", isRTL && "ml-0 mr-3")}>
-                <h1 className="text-xl font-bold bg-brand-gradient bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
                   {t("common.siteName")}
                 </h1>
-                <p className="text-xs text-muted-foreground">{t("common.siteNameAr")}</p>
+                <p className="text-xs text-zinc-400">{t("common.siteNameAr")}</p>
               </div>
             </Link>
             
             <Link href="/">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="text-zinc-300 hover:text-white hover:bg-zinc-800">
                 {t("auth.backToHome")}
               </Button>
             </Link>
@@ -97,19 +97,19 @@ export default function Auth() {
             {/* Left Column - Marketing Content */}
             <div className={cn("space-y-8", isRTL && "lg:order-2")}>
               <div className="space-y-4">
-                <Badge variant="secondary" className="bg-purple-100 text-purple-700 hover:bg-purple-200">
+                <Badge variant="secondary" className="bg-orange-500/10 text-orange-400 hover:bg-orange-500/20 border-orange-500/20">
                   <Sparkles className="h-3 w-3 mr-1" />
                   {t("auth.badge")}
                 </Badge>
                 
-                <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
+                <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight tracking-wide">
                   {t("auth.welcome")}
-                  <span className="block bg-brand-gradient bg-clip-text text-transparent">
+                  <span className="block bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
                     {t("auth.artSouk")}
                   </span>
                 </h1>
                 
-                <p className="text-xl text-muted-foreground leading-relaxed">
+                <p className="text-xl text-zinc-300 leading-relaxed">
                   {t("auth.subtitle")}
                 </p>
               </div>
@@ -119,16 +119,16 @@ export default function Auth() {
                 {features.map((feature, index) => (
                   <div 
                     key={index}
-                    className="flex items-start space-x-3 p-4 rounded-lg bg-white/50 backdrop-blur-sm border border-white/20 hover:bg-white/70 transition-all duration-300"
+                    className="flex items-start space-x-3 p-4 rounded-lg bg-zinc-900/50 backdrop-blur-sm border border-zinc-800/50 hover:bg-zinc-800/70 transition-all duration-300"
                   >
                     <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <feature.icon className="h-4 w-4 text-purple-600" />
+                      <div className="w-8 h-8 bg-orange-500/10 rounded-lg flex items-center justify-center">
+                        <feature.icon className="h-4 w-4 text-orange-500" />
                       </div>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-sm text-foreground">{feature.title}</h3>
-                      <p className="text-xs text-muted-foreground">{feature.description}</p>
+                      <h3 className="font-semibold text-sm text-white">{feature.title}</h3>
+                      <p className="text-xs text-zinc-400">{feature.description}</p>
                     </div>
                   </div>
                 ))}
@@ -136,15 +136,15 @@ export default function Auth() {
 
               {/* Benefits List */}
               <div className="space-y-3">
-                <h3 className="font-semibold text-foreground flex items-center">
-                  <Heart className="h-4 w-4 mr-2 text-red-500" />
+                <h3 className="font-semibold text-white flex items-center">
+                  <Heart className="h-4 w-4 mr-2 text-orange-500" />
                   {t("auth.joinBenefits")}
                 </h3>
                 <div className="space-y-2">
                   {benefits.map((benefit, index) => (
                     <div key={index} className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                      <span className="text-sm text-muted-foreground">{benefit}</span>
+                      <CheckCircle className="h-4 w-4 text-orange-500 flex-shrink-0" />
+                      <span className="text-sm text-zinc-300">{benefit}</span>
                     </div>
                   ))}
                 </div>
@@ -153,16 +153,16 @@ export default function Auth() {
 
             {/* Right Column - Auth Card */}
             <div className={cn("flex justify-center", isRTL && "lg:order-1")}>
-              <Card className="w-full max-w-md shadow-2xl border-0 bg-white/80 backdrop-blur-lg">
+              <Card className="w-full max-w-md shadow-2xl border border-zinc-800/50 bg-zinc-900/80 backdrop-blur-lg">
                 <CardContent className="p-8 space-y-6">
                   <div className="text-center space-y-2">
-                    <div className="w-16 h-16 bg-brand-gradient rounded-2xl flex items-center justify-center mx-auto shadow-lg">
+                    <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
                       <Palette className="h-8 w-8 text-white" />
                     </div>
-                    <h2 className="text-2xl font-bold text-foreground">
+                    <h2 className="text-2xl font-bold text-white">
                       {t("auth.getStarted")}
                     </h2>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-zinc-400">
                       {t("auth.joinCommunity")}
                     </p>
                   </div>
@@ -170,7 +170,7 @@ export default function Auth() {
                   <div className="space-y-4">
                     {/* Primary CTA */}
                     <Button 
-                      className="w-full bg-brand-gradient hover:opacity-90 text-white font-medium py-6 text-base shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium py-6 text-base shadow-lg hover:shadow-xl transition-all duration-300"
                       onClick={() => window.location.href = "/api/login"}
                     >
                       <Globe className="h-5 w-5 mr-2" />
@@ -181,10 +181,10 @@ export default function Auth() {
                     {/* Or Divider */}
                     <div className="relative">
                       <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t border-gray-200" />
+                        <span className="w-full border-t border-zinc-700" />
                       </div>
                       <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-white px-2 text-muted-foreground">
+                        <span className="bg-zinc-900 px-2 text-zinc-400">
                           {t("auth.alreadyMember")}
                         </span>
                       </div>
@@ -193,7 +193,7 @@ export default function Auth() {
                     {/* Secondary CTA */}
                     <Button 
                       variant="outline" 
-                      className="w-full py-6 text-base border-2 hover:bg-purple-50 hover:border-purple-200 transition-all duration-300"
+                      className="w-full py-6 text-base border-2 border-zinc-700 hover:bg-zinc-800 hover:border-orange-500 text-zinc-300 hover:text-white transition-all duration-300"
                       onClick={() => window.location.href = "/api/login"}
                     >
                       {t("auth.signIn")}
@@ -201,13 +201,13 @@ export default function Auth() {
                   </div>
 
                   {/* Trust Signals */}
-                  <div className="text-center space-y-2 pt-4 border-t border-gray-100">
-                    <div className="flex items-center justify-center space-x-1 text-yellow-500">
+                  <div className="text-center space-y-2 pt-4 border-t border-zinc-800">
+                    <div className="flex items-center justify-center space-x-1 text-orange-500">
                       {[...Array(5)].map((_, i) => (
                         <Star key={i} className="h-3 w-3 fill-current" />
                       ))}
                     </div>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-zinc-400">
                       {t("auth.trustedBy")}
                     </p>
                   </div>
@@ -219,9 +219,9 @@ export default function Auth() {
 
         {/* Bottom Section */}
         <div className="max-w-4xl mx-auto px-4 py-8 text-center">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-zinc-400">
             {t("auth.secureLogin")} {" "}
-            <span className="font-medium text-purple-600">Replit Auth</span>
+            <span className="font-medium text-orange-500">Replit Auth</span>
           </p>
         </div>
       </div>
