@@ -208,11 +208,13 @@
     text-rendering: optimizeLegibility !important;
   }
 
-  /* Override any global transparency issues */
-  * {
-    -webkit-text-fill-color: initial !important;
-    -webkit-background-clip: initial !important;
-    background-clip: initial !important;
+  /* Override transparency issues for non-gradient text */
+  body, p:not(.text-gradient), span:not(.text-gradient), 
+  div:not(.text-gradient), h1:not(.text-gradient), 
+  h2:not(.text-gradient), h3:not(.text-gradient), 
+  h4:not(.text-gradient), h5:not(.text-gradient), 
+  h6:not(.text-gradient) {
+    -webkit-text-fill-color: currentColor;
   }
 
   /* Ensure text gradient doesn't affect regular text */

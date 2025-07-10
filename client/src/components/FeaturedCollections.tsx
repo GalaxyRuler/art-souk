@@ -134,13 +134,15 @@ export function FeaturedCollections() {
                     marginBottom: '8px',
                     margin: '0 0 8px 0'
                   }}>{name}</h3>
-                  <p style={{ 
+                  <span style={{ 
                     color: '#000000',
                     fontWeight: '600',
                     fontSize: '14px',
                     lineHeight: '1.4',
-                    margin: '0'
-                  }}>{description}</p>
+                    margin: '0',
+                    display: 'block',
+                    WebkitTextFillColor: '#000000'
+                  }}>{description}</span>
                 </div>
               </div>
             );
