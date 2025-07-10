@@ -3468,8 +3468,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: 'CSV file not found' });
       }
       
-      // Set headers for file download
-      res.setHeader('Content-Type', 'text/csv');
+      // Set headers for file download with proper UTF-8 encoding
+      res.setHeader('Content-Type', 'text/csv; charset=utf-8');
       res.setHeader('Content-Disposition', 'attachment; filename="art-souk-translations.csv"');
       
       // Send file

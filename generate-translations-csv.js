@@ -44,8 +44,8 @@ function escapeCSV(value) {
 const flatEnTranslations = flattenObject(enTranslations);
 const flatArTranslations = flattenObject(arTranslations);
 
-// Create CSV content
-let csvContent = 'Translation Key,English Text,Arabic Text\n';
+// Create CSV content with UTF-8 BOM for proper Arabic rendering
+let csvContent = '\uFEFF' + 'Translation Key,English Text,Arabic Text\n';
 
 // Get all unique keys from both translations
 const allKeys = new Set([...Object.keys(flatEnTranslations), ...Object.keys(flatArTranslations)]);
