@@ -208,17 +208,23 @@
     text-rendering: optimizeLegibility !important;
   }
 
-  /* Reset webkit text fill for all elements */
-  * {
-    -webkit-text-fill-color: unset;
+  /* Remove all webkit text fill color issues */
+  body * {
+    -webkit-text-fill-color: unset !important;
   }
 
-  /* Ensure text gradient doesn't affect regular text */
+  /* Ensure text gradient only affects elements with this class */
   .text-gradient {
     background: linear-gradient(135deg, hsl(217, 91%, 35%) 0%, hsl(217, 91%, 25%) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+  
+  /* Force black text for featured collections */
+  section h2, section h3, section p, section span {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
   }
 
 

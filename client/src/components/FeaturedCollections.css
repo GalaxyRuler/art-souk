@@ -10,9 +10,11 @@
 
 .featured-collection-title {
   font-size: 20px;
-  font-weight: 600;
-  color: hsl(217, 91%, 25%);
+  font-weight: 700 !important;
+  color: #000000 !important;
   margin: 0 0 8px 0;
+  -webkit-text-fill-color: #000000 !important;
+  opacity: 1 !important;
 }
 
 .featured-collection-description {
@@ -22,6 +24,6 @@
   line-height: 1.4;
   margin: 0;
   display: block;
-  -webkit-text-fill-color: unset !important;
+  -webkit-text-fill-color: #000000 !important;
   opacity: 1 !important;
 }

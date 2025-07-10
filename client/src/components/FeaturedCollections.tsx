@@ -85,7 +85,7 @@ export function FeaturedCollections() {
     <section style={{ paddingTop: '64px', paddingBottom: '64px', backgroundColor: '#ffffff' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 16px' }}>
         <div style={{ textAlign: isRTL ? 'right' : 'center', marginBottom: '48px' }}>
-          <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: 'hsl(217, 91%, 35%)', marginBottom: '16px' }}>
+          <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#1a1a1a', marginBottom: '16px' }}>
             {t("collections.featured.title")}
           </h2>
           <p style={{ 
@@ -125,8 +125,21 @@ export function FeaturedCollections() {
                   padding: '24px',
                   backgroundColor: '#ffffff'
                 }}>
-                  <h3 className="featured-collection-title">{name}</h3>
-                  <span className="featured-collection-description">{description}</span>
+                  <h3 style={{ 
+                    fontSize: '20px',
+                    fontWeight: '700',
+                    color: '#000000',
+                    margin: '0 0 8px 0',
+                    WebkitTextFillColor: '#000000'
+                  }}>{name}</h3>
+                  <p style={{ 
+                    color: '#000000',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    lineHeight: '1.4',
+                    margin: '0',
+                    WebkitTextFillColor: '#000000'
+                  }}>{description}</p>
                 </div>
               </div>
             );
