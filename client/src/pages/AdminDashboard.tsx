@@ -272,6 +272,11 @@ export default function AdminDashboard() {
     enabled: activeTab === "emails",
   });
 
+  const { data: newsletterSubscribers = [], isLoading: loadingSubscribers } = useQuery<NewsletterSubscriber[]>({
+    queryKey: ["/api/admin/newsletter-subscribers"],
+    enabled: activeTab === "emails",
+  });
+
   // Role update mutation
   const updateRoleMutation = useMutation({
     mutationFn: async ({ userId, role }: { userId: string; role: string }) => {
