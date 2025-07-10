@@ -131,6 +131,7 @@ import {
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
+import { emailService } from "./emailService";
 
 export interface IStorage {
   // User operations (mandatory for Replit Auth)
@@ -367,7 +368,7 @@ export interface IStorage {
   getParticipantList(entityType: string, entityId: number): Promise<ParticipantList[]>;
   addParticipant(participant: InsertParticipantList): Promise<ParticipantList>;
   updateParticipant(id: number, participant: Partial<InsertParticipantList>): Promise<ParticipantList>;
-  checkInParticipant(id: number, method: string): Promise<void>;
+  checkInParticipant(id: number, method: string, seatNumber?: string): Promise<ParticipantList>;
   getParticipantDetails(entityType: string, entityId: number, userId: string): Promise<ParticipantList | undefined>;
   exportParticipantList(entityType: string, entityId: number): Promise<ParticipantList[]>;
   
@@ -2351,13 +2352,19 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Participant Management
-  async getParticipantList(entityType: string, entityId: number): Promise<ParticipantList[]> {
+  async getParticipantList(entityType: string, entityId: number, status?: string): Promise<ParticipantList[]> {
+    const conditions = [
+      eq(participantLists.entityType, entityType),
+      eq(participantLists.entityId, entityId)
+    ];
+
+    if (status) {
+      conditions.push(eq(participantLists.status, status));
+    }
+
     return await db.select()
       .from(participantLists)
-      .where(and(
-        eq(participantLists.entityType, entityType),
-        eq(participantLists.entityId, entityId)
-      ))
+      .where(and(...conditions))
       .orderBy(asc(participantLists.createdAt));
   }
 
@@ -2376,16 +2383,7 @@ export class DatabaseStorage implements IStorage {
     return updated;
   }
 
-  async checkInParticipant(id: number, method: string): Promise<void> {
-    await db.update(participantLists)
-      .set({ 
-        status: 'attended',
-        checkInTime: new Date(),
-        checkInMethod: method,
-        updatedAt: new Date()
-      })
-      .where(eq(participantLists.id, id));
-  }
+
 
   async getParticipantDetails(entityType: string, entityId: number, userId: string): Promise<ParticipantList | undefined> {
     const [participant] = await db.select()
@@ -2480,6 +2478,190 @@ export class DatabaseStorage implements IStorage {
         eq(waitlistEntries.userId, userId)
       ));
   }
+
+  // Helper method to check if user is host of entity
+  async isEntityHost(userId: string, entityType: 'workshops' | 'events', entityId: number): Promise<boolean> {
+    if (entityType === 'workshops') {
+      const [workshop] = await db.select()
+        .from(workshops)
+        .where(eq(workshops.id, entityId));
+      
+      if (!workshop) return false;
+      
+      // Check if user is the host (either as artist or gallery)
+      const artist = await this.getArtistByUserId(userId);
+      if (artist && workshop.instructorType === 'artist' && workshop.instructorId === artist.id.toString()) return true;
+      
+      const gallery = await this.getGalleryByUserId(userId);
+      if (gallery && workshop.instructorType === 'gallery' && workshop.instructorId === gallery.id.toString()) return true;
+      
+      return false;
+    } else {
+      const [event] = await db.select()
+        .from(events)
+        .where(eq(events.id, entityId));
+      
+      if (!event) return false;
+      
+      // Check if user is the host (either as artist or gallery)
+      const artist = await this.getArtistByUserId(userId);
+      if (artist && event.organizerType === 'artist' && event.organizerId === artist.id.toString()) return true;
+      
+      const gallery = await this.getGalleryByUserId(userId);
+      if (gallery && event.organizerType === 'gallery' && event.organizerId === gallery.id.toString()) return true;
+      
+      return false;
+    }
+  }
+
+  // Export participants as CSV
+  async exportParticipantsCSV(participants: ParticipantList[]): Promise<string> {
+    const headers = [
+      'Name',
+      'Email',
+      'Status',
+      'Check-in Time',
+      'Seat Number',
+      'Special Requirements',
+      'Emergency Contact',
+      'Dietary Restrictions',
+      'Accessibility Needs'
+    ];
+
+    const rows = await Promise.all(participants.map(async (p) => {
+      const user = await this.getUser(p.userId);
+      return [
+        `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || 'N/A',
+        user?.email || 'N/A',
+        p.status,
+        p.checkInTime ? new Date(p.checkInTime).toLocaleString() : 'Not checked in',
+        p.seatNumber || 'N/A',
+        p.specialRequirements || 'None',
+        p.emergencyContact ? JSON.stringify(p.emergencyContact) : 'N/A',
+        p.dietaryRestrictions?.join(', ') || 'None',
+        p.accessibilityNeeds || 'None'
+      ];
+    }));
+
+    // Create CSV content
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+    ].join('\n');
+
+    return csvContent;
+  }
+
+  // Send bulk notification
+  async sendBulkNotification(entityType: 'workshops' | 'events', entityId: number, notification: {
+    subject: string;
+    message: string;
+    recipientFilter?: string;
+  }): Promise<{ sent: number; failed: number }> {
+    // Get participants based on filter
+    let participants = await this.getParticipantList(entityType, entityId);
+    
+    if (notification.recipientFilter) {
+      participants = participants.filter(p => p.status === notification.recipientFilter);
+    }
+
+    let sent = 0;
+    let failed = 0;
+
+    // Queue emails for each participant
+    for (const participant of participants) {
+      try {
+        const user = await this.getUser(participant.userId);
+        if (user?.email) {
+          await emailService.queueEmail({
+            recipientEmail: user.email,
+            recipientUserId: user.id,
+            subject: notification.subject,
+            bodyHtml: `<p>${notification.message}</p>`,
+            bodyText: notification.message,
+            priority: 5
+          });
+          sent++;
+        }
+      } catch (error) {
+        failed++;
+      }
+    }
+
+    return { sent, failed };
+  }
+
+  // Schedule a reminder
+  async scheduleReminder(reminder: {
+    entityType: 'workshops' | 'events';
+    entityId: number;
+    userId: string;
+    reminderType: string;
+    scheduledFor: Date;
+    deliveryMethod: string;
+    customMessage?: string;
+  }): Promise<EventReminder> {
+    // Calculate sendBefore in minutes
+    const now = new Date();
+    const sendBefore = Math.floor((reminder.scheduledFor.getTime() - now.getTime()) / (1000 * 60));
+
+    return await this.createEventReminder({
+      entityType: reminder.entityType,
+      entityId: reminder.entityId,
+      reminderType: reminder.reminderType,
+      sendBefore,
+      recipientType: 'custom',
+      customRecipients: [reminder.userId],
+      subject: `Reminder: ${reminder.reminderType}`,
+      message: reminder.customMessage || `This is a reminder for your upcoming ${reminder.entityType} event.`,
+      scheduledFor: reminder.scheduledFor
+    });
+  }
+
+  // Get user reminders
+  async getUserReminders(userId: string): Promise<EventReminder[]> {
+    return await db.select()
+      .from(eventReminders)
+      .where(and(
+        eq(eventReminders.status, 'scheduled'),
+        sql`${eventReminders.customRecipients}::jsonb @> ${JSON.stringify([userId])}::jsonb`
+      ))
+      .orderBy(asc(eventReminders.scheduledFor));
+  }
+
+  // Check in participant with seat number
+  async checkInParticipant(id: number, method: string, seatNumber?: string): Promise<ParticipantList> {
+    const updateData: any = {
+      status: 'attended',
+      checkInTime: new Date(),
+      checkInMethod: method,
+      updatedAt: new Date()
+    };
+
+    if (seatNumber) {
+      updateData.seatNumber = seatNumber;
+    }
+
+    const [updated] = await db.update(participantLists)
+      .set(updateData)
+      .where(eq(participantLists.id, id))
+      .returning();
+    
+    return updated;
+  }
+
+  // Get scheduling conflicts for an entity
+  async getSchedulingConflicts(entityType: 'workshops' | 'events', entityId: number): Promise<SchedulingConflict[]> {
+    return await db.select()
+      .from(schedulingConflicts)
+      .where(and(
+        eq(schedulingConflicts.entityType, entityType),
+        eq(schedulingConflicts.entityId, entityId)
+      ))
+      .orderBy(desc(schedulingConflicts.createdAt));
+  }
+
+
 }
 
 export const storage = new DatabaseStorage();
