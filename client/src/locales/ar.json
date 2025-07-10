@@ -879,6 +879,12 @@
     "sellerInfo": {
       "notSeller": "أنت غير مسجل كبائع",
       "registerPrompt": "سجل كفنان أو معرض للوصول إلى ميزات البائع"
+    },
+    "quickActions": {
+      "workshops": "إدارة ورش العمل",
+      "workshopsDesc": "إنشاء وإدارة ورش العمل الخاصة بك",
+      "events": "إدارة الفعاليات",
+      "eventsDesc": "إنشاء وإدارة الفعاليات الخاصة بك"
     }
   },
   "preferences": {

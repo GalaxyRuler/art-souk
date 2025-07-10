@@ -358,6 +358,16 @@ export default function Dashboard() {
                 {(user?.role === 'artist' || user?.role === 'gallery') && (
                   <Link to="/seller">
                     <Button className="w-full mt-2 bg-brand-navy hover:bg-brand-steel">
+                      <Package className="h-4 w-4 mr-2" />
+                      {t("dashboard.sellerDashboard")}
+                    </Button>
+                  </Link>
+                )}
+                
+                {/* Seller Dashboard Link for Artists/Galleries */}
+                {(user?.role === 'artist' || user?.role === 'gallery') && (
+                  <Link to="/seller">
+                    <Button className="w-full mt-2 bg-brand-navy hover:bg-brand-steel">
                       <ShoppingBag className="h-4 w-4 mr-2" />
                       {t("dashboard.sellerDashboard")}
                     </Button>

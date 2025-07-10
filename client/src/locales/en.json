@@ -845,6 +845,12 @@
     "sellerInfo": {
       "notSeller": "You are not registered as a seller",
       "registerPrompt": "Register as an artist or gallery to access seller features"
+    },
+    "quickActions": {
+      "workshops": "Manage Workshops",
+      "workshopsDesc": "Create and manage your workshops",
+      "events": "Manage Events",
+      "eventsDesc": "Create and manage your events"
     }
   },
   "preferences": {

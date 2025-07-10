@@ -42,10 +42,13 @@ import {
   Truck,
   CheckCircle,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Calendar,
+  Users
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { Link } from "wouter";
 
 interface PaymentMethod {
   id: string;
@@ -245,6 +248,41 @@ export default function SellerDashboard() {
           <p className="text-gray-600 mt-2">
             {t("seller.dashboard.subtitle", "Manage your orders and payment methods")}
           </p>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <Link to="/manage/workshops">
+            <Card className="bg-white/70 backdrop-blur-sm border-gray-200/50 hover:shadow-lg transition-shadow cursor-pointer">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-brand-navy/10 rounded-full">
+                    <Users className="h-6 w-6 text-brand-navy" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">{t("seller.quickActions.workshops", "Manage Workshops")}</h3>
+                    <p className="text-sm text-gray-600">{t("seller.quickActions.workshopsDesc", "Create and manage your workshops")}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="/manage/events">
+            <Card className="bg-white/70 backdrop-blur-sm border-gray-200/50 hover:shadow-lg transition-shadow cursor-pointer">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-brand-navy/10 rounded-full">
+                    <Calendar className="h-6 w-6 text-brand-navy" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">{t("seller.quickActions.events", "Manage Events")}</h3>
+                    <p className="text-sm text-gray-600">{t("seller.quickActions.eventsDesc", "Create and manage your events")}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         <Tabs defaultValue="orders" className="space-y-6">

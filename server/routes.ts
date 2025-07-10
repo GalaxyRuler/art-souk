@@ -895,6 +895,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/workshops/instructor', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user || (user.role !== 'artist' && user.role !== 'gallery')) {
+        return res.status(403).json({ message: 'Not authorized as instructor' });
+      }
+      
+      const workshops = await storage.getWorkshopsByInstructor(userId, user.role);
+      res.json(workshops);
+    } catch (error) {
+      console.error('Error fetching instructor workshops:', error);
+      res.status(500).json({ message: 'Failed to fetch instructor workshops' });
+    }
+  });
+
   app.post('/api/workshops', isAuthenticated, async (req: any, res) => {
     try {
       const workshopData = insertWorkshopSchema.parse({
@@ -906,6 +923,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error creating workshop:', error);
       res.status(500).json({ message: 'Failed to create workshop' });
+    }
+  });
+
+  app.put('/api/workshops/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify the user owns this workshop
+      const workshop = await storage.getWorkshop(id);
+      if (!workshop || workshop.instructorId !== userId) {
+        return res.status(403).json({ message: 'Unauthorized' });
+      }
+      
+      const updates = insertWorkshopSchema.partial().parse(req.body);
+      const updated = await storage.updateWorkshop(id, updates);
+      res.json(updated);
+    } catch (error) {
+      console.error('Error updating workshop:', error);
+      res.status(500).json({ message: 'Failed to update workshop' });
+    }
+  });
+
+  app.delete('/api/workshops/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify the user owns this workshop
+      const workshop = await storage.getWorkshop(id);
+      if (!workshop || workshop.instructorId !== userId) {
+        return res.status(403).json({ message: 'Unauthorized' });
+      }
+      
+      await storage.deleteWorkshop(id);
+      res.json({ message: 'Workshop deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting workshop:', error);
+      res.status(500).json({ message: 'Failed to delete workshop' });
     }
   });
 
@@ -971,6 +1027,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/events/organizer', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user || (user.role !== 'artist' && user.role !== 'gallery')) {
+        return res.status(403).json({ message: 'Not authorized as organizer' });
+      }
+      
+      const events = await storage.getEventsByOrganizer(userId, user.role);
+      res.json(events);
+    } catch (error) {
+      console.error('Error fetching organizer events:', error);
+      res.status(500).json({ message: 'Failed to fetch organizer events' });
+    }
+  });
+
   app.post('/api/events', isAuthenticated, async (req: any, res) => {
     try {
       const eventData = insertEventSchema.parse({
@@ -982,6 +1055,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error creating event:', error);
       res.status(500).json({ message: 'Failed to create event' });
+    }
+  });
+
+  app.put('/api/events/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify the user owns this event
+      const event = await storage.getEvent(id);
+      if (!event || event.organizerId !== userId) {
+        return res.status(403).json({ message: 'Unauthorized' });
+      }
+      
+      const updates = insertEventSchema.partial().parse(req.body);
+      const updated = await storage.updateEvent(id, updates);
+      res.json(updated);
+    } catch (error) {
+      console.error('Error updating event:', error);
+      res.status(500).json({ message: 'Failed to update event' });
+    }
+  });
+
+  app.delete('/api/events/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify the user owns this event
+      const event = await storage.getEvent(id);
+      if (!event || event.organizerId !== userId) {
+        return res.status(403).json({ message: 'Unauthorized' });
+      }
+      
+      await storage.deleteEvent(id);
+      res.json({ message: 'Event deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      res.status(500).json({ message: 'Failed to delete event' });
     }
   });
 

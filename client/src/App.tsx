@@ -26,6 +26,8 @@ import CollectorDashboard from "@/pages/CollectorDashboard";
 import SellerDashboard from "@/pages/SellerDashboard";
 import EmailTest from "@/pages/EmailTest";
 import AchievementsPage from "@/pages/AchievementsPage";
+import ManageWorkshops from "@/pages/ManageWorkshops";
+import ManageEvents from "@/pages/ManageEvents";
 
 import Auth from "@/pages/Auth";
 import AdminSetup from "@/pages/AdminSetup";
@@ -60,6 +62,8 @@ function Router() {
           <Route path="/collector" component={CollectorDashboard} />
           <Route path="/seller" component={SellerDashboard} />
           <Route path="/achievements/:id" component={AchievementsPage} />
+          <Route path="/manage/workshops" component={ManageWorkshops} />
+          <Route path="/manage/events" component={ManageEvents} />
         </>
       )}
       {/* Public routes accessible to all users */}

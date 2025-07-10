@@ -1222,6 +1222,16 @@ export class DatabaseStorage implements IStorage {
       .limit(limit);
   }
 
+  async getWorkshopsByInstructor(instructorId: string, instructorType: string, limit = 20): Promise<Workshop[]> {
+    return await db.select().from(workshops)
+      .where(and(
+        eq(workshops.instructorId, instructorId),
+        eq(workshops.instructorType, instructorType)
+      ))
+      .orderBy(desc(workshops.createdAt))
+      .limit(limit);
+  }
+
   async createWorkshop(workshop: InsertWorkshop): Promise<Workshop> {
     const [newWorkshop] = await db.insert(workshops).values(workshop).returning();
     return newWorkshop;
