@@ -2,6 +2,7 @@ import { pgTable, serial, text, integer, decimal, timestamp, boolean, jsonb, pgE
 import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+import { users, artists } from "../schema";
 
 // Enum for commission request status
 export const commissionStatusEnum = pgEnum("commission_status", [
@@ -25,11 +26,14 @@ export const commissionRequests = pgTable("commission_requests", {
   id: serial("id").primaryKey(),
   collectorId: text("collector_id").notNull(),
   
-  // Request details
-  title: text("title").notNull(),
-  description: text("description").notNull(),
+  // Request details - bilingual
+  titleEn: text("title_en").notNull(),
+  titleAr: text("title_ar").notNull(),
+  descriptionEn: text("description_en").notNull(),
+  descriptionAr: text("description_ar").notNull(),
   
   // Artwork specifications
+  category: text("category"), // e.g., "painting", "sculpture", "digital"
   dimensions: text("dimensions"), // e.g., "120 × 90"
   medium: text("medium"), // e.g., "oil on canvas", "digital", "watercolor"
   style: text("style"), // e.g., "abstract", "realistic", "impressionist"
@@ -62,30 +66,27 @@ export const commissionRequests = pgTable("commission_requests", {
 // Artist bids on commission requests
 export const commissionBids = pgTable("commission_bids", {
   id: serial("id").primaryKey(),
-  commissionRequestId: integer("commission_request_id").notNull().references(() => commissionRequests.id),
-  artistId: integer("artist_id").notNull(),
+  commissionId: integer("commission_id").notNull().references(() => commissionRequests.id, { onDelete: "cascade" }),
+  artistId: integer("artist_id").notNull().references(() => artists.id, { onDelete: "cascade" }),
   
   // Bid details
-  proposedPrice: decimal("proposed_price", { precision: 10, scale: 2 }).notNull(),
+  bidAmount: decimal("bid_amount", { precision: 10, scale: 2 }).notNull(),
   currency: text("currency").default("SAR"),
-  estimatedDays: integer("estimated_days").notNull(),
+  timelineDays: integer("timeline_days").notNull(),
   
-  // Proposal
-  proposalText: text("proposal_text").notNull(),
-  portfolioSamples: jsonb("portfolio_samples").$type<number[]>().default([]), // artwork IDs
-  sketchIncluded: boolean("sketch_included").default(false),
-  revisionsIncluded: integer("revisions_included").default(1),
+  // Proposal - bilingual
+  proposalEn: text("proposal_en").notNull(),
+  proposalAr: text("proposal_ar").notNull(),
   
-  // Additional terms
-  paymentTerms: text("payment_terms"), // e.g., "50% upfront, 50% on completion"
-  deliveryFormat: text("delivery_format"), // e.g., "original + high-res digital"
+  // Portfolio samples
+  portfolioSamples: text("portfolio_samples").array(), // URLs to sample works
   
   // Status
   status: bidStatusEnum("status").default("pending"),
   
   // Timestamps
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow()
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
 // Messages between collector and artist about commission
@@ -151,8 +152,12 @@ export const commissionRequestsRelations = relations(commissionRequests, ({ one,
 
 export const commissionBidsRelations = relations(commissionBids, ({ one, many }) => ({
   commissionRequest: one(commissionRequests, {
-    fields: [commissionBids.commissionRequestId],
+    fields: [commissionBids.commissionId],
     references: [commissionRequests.id]
+  }),
+  artist: one(artists, {
+    fields: [commissionBids.artistId],
+    references: [artists.id]
   }),
   messages: many(commissionMessages),
   contract: one(commissionContracts)
