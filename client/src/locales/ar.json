@@ -8,7 +8,8 @@
     "galleries": "المعارض",
     "auctions": "المزادات",
     "workshops": "ورش العمل",
-    "events": "الفعاليات"
+    "events": "الفعاليات",
+    "commissions": "الطلبات الخاصة"
   },
   "auth": {
     "signin": "تسجيل الدخول",

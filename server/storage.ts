@@ -146,6 +146,18 @@ import {
   shippingAddresses,
   type ShippingAddress,
   type InsertShippingAddress,
+  commissionRequests,
+  type CommissionRequest,
+  type InsertCommissionRequest,
+  commissionBids,
+  type CommissionBid,
+  type InsertCommissionBid,
+  commissionMessages,
+  type CommissionMessage,
+  type InsertCommissionMessage,
+  commissionContracts,
+  type CommissionContract,
+  type InsertCommissionContract,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
@@ -436,6 +448,32 @@ export interface IStorage {
   updateShippingAddress(id: number, address: Partial<InsertShippingAddress>): Promise<ShippingAddress>;
   deleteShippingAddress(id: number): Promise<void>;
   setDefaultShippingAddress(userId: string, addressId: number): Promise<void>;
+  
+  // Commission Request operations
+  getCommissionRequests(status?: string, limit?: number, offset?: number): Promise<CommissionRequest[]>;
+  getCommissionRequest(id: number): Promise<CommissionRequest | undefined>;
+  getCommissionRequestsByUser(userId: string): Promise<CommissionRequest[]>;
+  createCommissionRequest(request: InsertCommissionRequest): Promise<CommissionRequest>;
+  updateCommissionRequest(id: number, request: Partial<InsertCommissionRequest>): Promise<CommissionRequest>;
+  deleteCommissionRequest(id: number): Promise<void>;
+  
+  // Commission Bid operations
+  getCommissionBids(requestId: number): Promise<CommissionBid[]>;
+  getCommissionBid(id: number): Promise<CommissionBid | undefined>;
+  getCommissionBidsByArtist(artistId: number): Promise<CommissionBid[]>;
+  createCommissionBid(bid: InsertCommissionBid): Promise<CommissionBid>;
+  updateCommissionBid(id: number, bid: Partial<InsertCommissionBid>): Promise<CommissionBid>;
+  acceptCommissionBid(bidId: number, userId: string): Promise<CommissionBid>;
+  rejectCommissionBid(bidId: number): Promise<CommissionBid>;
+  
+  // Commission Message operations
+  getCommissionMessages(requestId: number): Promise<CommissionMessage[]>;
+  createCommissionMessage(message: InsertCommissionMessage): Promise<CommissionMessage>;
+  
+  // Commission Contract operations
+  getCommissionContract(requestId: number): Promise<CommissionContract | undefined>;
+  createCommissionContract(contract: InsertCommissionContract): Promise<CommissionContract>;
+  updateCommissionContract(id: number, contract: Partial<InsertCommissionContract>): Promise<CommissionContract>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -3091,6 +3129,262 @@ export class DatabaseStorage implements IStorage {
       entityId: addressId.toString(),
       details: {}
     });
+  }
+
+  // Commission Request operations
+  async getCommissionRequests(status?: string, limit = 20, offset = 0): Promise<CommissionRequest[]> {
+    let query = db.select().from(commissionRequests);
+    
+    if (status) {
+      query = query.where(eq(commissionRequests.status, status as any));
+    }
+    
+    return await query
+      .orderBy(desc(commissionRequests.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async getCommissionRequest(id: number): Promise<CommissionRequest | undefined> {
+    const [request] = await db.select()
+      .from(commissionRequests)
+      .where(eq(commissionRequests.id, id));
+    return request;
+  }
+
+  async getCommissionRequestsByUser(userId: string): Promise<CommissionRequest[]> {
+    return await db.select()
+      .from(commissionRequests)
+      .where(eq(commissionRequests.userId, userId))
+      .orderBy(desc(commissionRequests.createdAt));
+  }
+
+  async createCommissionRequest(request: InsertCommissionRequest): Promise<CommissionRequest> {
+    const [newRequest] = await db.insert(commissionRequests)
+      .values(request)
+      .returning();
+    
+    await this.createAuditLog({
+      userId: request.userId,
+      action: 'commission_request_created',
+      entityType: 'commission_request',
+      entityId: newRequest.id.toString(),
+      newData: newRequest
+    });
+    
+    return newRequest;
+  }
+
+  async updateCommissionRequest(id: number, request: Partial<InsertCommissionRequest>): Promise<CommissionRequest> {
+    const [updated] = await db.update(commissionRequests)
+      .set({ ...request, updatedAt: new Date() })
+      .where(eq(commissionRequests.id, id))
+      .returning();
+    
+    await this.createAuditLog({
+      userId: updated.userId,
+      action: 'commission_request_updated',
+      entityType: 'commission_request',
+      entityId: id.toString(),
+      newData: request
+    });
+    
+    return updated;
+  }
+
+  async deleteCommissionRequest(id: number): Promise<void> {
+    const [request] = await db.select()
+      .from(commissionRequests)
+      .where(eq(commissionRequests.id, id));
+    
+    if (request) {
+      await db.delete(commissionRequests)
+        .where(eq(commissionRequests.id, id));
+      
+      await this.createAuditLog({
+        userId: request.userId,
+        action: 'commission_request_deleted',
+        entityType: 'commission_request',
+        entityId: id.toString(),
+        oldData: request
+      });
+    }
+  }
+
+  // Commission Bid operations
+  async getCommissionBids(requestId: number): Promise<CommissionBid[]> {
+    return await db.select()
+      .from(commissionBids)
+      .where(eq(commissionBids.requestId, requestId))
+      .orderBy(desc(commissionBids.createdAt));
+  }
+
+  async getCommissionBid(id: number): Promise<CommissionBid | undefined> {
+    const [bid] = await db.select()
+      .from(commissionBids)
+      .where(eq(commissionBids.id, id));
+    return bid;
+  }
+
+  async getCommissionBidsByArtist(artistId: number): Promise<CommissionBid[]> {
+    return await db.select()
+      .from(commissionBids)
+      .where(eq(commissionBids.artistId, artistId))
+      .orderBy(desc(commissionBids.createdAt));
+  }
+
+  async createCommissionBid(bid: InsertCommissionBid): Promise<CommissionBid> {
+    const [newBid] = await db.insert(commissionBids)
+      .values(bid)
+      .returning();
+    
+    await this.createAuditLog({
+      userId: null,
+      action: 'commission_bid_created',
+      entityType: 'commission_bid',
+      entityId: newBid.id.toString(),
+      newData: newBid
+    });
+    
+    return newBid;
+  }
+
+  async updateCommissionBid(id: number, bid: Partial<InsertCommissionBid>): Promise<CommissionBid> {
+    const [updated] = await db.update(commissionBids)
+      .set({ ...bid, updatedAt: new Date() })
+      .where(eq(commissionBids.id, id))
+      .returning();
+    
+    await this.createAuditLog({
+      userId: null,
+      action: 'commission_bid_updated',
+      entityType: 'commission_bid',
+      entityId: id.toString(),
+      newData: bid
+    });
+    
+    return updated;
+  }
+
+  async acceptCommissionBid(bidId: number, userId: string): Promise<CommissionBid> {
+    const [bid] = await db.select()
+      .from(commissionBids)
+      .where(eq(commissionBids.id, bidId));
+    
+    if (!bid) {
+      throw new Error('Bid not found');
+    }
+    
+    // Update bid status to accepted
+    const [accepted] = await db.update(commissionBids)
+      .set({ status: 'accepted', updatedAt: new Date() })
+      .where(eq(commissionBids.id, bidId))
+      .returning();
+    
+    // Update request status to in_progress
+    await db.update(commissionRequests)
+      .set({ status: 'in_progress', updatedAt: new Date() })
+      .where(eq(commissionRequests.id, bid.requestId));
+    
+    // Reject all other bids for this request
+    await db.update(commissionBids)
+      .set({ status: 'rejected', updatedAt: new Date() })
+      .where(and(
+        eq(commissionBids.requestId, bid.requestId),
+        ne(commissionBids.id, bidId)
+      ));
+    
+    await this.createAuditLog({
+      userId,
+      action: 'commission_bid_accepted',
+      entityType: 'commission_bid',
+      entityId: bidId.toString(),
+      newData: { status: 'accepted' }
+    });
+    
+    return accepted;
+  }
+
+  async rejectCommissionBid(bidId: number): Promise<CommissionBid> {
+    const [rejected] = await db.update(commissionBids)
+      .set({ status: 'rejected', updatedAt: new Date() })
+      .where(eq(commissionBids.id, bidId))
+      .returning();
+    
+    await this.createAuditLog({
+      userId: null,
+      action: 'commission_bid_rejected',
+      entityType: 'commission_bid',
+      entityId: bidId.toString(),
+      newData: { status: 'rejected' }
+    });
+    
+    return rejected;
+  }
+
+  // Commission Message operations
+  async getCommissionMessages(requestId: number): Promise<CommissionMessage[]> {
+    return await db.select()
+      .from(commissionMessages)
+      .where(eq(commissionMessages.requestId, requestId))
+      .orderBy(asc(commissionMessages.createdAt));
+  }
+
+  async createCommissionMessage(message: InsertCommissionMessage): Promise<CommissionMessage> {
+    const [newMessage] = await db.insert(commissionMessages)
+      .values(message)
+      .returning();
+    
+    await this.createAuditLog({
+      userId: message.senderId,
+      action: 'commission_message_created',
+      entityType: 'commission_message',
+      entityId: newMessage.id.toString(),
+      newData: { requestId: message.requestId }
+    });
+    
+    return newMessage;
+  }
+
+  // Commission Contract operations
+  async getCommissionContract(requestId: number): Promise<CommissionContract | undefined> {
+    const [contract] = await db.select()
+      .from(commissionContracts)
+      .where(eq(commissionContracts.requestId, requestId));
+    return contract;
+  }
+
+  async createCommissionContract(contract: InsertCommissionContract): Promise<CommissionContract> {
+    const [newContract] = await db.insert(commissionContracts)
+      .values(contract)
+      .returning();
+    
+    await this.createAuditLog({
+      userId: null,
+      action: 'commission_contract_created',
+      entityType: 'commission_contract',
+      entityId: newContract.id.toString(),
+      newData: newContract
+    });
+    
+    return newContract;
+  }
+
+  async updateCommissionContract(id: number, contract: Partial<InsertCommissionContract>): Promise<CommissionContract> {
+    const [updated] = await db.update(commissionContracts)
+      .set({ ...contract, updatedAt: new Date() })
+      .where(eq(commissionContracts.id, id))
+      .returning();
+    
+    await this.createAuditLog({
+      userId: null,
+      action: 'commission_contract_updated',
+      entityType: 'commission_contract',
+      entityId: id.toString(),
+      newData: contract
+    });
+    
+    return updated;
   }
 
 

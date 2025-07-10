@@ -1251,3 +1251,6 @@ export const insertWaitlistEntrySchema = createInsertSchema(waitlistEntries).omi
 
 // Privacy and Trust/Safety exports
 export * from './schema/privacy';
+
+// Commission system exports
+export * from './schema/commissions';

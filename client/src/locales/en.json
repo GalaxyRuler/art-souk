@@ -8,7 +8,8 @@
     "galleries": "Galleries",
     "auctions": "Auctions",
     "workshops": "Workshops",
-    "events": "Events"
+    "events": "Events",
+    "commissions": "Commissions"
   },
   "auth": {
     "signin": "Sign In",

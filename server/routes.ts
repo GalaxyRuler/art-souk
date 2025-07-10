@@ -41,7 +41,11 @@ import {
   insertReportSchema,
   insertAuctionUpdateRequestSchema,
   insertSellerKycDocSchema,
-  insertShippingAddressSchema
+  insertShippingAddressSchema,
+  insertCommissionRequestSchema,
+  insertCommissionBidSchema,
+  insertCommissionMessageSchema,
+  insertCommissionContractSchema
 } from "@shared/schema";
 import { z } from "zod";
 
@@ -3087,6 +3091,360 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error setting default address:', error);
       res.status(500).json({ message: 'Failed to set default address' });
+    }
+  });
+
+  // Commission Request Routes
+  app.get('/api/commissions', async (req, res) => {
+    try {
+      const { status, limit = '20', offset = '0' } = req.query;
+      const requests = await storage.getCommissionRequests(
+        status as string | undefined,
+        parseInt(limit as string),
+        parseInt(offset as string)
+      );
+      res.json(requests);
+    } catch (error) {
+      console.error('Error fetching commission requests:', error);
+      res.status(500).json({ message: 'Failed to fetch commission requests' });
+    }
+  });
+
+  app.get('/api/commissions/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const request = await storage.getCommissionRequest(parseInt(id));
+      
+      if (!request) {
+        return res.status(404).json({ message: 'Commission request not found' });
+      }
+      
+      res.json(request);
+    } catch (error) {
+      console.error('Error fetching commission request:', error);
+      res.status(500).json({ message: 'Failed to fetch commission request' });
+    }
+  });
+
+  app.get('/api/user/commissions', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const requests = await storage.getCommissionRequestsByUser(userId);
+      res.json(requests);
+    } catch (error) {
+      console.error('Error fetching user commission requests:', error);
+      res.status(500).json({ message: 'Failed to fetch user commission requests' });
+    }
+  });
+
+  app.post('/api/commissions', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const parsed = insertCommissionRequestSchema.parse({
+        ...req.body,
+        collectorId: userId
+      });
+      
+      const request = await storage.createCommissionRequest(parsed);
+      res.status(201).json(request);
+    } catch (error) {
+      console.error('Error creating commission request:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Invalid commission data', errors: error.errors });
+      }
+      res.status(500).json({ message: 'Failed to create commission request' });
+    }
+  });
+
+  app.patch('/api/commissions/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { id } = req.params;
+      
+      // Verify ownership
+      const request = await storage.getCommissionRequest(parseInt(id));
+      if (!request || request.collectorId !== userId) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+      
+      const updated = await storage.updateCommissionRequest(parseInt(id), req.body);
+      res.json(updated);
+    } catch (error) {
+      console.error('Error updating commission request:', error);
+      res.status(500).json({ message: 'Failed to update commission request' });
+    }
+  });
+
+  app.delete('/api/commissions/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { id } = req.params;
+      
+      // Verify ownership
+      const request = await storage.getCommissionRequest(parseInt(id));
+      if (!request || request.collectorId !== userId) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+      
+      await storage.deleteCommissionRequest(parseInt(id));
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting commission request:', error);
+      res.status(500).json({ message: 'Failed to delete commission request' });
+    }
+  });
+
+  // Commission Bid Routes
+  app.get('/api/commissions/:requestId/bids', async (req, res) => {
+    try {
+      const { requestId } = req.params;
+      const bids = await storage.getCommissionBids(parseInt(requestId));
+      res.json(bids);
+    } catch (error) {
+      console.error('Error fetching commission bids:', error);
+      res.status(500).json({ message: 'Failed to fetch commission bids' });
+    }
+  });
+
+  app.get('/api/artists/:artistId/commission-bids', async (req, res) => {
+    try {
+      const { artistId } = req.params;
+      const bids = await storage.getCommissionBidsByArtist(parseInt(artistId));
+      res.json(bids);
+    } catch (error) {
+      console.error('Error fetching artist commission bids:', error);
+      res.status(500).json({ message: 'Failed to fetch artist commission bids' });
+    }
+  });
+
+  app.post('/api/commissions/:requestId/bids', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { requestId } = req.params;
+      
+      // Get artist profile
+      const artist = await storage.getArtistByUserId(userId);
+      if (!artist) {
+        return res.status(403).json({ message: 'Only artists can bid on commissions' });
+      }
+      
+      const parsed = insertCommissionBidSchema.parse({
+        ...req.body,
+        commissionRequestId: parseInt(requestId),
+        artistId: artist.id
+      });
+      
+      const bid = await storage.createCommissionBid(parsed);
+      res.status(201).json(bid);
+    } catch (error) {
+      console.error('Error creating commission bid:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Invalid bid data', errors: error.errors });
+      }
+      res.status(500).json({ message: 'Failed to create commission bid' });
+    }
+  });
+
+  app.patch('/api/commission-bids/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { id } = req.params;
+      
+      // Get bid and verify ownership
+      const bid = await storage.getCommissionBid(parseInt(id));
+      if (!bid) {
+        return res.status(404).json({ message: 'Bid not found' });
+      }
+      
+      const artist = await storage.getArtist(bid.artistId);
+      if (!artist || artist.userId !== userId) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+      
+      const updated = await storage.updateCommissionBid(parseInt(id), req.body);
+      res.json(updated);
+    } catch (error) {
+      console.error('Error updating commission bid:', error);
+      res.status(500).json({ message: 'Failed to update commission bid' });
+    }
+  });
+
+  app.post('/api/commission-bids/:id/accept', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { id } = req.params;
+      
+      // Get bid and verify request ownership
+      const bid = await storage.getCommissionBid(parseInt(id));
+      if (!bid) {
+        return res.status(404).json({ message: 'Bid not found' });
+      }
+      
+      const request = await storage.getCommissionRequest(bid.commissionRequestId);
+      if (!request || request.collectorId !== userId) {
+        return res.status(403).json({ message: 'Only request owner can accept bids' });
+      }
+      
+      const accepted = await storage.acceptCommissionBid(parseInt(id), userId);
+      res.json(accepted);
+    } catch (error) {
+      console.error('Error accepting commission bid:', error);
+      res.status(500).json({ message: 'Failed to accept commission bid' });
+    }
+  });
+
+  app.post('/api/commission-bids/:id/reject', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { id } = req.params;
+      
+      // Get bid and verify request ownership
+      const bid = await storage.getCommissionBid(parseInt(id));
+      if (!bid) {
+        return res.status(404).json({ message: 'Bid not found' });
+      }
+      
+      const request = await storage.getCommissionRequest(bid.commissionRequestId);
+      if (!request || request.collectorId !== userId) {
+        return res.status(403).json({ message: 'Only request owner can reject bids' });
+      }
+      
+      const rejected = await storage.rejectCommissionBid(parseInt(id));
+      res.json(rejected);
+    } catch (error) {
+      console.error('Error rejecting commission bid:', error);
+      res.status(500).json({ message: 'Failed to reject commission bid' });
+    }
+  });
+
+  // Commission Message Routes
+  app.get('/api/commissions/:requestId/messages', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { requestId } = req.params;
+      
+      // Verify access - either request owner or bidding artist
+      const request = await storage.getCommissionRequest(parseInt(requestId));
+      if (!request) {
+        return res.status(404).json({ message: 'Commission request not found' });
+      }
+      
+      const artist = await storage.getArtistByUserId(userId);
+      const userBids = artist ? await storage.getCommissionBidsByArtist(artist.id) : [];
+      const hasBid = userBids.some(bid => bid.commissionRequestId === parseInt(requestId));
+      
+      if (request.collectorId !== userId && !hasBid) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+      
+      const messages = await storage.getCommissionMessages(parseInt(requestId));
+      res.json(messages);
+    } catch (error) {
+      console.error('Error fetching commission messages:', error);
+      res.status(500).json({ message: 'Failed to fetch commission messages' });
+    }
+  });
+
+  app.post('/api/commissions/:requestId/messages', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { requestId } = req.params;
+      
+      // Determine sender type
+      const request = await storage.getCommissionRequest(parseInt(requestId));
+      if (!request) {
+        return res.status(404).json({ message: 'Commission request not found' });
+      }
+      
+      let senderType = 'collector';
+      if (request.collectorId !== userId) {
+        const artist = await storage.getArtistByUserId(userId);
+        if (!artist) {
+          return res.status(403).json({ message: 'Access denied' });
+        }
+        senderType = 'artist';
+      }
+      
+      const parsed = insertCommissionMessageSchema.parse({
+        ...req.body,
+        commissionRequestId: parseInt(requestId),
+        senderId: userId,
+        senderType
+      });
+      
+      const message = await storage.createCommissionMessage(parsed);
+      res.status(201).json(message);
+    } catch (error) {
+      console.error('Error creating commission message:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Invalid message data', errors: error.errors });
+      }
+      res.status(500).json({ message: 'Failed to create commission message' });
+    }
+  });
+
+  // Commission Contract Routes
+  app.get('/api/commissions/:requestId/contract', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { requestId } = req.params;
+      
+      // Verify access
+      const request = await storage.getCommissionRequest(parseInt(requestId));
+      if (!request) {
+        return res.status(404).json({ message: 'Commission request not found' });
+      }
+      
+      const artist = await storage.getArtistByUserId(userId);
+      const isInvolved = request.collectorId === userId || 
+        (artist && request.selectedBidId && 
+         (await storage.getCommissionBid(request.selectedBidId))?.artistId === artist.id);
+      
+      if (!isInvolved) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+      
+      const contract = await storage.getCommissionContract(parseInt(requestId));
+      if (!contract) {
+        return res.status(404).json({ message: 'Contract not found' });
+      }
+      
+      res.json(contract);
+    } catch (error) {
+      console.error('Error fetching commission contract:', error);
+      res.status(500).json({ message: 'Failed to fetch commission contract' });
+    }
+  });
+
+  app.post('/api/commissions/:requestId/contract', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { requestId } = req.params;
+      
+      // Verify ownership of commission request
+      const request = await storage.getCommissionRequest(parseInt(requestId));
+      if (!request || request.collectorId !== userId) {
+        return res.status(403).json({ message: 'Only commission owner can create contract' });
+      }
+      
+      if (!request.selectedBidId) {
+        return res.status(400).json({ message: 'No bid selected for this commission' });
+      }
+      
+      const parsed = insertCommissionContractSchema.parse({
+        ...req.body,
+        commissionRequestId: parseInt(requestId),
+        bidId: request.selectedBidId
+      });
+      
+      const contract = await storage.createCommissionContract(parsed);
+      res.status(201).json(contract);
+    } catch (error) {
+      console.error('Error creating commission contract:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Invalid contract data', errors: error.errors });
+      }
+      res.status(500).json({ message: 'Failed to create commission contract' });
     }
   });
 

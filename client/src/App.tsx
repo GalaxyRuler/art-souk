@@ -28,6 +28,8 @@ import EmailTest from "@/pages/EmailTest";
 import AchievementsPage from "@/pages/AchievementsPage";
 import ManageWorkshops from "@/pages/ManageWorkshops";
 import ManageEvents from "@/pages/ManageEvents";
+import { CommissionRequests } from "@/pages/CommissionRequests";
+import { CommissionDetail } from "@/pages/CommissionDetail";
 
 import Auth from "@/pages/Auth";
 import AdminSetup from "@/pages/AdminSetup";
@@ -64,6 +66,8 @@ function Router() {
           <Route path="/achievements/:id" component={AchievementsPage} />
           <Route path="/manage/workshops" component={ManageWorkshops} />
           <Route path="/manage/events" component={ManageEvents} />
+          <Route path="/commissions" component={CommissionRequests} />
+          <Route path="/commissions/:id" component={CommissionDetail} />
         </>
       )}
       {/* Public routes accessible to all users */}

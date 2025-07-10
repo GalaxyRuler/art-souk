@@ -21,6 +21,7 @@ export function Navbar() {
     { key: "auctions", href: "/auctions" },
     { key: "workshops", href: "/workshops" },
     { key: "events", href: "/events" },
+    { key: "commissions", href: "/commissions" },
   ];
 
   return (
