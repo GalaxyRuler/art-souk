@@ -41,7 +41,7 @@ export default function Home() {
       <main>
         {/* Welcome Section */}
         <section className="relative py-16 overflow-hidden">
-          <div className="absolute inset-0 bg-mesh-gradient opacity-30" />
+          <div className="absolute inset-0 bg-mesh-gradient opacity-10" />
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className={cn("text-center space-y-6", isRTL && "text-right")}>
               <h1 className="text-4xl md:text-5xl font-bold animate-float">

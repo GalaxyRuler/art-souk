@@ -81,19 +81,18 @@ export function FeaturedCollections() {
   const displayCollections = collections.length > 0 ? collections : mockCollections;
 
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={cn("text-center mb-12", isRTL && "text-right")}>
-          <h2 className="text-3xl font-bold text-primary mb-4">
+    <section style={{ paddingTop: '64px', paddingBottom: '64px', backgroundColor: '#ffffff' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 16px' }}>
+        <div style={{ textAlign: isRTL ? 'right' : 'center', marginBottom: '48px' }}>
+          <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: 'hsl(217, 91%, 35%)', marginBottom: '16px' }}>
             {t("collections.featured.title")}
           </h2>
-          <p className="max-w-2xl mx-auto" style={{ 
+          <p style={{ 
+            maxWidth: '672px',
+            margin: '0 auto',
             color: '#000000',
             fontWeight: '500',
-            fontSize: '16px',
-            opacity: 1,
-            textShadow: 'none',
-            filter: 'none'
+            fontSize: '16px'
           }}>
             {t("collections.featured.description")}
           </p>
@@ -135,15 +134,12 @@ export function FeaturedCollections() {
                     marginBottom: '8px',
                     margin: '0 0 8px 0'
                   }}>{name}</h3>
-                  <p className="featured-collections-text" style={{ 
+                  <p style={{ 
                     color: '#000000',
                     fontWeight: '600',
                     fontSize: '14px',
                     lineHeight: '1.4',
-                    margin: '0',
-                    WebkitTextFillColor: '#000000',
-                    WebkitBackgroundClip: 'initial',
-                    backgroundClip: 'initial'
+                    margin: '0'
                   }}>{description}</p>
                 </div>
               </div>
