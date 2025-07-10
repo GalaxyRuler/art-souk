@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArtworkCard } from "@/components/ArtworkCard";
 import { ArtistCard } from "@/components/ArtistCard";
 import { Badge } from "@/components/ui/badge";
+import { FeaturedCollections } from "@/components/FeaturedCollections";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
 import { cn, formatPrice } from "@/lib/utils";
@@ -179,6 +180,9 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        {/* Featured Collections */}
+        <FeaturedCollections />
 
         {/* Featured Artists */}
         <section className="py-16 bg-gray-50">
