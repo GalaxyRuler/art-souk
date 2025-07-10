@@ -24,6 +24,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import type { CommissionRequest, CommissionBid } from "@shared/schema/commissions";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 export function CommissionDetail() {
   const { t, i18n } = useTranslation();
@@ -107,32 +109,40 @@ export function CommissionDetail() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <Skeleton className="h-8 w-64 mb-4" />
-        <Card className="p-6">
-          <Skeleton className="h-6 w-3/4 mb-4" />
-          <Skeleton className="h-4 w-full mb-2" />
-          <Skeleton className="h-4 w-full mb-2" />
-          <Skeleton className="h-4 w-2/3" />
-        </Card>
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <Skeleton className="h-8 w-64 mb-4" />
+          <Card className="p-6">
+            <Skeleton className="h-6 w-3/4 mb-4" />
+            <Skeleton className="h-4 w-full mb-2" />
+            <Skeleton className="h-4 w-full mb-2" />
+            <Skeleton className="h-4 w-2/3" />
+          </Card>
+        </div>
+        <Footer />
       </div>
     );
   }
 
   if (!request) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <Card className="p-12 text-center">
-          <h3 className="text-xl font-semibold mb-2">
-            {t("commissions.requestNotFound")}
-          </h3>
-          <Link href="/commissions">
-            <Button variant="outline" className="mt-4">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              {t("common.back")}
-            </Button>
-          </Link>
-        </Card>
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <Card className="p-12 text-center">
+            <h3 className="text-xl font-semibold mb-2">
+              {t("commissions.requestNotFound")}
+            </h3>
+            <Link href="/commissions">
+              <Button variant="outline" className="mt-4">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                {t("common.back")}
+              </Button>
+            </Link>
+          </Card>
+        </div>
+        <Footer />
       </div>
     );
   }
@@ -142,8 +152,10 @@ export function CommissionDetail() {
   const canBid = isArtist && !isOwner && request.status === "open";
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-6">
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-6">
         <Link href="/commissions">
           <Button variant="ghost" className="mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -382,7 +394,9 @@ export function CommissionDetail() {
             </Card>
           )}
         </div>
+        </div>
       </div>
+      <Footer />
     </div>
   );
 }

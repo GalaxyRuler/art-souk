@@ -10,6 +10,8 @@ import { Link } from "wouter";
 import { format } from "date-fns";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { CommissionRequest } from "@shared/schema/commissions";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 export function CommissionRequests() {
   const { t, i18n } = useTranslation();
@@ -41,7 +43,9 @@ export function CommissionRequests() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
@@ -149,6 +153,8 @@ export function CommissionRequests() {
           )}
         </Card>
       )}
+      </div>
+      <Footer />
     </div>
   );
 }
