@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Heart, MessageSquare, User, Settings, Eye, Calendar, MapPin, Phone, Mail, Edit2, Save, X, BarChart3, Package, ShoppingBag } from "lucide-react";
+import { Heart, MessageSquare, User, Settings, Eye, Calendar, MapPin, Phone, Mail, Edit2, Save, X, BarChart3, Package } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
@@ -19,8 +19,6 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { ArtworkCard } from "@/components/ArtworkCard";
 import { Link } from "wouter";
-import { NavbarRedesigned } from "@/components/NavbarRedesigned";
-import { Footer } from "@/components/Footer";
 
 interface UserProfile {
   id: string;
@@ -151,14 +149,13 @@ export default function Dashboard() {
 
   if (profileLoading) {
     return (
-      <div className="min-h-screen bg-black">
-        <NavbarRedesigned />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-28">
+      <div className="min-h-screen bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="animate-pulse space-y-8">
-            <div className="h-8 bg-zinc-800 rounded w-1/4"></div>
+            <div className="h-8 bg-muted rounded w-1/4"></div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="h-96 bg-zinc-800 rounded"></div>
-              <div className="lg:col-span-2 h-96 bg-zinc-800 rounded"></div>
+              <div className="h-96 bg-muted rounded-2xl"></div>
+              <div className="lg:col-span-2 h-96 bg-muted rounded-2xl"></div>
             </div>
           </div>
         </div>
@@ -169,16 +166,14 @@ export default function Dashboard() {
 
 
   return (
-    <div className="min-h-screen bg-black">
-      <NavbarRedesigned />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-28">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-5xl font-black text-white uppercase tracking-wider mb-2">
+          <h1 className="text-4xl font-bold text-brand-charcoal mb-2">
             {t("dashboard.title")}
           </h1>
-          <div className="w-24 h-1 bg-orange-500 mb-4"></div>
-          <p className="text-gray-400 text-lg">
+          <p className="text-muted-foreground">
             {t("dashboard.welcomeBack", { name: userProfile?.firstName || user?.claims?.first_name })}
           </p>
         </div>
@@ -186,18 +181,18 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Profile Sidebar */}
           <div className="space-y-6">
-            <Card className="bg-zinc-900 border border-zinc-800">
+            <Card className="card-elevated">
               <CardHeader className="text-center">
-                <Avatar className="w-24 h-24 mx-auto mb-4 border-2 border-orange-500">
+                <Avatar className="w-24 h-24 mx-auto mb-4">
                   <AvatarImage src={userProfile?.profileImageUrl || user?.claims?.profile_image_url} />
-                  <AvatarFallback className="text-2xl bg-zinc-800 text-white">
+                  <AvatarFallback className="text-2xl">
                     {(userProfile?.firstName?.[0] || user?.claims?.first_name?.[0] || 'U')}
                   </AvatarFallback>
                 </Avatar>
-                <CardTitle className="text-xl text-white font-bold uppercase tracking-wider">
+                <CardTitle className="text-xl text-brand-charcoal">
                   {userProfile?.firstName || user?.claims?.first_name} {userProfile?.lastName || user?.claims?.last_name}
                 </CardTitle>
-                <p className="text-gray-400 text-sm">
+                <p className="text-muted-foreground text-sm">
                   {userProfile?.email || user?.claims?.email}
                 </p>
               </CardHeader>
@@ -206,21 +201,21 @@ export default function Dashboard() {
                   <>
                     {userProfile?.phone && (
                       <div className="flex items-center gap-3">
-                        <Phone className="h-4 w-4 text-orange-500" />
-                        <span className="text-sm text-gray-300">{userProfile.phone}</span>
+                        <Phone className="h-4 w-4 text-brand-purple" />
+                        <span className="text-sm">{userProfile.phone}</span>
                       </div>
                     )}
                     
                     {userProfile?.location && (
                       <div className="flex items-center gap-3">
-                        <MapPin className="h-4 w-4 text-orange-500" />
-                        <span className="text-sm text-gray-300">{userProfile.location}</span>
+                        <MapPin className="h-4 w-4 text-brand-purple" />
+                        <span className="text-sm">{userProfile.location}</span>
                       </div>
                     )}
 
                     {userProfile?.bio && (
                       <div className="pt-2">
-                        <p className="text-sm text-gray-400 leading-relaxed">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                           {userProfile.bio}
                         </p>
                       </div>
@@ -228,7 +223,7 @@ export default function Dashboard() {
 
                     <Button 
                       variant="outline" 
-                      className="w-full border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-black font-bold uppercase tracking-wider"
+                      className="w-full border-brand-purple text-brand-purple hover:bg-brand-light-gold"
                       onClick={handleEditProfile}
                     >
                       <Edit2 className="h-4 w-4 mr-2" />
@@ -314,37 +309,37 @@ export default function Dashboard() {
             </Card>
 
             {/* Quick Stats */}
-            <Card className="bg-zinc-900 border border-zinc-800">
+            <Card className="card-elevated">
               <CardContent className="p-6">
-                <h3 className="font-bold text-white uppercase tracking-wider mb-4">{t("dashboard.quickStats.title")}</h3>
+                <h3 className="font-semibold text-brand-charcoal mb-4">{t("dashboard.quickStats.title")}</h3>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Heart className="h-4 w-4 text-orange-500" />
-                      <span className="text-sm text-gray-300">{t("dashboard.quickStats.favorites")}</span>
+                      <Heart className="h-4 w-4 text-brand-purple" />
+                      <span className="text-sm">{t("dashboard.quickStats.favorites")}</span>
                     </div>
-                    <Badge className="bg-orange-500/10 text-orange-500 border-orange-500/30">{favorites?.length || 0}</Badge>
+                    <Badge variant="secondary">{favorites?.length || 0}</Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <MessageSquare className="h-4 w-4 text-orange-500" />
-                      <span className="text-sm text-gray-300">{t("dashboard.quickStats.inquiries")}</span>
+                      <MessageSquare className="h-4 w-4 text-brand-purple" />
+                      <span className="text-sm">{t("dashboard.quickStats.inquiries")}</span>
                     </div>
-                    <Badge className="bg-orange-500/10 text-orange-500 border-orange-500/30">{inquiries?.length || 0}</Badge>
+                    <Badge variant="secondary">{inquiries?.length || 0}</Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Eye className="h-4 w-4 text-orange-500" />
-                      <span className="text-sm text-gray-300">{t("dashboard.quickStats.views")}</span>
+                      <Eye className="h-4 w-4 text-brand-purple" />
+                      <span className="text-sm">{t("dashboard.quickStats.views")}</span>
                     </div>
-                    <Badge className="bg-orange-500/10 text-orange-500 border-orange-500/30">---</Badge>
+                    <Badge variant="secondary">---</Badge>
                   </div>
                 </div>
                 
                 {/* Analytics Link for Artists/Galleries */}
                 {(user?.role === 'artist' || user?.role === 'gallery') && (
                   <Link to="/analytics">
-                    <Button className="w-full mt-4 bg-orange-500 hover:bg-orange-600 text-black font-bold uppercase tracking-wider">
+                    <Button className="w-full mt-4 bg-brand-navy hover:bg-brand-steel">
                       <BarChart3 className="h-4 w-4 mr-2" />
                       {t("dashboard.viewAnalytics")}
                     </Button>
@@ -353,7 +348,7 @@ export default function Dashboard() {
                 
                 {/* Collector Dashboard Link */}
                 <Link to="/collector">
-                  <Button className="w-full mt-4 bg-orange-500 hover:bg-orange-600 text-black font-bold uppercase tracking-wider">
+                  <Button className="w-full mt-4 bg-brand-navy hover:bg-brand-steel">
                     <Package className="h-4 w-4 mr-2" />
                     {t("dashboard.collectorDashboard")}
                   </Button>
@@ -362,7 +357,17 @@ export default function Dashboard() {
                 {/* Seller Dashboard Link for Artists/Galleries */}
                 {(user?.role === 'artist' || user?.role === 'gallery') && (
                   <Link to="/seller">
-                    <Button className="w-full mt-2 bg-orange-500 hover:bg-orange-600 text-black font-bold uppercase tracking-wider">
+                    <Button className="w-full mt-2 bg-brand-navy hover:bg-brand-steel">
+                      <Package className="h-4 w-4 mr-2" />
+                      {t("dashboard.sellerDashboard")}
+                    </Button>
+                  </Link>
+                )}
+                
+                {/* Seller Dashboard Link for Artists/Galleries */}
+                {(user?.role === 'artist' || user?.role === 'gallery') && (
+                  <Link to="/seller">
+                    <Button className="w-full mt-2 bg-brand-navy hover:bg-brand-steel">
                       <ShoppingBag className="h-4 w-4 mr-2" />
                       {t("dashboard.sellerDashboard")}
                     </Button>

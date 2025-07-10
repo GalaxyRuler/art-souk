@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { NavbarRedesigned } from "@/components/NavbarRedesigned";
+import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { HeroSection } from "@/components/HeroSection";
-import { FeaturedCollectionsRedesigned } from "@/components/FeaturedCollectionsRedesigned";
+import { FeaturedCollections } from "@/components/FeaturedCollections";
 import { CuratorsPicks } from "@/components/CuratorsPicks";
 import { EditorialSection } from "@/components/EditorialSection";
 import { AuctionSection } from "@/components/AuctionSection";
@@ -11,12 +11,13 @@ export default function Landing() {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-black">
-      <NavbarRedesigned />
-      <main className="overflow-hidden pt-20">
+    <div className="min-h-screen bg-mesh-gradient">
+      <Navbar />
+      <main className="overflow-hidden">
         <HeroSection />
-        <div className="relative bg-zinc-900">
-          <FeaturedCollectionsRedesigned />
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white pointer-events-none" />
+          <FeaturedCollections />
         </div>
         <CuratorsPicks />
         <EditorialSection />

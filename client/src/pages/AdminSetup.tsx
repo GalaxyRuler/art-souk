@@ -35,17 +35,17 @@ export default function AdminSetup() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-zinc-800 flex items-center justify-center">
-        <Card className="w-full max-w-md bg-zinc-900/80 border-zinc-800">
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle className="text-white">Admin Setup</CardTitle>
+            <CardTitle>Admin Setup</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-zinc-400">
+            <p className="text-muted-foreground">
               You need to log in first to set up an admin account.
             </p>
             <Link href="/api/login">
-              <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700">Log In</Button>
+              <Button className="w-full">Log In</Button>
             </Link>
           </CardContent>
         </Card>
@@ -54,35 +54,35 @@ export default function AdminSetup() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-zinc-800 flex items-center justify-center">
-      <Card className="w-full max-w-md bg-zinc-900/80 border-zinc-800">
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-white">Admin Setup</CardTitle>
+          <CardTitle>Admin Setup</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="text-sm text-zinc-400">
+          <div className="text-sm text-muted-foreground">
             <p>Current user: {user?.email}</p>
             <p>Role: {user?.role || 'user'}</p>
           </div>
           
           {user?.role === 'admin' ? (
             <div className="space-y-4">
-              <p className="text-orange-500 font-medium">
+              <p className="text-green-600 font-medium">
                 ✓ You are already an admin!
               </p>
               <Link href="/">
-                <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700">Go to Dashboard</Button>
+                <Button className="w-full">Go to Dashboard</Button>
               </Link>
             </div>
           ) : (
             <div className="space-y-4">
-              <p className="text-zinc-400">
+              <p className="text-muted-foreground">
                 Click the button below to become the first admin user.
               </p>
               <Button 
                 onClick={handleSetupAdmin}
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                className="w-full"
               >
                 {isLoading ? "Setting up..." : "Become Admin"}
               </Button>

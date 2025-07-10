@@ -8,23 +8,22 @@ export function Footer() {
   const { t } = useTranslation();
 
   return (
-    <footer className="bg-black border-t border-zinc-800 text-white">
-      <div className="max-w-7xl mx-auto px-4 py-16">
+    <footer className="bg-primary text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Newsletter Section */}
           <div>
-            <h2 className="text-3xl font-black mb-2 uppercase tracking-wider">{t("footer.newsletter.title")}</h2>
-            <div className="w-24 h-1 bg-orange-500 mb-6"></div>
-            <p className="text-gray-400 mb-6 text-lg">
+            <h2 className="text-3xl font-bold mb-4">{t("footer.newsletter.title")}</h2>
+            <p className="text-gray-300 mb-6">
               {t("footer.newsletter.description")}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Input
                 type="email"
                 placeholder={t("footer.newsletter.placeholder")}
-                className="flex-1 bg-zinc-900 border-zinc-700 text-white placeholder:text-gray-400"
+                className="flex-1 bg-white text-gray-900"
               />
-              <Button className="bg-orange-500 hover:bg-orange-600 text-black font-bold uppercase tracking-wider">
+              <Button variant="secondary" className="bg-accent hover:bg-accent/90">
                 {t("footer.newsletter.subscribe")}
               </Button>
             </div>
@@ -33,55 +32,55 @@ export function Footer() {
           {/* Links Section */}
           <div className="grid grid-cols-2 gap-8">
             <div>
-              <h3 className="font-bold mb-4 uppercase tracking-wider text-white">{t("footer.explore.title")}</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <h3 className="font-semibold mb-4">{t("footer.explore.title")}</h3>
+              <ul className="space-y-2 text-sm text-gray-300">
                 <li>
-                  <Link href="/artists" className="hover:text-orange-500 transition-colors uppercase font-medium">
+                  <Link href="/artists" className="hover:text-white transition-colors">
                     {t("nav.artists")}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/galleries" className="hover:text-orange-500 transition-colors uppercase font-medium">
+                  <Link href="/galleries" className="hover:text-white transition-colors">
                     {t("nav.galleries")}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/auctions" className="hover:text-orange-500 transition-colors uppercase font-medium">
+                  <Link href="/auctions" className="hover:text-white transition-colors">
                     {t("nav.auctions")}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/workshops" className="hover:text-orange-500 transition-colors uppercase font-medium">
+                  <Link href="/workshops" className="hover:text-white transition-colors">
                     {t("nav.workshops")}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/events" className="hover:text-orange-500 transition-colors uppercase font-medium">
+                  <Link href="/events" className="hover:text-white transition-colors">
                     {t("nav.events")}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/commissions" className="hover:text-orange-500 transition-colors uppercase font-medium">
+                  <Link href="/commissions" className="hover:text-white transition-colors">
                     {t("nav.commissions")}
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-bold mb-4 uppercase tracking-wider text-white">{t("footer.resources.title")}</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <h3 className="font-semibold mb-4">{t("footer.resources.title")}</h3>
+              <ul className="space-y-2 text-sm text-gray-300">
                 <li>
-                  <Link href="/guide" className="hover:text-orange-500 transition-colors uppercase font-medium">
+                  <Link href="/guide" className="hover:text-white transition-colors">
                     {t("footer.resources.guide")}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/investment" className="hover:text-orange-500 transition-colors uppercase font-medium">
+                  <Link href="/investment" className="hover:text-white transition-colors">
                     {t("footer.resources.investment")}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/support" className="hover:text-orange-500 transition-colors uppercase font-medium">
+                  <Link href="/support" className="hover:text-white transition-colors">
                     {t("footer.resources.support")}
                   </Link>
                 </li>
@@ -91,25 +90,25 @@ export function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-zinc-800 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center">
+        <div className="border-t border-gray-700 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <div className="flex items-center space-x-6 mb-4 sm:mb-0">
-            <div className="text-xl font-black uppercase tracking-wider">
-              <span className="text-orange-500">{t("common.siteName")}</span>
+            <div className="text-xl font-bold">
+              <span className="text-accent">{t("common.siteName")}</span>
             </div>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Twitter className="h-4 w-4" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Instagram className="h-4 w-4" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Facebook className="h-4 w-4" />
               </a>
             </div>
           </div>
           <p className="text-sm text-gray-400">
-            &copy; 2025 {t("common.siteName")}. All rights reserved.
+            {t("footer.copyright")}
           </p>
         </div>
       </div>
