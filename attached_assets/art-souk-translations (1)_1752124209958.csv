@@ -1,0 +1,892 @@
+﻿Translation Key,English Text,Arabic Text
+achievements.achievementPoints,Achievement Points,نقاط الإنجاز
+achievements.artistNotFound,Artist Not Found,الفنان غير موجود
+achievements.badges.completed,Completed,مكتمل
+achievements.badges.currentProgress,Current Progress,التقدم الحالي
+achievements.badges.earnedOn,Earned on,حصلت عليه في
+achievements.badges.inProgress,In Progress,قيد التقدم
+achievements.badges.level,Level,المستوى
+achievements.badges.locked,Locked,مقفل
+achievements.badges.nextLevel,Next Level,المستوى التالي
+achievements.badges.points,points,نقاط
+achievements.badges.targetProgress,Target Progress,التقدم المستهدف
+achievements.badges.unlocked,Unlocked,مفتوح
+achievements.categories.engagement,Engagement,التفاعل
+achievements.categories.expertise,Expertise,الخبرة
+achievements.categories.participation,Participation,المشاركة
+achievements.categories.sales,Sales,المبيعات
+achievements.categories.time_based,Time Based,مرتبط بالوقت
+achievements.completionRate,Completion Rate,معدل الإكمال
+achievements.earnedAchievements,Earned Achievements,الإنجازات المكتسبة
+achievements.noAchievements,No achievements earned yet,لم تحصل على أي إنجازات بعد
+achievements.profileCompleteness,Profile Completeness,اكتمال الملف الشخصي
+achievements.progress,Progress,التقدم
+achievements.rarity.common,Common,شائع
+achievements.rarity.epic,Epic,ملحمي
+achievements.rarity.legendary,Legendary,أسطوري
+achievements.rarity.rare,Rare,نادر
+achievements.rarity.uncommon,Uncommon,غير شائع
+achievements.startJourney,Start your journey to earn badges and recognition,ابدأ رحلتك لكسب الشارات والتقدير
+achievements.statistics,Statistics,الإحصائيات
+achievements.stats.averageRating,Average Rating,متوسط التقييم
+achievements.stats.totalArtworks,Total Artworks,إجمالي الأعمال الفنية
+achievements.stats.totalExhibitions,Total Exhibitions,إجمالي المعارض
+achievements.stats.totalFollowers,Total Followers,إجمالي المتابعين
+achievements.stats.totalLikes,Total Likes,إجمالي الإعجابات
+achievements.stats.totalRevenue,Total Revenue,إجمالي الإيرادات
+achievements.stats.totalReviews,Total Reviews,إجمالي المراجعات
+achievements.stats.totalSales,Total Sales,إجمالي المبيعات
+achievements.stats.totalViews,Total Views,إجمالي المشاهدات
+achievements.stats.totalWorkshops,Total Workshops,إجمالي ورش العمل
+achievements.subtitle,Track your milestones and earn badges,تتبع معالمك واكسب الشارات
+achievements.title,Achievements,الإنجازات
+achievements.viewAll,View All Achievements,عرض جميع الإنجازات
+analytics.averagePrice,Average Price,متوسط السعر
+analytics.charts.engagementRate,Engagement Rate,معدل التفاعل
+analytics.charts.priceDistribution,Price Distribution,توزيع الأسعار
+analytics.charts.salesByCategory,Sales by Category,المبيعات حسب الفئة
+analytics.charts.viewsOverTime,Views Over Time,المشاهدات بمرور الوقت
+analytics.conversionRate,Conversion Rate,معدل التحويل
+analytics.dateRange,Date Range,النطاق الزمني
+analytics.engagement,Engagement,التفاعل
+analytics.export,Export Data,تصدير البيانات
+analytics.metrics.artworkViews,Artwork Views,مشاهدات الأعمال الفنية
+analytics.metrics.inquiries,Inquiries,الاستفسارات
+analytics.metrics.likes,Likes,الإعجابات
+analytics.metrics.profileViews,Profile Views,مشاهدات الملف الشخصي
+analytics.metrics.revenue,Revenue,الإيرادات
+analytics.metrics.saves,Saves,الحفظ
+analytics.metrics.sold,Sold,مباع
+analytics.noData,No data available for this period,لا توجد بيانات متاحة لهذه الفترة
+analytics.performance,Performance,الأداء
+analytics.recentActivity,Recent Activity,النشاط الأخير
+analytics.sales,Sales,المبيعات
+analytics.subtitle,Track your performance and insights,تتبع أدائك ورؤاك
+analytics.title,Analytics Dashboard,لوحة التحليلات
+analytics.topArtworks,Top Artworks,أفضل الأعمال الفنية
+analytics.totalEngagement,Total Engagement,إجمالي التفاعل
+analytics.totalSales,Total Sales,إجمالي المبيعات
+analytics.totalViews,Total Views,إجمالي المشاهدات
+analytics.tryDifferentRange,Try selecting a different date range,حاول تحديد نطاق زمني مختلف
+analytics.views,Views,المشاهدات
+artist.about.birthYear,Born,مولود
+artist.about.details,Artist Details,تفاصيل الفنان
+artist.about.instagram,Instagram,إنستغرام
+artist.about.links,Links,الروابط
+artist.about.nationality,Nationality,الجنسية
+artist.about.noBiography,No biography available for this artist.,لا توجد سيرة ذاتية متاحة لهذا الفنان.
+artist.about.title,About the Artist,نبذة عن الفنان
+artist.about.website,Website,الموقع الإلكتروني
+artist.aboutArtist,About the Artist,نبذة عن الفنان
+artist.additionalInfo,Additional Information,معلومات إضافية
+artist.artworks,artworks,أعمال فنية
+artist.artworksCount,{{count}} artworks,{{count}} عمل فني
+artist.averagePrice,Average Price,متوسط السعر
+artist.awards,Awards,الجوائز
+artist.backToArtists,Back to Artists,العودة إلى الفنانين
+artist.born,b.,و.
+artist.browseArtists,Browse Artists,تصفح الفنانين
+artist.categories,Categories,الفئات
+artist.contactSocial,Contact & Social,التواصل والاجتماعي
+artist.died,d.,ت.
+artist.education,Education,التعليم
+artist.email,Email,البريد الإلكتروني
+artist.exhibitions,Exhibitions,المعارض
+artist.featured,Featured,مميز
+artist.groupExhibitions,Group Exhibitions,المعارض الجماعية
+artist.instagram,Instagram,إنستغرام
+artist.linkCopied,Link copied,تم نسخ الرابط
+artist.linkCopiedDescription,Artist profile link copied to clipboard,تم نسخ رابط صفحة الفنان إلى الحافظة
+artist.noArtworks.description,This artist hasn't uploaded any artworks yet.,لم يقم هذا الفنان برفع أي أعمال فنية بعد.
+artist.noArtworks.title,No artworks available,لا توجد أعمال فنية متاحة
+artist.noArtworksDescription,This artist hasn't uploaded any artworks yet,لم يقم هذا الفنان برفع أي أعمال فنية بعد
+artist.noArtworksTitle,No artworks available,لا توجد أعمال فنية متاحة
+artist.noExhibitionsDescription,Exhibition history will be displayed here when available,سيتم عرض تاريخ المعارض هنا عند توفره
+artist.noExhibitionsTitle,No exhibitions listed,لا توجد معارض مدرجة
+artist.notFound,Artist not found,لم يتم العثور على الفنان
+artist.primaryMedium,Primary Medium,الوسيط الأساسي
+artist.share,Share,مشاركة
+artist.shareText,Check out {{name}} on Artisan,تحقق من {{name}} على سوق آرت
+artist.sidebar.age,Age,العمر
+artist.sidebar.artworks,Artworks,الأعمال الفنية
+artist.sidebar.follow,Follow Artist,متابعة الفنان
+artist.sidebar.nationality,Nationality,الجنسية
+artist.sidebar.quickInfo,Quick Info,معلومات سريعة
+artist.sidebar.website,Visit Website,زيارة الموقع
+artist.soloExhibitions,Solo Exhibitions,المعارض الفردية
+artist.statistics,Statistics,الإحصائيات
+artist.style,Style,الأسلوب
+artist.tabs.about,About,نبذة
+artist.tabs.artworks,Artworks,الأعمال الفنية
+artist.totalArtworks,Total Artworks,إجمالي الأعمال الفنية
+artist.totalSales,Total Sales,إجمالي المبيعات
+artist.website,Website,الموقع الإلكتروني
+artists.featured,Featured Artists,فنانون مميزون
+artists.filters.allCountries,All Countries,جميع البلدان
+artists.filters.nationality,Nationality,الجنسية
+artists.noResults.clearFilters,Clear All Filters,مسح جميع المرشحات
+artists.noResults.description,Try adjusting your search terms or filters to find artists.,حاول تعديل مصطلحات البحث أو المرشحات للعثور على الفنانين.
+artists.noResults.title,No artists found,لم يتم العثور على فنانين
+artists.results,{{count}} artists found,تم العثور على {{count}} فنان
+artists.search.placeholder,Search artists by name...,البحث عن الفنانين بالاسم...
+artists.sort.featured,Featured First,المميز أولاً
+artists.sort.latest,Latest,الأحدث
+artists.sort.name,Name A-Z,الاسم أ-ي
+artists.subtitle,"Discover talented artists from Saudi Arabia and the GCC region, from emerging voices to established masters.","اكتشف الفنانين الموهوبين من المملكة العربية السعودية ومنطقة دول مجلس التعاون الخليجي، من الأصوات الناشئة إلى الأساتذة المؤسسين."
+artists.title,Artists,الفنانون
+artwork.artist,Artist,الفنان
+artwork.description,Description,الوصف
+artwork.details,Details,التفاصيل
+artwork.favorite,Add to Favorites,إضافة للمفضلة
+artwork.favoriteAdded,Added to Favorites,أُضيف للمفضلة
+artwork.favoriteAddedDescription,This artwork has been added to your favorites.,تم إضافة هذا العمل الفني إلى مفضلتك.
+artwork.favoriteRemoved,Removed from Favorites,أُزيل من المفضلة
+artwork.favoriteRemovedDescription,This artwork has been removed from your favorites.,تم إزالة هذا العمل الفني من مفضلتك.
+artwork.favorited,Favorited,مُضاف للمفضلة
+artwork.gallery,Gallery,المعرض
+artwork.inquire,Inquire,استفسار
+artwork.inquiryEmail,Email,البريد الإلكتروني
+artwork.inquiryEmailPlaceholder,your@email.com,your@email.com
+artwork.inquiryMessage,Message,الرسالة
+artwork.inquiryMessagePlaceholder,I'm interested in learning more about this artwork...,أنا مهتم بمعرفة المزيد عن هذا العمل الفني...
+artwork.inquiryPhone,Phone (Optional),الهاتف (اختياري)
+artwork.inquiryPhonePlaceholder,+966 XX XXX XXXX,+966 XX XXX XXXX
+artwork.inquirySent,Inquiry Sent,تم إرسال الاستفسار
+artwork.inquirySentDescription,Your inquiry has been sent to the gallery. They will contact you soon.,تم إرسال استفسارك إلى المعرض. سيتواصلون معك قريباً.
+artwork.inquiryTitle,Inquire About This Artwork,استفسر عن هذا العمل الفني
+artwork.linkCopied,Link Copied,تم نسخ الرابط
+artwork.linkCopiedDescription,The artwork link has been copied to your clipboard.,تم نسخ رابط العمل الفني إلى الحافظة.
+artwork.moreFromArtist,More from this Artist,المزيد من هذا الفنان
+artwork.price,Price,السعر
+artwork.sendInquiry,Send Inquiry,إرسال الاستفسار
+artwork.share,Share,مشاركة
+artwork.shareText,Check out this artwork: {{title}},تحقق من هذا العمل الفني: {{title}}
+artwork.status.available,Available,متاح
+artwork.status.on_auction,At Auction,في المزاد
+artwork.status.sold,Sold,مُباع
+auctions.auctionDetails,Auction Details,تفاصيل المزاد
+auctions.auctionEnded,Auction Ended,انتهى المزاد
+auctions.beFirstToBid,Be the first to bid!,كن أول من يقدم عرضاً!
+auctions.biddingActivity,Bidding Activity,نشاط المزايدة
+auctions.bids,bids,عروض
+auctions.currentBid,Current Bid,العرض الحالي
+auctions.description,Exceptional works from regional artists and galleries,أعمال استثنائية من فنانين ومعارض إقليمية
+auctions.ended,Ended,انتهى
+auctions.endingSoon,Ending Soon,ينتهي قريباً
+auctions.endsIn,Ends in,ينتهي في
+auctions.finalBid,Final bid,العرض النهائي
+auctions.leading,Leading,رائد
+auctions.live,Live,مباشر
+auctions.liveBidding,Live bidding,مزايدة مباشرة
+auctions.noAuctions.description,Check back later for new auction listings.,تحقق مرة أخرى لاحقاً لقوائم المزادات الجديدة.
+auctions.noAuctions.title,No Auctions Available,لا توجد مزادات متاحة
+auctions.noBidsYet,No bids yet,لا توجد عروض بعد
+auctions.noLive.description,Check back soon for upcoming auctions.,تحقق مرة أخرى قريباً للمزادات القادمة.
+auctions.noLive.title,No Live Auctions,لا توجد مزادات مباشرة
+auctions.noUpcoming.description,All scheduled auctions are currently live or have ended.,جميع المزادات المجدولة مباشرة حالياً أو انتهت.
+auctions.noUpcoming.title,No Upcoming Auctions,لا توجد مزادات قادمة
+auctions.placeBid,Place Bid,تقديم عرض
+auctions.startsIn,Starts in,يبدأ في
+auctions.stats.live,Live Auctions,مزادات مباشرة
+auctions.stats.total,Total Auctions,إجمالي المزادات
+auctions.stats.totalBids,Total Bids,إجمالي العروض
+auctions.stats.upcoming,Upcoming,قادمة
+auctions.status.ended,Ended,انتهى
+auctions.status.live,Live,مباشر
+auctions.status.unknown,Unknown,غير معروف
+auctions.status.upcoming,Upcoming,قادم
+auctions.subtitle,Discover exceptional works from regional artists and galleries at live and upcoming auctions.,اكتشف أعمالاً استثنائية من فنانين ومعارض إقليمية في المزادات المباشرة والقادمة.
+auctions.tabs.all,All Auctions,جميع المزادات
+auctions.tabs.live,Live Auctions,مزادات مباشرة
+auctions.tabs.upcoming,Upcoming,قادمة
+auctions.termsAndConditions,Terms & Conditions,الشروط والأحكام
+auctions.timeDays,{{count}} days,{{count}} أيام
+auctions.timeEnded,Ended,انتهى
+auctions.timeHours,{{count}} hours,{{count}} ساعات
+auctions.timeRemaining.days,{{count}} days,{{count}} أيام
+auctions.timeRemaining.hours,{{count}} hours,{{count}} ساعات
+auctions.timeRemaining.minutes,{{count}} minutes,{{count}} دقائق
+auctions.timeRemaining.title,Time Remaining,الوقت المتبقي
+auctions.title,Auctions,المزادات
+auctions.upcoming,Upcoming,قادم
+auctions.updatesAutomatically,Updates automatically,التحديث تلقائياً
+auctions.viewAll,View All Auctions,عرض جميع المزادات
+auth.alreadyMember,Already a member?,لديك حساب بالفعل؟
+auth.artSouk,Art Souk,سوق آرت
+auth.backToHome,Back to Home,العودة للرئيسية
+auth.badge,Premium Art Platform,منصة فنية متميزة
+auth.benefits.auctions,Participate in exclusive live auctions,شارك في مزادات حية حصرية
+auth.benefits.favorites,Save and organize your favorite artworks,احفظ ونظم أعمالك الفنية المفضلة
+auth.benefits.inquiries,Direct contact with artists and galleries,تواصل مباشر مع الفنانين والمعارض
+auth.benefits.personalized,Get personalized art recommendations,احصل على توصيات فنية شخصية
+auth.features.collections,Premium Collections,مجموعات مميزة
+auth.features.collectionsDesc,Access curated selections,اطلع على المختارات المنسقة
+auth.features.community,Art Community,مجتمع الفن
+auth.features.communityDesc,Join collectors and enthusiasts,انضم لجامعي الفنون والهواة
+auth.features.discover,Discover Art,اكتشف الفن
+auth.features.discoverDesc,Explore thousands of contemporary works,اكتشف آلاف الأعمال المعاصرة
+auth.features.galleries,Top Galleries,أفضل المعارض
+auth.features.galleriesDesc,Connect with leading GCC art spaces,تواصل مع المساحات الفنية الرائدة في الخليج
+auth.getStarted,Get Started,ابدأ الآن
+auth.joinBenefits,Why join Art Souk?,لماذا تنضم لسوق آرت؟
+auth.joinCommunity,"Join our community of artists, collectors, and art enthusiasts",انضم إلى مجتمعنا من الفنانين وجامعي الفنون وعشاق الفن
+auth.loggingInAgain,You are logged out. Logging in again...,لقد تم تسجيل خروجك. جاري تسجيل الدخول مرة أخرى...
+auth.logout,Log Out,تسجيل الخروج
+auth.required,Authentication Required,التوثيق مطلوب
+auth.secureLogin,Secure login powered by,تسجيل دخول آمن مدعوم من
+auth.signUpFree,Sign Up Free,سجل مجاناً
+auth.signin,Sign In,تسجيل الدخول
+auth.signup,Sign Up,إنشاء حساب
+auth.subtitle,"Discover, collect, and connect with the vibrant Saudi and GCC contemporary art scene.",اكتشف واجمع وتواصل مع المشهد الفني المعاصر النابض بالحياة في السعودية ودول الخليج.
+auth.trustedBy,Trusted by thousands of art lovers across the region,موثوق من قبل آلاف عشاق الفن في المنطقة
+auth.unauthorized,Unauthorized,غير مصرح
+auth.welcome,Welcome to,مرحباً بك في
+cities.abuDhabi,Abu Dhabi,أبو ظبي
+cities.doha,Doha,الدوحة
+cities.dubai,Dubai,دبي
+cities.jeddah,Jeddah,جدة
+cities.kuwaitCity,Kuwait City,مدينة الكويت
+cities.manama,Manama,المنامة
+cities.muscat,Muscat,مسقط
+cities.riyadh,Riyadh,الرياض
+collections.featured.description,Curated selections showcasing the best of Saudi and GCC contemporary art,مجموعات منتقاة تعرض أفضل الفن المعاصر السعودي ودول مجلس التعاون
+collections.featured.title,Featured Collections,مجموعات مميزة
+collector.addToWishlist,Add to Wishlist,إضافة لقائمة الأمنيات
+collector.carrier,Carrier,شركة الشحن
+collector.currentPrice,Current Price,السعر الحالي
+collector.estimatedDelivery,Estimated Delivery,التسليم المتوقع
+collector.externalPaymentNote,Note: All payments are arranged directly between buyers and sellers outside the platform,ملاحظة: يتم ترتيب جميع المدفوعات مباشرة بين المشترين والبائعين خارج المنصة
+collector.noOrders,No orders yet,لا توجد طلبات بعد
+collector.noPurchases,No purchases yet,لا توجد مشتريات بعد
+collector.noTracking,No tracking information available,لا توجد معلومات تتبع متاحة
+collector.noWishlist,Your wishlist is empty,قائمة أمنياتك فارغة
+collector.notifyWhenPriceDrops,Notify me when price drops below,أخطرني عندما ينخفض السعر إلى أقل من
+collector.orderDetails,Order Details,تفاصيل الطلب
+collector.orderStatus.cancelled,Cancelled,ملغي
+collector.orderStatus.confirmed,Confirmed,مؤكد
+collector.orderStatus.delivered,Delivered,تم التسليم
+collector.orderStatus.pending,Pending,معلق
+collector.orderStatus.processing,Processing,قيد المعالجة
+collector.orderStatus.shipped,Shipped,تم الشحن
+collector.orders,Orders,الطلبات
+collector.paymentStatus.completed,Payment Completed,تم الدفع
+collector.paymentStatus.failed,Payment Failed,فشل الدفع
+collector.paymentStatus.pending,Payment Pending,الدفع معلق
+collector.paymentStatus.refunded,Refunded,تم الاسترداد
+collector.priceDropAlert,Price Drop Alert,تنبيه انخفاض السعر
+collector.priority.high,High Priority,أولوية عالية
+collector.priority.low,Low Priority,أولوية منخفضة
+collector.priority.medium,Medium Priority,أولوية متوسطة
+collector.purchaseHistory,Purchase History,سجل الشراء
+collector.removeFromWishlist,Remove from Wishlist,إزالة من قائمة الأمنيات
+collector.setPriceAlert,Set Price Alert,تعيين تنبيه السعر
+collector.shipmentTracking,Shipment Tracking,تتبع الشحنة
+collector.subtitle,Manage your art collection and purchases,إدارة مجموعتك الفنية ومشترياتك
+collector.targetPrice,Target Price,السعر المستهدف
+collector.title,Collector Dashboard,لوحة تحكم جامعي الفنون
+collector.tracking,Tracking,التتبع
+collector.trackingNumber,Tracking Number,رقم التتبع
+collector.wishlist,Wishlist,قائمة الأمنيات
+commissions.detail.subtitle,Review request details and place your bid,راجع تفاصيل الطلب وقدم عرضك
+commissions.detail.title,Commission Details,تفاصيل العمولة
+commissions.post.subtitle,Request custom artwork from talented artists,اطلب عملاً فنياً مخصصاً من الفنانين الموهوبين
+commissions.post.title,Post Commission Request,نشر طلب خاص
+commissions.requests.noRequests,No commission requests found,لا توجد طلبات خاصة
+commissions.requests.noRequestsDescription,Be the first to post a commission request or check back later for new opportunities,كن أول من ينشر طلب خاص أو تحقق لاحقاً من الفرص الجديدة
+commissions.requests.subtitle,Browse custom artwork requests from collectors,تصفح طلبات الأعمال الفنية المخصصة من جامعي الفنون
+commissions.requests.title,Commission Requests,طلبات خاصة
+common.allCategories,All Categories,جميع الفئات
+common.allStatus,All Status,جميع الحالات
+common.cancel,Cancel,إلغاء
+common.completed,Completed,مكتمل
+common.delete,Delete,حذف
+common.edit,Edit,تعديل
+common.error,Error,خطأ
+common.featured,Featured,مميز
+common.items,items,عناصر
+common.loading,Loading...,جاري التحميل...
+common.published,Published,منشور
+common.save,Save,حفظ
+common.sending,Sending...,جاري الإرسال...
+common.siteName,Art Souk,سوق آرت
+common.siteNameAr,سوق آرت,سوق آرت
+common.upcoming,Upcoming,قادم
+countries.bahrain,Bahrain,مملكة البحرين
+countries.kuwait,Kuwait,دولة الكويت
+countries.oman,Oman,سلطنة عُمان
+countries.qatar,Qatar,دولة قطر
+countries.saudiArabia,Saudi Arabia,المملكة العربية السعودية
+countries.uae,United Arab Emirates,دولة الإمارات العربية المتحدة
+curators.description,Fresh standout works handpicked by our regional art experts,أعمال بارزة جديدة منتقاة بعناية من قبل خبراء الفن الإقليميين
+curators.title,Curators' Picks,اختيارات القيمين
+curators.viewAll,View All Works,عرض جميع الأعمال
+dashboard.accountSettings,Account Settings,إعدادات الحساب
+dashboard.artworkRemoved,Artwork removed from your collection,تمت إزالة العمل الفني من مجموعتك
+dashboard.artworkUpdates,Artwork Updates,تحديثات الأعمال الفنية
+dashboard.auctionAlerts,Auction Alerts,تنبيهات المزادات
+dashboard.browseArt,Browse Art,تصفح الفن
+dashboard.collectorDashboard,Collector Dashboard,لوحة تحكم المجمع
+dashboard.contactArtists,Contact artists and galleries about artworks you're interested in,تواصل مع الفنانين والمعارض حول الأعمال الفنية التي تهمك
+dashboard.editProfile,Edit Profile,تعديل الملف الشخصي
+dashboard.exploreArtworks,Explore Artworks,استكشف الأعمال الفنية
+dashboard.following,Following,المتابعين
+dashboard.inquiries,Inquiries,الاستفسارات
+dashboard.inquiryStatus.closed,Closed,مغلق
+dashboard.inquiryStatus.pending,Pending,معلق
+dashboard.inquiryStatus.responded,Responded,تم الرد
+dashboard.messageNotifications,Message Notifications,إشعارات الرسائل
+dashboard.myCollection,My Collection,مجموعتي
+dashboard.newsletter,Newsletter,النشرة الإخبارية
+dashboard.noFavorites,No favorites yet,لا توجد مفضلات بعد
+dashboard.noInquiries,No inquiries yet,لا توجد استفسارات بعد
+dashboard.notificationPreferences,Notification Preferences,تفضيلات الإشعارات
+dashboard.pendingInquiries,Pending Inquiries,استفسارات معلقة
+dashboard.priceAlerts,Price Alerts,تنبيهات الأسعار
+dashboard.profileForm.bio,Bio,نبذة عني
+dashboard.profileForm.bioPlaceholder,Tell us about yourself...,أخبرنا عن نفسك...
+dashboard.profileForm.cancel,Cancel,إلغاء
+dashboard.profileForm.firstName,First Name,الاسم الأول
+dashboard.profileForm.lastName,Last Name,اسم العائلة
+dashboard.profileForm.location,Location,الموقع
+dashboard.profileForm.phone,Phone,الهاتف
+dashboard.profileForm.save,Save,حفظ
+dashboard.profileSettings,Profile Settings,إعدادات الملف الشخصي
+dashboard.profileUpdateSuccess,Your profile has been updated successfully.,تم تحديث ملفك الشخصي بنجاح.
+dashboard.profileUpdated,Profile updated,تم تحديث الملف الشخصي
+dashboard.quickStats,Quick Stats,إحصائيات سريعة
+dashboard.removedFromFavorites,Removed from favorites,أُزيل من المفضلات
+dashboard.saveSettings,Save Settings,حفظ الإعدادات
+dashboard.sellerDashboard,Seller Dashboard,لوحة تحكم البائع
+dashboard.settingsSaved,Settings saved,تم حفظ الإعدادات
+dashboard.settingsUpdateSuccess,Your preferences have been updated successfully.,تم تحديث تفضيلاتك بنجاح.
+dashboard.startExploring,Start exploring artworks to build your collection,ابدأ في استكشاف الأعمال الفنية لبناء مجموعتك
+dashboard.tabs.favorites,Favorites,المفضلات
+dashboard.tabs.inquiries,Inquiries,الاستفسارات
+dashboard.tabs.settings,Settings,الإعدادات
+dashboard.title,Dashboard,لوحة التحكم
+dashboard.totalFavorites,Total Favorites,إجمالي المفضلات
+dashboard.viewAnalytics,View Analytics,عرض التحليلات
+dashboard.welcome,Welcome back,مرحباً بعودتك
+editorial.author,Author,الكاتب
+editorial.categories.art,Art,فن
+editorial.categories.guide,Guide,دليل
+editorial.categories.interview,Interview,مقابلة
+editorial.categories.market,Art Market,سوق آرت
+editorial.categories.news,News,أخبار
+editorial.description,"Discover the stories behind the art, meet the artists, and explore the cultural movements shaping the contemporary Gulf art scene.","اكتشف القصص وراء الفن، تعرف على الفنانين، واستكشف الحركات الثقافية التي تشكل مشهد الفن المعاصر في الخليج."
+editorial.featured,Featured Articles,مقالات مميزة
+editorial.filters.allCategories,All Categories,جميع الفئات
+editorial.filters.category,Category,الفئة
+editorial.newsletter.description,"Get the latest art news, artist features, and exclusive content delivered to your inbox.",احصل على آخر أخبار الفن وميزات الفنانين والمحتوى الحصري في صندوق البريد الإلكتروني الخاص بك.
+editorial.newsletter.placeholder,Enter your email,أدخل بريدك الإلكتروني
+editorial.newsletter.subscribe,Subscribe,اشتراك
+editorial.newsletter.title,Stay Updated,ابق على اطلاع
+editorial.noResults.clearFilters,Clear Filters,مسح المرشحات
+editorial.noResults.description,Try adjusting your search terms or filters to find what you're looking for.,حاول تعديل مصطلحات البحث أو المرشحات للعثور على ما تبحث عنه.
+editorial.noResults.title,No articles found,لم يتم العثور على مقالات
+editorial.results,{{count}} articles found,تم العثور على {{count}} مقال
+editorial.search.placeholder,"Search articles, artists, topics...",البحث في المقالات والفنانين والمواضيع...
+editorial.sort.featured,Featured,المميز
+editorial.sort.latest,Latest,الأحدث
+editorial.sort.popular,Most Popular,الأكثر شعبية
+editorial.subtitle,Latest insights from the Saudi & GCC art world,آخر الرؤى من عالم الفن السعودي ودول مجلس التعاون
+editorial.title,Editorial,المقالات
+editorial.viewAll,View All Articles,عرض جميع المقالات
+errors.401.action,,تسجيل الدخول
+errors.401.message,,تحتاج إلى تسجيل الدخول للوصول إلى هذه الصفحة.
+errors.401.title,,غير مصرح
+errors.403.action,,العودة
+errors.403.message,,ليس لديك إذن للوصول إلى هذا المورد.
+errors.403.title,,محظور
+errors.404.action,,الذهاب للرئيسية
+errors.404.message,,الصفحة التي تبحث عنها غير موجودة.
+errors.404.title,,الصفحة غير موجودة
+errors.500.action,,إعادة المحاولة
+errors.500.message,,حدث خطأ من جانبنا. يرجى المحاولة مرة أخرى لاحقاً.
+errors.500.title,,خطأ في الخادم
+errors.artistNotFound,Artist not found,الفنان غير موجود
+errors.artistNotFoundDescription,The artist profile you're looking for doesn't exist or has been removed.,ملف الفنان الذي تبحث عنه غير موجود أو تم حذفه.
+errors.artworkNotFound,Artwork not found,العمل الفني غير موجود
+errors.artworkNotFoundDescription,The artwork you're looking for doesn't exist or has been removed.,العمل الفني الذي تبحث عنه غير موجود أو تم حذفه.
+errors.general.action,,إعادة المحاولة
+errors.general.message,,حدث خطأ ما. يرجى المحاولة مرة أخرى.
+errors.general.title,,عفواً!
+errors.generic,Something went wrong,حدث خطأ ما
+errors.loadingArticles,Failed to load articles,فشل في تحميل المقالات
+errors.loadingArtists,Failed to load artists,فشل في تحميل الفنانين
+errors.loadingGalleries,Failed to load galleries,فشل في تحميل المعارض
+errors.tryAgainLater,Please try again later.,يرجى المحاولة مرة أخرى لاحقاً.
+events.about,About this Event,عن هذه الفعالية
+events.all,All Events,جميع الفعاليات
+events.attend,Attend,حضور
+events.attendees,{{count}} attendees,{{count}} حاضر
+events.attending,Attending,سأحضر
+events.byInvitation,By Invitation,بدعوة
+events.calendar.addToCalendar,Add to Calendar,إضافة إلى التقويم
+events.calendar.appleCalendar,Apple Calendar,تقويم Apple
+events.calendar.googleCalendar,Google Calendar,تقويم جوجل
+events.calendar.outlookCalendar,Outlook Calendar,تقويم Outlook
+events.categories.all,All Events,جميع الفعاليات
+events.categories.auction,Auction,مزاد
+events.categories.exhibition,Exhibition,معرض
+events.categories.fair,Art Fair,معرض فني
+events.categories.networking,Networking,تواصل
+events.categories.opening,Opening,افتتاح
+events.categories.talk,Talk,محاضرة
+events.categories.workshop,Workshop,ورشة عمل
+events.category,Category,الفئة
+events.checkBackLater,Check back later for upcoming events,تحقق لاحقاً من الفعاليات القادمة
+events.empty,No events found matching your criteria.,لم يتم العثور على فعاليات تطابق معاييرك.
+events.featured,Featured Events,فعاليات مميزة
+events.filter,Filter,تصفية
+events.free,Free Event,فعالية مجانية
+events.loading,Loading events...,جاري تحميل الفعاليات...
+events.loginToRSVP,Please log in to RSVP for events,يرجى تسجيل الدخول لتأكيد الحضور للفعاليات
+events.maybeAttending,Maybe,ربما
+events.myEvents,My Events,فعالياتي
+events.noEvents,No events scheduled,لا توجد فعاليات مجدولة
+events.notAttending,Not Attending,لن أحضر
+events.online,Online,عبر الإنترنت
+events.organizer,Organizer,المنظم
+events.past,Past Events,فعاليات سابقة
+events.rsvp,RSVP,تأكيد الحضور
+events.rsvpError,Error with RSVP,خطأ في تأكيد الحضور
+events.rsvpFailed,RSVP Failed,فشل تأكيد الحضور
+events.rsvpFailedDesc,Unable to RSVP for this event. Please try again.,غير قادر على تأكيد الحضور لهذه الفعالية. يرجى المحاولة مرة أخرى.
+events.rsvpSuccess,RSVP Successful,تم تأكيد الحضور بنجاح
+events.rsvpSuccessDesc,You've successfully RSVP'd as {{status}},لقد أكدت حضورك بنجاح كـ {{status}}
+events.search,Search events...,البحث في الفعاليات...
+events.status,Status,الحالة
+events.subtitle,"Discover art exhibitions, openings, and cultural events",اكتشف المعارض الفنية والافتتاحات والفعاليات الثقافية
+events.ticketed,Ticketed Event,تذاكر
+events.title,Events,الفعاليات
+events.upcoming,Upcoming Events,فعاليات قادمة
+events.venue,Venue,المكان
+footer.copyright,© 2025 Souk Art. All rights reserved.,© 2025 سوق آرت. جميع الحقوق محفوظة.
+footer.explore.title,Explore,استكشف
+footer.newsletter.description,"Get the latest news from the Saudi and GCC art world, including new artist features, exclusive exhibitions, and market insights.","احصل على آخر الأخبار من عالم الفن السعودي ودول مجلس التعاون، بما في ذلك ميزات الفنانين الجدد والمعارض الحصرية ورؤى السوق."
+footer.newsletter.placeholder,Enter your email,أدخل بريدك الإلكتروني
+footer.newsletter.subscribe,Subscribe,اشتراك
+footer.newsletter.title,Stay Connected,ابق على تواصل
+footer.resources.guide,Art Guide,دليل الفن
+footer.resources.investment,Investment Tips,نصائح الاستثمار
+footer.resources.support,Support,الدعم
+footer.resources.title,Resources,الموارد
+galleries.contact,Contact,اتصال
+galleries.featured,Featured Galleries,معارض مميزة
+galleries.filters.allLocations,All Locations,جميع المواقع
+galleries.filters.location,Location,الموقع
+galleries.noResults.clearFilters,Clear All Filters,مسح جميع المرشحات
+galleries.noResults.description,Try adjusting your search terms or filters to find galleries.,حاول تعديل مصطلحات البحث أو المرشحات للعثور على المعارض.
+galleries.noResults.title,No galleries found,لم يتم العثور على معارض
+galleries.results,{{count}} galleries found,تم العثور على {{count}} معرض
+galleries.search.placeholder,Search galleries by name...,البحث عن المعارض بالاسم...
+galleries.sort.featured,Featured First,المميز أولاً
+galleries.sort.latest,Latest,الأحدث
+galleries.sort.name,Name A-Z,الاسم أ-ي
+galleries.subtitle,Explore prestigious galleries and exhibition spaces across Saudi Arabia and the GCC region.,استكشف المعارض المرموقة وأماكن العرض عبر المملكة العربية السعودية ومنطقة دول مجلس التعاون الخليجي.
+galleries.title,Galleries,المعارض
+galleries.website,Website,الموقع الإلكتروني
+gallery.aboutGallery,About the Gallery,عن المعرض
+gallery.address,Address,العنوان
+gallery.artists,Artists,الفنانون
+gallery.artworks,Artworks,الأعمال الفنية
+gallery.artworksLowercase,artworks,أعمال فنية
+gallery.availableArtworks,Available Artworks,الأعمال الفنية المتاحة
+gallery.backToGalleries,Back to Galleries,العودة إلى المعارض
+gallery.browseGalleries,Browse Galleries,تصفح المعارض
+gallery.contactInfo,Contact Information,معلومات الاتصال
+gallery.curator,Curator,القيّم
+gallery.current,Current,حالي
+gallery.currentExhibition,Current Exhibition,المعرض الحالي
+gallery.currentExhibitions,Current Exhibitions,المعارض الحالية
+gallery.email,Email,البريد الإلكتروني
+gallery.established,Est.,تأسس
+gallery.exhibitions,Exhibitions,المعارض
+gallery.facebook,Facebook,فيسبوك
+gallery.featured,Featured,مميز
+gallery.followDescription,You will receive updates about this gallery,ستتلقى تحديثات حول هذا المعرض
+gallery.followingGallery,Following gallery,تتابع المعرض
+gallery.galleryStats,Gallery Statistics,إحصائيات المعرض
+gallery.group,Group,جماعي
+gallery.instagram,Instagram,إنستغرام
+gallery.linkCopied,Link copied,تم نسخ الرابط
+gallery.linkCopiedDescription,Gallery profile link copied to clipboard,تم نسخ رابط صفحة المعرض إلى الحافظة
+gallery.noArtistsDescription,This gallery hasn't listed any represented artists yet,لم يدرج هذا المعرض أي فنانين ممثلين بعد
+gallery.noArtistsRepresented,No artists represented,لا يوجد فنانون ممثلون
+gallery.noArtworksAvailable,No artworks available,لا توجد أعمال فنية متاحة
+gallery.noArtworksDescription,This gallery hasn't listed any artworks yet,لم يدرج هذا المعرض أي أعمال فنية بعد
+gallery.noExhibitions,No exhibitions,لا توجد معارض
+gallery.noExhibitionsDescription,This gallery hasn't listed any exhibitions yet,لم يدرج هذا المعرض أي معارض بعد
+gallery.notFound,Gallery not found,المعرض غير موجود
+gallery.openingHours,Opening Hours,ساعات العمل
+gallery.past,Past,سابق
+gallery.pastExhibitions,Past Exhibitions,المعارض السابقة
+gallery.phone,Phone,الهاتف
+gallery.representedArtists,Represented Artists,الفنانون الممثلون
+gallery.share,Share,مشاركة
+gallery.socialMedia,Social Media,وسائل التواصل الاجتماعي
+gallery.solo,Solo,فردي
+gallery.specialties,Specialties,التخصصات
+gallery.starts,Starts,يبدأ
+gallery.totalExhibitions,Total Exhibitions,إجمالي المعارض
+gallery.twitter,Twitter,تويتر
+gallery.unfollowDescription,You are no longer following this gallery,لم تعد تتابع هذا المعرض
+gallery.unfollowedGallery,Unfollowed gallery,تم إلغاء متابعة المعرض
+gallery.until,Until,حتى
+gallery.upcoming,Upcoming,قادم
+gallery.upcomingExhibitions,Upcoming Exhibitions,المعارض القادمة
+gallery.visitWebsite,Visit Website,زيارة الموقع
+gallery.website,Website,الموقع الإلكتروني
+gallery.yearsInBusiness,Years in Business,سنوات في العمل
+hero.cta.browse,Browse Artists,تصفح الفنانين
+hero.cta.start,Start Collecting,ابدأ الجمع
+hero.description,"Connect with the region's most talented artists, galleries, and collectors. Explore traditional calligraphy, contemporary works, and emerging talent from across the Gulf.",تواصل مع أكثر الفنانين والمعارض والجامعين موهبة في المنطقة. استكشف الخط العربي التقليدي والأعمال المعاصرة والمواهب الناشئة من جميع أنحاء الخليج.
+hero.featuredArt,Contemporary Saudi art exhibition,معرض الفن السعودي المعاصر
+hero.featuredArtist,Featured Artist,فنان مميز
+hero.subtitle,Contemporary Art,المعاصر
+hero.title,Discover Saudi & GCC,اكتشف فن السعودية ودول مجلس التعاون
+home.featuredArtists.empty,No featured artists available at the moment.,لا يوجد فنانون مميزون متاحون في الوقت الحالي.
+home.featuredArtists.subtitle,Discover the region's most talented and emerging artists,اكتشف أكثر الفنانين موهبة وإبداعاً في المنطقة
+home.featuredArtists.title,Featured Artists,فنانون مميزون
+home.liveAuctions.title,Live Auctions,مزادات مباشرة
+home.recommendations.empty,No recommendations available. Start exploring to get personalized suggestions!,لا توجد توصيات متاحة. ابدأ الاستكشاف للحصول على اقتراحات شخصية!
+home.recommendations.exploreArtists,Explore Artists,استكشف الفنانين
+home.recommendations.subtitle,Artworks selected based on your interests and preferences,أعمال فنية مختارة بناءً على اهتماماتك وتفضيلاتك
+home.recommendations.title,Recommended for You,موصى لك
+home.stats.artists,Featured Artists,فنانون مميزون
+home.stats.favorites,Favorites,المفضلة
+home.stats.liveAuctions,Live Auctions,مزادات مباشرة
+home.stats.trending,Trending,الأكثر رواجاً
+home.subtitle,"Discover new artworks, follow your favorite artists, and stay updated with the latest from the GCC art scene.","اكتشف أعمالاً فنية جديدة، تابع فنانيك المفضلين، وابق على اطلاع بآخر أخبار مشهد الفن في دول مجلس التعاون."
+home.user,Art Lover,محب الفن
+home.welcome,"Welcome back, {{name}}","مرحباً بعودتك، {{name}}"
+messages.confirm.cancel,Are you sure you want to cancel?,هل أنت متأكد من الإلغاء؟
+messages.confirm.delete,Are you sure you want to delete this?,هل أنت متأكد من حذف هذا؟
+messages.confirm.leave,Are you sure you want to leave? Unsaved changes will be lost.,هل أنت متأكد من المغادرة؟ ستفقد التغييرات غير المحفوظة.
+messages.confirm.logout,Are you sure you want to log out?,هل أنت متأكد من تسجيل الخروج؟
+messages.error.forbidden,This action is forbidden.,هذا الإجراء محظور.
+messages.error.general,An error occurred. Please try again.,حدث خطأ. يرجى المحاولة مرة أخرى.
+messages.error.network,Network error. Please check your connection.,خطأ في الشبكة. يرجى التحقق من الاتصال.
+messages.error.notFound,Resource not found.,المورد غير موجود.
+messages.error.server,Server error. Please try again later.,خطأ في الخادم. يرجى المحاولة لاحقاً.
+messages.error.timeout,Request timed out. Please try again.,انتهت مهلة الطلب. يرجى المحاولة مرة أخرى.
+messages.error.unauthorized,You are not authorized to perform this action.,غير مصرح لك بتنفيذ هذا الإجراء.
+messages.error.validation,Please check your input and try again.,يرجى التحقق من المدخلات والمحاولة مرة أخرى.
+messages.info.empty,No data available,لا توجد بيانات متاحة
+messages.info.endOfResults,End of results,نهاية النتائج
+messages.info.loading,Loading...,جاري التحميل...
+messages.info.noResults,No results found,لم يتم العثور على نتائج
+messages.info.processing,Processing...,جاري المعالجة...
+messages.info.redirecting,Redirecting...,جاري إعادة التوجيه...
+messages.info.saving,Saving...,جاري الحفظ...
+messages.success.copied,Copied to clipboard,تم النسخ إلى الحافظة
+messages.success.created,Created successfully,تم الإنشاء بنجاح
+messages.success.deleted,Deleted successfully,تم الحذف بنجاح
+messages.success.downloaded,Downloaded successfully,تم التحميل بنجاح
+messages.success.saved,Changes saved successfully,تم حفظ التغييرات بنجاح
+messages.success.sent,Sent successfully,تم الإرسال بنجاح
+messages.success.updated,Updated successfully,تم التحديث بنجاح
+messages.success.uploaded,Uploaded successfully,تم الرفع بنجاح
+nav.acceptBid,Accept Bid,قبول العرض
+nav.accepted,Accepted,مقبول
+nav.activeRequests,Active Requests,الطلبات النشطة
+nav.alreadyBid,You have already placed a bid,لقد قدمت عرضاً بالفعل
+nav.artists,Artists,الفنانون
+nav.auctions,Auctions,المزادات
+nav.bidAccepted,Bid Accepted,تم قبول العرض
+nav.bidAmount,Bid Amount,مبلغ العرض
+nav.bidCount,{{count}} bid,{{count}} عرض
+nav.bidCount_plural,{{count}} bids,{{count}} عروض
+nav.bidDetails,Bid Details,تفاصيل العرض
+nav.bidForm.bidAmount,Bid Amount,مبلغ العرض
+nav.bidForm.bidAmountPlaceholder,Enter your bid amount,أدخل مبلغ عرضك
+nav.bidForm.portfolio,Portfolio Samples,نماذج الأعمال
+nav.bidForm.portfolioPlaceholder,Add relevant work samples,أضف نماذج أعمال ذات صلة
+nav.bidForm.proposal,Proposal,الاقتراح
+nav.bidForm.proposalPlaceholder,Describe your approach...,صف نهجك...
+nav.bidForm.submit,Submit Bid,تقديم العرض
+nav.bidForm.timeline,Timeline (days),الجدول الزمني (أيام)
+nav.bidForm.timelinePlaceholder,How many days to complete,كم يوم للإكمال
+nav.bidForm.update,Update Bid,تحديث العرض
+nav.bidForm.withdraw,Withdraw Bid,سحب العرض
+nav.bidRejected,Bid Rejected,تم رفض العرض
+nav.bidSubmitted,Bid Submitted,تم تقديم العرض
+nav.bidTooLow,Bid must be at least {{amount}},يجب أن يكون العرض على الأقل {{amount}}
+nav.bidUpdated,Bid Updated,تم تحديث العرض
+nav.bidWithdrawn,Bid Withdrawn,تم سحب العرض
+nav.browseAvailable,Browse available commission requests,تصفح الطلبات المتاحة
+nav.browseCommissions,Browse Commissions,تصفح الطلبات
+nav.cancelled,Cancelled,ملغى
+nav.commissionClosed,This commission is closed,هذا الطلب مغلق
+nav.commissionDeleted,Commission Deleted,تم حذف الطلب
+nav.commissionDetails,Commission Details,تفاصيل العمولة
+nav.commissionForm.additionalRequirements,Additional Requirements,متطلبات إضافية
+nav.commissionForm.additionalRequirementsPlaceholder,Any special requirements...,أي متطلبات خاصة...
+nav.commissionForm.budget,Budget,الميزانية
+nav.commissionForm.budgetPlaceholder,Enter your budget,أدخل ميزانيتك
+nav.commissionForm.cancel,Cancel,إلغاء
+nav.commissionForm.currency,Currency,العملة
+nav.commissionForm.deadline,Deadline,الموعد النهائي
+nav.commissionForm.deadlinePlaceholder,Select deadline,اختر الموعد النهائي
+nav.commissionForm.description,Description,الوصف
+nav.commissionForm.descriptionPlaceholder,Describe what you're looking for...,صف ما تبحث عنه...
+nav.commissionForm.dimensions,Dimensions,الأبعاد
+nav.commissionForm.dimensionsPlaceholder,"e.g., 120 × 90 cm",مثل: 120 × 90 سم
+nav.commissionForm.medium,Medium,الوسيط
+nav.commissionForm.mediumPlaceholder,"e.g., Oil painting, Digital art","مثل: رسم زيتي، فن رقمي"
+nav.commissionForm.references,Reference Images,صور مرجعية
+nav.commissionForm.referencesPlaceholder,Add reference image URLs,أضف روابط الصور المرجعية
+nav.commissionForm.style,Style,الأسلوب
+nav.commissionForm.stylePlaceholder,"e.g., Abstract, Realistic","مثل: تجريدي، واقعي"
+nav.commissionForm.submit,Submit Request,إرسال الطلب
+nav.commissionForm.title,Title,العنوان
+nav.commissionForm.titlePlaceholder,Enter commission title,أدخل عنوان الطلب
+nav.commissionPosted,Commission Posted,تم نشر الطلب
+nav.commissionUpdated,Commission Updated,تم تحديث الطلب
+nav.commissions,Commissions,الطلبات الخاصة
+nav.commissionsTitle,Commission Requests,طلبات العمولة
+nav.completed,Completed,مكتمل
+nav.completedRequests,Completed Requests,الطلبات المكتملة
+nav.contractCreated,Contract Created,تم إنشاء العقد
+nav.contractForm.agreedPrice,Agreed Price,السعر المتفق عليه
+nav.contractForm.agreedPricePlaceholder,Final agreed price,السعر النهائي المتفق عليه
+nav.contractForm.create,Create Contract,إنشاء عقد
+nav.contractForm.deadline,Delivery Deadline,موعد التسليم
+nav.contractForm.sign,Sign Contract,توقيع العقد
+nav.contractForm.terms,Contract Terms,شروط العقد
+nav.contractForm.termsPlaceholder,Enter detailed contract terms...,أدخل شروط العقد التفصيلية...
+nav.contractRequired,Contract terms are required,شروط العقد مطلوبة
+nav.contractSigned,Contract Signed,تم توقيع العقد
+nav.contractTerms,Contract Terms,شروط العقد
+nav.createContract,Create Contract,إنشاء عقد
+nav.createYourFirst,Create your first commission request,أنشئ طلبك الأول
+nav.deadlineRequired,Deadline is required,الموعد النهائي مطلوب
+nav.deliveryTerms,Delivery Terms,شروط التسليم
+nav.events,Events,الفعاليات
+nav.galleries,Galleries,المعارض
+nav.inProgress,In Progress,قيد التنفيذ
+nav.invalidBidAmount,Please enter a valid bid amount,الرجاء إدخال مبلغ عرض صحيح
+nav.messageForm.attachments,Attachments,المرفقات
+nav.messageForm.message,Message,الرسالة
+nav.messageForm.messagePlaceholder,Type your message...,اكتب رسالتك...
+nav.messageForm.send,Send,إرسال
+nav.messageTooShort,Message must be at least 10 characters,يجب أن تكون الرسالة 10 أحرف على الأقل
+nav.messagesSent,Message Sent,تم إرسال الرسالة
+nav.myCommissions,My Commissions,طلباتي
+nav.newCommission,New Commission,طلب جديد
+nav.noBidsYet,No bids yet,لا توجد عروض بعد
+nav.noCommissionsFound,No commission requests found,لا توجد طلبات عمولة
+nav.noPortfolioSamples,No portfolio samples provided,لا توجد نماذج أعمال مقدمة
+nav.open,Open,مفتوح
+nav.otherBids,Other Bids,العروض الأخرى
+nav.ownCommission,You cannot bid on your own commission,لا يمكنك تقديم عرض على طلبك الخاص
+nav.paymentTerms,Payment Terms,شروط الدفع
+nav.pending,Pending,قيد الانتظار
+nav.placeBid,Place Bid,تقديم عرض
+nav.portfolioSamples,Portfolio Samples,نماذج الأعمال
+nav.postCommission,Post Commission Request,نشر طلب خاص
+nav.proposedPrice,Proposed Price,السعر المقترح
+nav.proposedTimeline,Proposed Timeline,الجدول الزمني المقترح
+nav.rejectBid,Reject Bid,رفض العرض
+nav.rejected,Rejected,مرفوض
+nav.requestDetails,Request Details,تفاصيل الطلب
+nav.revisionPolicy,Revision Policy,سياسة المراجعة
+nav.selectBid,Select Bid,اختر عرض
+nav.sendMessage,Send Message,إرسال رسالة
+nav.signInToBid,Sign in to place a bid,سجل الدخول لتقديم عرض
+nav.signInToMessage,Sign in to send messages,سجل الدخول لإرسال رسائل
+nav.signInToView,Sign in to view commissions,سجل الدخول لعرض الطلبات
+nav.status,Status,الحالة
+nav.timeline,Timeline,الجدول الزمني
+nav.timelineDays,{{days}} days,{{days}} يوم
+nav.viewBids,View Bids,عرض العروض
+nav.viewContract,View Contract,عرض العقد
+nav.withdrawn,Withdrawn,تم السحب
+nav.workshops,Workshops,ورش العمل
+nav.yourBid,Your Bid,عرضك
+newsletter.enterEmail,Enter your email,أدخل بريدك الإلكتروني
+newsletter.frequency.monthly,Monthly Newsletter,نشرة شهرية
+newsletter.frequency.updates,Major Updates Only,التحديثات الرئيسية فقط
+newsletter.frequency.weekly,Weekly Digest,ملخص أسبوعي
+newsletter.preferences.artistSpotlights,Artist Spotlights,تسليط الضوء على الفنانين
+newsletter.preferences.collectorTips,Collector Tips,نصائح لجامعي الفنون
+newsletter.preferences.marketInsights,Market Insights,رؤى السوق
+newsletter.preferences.newArtworks,New Artworks,أعمال فنية جديدة
+newsletter.preferences.upcomingEvents,Upcoming Events,الفعاليات القادمة
+newsletter.subscribe,Subscribe to Newsletter,الاشتراك في النشرة الإخبارية
+newsletter.subscribed,You're subscribed!,أنت مشترك!
+newsletter.unsubscribe,Unsubscribe,إلغاء الاشتراك
+newsletter.unsubscribed,You've been unsubscribed,تم إلغاء اشتراكك
+preferences.apply,Apply Changes,تطبيق التغييرات
+preferences.artCategories,Art Categories,فئات الفن
+preferences.maxPrice,Maximum Price,الحد الأقصى للسعر
+preferences.minPrice,Minimum Price,الحد الأدنى للسعر
+preferences.notifications.artistUpdates,Artist Updates,تحديثات الفنانين
+preferences.notifications.auctionReminders,Auction Reminders,تذكيرات المزادات
+preferences.notifications.eventInvitations,Event Invitations,دعوات الفعاليات
+preferences.notifications.newArtworks,New Artworks,أعمال فنية جديدة
+preferences.notifications.newsletterSubscription,Newsletter Subscription,الاشتراك في النشرة الإخبارية
+preferences.notifications.priceDrops,Price Drops,انخفاض الأسعار
+preferences.notifications.title,Notification Settings,إعدادات الإشعارات
+preferences.notifications.workshopAnnouncements,Workshop Announcements,إعلانات ورش العمل
+preferences.priceRange,Price Range,نطاق السعر
+preferences.privacy.activityVisibility,Activity Visibility,ظهور النشاط
+preferences.privacy.collectionVisibility,Collection Visibility,ظهور المجموعة
+preferences.privacy.friendsOnly,Friends Only,الأصدقاء فقط
+preferences.privacy.private,Private,خاص
+preferences.privacy.profileVisibility,Profile Visibility,ظهور الملف الشخصي
+preferences.privacy.public,Public,عام
+preferences.privacy.title,Privacy Settings,إعدادات الخصوصية
+preferences.reset,Reset to Defaults,إعادة تعيين للافتراضي
+preferences.saved,Preferences saved successfully,تم حفظ التفضيلات بنجاح
+preferences.selectCategories,Select your favorite art categories,اختر فئات الفن المفضلة لديك
+preferences.setPriceRange,Set your preferred price range,حدد نطاق السعر المفضل لديك
+preferences.subtitle,Customize your art discovery experience,خصص تجربة اكتشاف الفن الخاصة بك
+preferences.title,Preferences,التفضيلات
+preferences.unlimited,Unlimited,غير محدود
+seller.addFirstMethod,Add your first payment method to start receiving payments,أضف طريقة الدفع الأولى لبدء استقبال المدفوعات
+seller.addTracking,Add Tracking,إضافة التتبع
+seller.buyerInfo,Buyer Information,معلومات المشتري
+seller.confirmDelete,Are you sure you want to delete this payment method?,هل أنت متأكد من حذف طريقة الدفع هذه؟
+seller.lastUpdated,Last Updated,آخر تحديث
+seller.methodAdded,Payment method added successfully,تمت إضافة طريقة الدفع بنجاح
+seller.methodDeleted,Payment method deleted successfully,تم حذف طريقة الدفع بنجاح
+seller.methodUpdated,Payment method updated successfully,تم تحديث طريقة الدفع بنجاح
+seller.noOrders,No orders received yet,لم تستلم أي طلبات بعد
+seller.noPaymentMethods,No payment methods added,لم تضف أي طرق دفع
+seller.orderDate,Order Date,تاريخ الطلب
+seller.orderManagement,Order Management,إدارة الطلبات
+seller.orderUpdated,Order updated successfully,تم تحديث الطلب بنجاح
+seller.orders,Orders,الطلبات
+seller.paymentMethod.add,Add Payment Method,إضافة طريقة دفع
+seller.paymentMethod.cancel,Cancel,إلغاء
+seller.paymentMethod.delete,Delete,حذف
+seller.paymentMethod.details,Details,التفاصيل
+seller.paymentMethod.detailsPlaceholder,"e.g., Account number, IBAN, etc.","مثال: رقم الحساب، IBAN، إلخ."
+seller.paymentMethod.edit,Edit,تعديل
+seller.paymentMethod.instructions,Instructions,التعليمات
+seller.paymentMethod.instructionsPlaceholder,Additional instructions for buyers,تعليمات إضافية للمشترين
+seller.paymentMethod.name,Name,الاسم
+seller.paymentMethod.namePlaceholder,"e.g., My Bank Account",مثال: حسابي البنكي
+seller.paymentMethod.save,Save Method,حفظ الطريقة
+seller.paymentMethod.title,Payment Method,طريقة الدفع
+seller.paymentMethod.type,Type,النوع
+seller.paymentMethod.types.apple_pay,Apple Pay,Apple Pay
+seller.paymentMethod.types.bank_transfer,Bank Transfer,حوالة بنكية
+seller.paymentMethod.types.cash,Cash,نقداً
+seller.paymentMethod.types.other,Other,أخرى
+seller.paymentMethod.types.paypal,PayPal,باي بال
+seller.paymentMethod.types.stc_pay,STC Pay,STC Pay
+seller.paymentMethods,Payment Methods,طرق الدفع
+seller.quickActions.events,Manage Events,إدارة الفعاليات
+seller.quickActions.eventsDesc,Create and manage your events,إنشاء وإدارة الفعاليات الخاصة بك
+seller.quickActions.workshops,Manage Workshops,إدارة ورش العمل
+seller.quickActions.workshopsDesc,Create and manage your workshops,إنشاء وإدارة ورش العمل الخاصة بك
+seller.sellerInfo.notSeller,You are not registered as a seller,أنت غير مسجل كبائع
+seller.sellerInfo.registerPrompt,Register as an artist or gallery to access seller features,سجل كفنان أو معرض للوصول إلى ميزات البائع
+seller.sellerNotes,Seller Notes,ملاحظات البائع
+seller.shippingAddress,Shipping Address,عنوان الشحن
+seller.subtitle,Manage your sales and payment methods,إدارة مبيعاتك وطرق الدفع
+seller.title,Seller Dashboard,لوحة تحكم البائع
+seller.trackingAdded,Tracking information added,تمت إضافة معلومات التتبع
+seller.updateStatus,Update Status,تحديث الحالة
+site.name,Art Souk,سوق آرت
+site.tagline,Saudi & GCC Art,فن السعودية ودول مجلس التعاون
+social.activity.bid,Placed a bid {{time}},قدم عرضاً {{time}}
+social.activity.comment,Commented on a {{entity}} {{time}},علق على {{entity}} {{time}}
+social.activity.favorite,Favorited an {{entity}} {{time}},أضاف {{entity}} للمفضلة {{time}}
+social.activity.follow,Followed a {{entity}} {{time}},تابع {{entity}} {{time}}
+social.activity.inquiry,Made an inquiry {{time}},قدم استفساراً {{time}}
+social.activity.like,Liked a {{entity}} {{time}},أعجب ب{{entity}} {{time}}
+social.commentAdded,Comment Added,تم إضافة التعليق
+social.commentAddedDesc,Your comment has been posted,تم نشر تعليقك
+social.commentDeleted,Comment Deleted,تم حذف التعليق
+social.commentDeletedDesc,Your comment has been deleted,تم حذف تعليقك
+social.commentUpdated,Comment Updated,تم تحديث التعليق
+social.commentUpdatedDesc,Your comment has been updated,تم تحديث تعليقك
+social.comments,Comments,التعليقات
+social.confirmDelete,Are you sure you want to delete this comment?,هل أنت متأكد من حذف هذا التعليق؟
+social.follow,Follow,متابعة
+social.followed,Followed,تمت المتابعة
+social.followedDesc,You are now following this profile,أنت الآن تتابع هذا الملف الشخصي
+social.following,Following,متابَع
+social.joinedDate,Joined {{date}},انضم في {{date}}
+social.like,Like,إعجاب
+social.liked,Liked,أعجبت
+social.likedDesc,You liked this,أعجبت بهذا
+social.noComments,No comments yet,لا توجد تعليقات بعد
+social.postComment,Post Comment,نشر التعليق
+social.recentActivity,Recent Activity,النشاط الأخير
+social.signInToComment,Sign in to comment,سجل دخولك للتعليق
+social.unfollowed,Unfollowed,تم إلغاء المتابعة
+social.unfollowedDesc,You have unfollowed this profile,لقد ألغيت متابعة هذا الملف الشخصي
+social.unliked,Unliked,ألغيت الإعجاب
+social.unlikedDesc,You unliked this,ألغيت إعجابك بهذا
+social.website,Website,الموقع الإلكتروني
+social.writeComment,Write a comment...,اكتب تعليقاً...
+validation.date,Please enter a valid date,يرجى إدخال تاريخ صالح
+validation.email,Please enter a valid email,يرجى إدخال بريد إلكتروني صالح
+validation.future,Date must be in the future,يجب أن يكون التاريخ في المستقبل
+validation.integer,Must be a whole number,يجب أن يكون رقماً صحيحاً
+validation.match,Fields must match,يجب أن تتطابق الحقول
+validation.max,Must be no more than {{max}},يجب ألا يزيد عن {{max}}
+validation.maxLength,Must be no more than {{max}} characters,يجب ألا يزيد عن {{max}} حرفاً
+validation.min,Must be at least {{min}},يجب أن يكون {{min}} على الأقل
+validation.minLength,Must be at least {{min}} characters,يجب أن يكون {{min}} حرفاً على الأقل
+validation.number,Must be a number,يجب أن يكون رقماً
+validation.past,Date must be in the past,يجب أن يكون التاريخ في الماضي
+validation.pattern,Invalid format,تنسيق غير صالح
+validation.phone,Please enter a valid phone number,يرجى إدخال رقم هاتف صالح
+validation.positive,Must be a positive number,يجب أن يكون رقماً موجباً
+validation.required,This field is required,هذا الحقل مطلوب
+validation.unique,This value is already taken,هذه القيمة مستخدمة بالفعل
+validation.url,Please enter a valid URL,يرجى إدخال رابط صالح
+workshops.about,About this Workshop,عن هذه الورشة
+workshops.all,All Workshops,جميع ورش العمل
+workshops.categories.calligraphy,Calligraphy,الخط العربي
+workshops.categories.ceramics,Ceramics,الخزف
+workshops.categories.digital_art,Digital Art,الفن الرقمي
+workshops.categories.drawing,Drawing,الرسم
+workshops.categories.mixed_media,Mixed Media,الوسائط المختلطة
+workshops.categories.painting,Painting,الرسم
+workshops.categories.photography,Photography,التصوير
+workshops.categories.printmaking,Printmaking,الطباعة الفنية
+workshops.categories.sculpture,Sculpture,النحت
+workshops.category,Category,الفئة
+workshops.checkBackLater,Check back later for new workshops,تحقق لاحقاً من ورش العمل الجديدة
+workshops.duration,{{hours}} hours,{{hours}} ساعات
+workshops.empty,No workshops found matching your criteria.,لم يتم العثور على ورش عمل تطابق معاييرك.
+workshops.featured,Featured Workshops,ورش عمل مميزة
+workshops.filter,Filter,تصفية
+workshops.free,Free,مجاني
+workshops.full,Full,ممتلئ
+workshops.inPerson,In Person,حضوري
+workshops.instructor,Instructor,المدرب
+workshops.level,Skill Level,مستوى المهارة
+workshops.loading,Loading workshops...,جاري تحميل ورش العمل...
+workshops.loginToRegister,Please log in to register for workshops,يرجى تسجيل الدخول للتسجيل في ورش العمل
+workshops.materials,Materials,المواد
+workshops.myWorkshops,My Workshops,ورش عملي
+workshops.noWorkshops,No workshops available,لا توجد ورش عمل متاحة
+workshops.online,Online,عبر الإنترنت
+workshops.participants,{{current}}/{{max}} participants,{{current}}/{{max}} مشارك
+workshops.past,Past Workshops,ورش عمل سابقة
+workshops.register,Register,التسجيل
+workshops.registered,Registered,مسجل
+workshops.registrationError,Error registering for workshop,خطأ في التسجيل في الورشة
+workshops.registrationFailed,Registration Failed,فشل التسجيل
+workshops.registrationFailedDesc,Unable to register for this workshop. Please try again.,غير قادر على التسجيل في هذه الورشة. يرجى المحاولة مرة أخرى.
+workshops.registrationSuccess,Registration Successful,تم التسجيل بنجاح
+workshops.registrationSuccessDesc,You've successfully registered for this workshop,لقد سجلت بنجاح في هذه الورشة
+workshops.requirements,Requirements,المتطلبات
+workshops.search,Search workshops...,البحث في ورش العمل...
+workshops.skillLevel.advanced,Advanced,متقدم
+workshops.skillLevel.all,All Levels,جميع المستويات
+workshops.skillLevel.beginner,Beginner,مبتدئ
+workshops.skillLevel.intermediate,Intermediate,متوسط
+workshops.subtitle,Learn from master artists and develop your skills,تعلم من الفنانين المحترفين وطور مهاراتك
+workshops.title,Workshops,ورش العمل
+workshops.upcoming,Upcoming Workshops,ورش عمل قادمة
+workshops.waitlist,Join Waitlist,انضم لقائمة الانتظار
+workshops.whatYouWillLearn,What You'll Learn,ما ستتعلمه
