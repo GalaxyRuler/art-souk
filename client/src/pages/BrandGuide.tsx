@@ -47,10 +47,10 @@ export default function BrandGuide() {
         {/* Header */}
         <section className="max-w-7xl mx-auto px-4 mb-16">
           <h1 className="text-5xl font-bold text-soukk-text-primary mb-4">
-            Soukk.art Brand Identity Guide
+            Souk.art Brand Identity Guide
           </h1>
           <p className="text-xl text-soukk-text-secondary max-w-3xl">
-            A comprehensive guide to the visual identity of Soukk.art - where traditional Gulf souks meet modern digital artistry.
+            A comprehensive guide to the visual identity of Souk.art - where traditional Gulf souks meet modern digital artistry.
           </p>
         </section>
 

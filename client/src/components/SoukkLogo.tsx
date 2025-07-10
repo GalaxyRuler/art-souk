@@ -83,7 +83,7 @@ export function SoukkLogo({
             />
             {/* Text */}
             <text x="100" y="50" textAnchor="middle" className="heading-4" fill="var(--soukk-charcoal)">
-              Soukk
+              Souk
             </text>
           </g>
         </svg>
@@ -124,7 +124,7 @@ export function SoukkLogo({
           
           {/* English text */}
           <text x="90" y="35" className="font-semibold" fontSize="28" fill="var(--soukk-charcoal)">
-            Soukk.art
+            Souk.art
           </text>
           
           {/* Arabic text */}
