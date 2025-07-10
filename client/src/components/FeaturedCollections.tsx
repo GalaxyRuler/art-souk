@@ -135,17 +135,16 @@ export function FeaturedCollections() {
                     marginBottom: '8px',
                     margin: '0 0 8px 0'
                   }}>{name}</h3>
-                  <p style={{ 
+                  <p className="featured-collections-text" style={{ 
                     color: '#000000',
-                    backgroundColor: '#ffff00',
-                    fontWeight: '900',
-                    fontSize: '16px',
+                    fontWeight: '600',
+                    fontSize: '14px',
                     lineHeight: '1.4',
                     margin: '0',
-                    padding: '8px',
-                    textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
-                    border: '2px solid #ff0000'
-                  }}>TEST TEXT: {description}</p>
+                    WebkitTextFillColor: '#000000',
+                    WebkitBackgroundClip: 'initial',
+                    backgroundClip: 'initial'
+                  }}>{description}</p>
                 </div>
               </div>
             );
