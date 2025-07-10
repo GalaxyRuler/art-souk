@@ -99,9 +99,9 @@ export default function Home() {
                 </h2>
                 <p className="text-gray-600">{t("home.recommendations.subtitle")}</p>
               </div>
-              <Link href="/artworks">
+              <Link href="/artists">
                 <Button variant="outline">
-                  {t("common.viewAll")}
+                  {t("home.recommendations.exploreArtists")}
                 </Button>
               </Link>
             </div>
