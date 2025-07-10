@@ -134,6 +134,9 @@
     "requests": {
       "title": "Commission Requests",
       "subtitle": "Browse custom artwork requests from collectors",
+      "postRequest": "Post Request",
+      "bidsCount": "{{count}} bid",
+      "bidsCount_plural": "{{count}} bids",
       "noRequests": "No commission requests found",
       "noRequestsDescription": "Be the first to post a commission request or check back later for new opportunities"
     },
@@ -1152,6 +1155,10 @@
     }
   },
   "errors": {
+    "loadingArtists": "Error loading artists",
+    "loadingGalleries": "Error loading galleries", 
+    "loadingArticles": "Error loading articles",
+    "tryAgainLater": "Please try again later",
     "404": {
       "title": "Page Not Found",
       "message": "The page you're looking for doesn't exist.",
