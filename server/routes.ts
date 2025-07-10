@@ -1,5 +1,7 @@
 import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
+import fs from 'fs';
+import path from 'path';
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { emailService } from "./emailService";
@@ -3445,6 +3447,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Invalid contract data', errors: error.errors });
       }
       res.status(500).json({ message: 'Failed to create commission contract' });
+    }
+  });
+
+  // Admin CSV export endpoint
+  app.get('/api/admin/export/translations', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      // Check if user is admin
+      if (!user || user.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+      
+      const csvPath = path.join(process.cwd(), 'translations.csv');
+      
+      // Check if file exists
+      if (!fs.existsSync(csvPath)) {
+        return res.status(404).json({ message: 'CSV file not found' });
+      }
+      
+      // Set headers for file download
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="art-souk-translations.csv"');
+      
+      // Send file
+      res.sendFile(csvPath);
+    } catch (error) {
+      console.error('Error exporting translations:', error);
+      res.status(500).json({ message: 'Failed to export translations' });
     }
   });
 

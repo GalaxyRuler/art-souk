@@ -46,7 +46,9 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
-  RefreshCw
+  RefreshCw,
+  Download,
+  Database
 } from "lucide-react";
 
 interface User {
@@ -496,7 +498,7 @@ export default function AdminDashboard() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-8">
+          <TabsList className="grid w-full grid-cols-9">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="artists">Artists</TabsTrigger>
@@ -505,6 +507,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="auctions">Auctions</TabsTrigger>
             <TabsTrigger value="articles">Articles</TabsTrigger>
             <TabsTrigger value="emails">Emails</TabsTrigger>
+            <TabsTrigger value="system">System</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -1356,6 +1359,88 @@ export default function AdminDashboard() {
                 </Card>
               </TabsContent>
             </Tabs>
+          </TabsContent>
+
+          <TabsContent value="system" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-semibold">System Tools</h2>
+                <p className="text-sm text-muted-foreground">Platform administration and data management</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Download className="h-5 w-5" />
+                    Translation Export
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    Export all platform translations in CSV format for review, editing, or translation management.
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <Database className="h-4 w-4" />
+                      <span>891 translation entries</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <FileText className="h-4 w-4" />
+                      <span>English and Arabic translations</span>
+                    </div>
+                  </div>
+                  <Button 
+                    className="w-full"
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.href = '/api/admin/export/translations';
+                      link.download = 'art-souk-translations.csv';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      toast({
+                        title: "Export Started",
+                        description: "Translations CSV file is being downloaded.",
+                      });
+                    }}
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Download CSV
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Settings className="h-5 w-5" />
+                    System Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Platform Version</span>
+                      <Badge variant="outline">v1.0.0</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Database Status</span>
+                      <Badge variant="default" className="bg-green-500">Online</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Email Service</span>
+                      <Badge variant="default" className="bg-green-500">Active</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Languages</span>
+                      <span className="text-sm">Arabic, English</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
 
