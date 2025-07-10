@@ -137,11 +137,14 @@ export function FeaturedCollections() {
                   }}>{name}</h3>
                   <p style={{ 
                     color: '#000000',
+                    backgroundColor: '#ffff00',
                     fontWeight: '900',
                     fontSize: '16px',
                     lineHeight: '1.4',
                     margin: '0',
-                    textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                    padding: '8px',
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
+                    border: '2px solid #ff0000'
                   }}>TEST TEXT: {description}</p>
                 </div>
               </div>

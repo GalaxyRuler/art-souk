@@ -200,4 +200,11 @@
   html {
     scroll-behavior: smooth;
   }
+
+  /* Force text to be fully opaque */
+  p, span, div, h1, h2, h3, h4, h5, h6 {
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
+    text-rendering: optimizeLegibility !important;
+  }
 }
