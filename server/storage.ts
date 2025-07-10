@@ -3155,7 +3155,7 @@ export class DatabaseStorage implements IStorage {
   async getCommissionRequestsByUser(userId: string): Promise<CommissionRequest[]> {
     return await db.select()
       .from(commissionRequests)
-      .where(eq(commissionRequests.userId, userId))
+      .where(eq(commissionRequests.collectorId, userId))
       .orderBy(desc(commissionRequests.createdAt));
   }
 
@@ -3165,7 +3165,7 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     await this.createAuditLog({
-      userId: request.userId,
+      userId: request.collectorId,
       action: 'commission_request_created',
       entityType: 'commission_request',
       entityId: newRequest.id.toString(),
@@ -3182,7 +3182,7 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     await this.createAuditLog({
-      userId: updated.userId,
+      userId: updated.collectorId,
       action: 'commission_request_updated',
       entityType: 'commission_request',
       entityId: id.toString(),
@@ -3202,7 +3202,7 @@ export class DatabaseStorage implements IStorage {
         .where(eq(commissionRequests.id, id));
       
       await this.createAuditLog({
-        userId: request.userId,
+        userId: request.collectorId,
         action: 'commission_request_deleted',
         entityType: 'commission_request',
         entityId: id.toString(),
@@ -3215,7 +3215,7 @@ export class DatabaseStorage implements IStorage {
   async getCommissionBids(requestId: number): Promise<CommissionBid[]> {
     return await db.select()
       .from(commissionBids)
-      .where(eq(commissionBids.requestId, requestId))
+      .where(eq(commissionBids.commissionRequestId, requestId))
       .orderBy(desc(commissionBids.createdAt));
   }
 
@@ -3284,13 +3284,13 @@ export class DatabaseStorage implements IStorage {
     // Update request status to in_progress
     await db.update(commissionRequests)
       .set({ status: 'in_progress', updatedAt: new Date() })
-      .where(eq(commissionRequests.id, bid.requestId));
+      .where(eq(commissionRequests.id, bid.commissionRequestId));
     
     // Reject all other bids for this request
     await db.update(commissionBids)
       .set({ status: 'rejected', updatedAt: new Date() })
       .where(and(
-        eq(commissionBids.requestId, bid.requestId),
+        eq(commissionBids.commissionRequestId, bid.commissionRequestId),
         ne(commissionBids.id, bidId)
       ));
     
@@ -3326,7 +3326,7 @@ export class DatabaseStorage implements IStorage {
   async getCommissionMessages(requestId: number): Promise<CommissionMessage[]> {
     return await db.select()
       .from(commissionMessages)
-      .where(eq(commissionMessages.requestId, requestId))
+      .where(eq(commissionMessages.commissionRequestId, requestId))
       .orderBy(asc(commissionMessages.createdAt));
   }
 
@@ -3340,7 +3340,7 @@ export class DatabaseStorage implements IStorage {
       action: 'commission_message_created',
       entityType: 'commission_message',
       entityId: newMessage.id.toString(),
-      newData: { requestId: message.requestId }
+      newData: { requestId: message.commissionRequestId }
     });
     
     return newMessage;
@@ -3350,7 +3350,7 @@ export class DatabaseStorage implements IStorage {
   async getCommissionContract(requestId: number): Promise<CommissionContract | undefined> {
     const [contract] = await db.select()
       .from(commissionContracts)
-      .where(eq(commissionContracts.requestId, requestId));
+      .where(eq(commissionContracts.commissionRequestId, requestId));
     return contract;
   }
 

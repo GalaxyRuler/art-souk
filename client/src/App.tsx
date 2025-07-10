@@ -30,6 +30,7 @@ import ManageWorkshops from "@/pages/ManageWorkshops";
 import ManageEvents from "@/pages/ManageEvents";
 import { CommissionRequests } from "@/pages/CommissionRequests";
 import { CommissionDetail } from "@/pages/CommissionDetail";
+import TestCommissions from "@/pages/TestCommissions";
 
 import Auth from "@/pages/Auth";
 import AdminSetup from "@/pages/AdminSetup";
