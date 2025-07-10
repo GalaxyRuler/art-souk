@@ -756,8 +756,14 @@
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome back",
+    "welcomeBack": "Welcome back, {{name}}",
     "editProfile": "Edit Profile",
-    "quickStats": "Quick Stats",
+    "quickStats": {
+      "title": "Quick Stats",
+      "favorites": "Favorites",
+      "inquiries": "Inquiries",
+      "views": "Views"
+    },
     "totalFavorites": "Total Favorites",
     "pendingInquiries": "Pending Inquiries",
     "following": "Following",
@@ -796,6 +802,24 @@
       "pending": "Pending",
       "responded": "Responded",
       "closed": "Closed"
+    },
+    "profile": {
+      "edit": "Edit Profile",
+      "firstName": "First Name",
+      "lastName": "Last Name", 
+      "phone": "Phone",
+      "location": "Location",
+      "bio": "Bio"
+    },
+    "favorites": {
+      "title": "My Collection",
+      "empty": "No favorites yet",
+      "emptyDescription": "Start exploring artworks to build your collection",
+      "browseArtworks": "Explore Artworks"
+    },
+    "inquiries": {
+      "title": "Inquiries",
+      "count": "inquiries"
     },
     "profileForm": {
       "firstName": "First Name",

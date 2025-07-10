@@ -374,10 +374,13 @@
       "title": "نشر طلب خاص"
     },
     "requests": {
-      "noRequests": "لا توجد طلبات خاصة",
-      "noRequestsDescription": "كن أول من ينشر طلب خاص أو تحقق لاحقاً من الفرص الجديدة",
+      "title": "طلبات خاصة",
       "subtitle": "تصفح طلبات الأعمال الفنية المخصصة من جامعي الفنون",
-      "title": "طلبات خاصة"
+      "postRequest": "نشر طلب",
+      "bidsCount": "{{count}} عرض",
+      "bidsCount_plural": "{{count}} عروض",
+      "noRequests": "لا توجد طلبات خاصة",
+      "noRequestsDescription": "كن أول من ينشر طلب خاص أو تحقق لاحقاً من الفرص الجديدة"
     }
   },
   "common": {
@@ -450,7 +453,31 @@
     "profileSettings": "إعدادات الملف الشخصي",
     "profileUpdateSuccess": "تم تحديث ملفك الشخصي بنجاح.",
     "profileUpdated": "تم تحديث الملف الشخصي",
-    "quickStats": "إحصائيات سريعة",
+    "welcomeBack": "مرحباً بعودتك، {{name}}",
+    "quickStats": {
+      "title": "إحصائيات سريعة", 
+      "favorites": "المفضلات",
+      "inquiries": "الاستفسارات",
+      "views": "المشاهدات"
+    },
+    "profile": {
+      "edit": "تعديل الملف الشخصي",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "phone": "الهاتف",
+      "location": "الموقع",
+      "bio": "نبذة عني"
+    },
+    "favorites": {
+      "title": "مجموعتي",
+      "empty": "لا توجد مفضلات بعد",
+      "emptyDescription": "ابدأ في استكشاف الأعمال الفنية لبناء مجموعتك",
+      "browseArtworks": "استكشف الأعمال الفنية"
+    },
+    "inquiries": {
+      "title": "الاستفسارات",
+      "count": "استفسارات"
+    },
     "removedFromFavorites": "أُزيل من المفضلات",
     "saveSettings": "حفظ الإعدادات",
     "sellerDashboard": "لوحة تحكم البائع",
