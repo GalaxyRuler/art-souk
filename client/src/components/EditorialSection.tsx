@@ -29,24 +29,24 @@ export function EditorialSection() {
 
   if (isLoading) {
     return (
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-zinc-900 border-t border-zinc-800">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="animate-pulse space-y-8">
             <div className="flex justify-between items-center">
               <div className="space-y-2">
-                <div className="h-8 bg-gray-200 rounded w-64"></div>
-                <div className="h-4 bg-gray-200 rounded w-96"></div>
+                <div className="h-8 bg-zinc-800 rounded w-64"></div>
+                <div className="h-4 bg-zinc-800 rounded w-96"></div>
               </div>
-              <div className="h-10 bg-gray-200 rounded w-32"></div>
+              <div className="h-10 bg-zinc-800 rounded w-32"></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="space-y-4">
-                  <div className="h-48 bg-gray-200 rounded-xl"></div>
+                  <div className="h-48 bg-zinc-800 rounded"></div>
                   <div className="space-y-2">
-                    <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-4 bg-gray-200 rounded"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div className="h-6 bg-zinc-800 rounded w-3/4"></div>
+                    <div className="h-4 bg-zinc-800 rounded"></div>
+                    <div className="h-4 bg-zinc-800 rounded w-1/2"></div>
                   </div>
                 </div>
               ))}
@@ -100,19 +100,19 @@ export function EditorialSection() {
   const displayArticles = articles.length > 0 ? articles : mockArticles;
 
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-zinc-900 border-t border-zinc-800">
+      <div className="max-w-7xl mx-auto px-4">
         <div className={cn("flex justify-between items-center mb-12", isRTL && "flex-row-reverse")}>
           <div className={cn(isRTL && "text-right")}>
-            <h2 className="text-3xl font-bold text-primary mb-4">
+            <h2 className="text-4xl font-black text-white uppercase tracking-wider mb-2">
               {t("editorial.title")}
             </h2>
-            <p className="text-gray-600">{t("editorial.description")}</p>
+            <div className="w-24 h-1 bg-orange-500 mb-4"></div>
+            <p className="text-gray-400 text-lg">{t("editorial.description")}</p>
           </div>
           <Link href="/editorial">
             <Button
-              variant="outline"
-              className="border-gray-300 text-gray-700 hover:bg-gray-50"
+              className="bg-transparent border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-black font-bold uppercase tracking-wider"
             >
               {t("editorial.viewAll")}
             </Button>
@@ -126,24 +126,24 @@ export function EditorialSection() {
             const category = isRTL && article.categoryAr ? article.categoryAr : article.category;
 
             return (
-              <article key={article.id} className="group cursor-pointer">
-                <div className="relative overflow-hidden rounded-xl mb-4">
+              <article key={article.id} className="group cursor-pointer bg-zinc-800 border border-zinc-700 hover:border-orange-500 transition-colors p-6">
+                <div className="relative overflow-hidden mb-4">
                   <img
                     src={article.coverImage}
                     alt={title}
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute top-4 left-4">
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge className="bg-orange-500/10 text-orange-500 border-orange-500/30 text-xs">
                       {category}
                     </Badge>
                   </div>
                 </div>
                 <div className={cn("space-y-3", isRTL && "text-right")}>
-                  <h3 className="text-xl font-semibold text-primary group-hover:text-accent transition-colors">
+                  <h3 className="text-xl font-bold text-white group-hover:text-orange-500 transition-colors uppercase tracking-wider">
                     {title}
                   </h3>
-                  <p className="text-gray-600 text-sm line-clamp-3">
+                  <p className="text-gray-400 text-sm line-clamp-3">
                     {excerpt}
                   </p>
                   <div className="flex items-center text-xs text-gray-500">

@@ -10,12 +10,12 @@ export function HeroSection() {
   const { isRTL } = useLanguage();
 
   return (
-    <section className="relative bg-hero-gradient overflow-hidden min-h-[80vh] flex items-center">
+    <section className="relative bg-zinc-900 overflow-hidden min-h-[80vh] flex items-center">
       {/* Background Decorations */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-20 left-20 w-40 h-40 bg-brand-gold rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-32 h-32 bg-white rounded-full blur-2xl"></div>
-        <div className="absolute top-1/3 right-1/4 w-24 h-24 bg-brand-navy rounded-full blur-xl"></div>
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-20 left-20 w-40 h-40 bg-orange-500 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-32 h-32 bg-zinc-700 rounded-full blur-2xl"></div>
+        <div className="absolute top-1/3 right-1/4 w-24 h-24 bg-orange-400 rounded-full blur-xl"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10">
@@ -23,13 +23,14 @@ export function HeroSection() {
           {/* Text Content */}
           <div className={cn("space-y-10", isRTL && "text-right")}>
             <div className="space-y-6">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight uppercase tracking-wider">
                 {t("hero.title")}
-                <span className="text-brand-gold block text-4xl md:text-5xl lg:text-6xl mt-2">
+                <span className="text-orange-500 block text-4xl md:text-5xl lg:text-6xl mt-2">
                   {t("hero.subtitle")}
                 </span>
               </h1>
-              <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-2xl">
+              <div className="w-24 h-1 bg-orange-500 mb-6"></div>
+              <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-2xl">
                 {t("hero.description")}
               </p>
             </div>
@@ -38,7 +39,7 @@ export function HeroSection() {
               {isAuthenticated ? (
                 <Button
                   size="lg"
-                  className="bg-white text-brand-navy hover:bg-gray-100 shadow-lg text-lg px-8 py-4 h-auto font-semibold"
+                  className="bg-orange-500 text-black hover:bg-orange-600 shadow-lg text-lg px-8 py-4 h-auto font-bold uppercase tracking-wider"
                 >
                   {t("hero.cta.browse")}
                 </Button>
@@ -46,7 +47,7 @@ export function HeroSection() {
                 <>
                   <Button
                     size="lg"
-                    className="bg-white text-brand-navy hover:bg-gray-100 shadow-lg text-lg px-8 py-4 h-auto font-semibold"
+                    className="bg-orange-500 text-black hover:bg-orange-600 shadow-lg text-lg px-8 py-4 h-auto font-bold uppercase tracking-wider"
                     onClick={() => (window.location.href = "/api/login")}
                   >
                     {t("hero.cta.start")}
@@ -54,7 +55,7 @@ export function HeroSection() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-2 border-white text-white hover:bg-white hover:text-brand-navy text-lg px-8 py-4 h-auto font-semibold backdrop-blur-sm bg-white/10"
+                    className="border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-black text-lg px-8 py-4 h-auto font-bold uppercase tracking-wider"
                   >
                     {t("hero.cta.browse")}
                   </Button>

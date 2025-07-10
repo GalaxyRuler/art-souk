@@ -47,16 +47,16 @@ export function NavbarRedesigned() {
               if (item.requireAuth && !user) return null;
               return (
                 <Link key={item.href} href={item.href}>
-                  <a
+                  <span
                     className={cn(
-                      "text-sm font-bold uppercase tracking-wider transition-colors duration-200",
+                      "text-sm font-bold uppercase tracking-wider transition-colors duration-200 cursor-pointer",
                       location === item.href
                         ? "text-orange-500"
                         : "text-gray-300 hover:text-white"
                     )}
                   >
                     {item.label}
-                  </a>
+                  </span>
                 </Link>
               );
             })}
@@ -113,9 +113,9 @@ export function NavbarRedesigned() {
               if (item.requireAuth && !user) return null;
               return (
                 <Link key={item.href} href={item.href}>
-                  <a
+                  <span
                     className={cn(
-                      "block py-3 text-sm font-bold uppercase tracking-wider transition-colors",
+                      "block py-3 text-sm font-bold uppercase tracking-wider transition-colors cursor-pointer",
                       location === item.href
                         ? "text-orange-500"
                         : "text-gray-300 hover:text-white"
@@ -123,7 +123,7 @@ export function NavbarRedesigned() {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.label}
-                  </a>
+                  </span>
                 </Link>
               );
             })}

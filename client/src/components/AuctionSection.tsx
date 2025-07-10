@@ -39,23 +39,23 @@ export function AuctionSection() {
 
   if (isLoading) {
     return (
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-black border-t border-zinc-800">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="animate-pulse space-y-8">
             <div className="flex justify-between items-center">
               <div className="space-y-2">
-                <div className="h-8 bg-gray-200 rounded w-64"></div>
-                <div className="h-4 bg-gray-200 rounded w-96"></div>
+                <div className="h-8 bg-zinc-800 rounded w-64"></div>
+                <div className="h-4 bg-zinc-800 rounded w-96"></div>
               </div>
-              <div className="h-10 bg-gray-200 rounded w-32"></div>
+              <div className="h-10 bg-zinc-800 rounded w-32"></div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[...Array(4)].map((_, i) => (
                 <div key={i} className="space-y-4">
-                  <div className="h-48 bg-gray-200 rounded-lg"></div>
+                  <div className="h-48 bg-zinc-800 rounded"></div>
                   <div className="space-y-2">
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div className="h-4 bg-zinc-800 rounded w-3/4"></div>
+                    <div className="h-4 bg-zinc-800 rounded w-1/2"></div>
                   </div>
                 </div>
               ))}
@@ -159,13 +159,13 @@ export function AuctionSection() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "live":
-        return <Badge variant="destructive" className="text-xs">{t("auctions.status.live")}</Badge>;
+        return <Badge className="bg-red-500 text-white text-xs font-bold uppercase">{t("auctions.status.live")}</Badge>;
       case "upcoming":
-        return <Badge variant="secondary" className="text-xs">{t("auctions.status.upcoming")}</Badge>;
+        return <Badge className="bg-blue-500 text-white text-xs font-bold uppercase">{t("auctions.status.upcoming")}</Badge>;
       case "ended":
-        return <Badge variant="outline" className="text-xs">{t("auctions.status.ended")}</Badge>;
+        return <Badge className="bg-gray-500 text-white text-xs font-bold uppercase">{t("auctions.status.ended")}</Badge>;
       default:
-        return <Badge variant="outline" className="text-xs">{t("auctions.status.unknown")}</Badge>;
+        return <Badge className="bg-gray-500 text-white text-xs font-bold uppercase">{t("auctions.status.unknown")}</Badge>;
     }
   };
 
@@ -185,19 +185,19 @@ export function AuctionSection() {
   };
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-black border-t border-zinc-800">
+      <div className="max-w-7xl mx-auto px-4">
         <div className={cn("flex justify-between items-center mb-12", isRTL && "flex-row-reverse")}>
           <div className={cn(isRTL && "text-right")}>
-            <h2 className="text-3xl font-bold text-primary mb-4">
+            <h2 className="text-4xl font-black text-white uppercase tracking-wider mb-2">
               {t("auctions.title")}
             </h2>
-            <p className="text-gray-600">{t("auctions.description")}</p>
+            <div className="w-24 h-1 bg-orange-500 mb-4"></div>
+            <p className="text-gray-400 text-lg">{t("auctions.description")}</p>
           </div>
           <Link href="/auctions">
             <Button
-              variant="outline"
-              className="border-gray-300 text-gray-700 hover:bg-white"
+              className="bg-transparent border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-black font-bold uppercase tracking-wider"
             >
               {t("auctions.viewAll")}
             </Button>
@@ -211,7 +211,7 @@ export function AuctionSection() {
             const artistName = isRTL && auction.artwork?.artist?.nameAr ? auction.artwork.artist.nameAr : auction.artwork?.artist?.name;
 
             return (
-              <Card key={auction.id} className="overflow-hidden group cursor-pointer transition-all duration-300 hover:shadow-lg">
+              <Card key={auction.id} className="overflow-hidden group cursor-pointer transition-all duration-300 bg-zinc-900 border border-zinc-800 hover:border-orange-500">
                 <div className="relative">
                   <img
                     src={auction.artwork?.images?.[0] || "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300"}
@@ -222,25 +222,25 @@ export function AuctionSection() {
                     {getStatusBadge(auction.status)}
                   </div>
                   <div className="absolute bottom-3 right-3">
-                    <Badge variant="secondary" className="text-xs bg-black/70 text-white">
+                    <Badge className="text-xs bg-orange-500/10 text-orange-500 border-orange-500/30 font-bold">
                       {auction.bidCount} {t("auctions.bids")}
                     </Badge>
                   </div>
                 </div>
                 <CardContent className="p-4">
-                  <h3 className="font-semibold text-primary text-sm mb-1 line-clamp-1">
+                  <h3 className="font-bold text-white text-sm mb-1 line-clamp-1 uppercase tracking-wider">
                     {artistName}
                   </h3>
-                  <p className="text-gray-600 text-xs italic mb-2 line-clamp-1">
+                  <p className="text-gray-400 text-xs italic mb-2 line-clamp-1">
                     {artworkTitle}
                   </p>
                   <p className="text-gray-500 text-xs mb-2 line-clamp-1">
                     {title}
                   </p>
-                  <p className="text-primary font-semibold text-sm">
+                  <p className="text-orange-500 font-bold text-sm">
                     {formatPrice(auction.currentBid, auction.currency, isRTL ? 'ar' : 'en')}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-400">
                     {auction.status === "live" ? `${t("auctions.endsIn")} ${getTimeRemaining(auction.endDate)}` : 
                      auction.status === "upcoming" ? `${t("auctions.startsIn")} ${getTimeRemaining(auction.endDate)}` : 
                      t("auctions.timeEnded")}

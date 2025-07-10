@@ -15,23 +15,23 @@ export function CuratorsPicks() {
 
   if (isLoading) {
     return (
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-black border-t border-zinc-800">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="animate-pulse space-y-8">
             <div className="flex justify-between items-center">
               <div className="space-y-2">
-                <div className="h-8 bg-gray-200 rounded w-64"></div>
-                <div className="h-4 bg-gray-200 rounded w-96"></div>
+                <div className="h-8 bg-zinc-800 rounded w-64"></div>
+                <div className="h-4 bg-zinc-800 rounded w-96"></div>
               </div>
-              <div className="h-10 bg-gray-200 rounded w-32"></div>
+              <div className="h-10 bg-zinc-800 rounded w-32"></div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
                 <div key={i} className="space-y-4">
-                  <div className="h-48 bg-gray-200 rounded-lg"></div>
+                  <div className="h-48 bg-zinc-800 rounded"></div>
                   <div className="space-y-2">
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div className="h-4 bg-zinc-800 rounded w-3/4"></div>
+                    <div className="h-4 bg-zinc-800 rounded w-1/2"></div>
                   </div>
                 </div>
               ))}
@@ -137,18 +137,18 @@ export function CuratorsPicks() {
   const displayArtworks = artworks.length > 0 ? artworks : mockArtworks;
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-black border-t border-zinc-800">
+      <div className="max-w-7xl mx-auto px-4">
         <div className={cn("flex justify-between items-center mb-12", isRTL && "flex-row-reverse")}>
           <div className={cn(isRTL && "text-right")}>
-            <h2 className="text-3xl font-bold text-primary mb-4">
+            <h2 className="text-4xl font-black text-white uppercase tracking-wider mb-2">
               {t("curators.title")}
             </h2>
-            <p className="text-gray-600">{t("curators.description")}</p>
+            <div className="w-24 h-1 bg-orange-500 mb-4"></div>
+            <p className="text-gray-400 text-lg">{t("curators.description")}</p>
           </div>
           <Button
-            variant="outline"
-            className="border-gray-300 text-gray-700 hover:bg-white"
+            className="bg-transparent border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-black font-bold uppercase tracking-wider"
           >
             {t("curators.viewAll")}
           </Button>
