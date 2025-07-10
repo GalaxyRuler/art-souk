@@ -3215,7 +3215,7 @@ export class DatabaseStorage implements IStorage {
   async getCommissionBids(requestId: number): Promise<CommissionBid[]> {
     return await db.select()
       .from(commissionBids)
-      .where(eq(commissionBids.commissionRequestId, requestId))
+      .where(eq(commissionBids.commissionId, requestId))
       .orderBy(desc(commissionBids.createdAt));
   }
 
@@ -3284,13 +3284,13 @@ export class DatabaseStorage implements IStorage {
     // Update request status to in_progress
     await db.update(commissionRequests)
       .set({ status: 'in_progress', updatedAt: new Date() })
-      .where(eq(commissionRequests.id, bid.commissionRequestId));
+      .where(eq(commissionRequests.id, bid.commissionId));
     
     // Reject all other bids for this request
     await db.update(commissionBids)
       .set({ status: 'rejected', updatedAt: new Date() })
       .where(and(
-        eq(commissionBids.commissionRequestId, bid.commissionRequestId),
+        eq(commissionBids.commissionId, bid.commissionId),
         ne(commissionBids.id, bidId)
       ));
     
