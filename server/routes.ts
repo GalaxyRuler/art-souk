@@ -625,6 +625,103 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update artwork
+  app.put('/api/artworks/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const artworkId = parseInt(req.params.id);
+      const artworkData = insertArtworkSchema.partial().parse(req.body);
+      const artwork = await storage.updateArtwork(artworkId, artworkData);
+      res.json(artwork);
+    } catch (error) {
+      console.error("Error updating artwork:", error);
+      res.status(500).json({ message: "Failed to update artwork" });
+    }
+  });
+
+  // Delete artwork
+  app.delete('/api/artworks/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const artworkId = parseInt(req.params.id);
+      await storage.deleteArtwork(artworkId);
+      res.json({ message: "Artwork deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting artwork:", error);
+      res.status(500).json({ message: "Failed to delete artwork" });
+    }
+  });
+
+  // User artworks endpoint - get artworks for authenticated user
+  app.get('/api/user/artworks', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Check if user has artist or gallery roles
+      const userRoles = user.roles || [];
+      if (!userRoles.includes('artist') && !userRoles.includes('gallery')) {
+        return res.status(403).json({ message: 'Access denied. Artist or gallery role required.' });
+      }
+
+      let artworks: any[] = [];
+      
+      // Get artworks based on user type
+      if (userRoles.includes('artist')) {
+        const artist = await storage.getArtistByUserId(userId);
+        if (artist) {
+          artworks = await storage.getArtworksByArtist(artist.id);
+        }
+      } else if (userRoles.includes('gallery')) {
+        const gallery = await storage.getGalleryByUserId(userId);
+        if (gallery) {
+          artworks = await storage.getArtworksByGallery(gallery.id);
+        }
+      }
+
+      res.json(artworks);
+    } catch (error) {
+      console.error("Error fetching user artworks:", error);
+      res.status(500).json({ message: "Failed to fetch user artworks" });
+    }
+  });
+
+  // User artist profile endpoint
+  app.get('/api/user/artist-profile', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const artist = await storage.getArtistByUserId(userId);
+      
+      if (!artist) {
+        return res.status(404).json({ message: 'Artist profile not found' });
+      }
+
+      res.json(artist);
+    } catch (error) {
+      console.error("Error fetching artist profile:", error);
+      res.status(500).json({ message: "Failed to fetch artist profile" });
+    }
+  });
+
+  // User gallery profile endpoint
+  app.get('/api/user/gallery-profile', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const gallery = await storage.getGalleryByUserId(userId);
+      
+      if (!gallery) {
+        return res.status(404).json({ message: 'Gallery profile not found' });
+      }
+
+      res.json(gallery);
+    } catch (error) {
+      console.error("Error fetching gallery profile:", error);
+      res.status(500).json({ message: "Failed to fetch gallery profile" });
+    }
+  });
+
   // Auction routes
   app.get('/api/auctions', async (req, res) => {
     try {

@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Heart, MessageSquare, User, Settings, Eye, Calendar, MapPin, Phone, Mail, Edit2, Save, X, BarChart3, Package } from "lucide-react";
+import { Heart, MessageSquare, User, Settings, Eye, Calendar, MapPin, Phone, Mail, Edit2, Save, X, BarChart3, Package, Palette } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
@@ -364,12 +364,12 @@ export default function Dashboard() {
                   </Link>
                 )}
                 
-                {/* Seller Dashboard Link for Artists/Galleries */}
+                {/* Artwork Management Link for Artists/Galleries */}
                 {(user?.role === 'artist' || user?.role === 'gallery') && (
-                  <Link to="/seller">
+                  <Link to="/artworks/manage">
                     <Button className="w-full mt-2 bg-brand-navy hover:bg-brand-steel">
-                      <ShoppingBag className="h-4 w-4 mr-2" />
-                      {t("dashboard.sellerDashboard")}
+                      <Palette className="h-4 w-4 mr-2" />
+                      {t("artworks.management")}
                     </Button>
                   </Link>
                 )}

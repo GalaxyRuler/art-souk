@@ -33,6 +33,7 @@ import { CommissionRequests } from "@/pages/CommissionRequests";
 import { CommissionDetail } from "@/pages/CommissionDetail";
 import TestCommissions from "@/pages/TestCommissions";
 import RoleSelection from "@/pages/RoleSelection";
+import ArtworkManagement from "@/pages/ArtworkManagement";
 // import TapPaymentSetup from "@/pages/TapPaymentSetup"; // Disabled until sufficient traffic
 
 import Auth from "@/pages/Auth";
@@ -73,6 +74,7 @@ function Router() {
           <Route path="/manage/events" component={ManageEvents} />
           <Route path="/commissions" component={CommissionRequests} />
           <Route path="/commissions/:id" component={CommissionDetail} />
+          <Route path="/artworks/manage" component={ArtworkManagement} />
           <Route path="/role-selection" component={RoleSelection} />
           {/* <Route path="/tap-payment-setup" component={TapPaymentSetup} /> */}
         </>

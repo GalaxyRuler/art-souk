@@ -823,6 +823,19 @@ export class DatabaseStorage implements IStorage {
     return updatedArtwork;
   }
 
+  async deleteArtwork(id: number): Promise<void> {
+    await db.delete(artworks).where(eq(artworks.id, id));
+  }
+
+  async getArtworksByGallery(galleryId: number, limit = 20): Promise<Artwork[]> {
+    return await db
+      .select()
+      .from(artworks)
+      .where(eq(artworks.galleryId, galleryId))
+      .orderBy(desc(artworks.createdAt))
+      .limit(limit);
+  }
+
   // Auction operations
   async getAuctions(limit = 20, offset = 0): Promise<Auction[]> {
     return await db
