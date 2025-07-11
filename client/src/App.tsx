@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nextProvider } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
+import { useRoleSetup } from "@/hooks/useRoleSetup";
 import { i18n } from "@/lib/i18n";
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/Landing";
@@ -41,6 +42,7 @@ import AuthTest from "@/pages/AuthTest";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
+  const { setupComplete, isLoading: roleLoading } = useRoleSetup();
 
   return (
     <Switch>
@@ -87,6 +89,7 @@ function Router() {
       <Route path="/search" component={Search} />
       <Route path="/achievements/:id" component={AchievementsPage} />
       <Route path="/auth" component={Auth} />
+      <Route path="/role-selection" component={RoleSelection} />
       <Route path="/admin/setup" component={AdminSetup} />
       <Route path="/admin/test" component={AdminTest} />
       <Route path="/admin" component={AdminDashboard} />

@@ -145,8 +145,8 @@ export default function RoleSelection() {
         description: t("roleSelection.successDesc"),
       });
 
-      // Redirect to dashboard
-      window.location.href = "/dashboard";
+      // Redirect to home page
+      window.location.href = "/";
     } catch (error) {
       console.error("Error updating user roles:", error);
       toast({
@@ -280,7 +280,15 @@ export default function RoleSelection() {
           <div className="flex justify-center space-x-4">
             <Button
               variant="outline"
-              onClick={() => window.location.href = "/"}
+              onClick={() => {
+                // Mark setup as complete without roles
+                apiRequest('/api/user/roles', {
+                  method: 'PUT',
+                  body: JSON.stringify({ roles: ['collector'] }) // Default to collector
+                }).then(() => {
+                  window.location.href = "/";
+                });
+              }}
               disabled={isSubmitting}
             >
               {t("roleSelection.skipForNow")}

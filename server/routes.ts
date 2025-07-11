@@ -123,6 +123,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Auth success redirect handler
+  app.get('/auth/success', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      // Check if user needs to complete role setup
+      if (!user?.roleSetupComplete) {
+        return res.redirect('/role-selection');
+      }
+      
+      // User has completed setup, redirect to home
+      res.redirect('/');
+    } catch (error) {
+      console.error("Error in auth success:", error);
+      res.redirect('/');
+    }
+  });
+
   // Admin setup endpoint - can be called once to make first user admin
   app.post('/api/admin/setup', isAuthenticated, async (req: any, res) => {
     try {
