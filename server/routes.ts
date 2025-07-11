@@ -82,6 +82,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const { roles } = req.body;
       
+      console.log(`Attempting to update roles for user ${userId}:`, roles);
+      
       if (!Array.isArray(roles) || roles.length === 0) {
         return res.status(400).json({ message: "Invalid roles array" });
       }
@@ -89,23 +91,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Validate role names
       const validRoles = ['collector', 'artist', 'gallery'];
       if (!roles.every(role => validRoles.includes(role))) {
+        console.error(`Invalid role names provided:`, roles);
         return res.status(400).json({ message: "Invalid role names" });
       }
       
+      // Check if user exists, create if not (for new users)
+      let user = await storage.getUser(userId);
+      if (!user) {
+        console.log(`User not found, creating new user: ${userId}`);
+        // Create user with basic info from auth claims
+        user = await storage.upsertUser({
+          id: userId,
+          email: req.user.claims.email || null,
+          firstName: req.user.claims.first_name || null,
+          lastName: req.user.claims.last_name || null,
+          profileImageUrl: req.user.claims.profile_image_url || null,
+        });
+      }
+      
+      console.log(`User found, updating roles from ${user.roles} to ${roles}`);
       await storage.updateUserRoles(userId, roles);
       
       // Create artist/gallery profiles if needed
       if (roles.includes('artist')) {
+        console.log(`Creating artist profile for user ${userId}`);
         await storage.createArtistProfileIfNotExists(userId);
       }
       if (roles.includes('gallery')) {
+        console.log(`Creating gallery profile for user ${userId}`);
         await storage.createGalleryProfileIfNotExists(userId);
       }
       
+      console.log(`Successfully updated roles for user ${userId}`);
       res.json({ message: "Roles updated successfully" });
     } catch (error) {
       console.error("Error updating user roles:", error);
-      res.status(500).json({ message: "Failed to update user roles" });
+      console.error("Stack trace:", error instanceof Error ? error.stack : error);
+      res.status(500).json({ message: "Failed to update user roles", error: error instanceof Error ? error.message : String(error) });
     }
   });
 

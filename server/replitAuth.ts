@@ -57,6 +57,7 @@ function updateUserSession(
 async function upsertUser(
   claims: any,
 ) {
+  console.log('Creating/updating user from auth claims:', claims["sub"]);
   await storage.upsertUser({
     id: claims["sub"],
     email: claims["email"],
