@@ -76,6 +76,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // User role management endpoints
+  app.put('/api/user/roles', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { roles } = req.body;
+      
+      if (!Array.isArray(roles) || roles.length === 0) {
+        return res.status(400).json({ message: "Invalid roles array" });
+      }
+      
+      // Validate role names
+      const validRoles = ['collector', 'artist', 'gallery'];
+      if (!roles.every(role => validRoles.includes(role))) {
+        return res.status(400).json({ message: "Invalid role names" });
+      }
+      
+      await storage.updateUserRoles(userId, roles);
+      
+      // Create artist/gallery profiles if needed
+      if (roles.includes('artist')) {
+        await storage.createArtistProfileIfNotExists(userId);
+      }
+      if (roles.includes('gallery')) {
+        await storage.createGalleryProfileIfNotExists(userId);
+      }
+      
+      res.json({ message: "Roles updated successfully" });
+    } catch (error) {
+      console.error("Error updating user roles:", error);
+      res.status(500).json({ message: "Failed to update user roles" });
+    }
+  });
+
+  app.get('/api/user/roles', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json({ 
+        roles: user?.roles || [], 
+        setupComplete: user?.roleSetupComplete || false 
+      });
+    } catch (error) {
+      console.error("Error fetching user roles:", error);
+      res.status(500).json({ message: "Failed to fetch user roles" });
+    }
+  });
+
   // Admin setup endpoint - can be called once to make first user admin
   app.post('/api/admin/setup', isAuthenticated, async (req: any, res) => {
     try {

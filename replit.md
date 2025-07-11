@@ -141,6 +141,18 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- January 17, 2025: Role Selection System Implementation
+  ✓ Enhanced user schema to support multiple roles (collector, artist, gallery)
+  ✓ Added roles array and role_setup_complete fields to users table
+  ✓ Created comprehensive Role Selection page with bilingual support
+  ✓ Users can now select multiple roles during signup (collector, artist, gallery)
+  ✓ Automatic artist/gallery profile creation when roles are selected
+  ✓ Added role management API endpoints for updating user roles
+  ✓ Role selection appears after first login to customize user experience
+  ✓ Users can change roles anytime or skip role selection initially
+  ✓ Full Arabic translations for role selection interface
+  ✓ Enhanced authentication flow to support multi-role users
+
 - July 06, 2025: Comprehensive marketplace implementation completed
   ✓ Individual artwork pages with image galleries, pricing, and inquiry system
   ✓ Advanced search & filtering functionality across all content types

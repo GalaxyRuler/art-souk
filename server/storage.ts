@@ -168,6 +168,9 @@ export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
   updateUserRole(id: string, role: string): Promise<User>;
+  updateUserRoles(id: string, roles: string[]): Promise<User>;
+  createArtistProfileIfNotExists(userId: string): Promise<void>;
+  createGalleryProfileIfNotExists(userId: string): Promise<void>;
   getAllUsers(): Promise<User[]>;
   
   // Artist operations
@@ -505,6 +508,67 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, id))
       .returning();
     return user;
+  }
+
+  async updateUserRoles(id: string, roles: string[]): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ 
+        roles, 
+        roleSetupComplete: true, 
+        updatedAt: new Date() 
+      })
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  async createArtistProfileIfNotExists(userId: string): Promise<void> {
+    const user = await this.getUser(userId);
+    if (!user) return;
+
+    // Check if artist profile exists
+    const [existingArtist] = await db
+      .select()
+      .from(artists)
+      .where(eq(artists.userId, userId));
+
+    if (!existingArtist) {
+      await db.insert(artists).values({
+        userId,
+        name: `${user.firstName} ${user.lastName}`.trim() || "Artist",
+        nameAr: `${user.firstName} ${user.lastName}`.trim() || "فنان",
+        biography: "This artist is setting up their profile.",
+        biographyAr: "هذا الفنان يقوم بإعداد ملفه الشخصي.",
+        nationality: "Saudi Arabia",
+        profileImage: user.profileImageUrl || null,
+      });
+    }
+  }
+
+  async createGalleryProfileIfNotExists(userId: string): Promise<void> {
+    const user = await this.getUser(userId);
+    if (!user) return;
+
+    // Check if gallery profile exists
+    const [existingGallery] = await db
+      .select()
+      .from(galleries)
+      .where(eq(galleries.userId, userId));
+
+    if (!existingGallery) {
+      await db.insert(galleries).values({
+        userId,
+        name: `${user.firstName} ${user.lastName} Gallery`.trim() || "Gallery",
+        nameAr: `معرض ${user.firstName} ${user.lastName}`.trim() || "معرض",
+        description: "This gallery is setting up their profile.",
+        descriptionAr: "هذا المعرض يقوم بإعداد ملفه الشخصي.",
+        location: "Saudi Arabia",
+        locationAr: "المملكة العربية السعودية",
+        email: user.email || null,
+        profileImage: user.profileImageUrl || null,
+      });
+    }
   }
 
   async getAllUsers(): Promise<User[]> {

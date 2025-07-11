@@ -36,6 +36,8 @@ export const users = pgTable("users", {
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
   role: varchar("role").default("user"), // user, artist, gallery, admin
+  roles: jsonb("roles").default([]), // Array of roles: ["collector", "artist", "gallery"]
+  roleSetupComplete: boolean("role_setup_complete").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

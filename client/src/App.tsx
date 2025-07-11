@@ -31,6 +31,7 @@ import ManageEvents from "@/pages/ManageEvents";
 import { CommissionRequests } from "@/pages/CommissionRequests";
 import { CommissionDetail } from "@/pages/CommissionDetail";
 import TestCommissions from "@/pages/TestCommissions";
+import RoleSelection from "@/pages/RoleSelection";
 
 import Auth from "@/pages/Auth";
 import AdminSetup from "@/pages/AdminSetup";
@@ -69,6 +70,7 @@ function Router() {
           <Route path="/manage/events" component={ManageEvents} />
           <Route path="/commissions" component={CommissionRequests} />
           <Route path="/commissions/:id" component={CommissionDetail} />
+          <Route path="/role-selection" component={RoleSelection} />
         </>
       )}
       {/* Public routes accessible to all users */}

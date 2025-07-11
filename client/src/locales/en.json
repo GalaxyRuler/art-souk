@@ -222,6 +222,22 @@
     "unauthorized": "Unauthorized", 
     "loggingInAgain": "You are logged out. Logging in again..."
   },
+  "roleSelection": {
+    "welcome": "Welcome",
+    "setupAccount": "Account Setup",
+    "chooseRole": "How would you like to use Art Souk?",
+    "subtitle": "Choose one or more roles to customize your experience. You can always change these later.",
+    "multipleRoles": "You can select multiple roles",
+    "selectAtLeastOne": "Please select at least one role",
+    "selectAtLeastOneDesc": "You need to select at least one role to continue",
+    "skipForNow": "Skip for now",
+    "continue": "Continue",
+    "setting": "Setting up...",
+    "success": "Roles updated successfully!",
+    "successDesc": "Your account has been configured with your selected roles.",
+    "error": "Failed to update roles",
+    "errorDesc": "There was an error updating your roles. Please try again."
+  },
   "hero": {
     "title": "Discover Saudi & GCC",
     "subtitle": "Contemporary Art",
