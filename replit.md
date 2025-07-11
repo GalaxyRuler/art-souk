@@ -157,7 +157,7 @@ Preferred communication style: Simple, everyday language.
   ✓ Created useRoleSetup hook for automatic role setup checking
   ✓ Auth callback now redirects to role selection for new users
 
-- January 17, 2025: Tap Payment Integration Implementation
+- January 17, 2025: Tap Payment Integration Implementation (DISABLED)
   ✓ Added comprehensive Tap Payment marketplace integration for artists and galleries
   ✓ Created TapPaymentService with business creation, payment processing, and webhook handling
   ✓ Implemented split payment system with automatic platform commission (5%)
@@ -169,6 +169,8 @@ Preferred communication style: Simple, everyday language.
   ✓ Environment configuration for both sandbox and production environments
   ✓ Payment method storage in artist/gallery profiles with destination IDs
   ✓ Complete Arabic translations for all Tap Payment interfaces
+  ✓ DISABLED: Routes and frontend access commented out until sufficient traffic is achieved
+  ✓ Code remains intact for easy re-activation when needed
 
 - July 06, 2025: Comprehensive marketplace implementation completed
   ✓ Individual artwork pages with image galleries, pricing, and inquiry system

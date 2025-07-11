@@ -2076,7 +2076,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Tap Payment Integration Routes
+  // Tap Payment Integration Routes - DISABLED UNTIL SUFFICIENT TRAFFIC
+  // Uncomment these routes when ready to enable Tap Payment integration
+  /*
   app.post('/api/tap/create-business', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
@@ -2230,6 +2232,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: 'Failed to fetch payment methods' });
     }
   });
+  */
 
   app.post('/api/seller/payment-methods', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {

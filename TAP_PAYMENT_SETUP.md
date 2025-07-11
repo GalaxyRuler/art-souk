@@ -1,5 +1,8 @@
 # Tap Payment Integration Setup Guide
 
+## ⚠️ CURRENTLY DISABLED
+This integration is temporarily disabled until the platform achieves sufficient traffic. All code remains intact for easy re-activation.
+
 ## Overview
 This guide explains how to integrate Tap Payment as a payment method for artists and galleries in the Art Souk platform.
 
@@ -159,3 +162,14 @@ TAP_SANDBOX_URL=https://api.tap.company/sandbox/v2
 - **Scalability**: Support for growing seller base
 
 This integration provides Art Souk with a robust, compliant, and user-friendly payment solution specifically designed for the Middle East market.
+
+## Re-enabling the Integration
+
+When ready to activate Tap Payment:
+
+1. **Backend**: Uncomment the routes in `server/routes.ts` (lines 2082-2224)
+2. **Frontend**: Uncomment the route and import in `client/src/App.tsx`
+3. **Environment**: Add your Tap Payment API keys
+4. **Testing**: Verify all endpoints and user flows work correctly
+
+The integration is designed to be easily activated without any code changes.
