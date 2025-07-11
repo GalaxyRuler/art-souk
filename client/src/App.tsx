@@ -33,6 +33,7 @@ import { CommissionRequests } from "@/pages/CommissionRequests";
 import { CommissionDetail } from "@/pages/CommissionDetail";
 import TestCommissions from "@/pages/TestCommissions";
 import RoleSelection from "@/pages/RoleSelection";
+import TapPaymentSetup from "@/pages/TapPaymentSetup";
 
 import Auth from "@/pages/Auth";
 import AdminSetup from "@/pages/AdminSetup";
@@ -73,6 +74,7 @@ function Router() {
           <Route path="/commissions" component={CommissionRequests} />
           <Route path="/commissions/:id" component={CommissionDetail} />
           <Route path="/role-selection" component={RoleSelection} />
+          <Route path="/tap-payment-setup" component={TapPaymentSetup} />
         </>
       )}
       {/* Public routes accessible to all users */}

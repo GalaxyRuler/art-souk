@@ -2076,6 +2076,161 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Tap Payment Integration Routes
+  app.post('/api/tap/create-business', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user || (!user.roles.includes('artist') && !user.roles.includes('gallery'))) {
+        return res.status(403).json({ message: 'Access denied - not a seller' });
+      }
+      
+      const { tapPaymentService } = await import('./tapPaymentService');
+      const businessData = req.body;
+      
+      // Create business in Tap
+      const tapBusiness = await tapPaymentService.createBusiness(businessData);
+      
+      // Create destination for payments
+      const destination = await tapPaymentService.createDestination(tapBusiness.id);
+      
+      // Store Tap Payment method in user's payment methods
+      const tapPaymentMethod = {
+        type: 'tap_payment',
+        destinationId: destination.id,
+        businessId: tapBusiness.id,
+        accountStatus: 'pending',
+        commissionRate: 5, // 5% platform commission
+        autoSplit: true,
+        details: {
+          name: businessData.name,
+          email: businessData.email,
+          phone: businessData.phone,
+        }
+      };
+      
+      // Update artist/gallery payment methods
+      if (user.roles.includes('artist')) {
+        const artist = await storage.getArtistByUserId(userId);
+        if (artist) {
+          const paymentMethods = artist.paymentMethods || [];
+          paymentMethods.push(tapPaymentMethod);
+          await storage.updateArtist(artist.id, { paymentMethods });
+        }
+      }
+      
+      if (user.roles.includes('gallery')) {
+        const gallery = await storage.getGalleryByUserId(userId);
+        if (gallery) {
+          const paymentMethods = gallery.paymentMethods || [];
+          paymentMethods.push(tapPaymentMethod);
+          await storage.updateGallery(gallery.id, { paymentMethods });
+        }
+      }
+      
+      res.json({
+        success: true,
+        businessId: tapBusiness.id,
+        destinationId: destination.id,
+        status: 'pending_kyc',
+        message: 'Tap Payment business created successfully. KYC verification in progress.'
+      });
+    } catch (error) {
+      console.error('Error creating Tap business:', error);
+      res.status(500).json({ message: 'Failed to create Tap Payment business' });
+    }
+  });
+
+  app.get('/api/tap/business-status/:businessId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { businessId } = req.params;
+      const { tapPaymentService } = await import('./tapPaymentService');
+      
+      const status = await tapPaymentService.getBusinessStatus(businessId);
+      res.json(status);
+    } catch (error) {
+      console.error('Error fetching Tap business status:', error);
+      res.status(500).json({ message: 'Failed to fetch business status' });
+    }
+  });
+
+  app.post('/api/tap/create-payment', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const {
+        orderId,
+        artworkId,
+        amount,
+        currency = 'SAR',
+        sellerId,
+        destinationId,
+        commissionRate = 5
+      } = req.body;
+      
+      const { tapPaymentService } = await import('./tapPaymentService');
+      const artwork = await storage.getArtwork(artworkId);
+      
+      if (!artwork) {
+        return res.status(404).json({ message: 'Artwork not found' });
+      }
+      
+      const paymentData = {
+        amount,
+        currency,
+        sellerId,
+        destinationId,
+        commissionRate,
+        orderId,
+        description: `Payment for artwork: ${artwork.title}`,
+      };
+      
+      const payment = await tapPaymentService.createPayment(paymentData);
+      
+      res.json({
+        success: true,
+        paymentId: payment.id,
+        paymentUrl: payment.transaction?.url,
+        status: payment.status,
+      });
+    } catch (error) {
+      console.error('Error creating Tap payment:', error);
+      res.status(500).json({ message: 'Failed to create payment' });
+    }
+  });
+
+  app.post('/api/tap-webhook', async (req, res) => {
+    try {
+      const { tapPaymentService } = await import('./tapPaymentService');
+      const webhookData = req.body;
+      
+      const result = await tapPaymentService.handleWebhook(webhookData);
+      
+      if (result.success && result.orderId) {
+        // Update order status in database
+        await storage.updatePurchaseOrderStatus(result.orderId, 'paid');
+        
+        // Send confirmation email
+        // await emailService.sendOrderConfirmation(result.orderId);
+      }
+      
+      res.json({ status: 'received' });
+    } catch (error) {
+      console.error('Error handling Tap webhook:', error);
+      res.status(500).json({ message: 'Webhook processing failed' });
+    }
+  });
+
+  app.get('/api/tap/payment-methods', async (req, res) => {
+    try {
+      const { tapPaymentService } = await import('./tapPaymentService');
+      const paymentMethods = tapPaymentService.getAvailablePaymentMethods();
+      res.json(paymentMethods);
+    } catch (error) {
+      console.error('Error fetching payment methods:', error);
+      res.status(500).json({ message: 'Failed to fetch payment methods' });
+    }
+  });
+
   app.post('/api/seller/payment-methods', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
