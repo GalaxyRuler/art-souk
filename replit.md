@@ -149,7 +149,8 @@ Preferred communication style: Simple, everyday language.
   ✓ Automatic artist/gallery profile creation when roles are selected
   ✓ Added role management API endpoints for updating user roles
   ✓ Role selection appears after first login to customize user experience
-  ✓ Users can change roles anytime or skip role selection initially
+  ✓ Role selection is mandatory for new signups - no skip option
+  ✓ Users can change roles anytime from their settings after initial setup
   ✓ Full Arabic translations for role selection interface
   ✓ Enhanced authentication flow to support multi-role users
   ✓ Integrated role selection into signup journey with automatic redirects

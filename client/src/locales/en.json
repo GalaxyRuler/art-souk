@@ -229,14 +229,14 @@
     "subtitle": "Choose one or more roles to customize your experience and unlock relevant features. You can always change these later in your settings.",
     "multipleRoles": "You can select multiple roles",
     "selectAtLeastOne": "Please select at least one role",
-    "selectAtLeastOneDesc": "You need to select at least one role to continue",
-    "skipForNow": "Skip for now",
+    "selectAtLeastOneDesc": "You need to select at least one role to continue with your account setup",
     "continue": "Complete Setup",
     "setting": "Setting up your account...",
     "success": "Welcome to Art Souk!",
     "successDesc": "Your account has been configured with your selected roles. You can now explore the platform.",
     "error": "Failed to update roles",
-    "errorDesc": "There was an error updating your roles. Please try again."
+    "errorDesc": "There was an error updating your roles. Please try again.",
+    "required": "Role selection is required to continue"
   },
   "hero": {
     "title": "Discover Saudi & GCC",

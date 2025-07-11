@@ -210,6 +210,15 @@ export default function RoleSelection() {
               <Users className="h-4 w-4" />
               <span>{t("roleSelection.multipleRoles")}</span>
             </div>
+            
+            <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-4 max-w-2xl mx-auto">
+              <div className="flex items-center space-x-2 text-amber-800 dark:text-amber-200">
+                <Crown className="h-4 w-4" />
+                <span className="text-sm font-medium">
+                  {t("roleSelection.required")}
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Role Selection Grid */}
@@ -276,28 +285,13 @@ export default function RoleSelection() {
             })}
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-center space-x-4">
-            <Button
-              variant="outline"
-              onClick={() => {
-                // Mark setup as complete without roles
-                apiRequest('/api/user/roles', {
-                  method: 'PUT',
-                  body: JSON.stringify({ roles: ['collector'] }) // Default to collector
-                }).then(() => {
-                  window.location.href = "/";
-                });
-              }}
-              disabled={isSubmitting}
-            >
-              {t("roleSelection.skipForNow")}
-            </Button>
-            
+          {/* Action Button */}
+          <div className="flex justify-center">
             <Button
               onClick={handleContinue}
               disabled={selectedRoles.length === 0 || isSubmitting}
-              className="bg-brand-gradient hover:opacity-90 text-white px-8"
+              className="bg-brand-gradient hover:opacity-90 text-white px-8 py-3"
+              size="lg"
             >
               {isSubmitting ? (
                 t("roleSelection.setting")
