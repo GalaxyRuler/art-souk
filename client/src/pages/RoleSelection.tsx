@@ -135,10 +135,7 @@ export default function RoleSelection() {
 
     setIsSubmitting(true);
     try {
-      await apiRequest('/api/user/roles', {
-        method: 'PUT',
-        body: JSON.stringify({ roles: selectedRoles })
-      });
+      await apiRequest('PUT', '/api/user/roles', { roles: selectedRoles });
 
       toast({
         title: t("roleSelection.success"),
