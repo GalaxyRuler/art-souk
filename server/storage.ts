@@ -488,19 +488,24 @@ export class DatabaseStorage implements IStorage {
 
   async upsertUser(userData: UpsertUser): Promise<User> {
     console.log('Upserting user:', userData);
-    const [user] = await db
-      .insert(users)
-      .values(userData)
-      .onConflictDoUpdate({
-        target: users.id,
-        set: {
-          ...userData,
-          updatedAt: new Date(),
-        },
-      })
-      .returning();
-    console.log('User upserted successfully:', user);
-    return user;
+    try {
+      const [user] = await db
+        .insert(users)
+        .values(userData)
+        .onConflictDoUpdate({
+          target: users.id,
+          set: {
+            ...userData,
+            updatedAt: new Date(),
+          },
+        })
+        .returning();
+      console.log('User upserted successfully:', user);
+      return user;
+    } catch (error) {
+      console.error('Error upserting user:', error);
+      throw error;
+    }
   }
 
   async updateUserRole(id: string, role: string): Promise<User> {
@@ -526,50 +531,62 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createArtistProfileIfNotExists(userId: string): Promise<void> {
-    const user = await this.getUser(userId);
-    if (!user) return;
+    try {
+      const user = await this.getUser(userId);
+      if (!user) return;
 
-    // Check if artist profile exists
-    const [existingArtist] = await db
-      .select()
-      .from(artists)
-      .where(eq(artists.userId, userId));
+      // Check if artist profile exists
+      const [existingArtist] = await db
+        .select()
+        .from(artists)
+        .where(eq(artists.userId, userId));
 
-    if (!existingArtist) {
-      await db.insert(artists).values({
-        userId,
-        name: `${user.firstName} ${user.lastName}`.trim() || "Artist",
-        nameAr: `${user.firstName} ${user.lastName}`.trim() || "فنان",
-        biography: "This artist is setting up their profile.",
-        biographyAr: "هذا الفنان يقوم بإعداد ملفه الشخصي.",
-        nationality: "Saudi Arabia",
-        profileImage: user.profileImageUrl || null,
-      });
+      if (!existingArtist) {
+        await db.insert(artists).values({
+          userId,
+          name: `${user.firstName} ${user.lastName}`.trim() || "Artist",
+          nameAr: `${user.firstName} ${user.lastName}`.trim() || "فنان",
+          biography: "This artist is setting up their profile.",
+          biographyAr: "هذا الفنان يقوم بإعداد ملفه الشخصي.",
+          nationality: "Saudi Arabia",
+          profileImage: user.profileImageUrl || null,
+        });
+        console.log(`Created artist profile for user ${userId}`);
+      }
+    } catch (error) {
+      console.error(`Error creating artist profile for user ${userId}:`, error);
+      throw error;
     }
   }
 
   async createGalleryProfileIfNotExists(userId: string): Promise<void> {
-    const user = await this.getUser(userId);
-    if (!user) return;
+    try {
+      const user = await this.getUser(userId);
+      if (!user) return;
 
-    // Check if gallery profile exists
-    const [existingGallery] = await db
-      .select()
-      .from(galleries)
-      .where(eq(galleries.userId, userId));
+      // Check if gallery profile exists
+      const [existingGallery] = await db
+        .select()
+        .from(galleries)
+        .where(eq(galleries.userId, userId));
 
-    if (!existingGallery) {
-      await db.insert(galleries).values({
-        userId,
-        name: `${user.firstName} ${user.lastName} Gallery`.trim() || "Gallery",
-        nameAr: `معرض ${user.firstName} ${user.lastName}`.trim() || "معرض",
-        description: "This gallery is setting up their profile.",
-        descriptionAr: "هذا المعرض يقوم بإعداد ملفه الشخصي.",
-        location: "Saudi Arabia",
-        locationAr: "المملكة العربية السعودية",
-        email: user.email || null,
-        profileImage: user.profileImageUrl || null,
-      });
+      if (!existingGallery) {
+        await db.insert(galleries).values({
+          userId,
+          name: `${user.firstName} ${user.lastName} Gallery`.trim() || "Gallery",
+          nameAr: `معرض ${user.firstName} ${user.lastName}`.trim() || "معرض",
+          description: "This gallery is setting up their profile.",
+          descriptionAr: "هذا المعرض يقوم بإعداد ملفه الشخصي.",
+          location: "Saudi Arabia",
+          locationAr: "المملكة العربية السعودية",
+          email: user.email || null,
+          profileImage: user.profileImageUrl || null,
+        });
+        console.log(`Created gallery profile for user ${userId}`);
+      }
+    } catch (error) {
+      console.error(`Error creating gallery profile for user ${userId}:`, error);
+      throw error;
     }
   }
 
