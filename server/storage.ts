@@ -3038,14 +3038,14 @@ export class DatabaseStorage implements IStorage {
     return updated;
   }
 
-  // Seller KYC
+  // Enhanced Seller KYC
   async createSellerKycDoc(doc: InsertSellerKycDoc): Promise<SellerKycDoc> {
     const [newDoc] = await db.insert(sellerKycDocs)
       .values(doc)
       .returning();
     
     await this.createAuditLog({
-      userId: doc.uploadedBy,
+      userId: doc.userId,
       action: 'kyc_document_uploaded',
       entityType: doc.sellerType,
       entityId: doc.sellerId.toString(),
@@ -3065,6 +3065,13 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(sellerKycDocs.uploadedAt));
   }
 
+  async getUserKycDocs(userId: string): Promise<SellerKycDoc[]> {
+    return await db.select()
+      .from(sellerKycDocs)
+      .where(eq(sellerKycDocs.userId, userId))
+      .orderBy(desc(sellerKycDocs.uploadedAt));
+  }
+
   async updateSellerKycDoc(id: number, update: Partial<InsertSellerKycDoc>): Promise<SellerKycDoc> {
     const [updated] = await db.update(sellerKycDocs)
       .set({ ...update, updatedAt: new Date() })
@@ -3076,10 +3083,115 @@ export class DatabaseStorage implements IStorage {
       action: 'kyc_document_reviewed',
       entityType: 'kyc_document',
       entityId: id.toString(),
+      details: { status: update.verificationStatus }
+    });
+    
+    return updated;
+  }
+
+  // KYC Verification Requirements
+  async getKycRequirements(sellerType: string): Promise<KycVerificationRequirement[]> {
+    return await db.select()
+      .from(kycVerificationRequirements)
+      .where(eq(kycVerificationRequirements.sellerType, sellerType))
+      .orderBy(kycVerificationRequirements.sortOrder);
+  }
+
+  async createKycRequirement(requirement: InsertKycVerificationRequirement): Promise<KycVerificationRequirement> {
+    const [newRequirement] = await db.insert(kycVerificationRequirements)
+      .values(requirement)
+      .returning();
+    
+    return newRequirement;
+  }
+
+  // KYC Verification Sessions
+  async createKycVerificationSession(session: InsertKycVerificationSession): Promise<KycVerificationSession> {
+    const [newSession] = await db.insert(kycVerificationSessions)
+      .values(session)
+      .returning();
+    
+    await this.createAuditLog({
+      userId: session.userId,
+      action: 'kyc_session_started',
+      entityType: 'kyc_session',
+      entityId: newSession.id.toString(),
+      details: { provider: session.provider, sellerType: session.sellerType }
+    });
+    
+    return newSession;
+  }
+
+  async getKycVerificationSession(sessionId: string): Promise<KycVerificationSession | undefined> {
+    const [session] = await db.select()
+      .from(kycVerificationSessions)
+      .where(eq(kycVerificationSessions.sessionId, sessionId));
+    
+    return session;
+  }
+
+  async updateKycVerificationSession(sessionId: string, update: Partial<InsertKycVerificationSession>): Promise<KycVerificationSession> {
+    const [updated] = await db.update(kycVerificationSessions)
+      .set(update)
+      .where(eq(kycVerificationSessions.sessionId, sessionId))
+      .returning();
+    
+    await this.createAuditLog({
+      userId: update.userId || 'system',
+      action: 'kyc_session_updated',
+      entityType: 'kyc_session',
+      entityId: updated.id.toString(),
       details: { status: update.status }
     });
     
     return updated;
+  }
+
+  async getSellerKycStatus(sellerType: string, sellerId: number): Promise<{
+    status: 'not_started' | 'in_progress' | 'completed' | 'rejected';
+    completedDocuments: number;
+    totalRequiredDocuments: number;
+    missingDocuments: string[];
+    rejectedDocuments: string[];
+  }> {
+    // Get required documents for seller type
+    const requirements = await this.getKycRequirements(sellerType);
+    const requiredDocs = requirements.filter(req => req.required);
+    
+    // Get submitted documents
+    const submittedDocs = await this.getSellerKycDocs(sellerType, sellerId);
+    
+    // Calculate status
+    const completedDocs = submittedDocs.filter(doc => doc.verificationStatus === 'approved');
+    const rejectedDocs = submittedDocs.filter(doc => doc.verificationStatus === 'rejected');
+    const pendingDocs = submittedDocs.filter(doc => doc.verificationStatus === 'pending' || doc.verificationStatus === 'under_review');
+    
+    const submittedDocTypes = submittedDocs.map(doc => doc.documentType);
+    const missingDocTypes = requiredDocs
+      .filter(req => !submittedDocTypes.includes(req.documentType))
+      .map(req => req.documentType);
+    
+    let status: 'not_started' | 'in_progress' | 'completed' | 'rejected';
+    
+    if (completedDocs.length === requiredDocs.length) {
+      status = 'completed';
+    } else if (rejectedDocs.length > 0 || submittedDocs.length > 0) {
+      status = 'in_progress';
+    } else {
+      status = 'not_started';
+    }
+    
+    if (rejectedDocs.length > 0 && completedDocs.length < requiredDocs.length) {
+      status = 'rejected';
+    }
+    
+    return {
+      status,
+      completedDocuments: completedDocs.length,
+      totalRequiredDocuments: requiredDocs.length,
+      missingDocuments: missingDocTypes,
+      rejectedDocuments: rejectedDocs.map(doc => doc.documentType)
+    };
   }
 
   // Shipping Addresses

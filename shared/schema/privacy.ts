@@ -67,16 +67,51 @@ export const auctionUpdateRequests = pgTable('auction_update_requests', {
   createdAt: timestamp('created_at').defaultNow()
 });
 
-// Seller KYC documents with retention policy
+// KYC document types based on Salla and Saudi regulations
+export const kycDocumentTypeEnum = pgEnum('kyc_document_type', [
+  'national_id',
+  'commercial_registration', 
+  'business_license',
+  'articles_of_association',
+  'address_proof',
+  'bank_statement',
+  'authorized_personnel_list',
+  'beneficial_owners_list',
+  'tax_certificate',
+  'other'
+]);
+
+export const kycStatusEnum = pgEnum('kyc_status', [
+  'pending',
+  'under_review',
+  'approved',
+  'rejected',
+  'expired',
+  'requires_update'
+]);
+
+// Enhanced Seller KYC documents with retention policy
 export const sellerKycDocs = pgTable('seller_kyc_docs', {
   id: serial('id').primaryKey(),
   userId: text('user_id').notNull(),
-  documentType: text('document_type').notNull(),
+  sellerType: text('seller_type').notNull(), // 'artist' or 'gallery'
+  sellerId: integer('seller_id').notNull(),
+  documentType: kycDocumentTypeEnum('document_type').notNull(),
   documentUrl: text('document_url').notNull(),
+  documentName: text('document_name'),
+  documentSize: integer('document_size'),
+  mimeType: text('mime_type'),
   sumsubApplicantId: text('sumsub_applicant_id'),
-  verificationStatus: text('verification_status'),
-  createdAt: timestamp('created_at').defaultNow(),
-  expiresAt: timestamp('expires_at').notNull() // For retention policy
+  verificationStatus: kycStatusEnum('verification_status').notNull().default('pending'),
+  verificationNotes: text('verification_notes'),
+  ocrData: jsonb('ocr_data'), // Extracted data from documents
+  biometricData: jsonb('biometric_data'), // Face match results
+  governmentVerified: boolean('government_verified').default(false),
+  reviewedBy: text('reviewed_by'),
+  reviewedAt: timestamp('reviewed_at'),
+  uploadedAt: timestamp('uploaded_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+  expiresAt: timestamp('expires_at').notNull() // 10-year retention policy
 });
 
 // Shipping addresses with retention policy
@@ -127,9 +162,57 @@ export const insertAuctionUpdateRequestSchema = createInsertSchema(auctionUpdate
   rejectionReason: true
 });
 
+// KYC verification requirements based on Saudi regulations
+export const kycVerificationRequirements = pgTable('kyc_verification_requirements', {
+  id: serial('id').primaryKey(),
+  sellerType: text('seller_type').notNull(), // 'artist' or 'gallery'
+  documentType: kycDocumentTypeEnum('document_type').notNull(),
+  required: boolean('required').notNull().default(true),
+  description: text('description'),
+  descriptionAr: text('description_ar'),
+  validityPeriod: integer('validity_period'), // months
+  sortOrder: integer('sort_order').default(0),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow()
+});
+
+// Enhanced KYC verification tracking
+export const kycVerificationSessions = pgTable('kyc_verification_sessions', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  sellerType: text('seller_type').notNull(),
+  sellerId: integer('seller_id').notNull(),
+  sessionId: text('session_id').notNull(),
+  provider: text('provider').notNull().default('sumsub'), // 'sumsub', 'uqudo', 'idmerit'
+  status: kycStatusEnum('status').notNull().default('pending'),
+  completedDocuments: jsonb('completed_documents'),
+  missingDocuments: jsonb('missing_documents'),
+  riskScore: integer('risk_score'),
+  complianceLevel: text('compliance_level'), // 'basic', 'enhanced', 'aml_required'
+  processingTime: integer('processing_time'), // seconds
+  rejectionReasons: jsonb('rejection_reasons'),
+  startedAt: timestamp('started_at').defaultNow(),
+  completedAt: timestamp('completed_at'),
+  expiresAt: timestamp('expires_at')
+});
+
 export const insertSellerKycDocSchema = createInsertSchema(sellerKycDocs).omit({ 
   id: true, 
-  createdAt: true 
+  uploadedAt: true,
+  updatedAt: true,
+  reviewedAt: true
+});
+
+export const insertKycVerificationRequirementSchema = createInsertSchema(kycVerificationRequirements).omit({ 
+  id: true, 
+  createdAt: true,
+  updatedAt: true
+});
+
+export const insertKycVerificationSessionSchema = createInsertSchema(kycVerificationSessions).omit({ 
+  id: true, 
+  startedAt: true,
+  completedAt: true
 });
 
 export const insertShippingAddressSchema = createInsertSchema(shippingAddresses).omit({ 
@@ -152,6 +235,12 @@ export type InsertAuctionUpdateRequest = z.infer<typeof insertAuctionUpdateReque
 
 export type SellerKycDoc = typeof sellerKycDocs.$inferSelect;
 export type InsertSellerKycDoc = z.infer<typeof insertSellerKycDocSchema>;
+
+export type KycVerificationRequirement = typeof kycVerificationRequirements.$inferSelect;
+export type InsertKycVerificationRequirement = z.infer<typeof insertKycVerificationRequirementSchema>;
+
+export type KycVerificationSession = typeof kycVerificationSessions.$inferSelect;
+export type InsertKycVerificationSession = z.infer<typeof insertKycVerificationSessionSchema>;
 
 export type ShippingAddress = typeof shippingAddresses.$inferSelect;
 export type InsertShippingAddress = z.infer<typeof insertShippingAddressSchema>;
