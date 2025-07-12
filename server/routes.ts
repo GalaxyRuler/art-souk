@@ -94,6 +94,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // User role management endpoints
   app.put('/api/user/roles', 
+    rateLimiters.auth,
     validateRequest({ body: commonSchemas.userProfileBody.pick({ roles: true }) }),
     isAuthenticated, 
     async (req: any, res) => {
@@ -189,7 +190,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin setup endpoint - can be called once to make first user admin
-  app.post('/api/admin/setup', isAuthenticated, async (req: any, res) => {
+  app.post('/api/admin/setup', rateLimiters.auth, isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const allUsers = await storage.getAllUsers();
@@ -485,7 +486,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/galleries', isAuthenticated, async (req, res) => {
+  app.post('/api/galleries', rateLimiters.creation, isAuthenticated, async (req, res) => {
     try {
       const galleryData = insertGallerySchema.parse(req.body);
       const gallery = await storage.createGallery(galleryData);
@@ -643,7 +644,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/artworks', isAuthenticated, async (req: any, res) => {
+  app.post('/api/artworks', rateLimiters.creation, isAuthenticated, async (req: any, res) => {
     try {
       const artworkData = insertArtworkSchema.parse(req.body);
       const artwork = await storage.createArtwork(artworkData);
@@ -800,7 +801,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/auctions', isAuthenticated, async (req, res) => {
+  app.post('/api/auctions', rateLimiters.creation, isAuthenticated, async (req, res) => {
     try {
       const auctionData = insertAuctionSchema.parse(req.body);
       const auction = await storage.createAuction(auctionData);
@@ -824,6 +825,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post('/api/auctions/:id/bids', 
+    rateLimiters.bidding,
     validateRequest({ 
       body: commonSchemas.bidBody,
       params: commonSchemas.idParam 
@@ -1144,7 +1146,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/workshops', isAuthenticated, async (req: any, res) => {
+  app.post('/api/workshops', rateLimiters.creation, isAuthenticated, async (req: any, res) => {
     try {
       const workshopData = insertWorkshopSchema.parse({
         ...req.body,
@@ -1276,7 +1278,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/events', isAuthenticated, async (req: any, res) => {
+  app.post('/api/events', rateLimiters.creation, isAuthenticated, async (req: any, res) => {
     try {
       const eventData = insertEventSchema.parse({
         ...req.body,
@@ -1677,7 +1679,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/inquiries', async (req: any, res) => {
+  app.post('/api/inquiries', rateLimiters.contact, async (req: any, res) => {
     try {
       const inquiryData = insertInquirySchema.parse({
         ...req.body,
@@ -3517,7 +3519,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/commissions', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/commissions', rateLimiters.commission, isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
       const parsed = insertCommissionRequestSchema.parse({
@@ -3597,7 +3599,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/commissions/:requestId/bids', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/commissions/:requestId/bids', rateLimiters.commission, isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
       const { requestId } = req.params;
@@ -3725,7 +3727,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/commissions/:requestId/messages', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/commissions/:requestId/messages', rateLimiters.contact, isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
       const { requestId } = req.params;

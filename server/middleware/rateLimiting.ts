@@ -106,9 +106,33 @@ export const rateLimiters = {
   // Commission system rate limiter
   commission: rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
-    max: 10, // limit each IP to 10 commission requests per hour
+    max: 5, // limit each IP to 5 commission requests per hour
     message: {
       error: 'Too many commission requests, please try again later.',
+      retryAfter: 60 * 60,
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+  }),
+
+  // Content creation rate limiter
+  creation: rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 20, // limit each IP to 20 uploads per hour
+    message: {
+      error: 'Too many content uploads, please try again later.',
+      retryAfter: 60 * 60,
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+  }),
+
+  // Contact/inquiry rate limiter
+  contact: rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 10, // limit each IP to 10 inquiries per hour
+    message: {
+      error: 'Too many contact attempts, please try again later.',
       retryAfter: 60 * 60,
     },
     standardHeaders: true,
