@@ -12,6 +12,10 @@ import { rateLimiters } from "./middleware/rateLimiting";
 import { validateRequest, commonSchemas } from "./middleware/validation";
 import { securityMiddlewareStack } from "./middleware/security";
 import { cacheConfigs } from "./middleware/caching";
+import { memoryMonitor, memoryTrackingMiddleware } from "./middleware/memoryMonitor";
+import { performanceMiddleware, performanceMonitor } from "./middleware/performanceMonitor";
+import { cacheInstances, optimizedCacheMiddleware, cacheKeys, getCacheStats } from "./middleware/cacheOptimization";
+import { databaseOptimizer } from "./middleware/databaseOptimization";
 import { 
   insertArtistSchema, 
   insertGallerySchema, 
@@ -71,6 +75,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Apply security middleware stack
   app.use(securityMiddlewareStack);
+
+  // Apply performance monitoring middleware
+  app.use(performanceMiddleware);
+  app.use(memoryTrackingMiddleware);
   
   // Apply lifecycle tracking middleware
   app.use(trackStageMiddleware);
@@ -4027,6 +4035,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Initialize database optimization
+  await databaseOptimizer.addPerformanceIndexes();
+
+  // Performance monitoring endpoints
+  app.get('/health/performance', async (req, res) => {
+    try {
+      const stats = performanceMonitor.getStatistics();
+      res.json({
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        performance: stats || {
+          message: 'No performance data available yet'
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 'error',
+        message: 'Failed to get performance statistics',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  app.get('/health/cache', async (req, res) => {
+    try {
+      const stats = getCacheStats();
+      res.json({
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        cache: stats
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 'error',
+        message: 'Failed to get cache statistics',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  app.get('/health/database', async (req, res) => {
+    try {
+      const queryStats = databaseOptimizer.getQueryStats();
+      res.json({
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        database: {
+          queryStats: queryStats.slice(0, 10), // Top 10 queries
+          totalQueries: queryStats.length
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 'error',
+        message: 'Failed to get database statistics',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
   // Start periodic metric updates (every hour)
   setInterval(async () => {
     try {
@@ -4035,6 +4103,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('Error updating periodic metrics:', error);
     }
   }, 60 * 60 * 1000); // 1 hour
+
+  // Start automatic cache cleanup
+  const { startCacheCleanup } = await import('./middleware/cacheOptimization');
+  startCacheCleanup();
+
+  // Set up memory monitoring alerts
+  memoryMonitor.addAlertCallback((metrics) => {
+    console.warn(`🚨 Memory Alert: ${metrics.heapPercentage}% usage - ${metrics.heapUsed}MB/${metrics.heapTotal}MB`);
+  });
+
+  // Set up performance monitoring alerts
+  performanceMonitor.addAlertCallback((metrics) => {
+    console.warn(`🐌 Performance Alert: ${metrics.endpoint} took ${metrics.duration}ms`);
+  });
+
+  // Schedule database maintenance (every 6 hours)
+  setInterval(async () => {
+    try {
+      await databaseOptimizer.maintainDatabase();
+    } catch (error) {
+      console.error('Error during database maintenance:', error);
+    }
+  }, 6 * 60 * 60 * 1000); // 6 hours
 
   const httpServer = createServer(app);
   return httpServer;

@@ -4,7 +4,7 @@ import { setupVite, serveStatic, log } from "./vite";
 import { configureProduction } from "./production";
 import { rateLimiters } from "./middleware/rateLimiting";
 import { performanceMiddleware, memoryMonitoringMiddleware, requestLoggingMiddleware } from "./middleware/performance";
-import { healthCheckMiddleware, databaseHealthCheck, readinessCheck, livenessCheck } from "./middleware/healthChecks";
+import { healthCheckMiddleware, databaseHealthCheck, readinessCheck, livenessCheck, memoryHealthCheck } from "./middleware/healthChecks";
 import { cacheConfigs } from "./middleware/caching";
 
 const app = express();
@@ -26,8 +26,11 @@ app.use(requestLoggingMiddleware);
 // Health check endpoints (before auth)
 app.get('/health', healthCheckMiddleware);
 app.get('/health/db', databaseHealthCheck);
+app.get('/health/memory', memoryHealthCheck);
 app.get('/health/ready', readinessCheck);
 app.get('/health/live', livenessCheck);
+
+// Additional monitoring endpoints will be added by routes.ts
 
 // Configure production security and static files
 configureProduction(app);

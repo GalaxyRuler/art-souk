@@ -233,3 +233,24 @@ export const livenessCheck = async (req: Request, res: Response) => {
     pid: process.pid,
   });
 };
+
+// Memory monitoring endpoint
+export const memoryHealthCheck = (req: Request, res: Response) => {
+  const memUsage = process.memoryUsage();
+  const heapPercentage = Math.round((memUsage.heapUsed / memUsage.heapTotal) * 100);
+  
+  const status = heapPercentage >= 90 ? 'critical' : 
+                 heapPercentage >= 80 ? 'warning' : 'healthy';
+  
+  res.json({
+    status,
+    timestamp: new Date().toISOString(),
+    memory: {
+      heapUsed: Math.round(memUsage.heapUsed / 1024 / 1024),
+      heapTotal: Math.round(memUsage.heapTotal / 1024 / 1024),
+      heapPercentage,
+      external: Math.round(memUsage.external / 1024 / 1024),
+      rss: Math.round(memUsage.rss / 1024 / 1024),
+    }
+  });
+};
