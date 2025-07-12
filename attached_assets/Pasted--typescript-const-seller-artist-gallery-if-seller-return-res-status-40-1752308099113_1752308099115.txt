@@ -1,0 +1,344 @@
+```typescript
+    const seller = artist || gallery;
+    if (!seller) {
+      return res.status(404).json({ error: 'Seller profile not found' });
+    }
+
+    const table = artist ? artists : galleries;
+    const existingMethods = seller.paymentMethods || [];
+    
+    // Create new payment method
+    const newMethod = {
+      id: `pm_${Date.now()}`,
+      type,
+      details,
+      customInstructions,
+      isDefault: isDefault || existingMethods.length === 0, // First method becomes default
+      displayInfo: generateDisplayInfo(type, details),
+      createdAt: new Date().toISOString()
+    };
+
+    // If this is set as default, remove default from others
+    const updatedMethods = existingMethods.map(method => ({
+      ...method,
+      isDefault: newMethod.isDefault ? false : method.isDefault
+    }));
+
+    updatedMethods.push(newMethod);
+
+    // Update seller profile
+    await db.update(table)
+      .set({ paymentMethods: updatedMethods })
+      .where(eq(table.userId, userId));
+
+    res.json({ success: true, paymentMethod: newMethod });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to add payment method' });
+  }
+});
+
+// Delete payment method
+sellerRouter.delete('/payment-methods/:methodId', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { methodId } = req.params;
+    
+    // Get seller profile
+    const [artist] = await db.select().from(artists).where(eq(artists.userId, userId));
+    const [gallery] = await db.select().from(galleries).where(eq(galleries.userId, userId));
+    
+    const seller = artist || gallery;
+    if (!seller) {
+      return res.status(404).json({ error: 'Seller profile not found' });
+    }
+
+    const table = artist ? artists : galleries;
+    const existingMethods = seller.paymentMethods || [];
+    
+    // Remove the method
+    const updatedMethods = existingMethods.filter(method => method.id !== methodId);
+    
+    // If deleted method was default and others exist, make first one default
+    if (updatedMethods.length > 0 && !updatedMethods.some(m => m.isDefault)) {
+      updatedMethods[0].isDefault = true;
+    }
+
+    // Update seller profile
+    await db.update(table)
+      .set({ paymentMethods: updatedMethods })
+      .where(eq(table.userId, userId));
+
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete payment method' });
+  }
+});
+
+// Helper function to generate display info
+function generateDisplayInfo(type, details) {
+  switch (type) {
+    case 'saudi_bank':
+      return `${details.bank_name} - ${details.iban?.slice(-4)}`;
+    case 'stc_pay':
+      return `STC Pay - ${details.phone_number}`;
+    case 'paypal':
+      return `PayPal - ${details.paypal_email}`;
+    case 'wise':
+      return `Wise - ${details.wise_email} (${details.preferred_currency})`;
+    default:
+      return 'Payment Method';
+  }
+}
+
+export { sellerRouter };
+```
+
+### 🔥 PHASE 5: Email Template Updates
+
+#### 8. Update Email Service with New Templates
+```typescript
+// FILE: server/emailService.ts
+// TASK: Add enhanced welcome email sending
+
+import { welcomeEmailTemplates } from './emailTemplates/welcomeTemplates';
+
+export class EmailService {
+  // ... existing methods
+
+  async sendWelcomeEmail(user, userType) {
+    const template = welcomeEmailTemplates[userType];
+    if (!template) {
+      console.error(`No welcome template found for user type: ${userType}`);
+      return;
+    }
+
+    const emailData = {
+      to: user.email,
+      subject: template.subject,
+      content: this.personalizeEmailContent(template.content, user),
+      templateType: 'welcome',
+      userType
+    };
+
+    await this.queueEmail(emailData);
+
+    // Schedule follow-up emails if configured
+    if (template.followUpSchedule) {
+      for (const days of template.followUpSchedule) {
+        await this.scheduleFollowUpEmail(user, userType, days);
+      }
+    }
+  }
+
+  private personalizeEmailContent(content, user) {
+    return content
+      .replace(/{{firstName}}/g, user.firstName || 'Artist')
+      .replace(/{{lastName}}/g, user.lastName || '')
+      .replace(/{{fullName}}/g, `${user.firstName || ''} ${user.lastName || ''}`.trim());
+  }
+
+  private async scheduleFollowUpEmail(user, userType, days) {
+    const sendDate = new Date();
+    sendDate.setDate(sendDate.getDate() + days);
+
+    const followUpContent = this.getFollowUpContent(userType, days);
+    
+    await this.queueEmail({
+      to: user.email,
+      subject: followUpContent.subject,
+      content: followUpContent.content,
+      templateType: 'followup',
+      scheduledFor: sendDate
+    });
+  }
+
+  private getFollowUpContent(userType, days) {
+    const followUpTemplates = {
+      artist: {
+        3: {
+          subject: "Quick Start Guide - Optimize Your Art Profile",
+          content: `
+            <h2>Hi again! Let's optimize your artist profile</h2>
+            <p>It's been a few days since you joined Art Souk. Here are some quick tips to boost your visibility:</p>
+            <ul>
+              <li>📸 High-quality photos get 3x more views</li>
+              <li>📝 Complete artist bio increases inquiries by 250%</li>
+              <li>💰 Competitive pricing attracts more collectors</li>
+            </ul>
+            <p><a href="${process.env.PLATFORM_URL}/artworks/manage">Complete your profile →</a></p>
+          `
+        },
+        7: {
+          subject: "Success Story: How Sarah Sold Her First Piece in Week 1",
+          content: `
+            <h2>Inspiration from the Art Souk Community</h2>
+            <p>Sarah, a Riyadh-based artist, sold her first artwork within a week of joining. Her secret?</p>
+            <ol>
+              <li>Professional photography of her pieces</li>
+              <li>Engaging artist story in her bio</li>
+              <li>Active engagement with collector inquiries</li>
+            </ol>
+            <p>Ready to follow in her footsteps?</p>
+            <p><a href="${process.env.PLATFORM_URL}/dashboard">View your dashboard →</a></p>
+          `
+        }
+      },
+      gallery: {
+        3: {
+          subject: "Gallery Success Tips - Maximize Your Digital Presence",
+          content: `
+            <h2>Take your gallery to the next level</h2>
+            <p>Successful galleries on our platform typically:</p>
+            <ul>
+              <li>🎨 Feature 15+ artists in their roster</li>
+              <li>📅 Host monthly virtual exhibitions</li>
+              <li>📱 Maintain active social media presence</li>
+            </ul>
+            <p><a href="${process.env.PLATFORM_URL}/manage/artists">Invite your artists →</a></p>
+          `
+        }
+      },
+      collector: {
+        3: {
+          subject: "Discover Your First Piece - Curated Recommendations",
+          content: `
+            <h2>Artworks selected just for you</h2>
+            <p>Based on your interests, here are some pieces you might love:</p>
+            <p>Our curators have selected artworks that match your preferences for contemporary GCC art.</p>
+            <p><a href="${process.env.PLATFORM_URL}/artworks/featured">View recommendations →</a></p>
+          `
+        }
+      }
+    };
+
+    return followUpTemplates[userType]?.[days] || {
+      subject: "Continue Your Art Journey",
+      content: "<p>Thank you for being part of the Art Souk community!</p>"
+    };
+  }
+}
+```
+
+### 🔥 PHASE 6: Register New Routes
+
+#### 9. Update Main Routes Registration
+```typescript
+// FILE: server/routes.ts
+// TASK: Add new admin and seller routes to main registration
+
+import { adminRouter } from './routes/admin';
+import { sellerRouter } from './routes/seller';
+
+export async function registerRoutes(app: Express) {
+  // ... existing route registrations
+
+  // Admin routes
+  app.use('/api/admin', adminRouter);
+
+  // Enhanced seller routes
+  app.use('/api/seller', sellerRouter);
+
+  // ... rest of existing routes
+}
+```
+
+#### 10. Update Role-Based Access Control
+```typescript
+// FILE: server/middleware/auth.ts
+// TASK: Add role-based access control middleware
+
+export const requireRole = (requiredRole: string) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    const userRoles = req.user.roles || [];
+    
+    if (!userRoles.includes(requiredRole)) {
+      return res.status(403).json({ 
+        message: `Access denied. Required role: ${requiredRole}` 
+      });
+    }
+
+    next();
+  };
+};
+
+export const requireAnyRole = (allowedRoles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    const userRoles = req.user.roles || [];
+    const hasRequiredRole = allowedRoles.some(role => userRoles.includes(role));
+    
+    if (!hasRequiredRole) {
+      return res.status(403).json({ 
+        message: `Access denied. Required roles: ${allowedRoles.join(', ')}` 
+      });
+    }
+
+    next();
+  };
+};
+```
+
+### 🔥 PHASE 7: Frontend Navigation Updates
+
+#### 11. Update Navigation to Remove Pricing References
+```typescript
+// FILE: client/src/components/Navbar.tsx
+// TASK: Update navigation messaging to be value-focused
+
+const navigationContent = {
+  unauthenticated: {
+    ctaText: "Join Art Souk",
+    description: "Connect with the GCC's finest art community"
+  },
+  
+  authenticated: {
+    artistLinks: [
+      { label: "My Artworks", href: "/artworks/manage" },
+      { label: "Performance", href: "/analytics" },
+      { label: "Payment Setup", href: "/seller" }
+    ],
+    
+    galleryLinks: [
+      { label: "Manage Artists", href: "/manage/artists" },
+      { label: "Exhibitions", href: "/manage/events" },
+      { label: "Gallery Analytics", href: "/analytics" }
+    ],
+    
+    collectorLinks: [
+      { label: "My Favorites", href: "/collector" },
+      { label: "Saved Searches", href: "/preferences" },
+      { label: "Purchase History", href: "/collector?tab=history" }
+    ]
+  }
+};
+```
+
+## TESTING REQUIREMENTS
+
+After implementation, test these key flows:
+
+1. **User Onboarding**: Verify new welcome messaging appears correctly
+2. **Admin Panel**: Test user management and content moderation features  
+3. **Payment Methods**: Test adding/removing payment methods for artists/galleries
+4. **Email System**: Verify welcome emails are sent with new templates
+5. **Role Access**: Test admin-only routes are properly protected
+
+## DEPLOYMENT NOTES
+
+- All pricing/monetization references removed from user-facing content
+- Value propositions emphasize community, reach, and professional tools
+- Admin panel provides comprehensive marketplace management
+- Enhanced payment system supports multiple local and international methods
+- Email templates create engaging onboarding experience
+
+Execute these changes in order and test each phase before proceeding to the next.
+```
+
+**This prompt provides Replit AI with complete, implementable instructions to enhance your marketplace platform while maintaining pricing flexibility. Each section includes specific file paths, code implementations, and testing requirements.**
