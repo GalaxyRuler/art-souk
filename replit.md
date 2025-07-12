@@ -199,7 +199,8 @@ Preferred communication style: Simple, everyday language.
      • Direct competitive comparison with ATHR Gallery and Al Bon
      • Emphasis on complete ecosystem vs. fragmented solutions
   ✓ **Market Proof Integration**: Added authentic market statistics and growth data
-     • $27M GCC art market size with 6 untapped countries
+     • $27M current GCC art market size with 6 untapped countries
+     • $2.5B projected artwork imports/exports value by 2026
      • 300% growth in Saudi art market since Vision 2030
      • 1M+ visitors to UAE art events data
      • 5,000+ artists without dedicated platform

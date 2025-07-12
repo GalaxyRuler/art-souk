@@ -45,11 +45,15 @@ const CompetitiveLandingHero = () => {
         </p>
 
         {/* Market size proof */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8 max-w-3xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
             <div>
               <div className="text-2xl font-bold text-amber-400">$27M</div>
-              <div className="text-sm text-gray-300">GCC Art Market Size</div>
+              <div className="text-sm text-gray-300">Current GCC Market</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-amber-400">$2.5B</div>
+              <div className="text-sm text-gray-300">Projected by 2026</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-amber-400">6 Countries</div>
@@ -335,9 +339,9 @@ const MarketProofSection = () => {
                 source="Louvre Abu Dhabi reports"
               />
               <MarketFactCard 
-                stat="$27M Market"
-                description="Combined GCC visual arts market value"
-                source="Regional art market analysis"
+                stat="$2.5B by 2026"
+                description="Projected value of artwork imports/exports"
+                source="Late 2023 market projections"
               />
             </div>
 
