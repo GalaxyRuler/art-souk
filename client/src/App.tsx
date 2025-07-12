@@ -22,6 +22,7 @@ import AuctionDetail from "@/pages/AuctionDetail";
 import Workshops from "@/pages/Workshops";
 import Events from "@/pages/Events";
 import Analytics from "@/pages/Analytics";
+import AnalyticsDashboard from "@/pages/AnalyticsDashboard";
 import UserPreferences from "@/pages/UserPreferences";
 import CollectorDashboard from "@/pages/CollectorDashboard";
 import SellerDashboard from "@/pages/SellerDashboard";
@@ -66,6 +67,7 @@ function Router() {
           <Route path="/search" component={Search} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/analytics" component={Analytics} />
+          <Route path="/analytics/dashboard" component={AnalyticsDashboard} />
           <Route path="/preferences" component={UserPreferences} />
           <Route path="/collector" component={CollectorDashboard} />
           <Route path="/seller" component={SellerDashboard} />

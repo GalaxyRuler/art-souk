@@ -346,6 +346,14 @@ export default function Dashboard() {
                   </Link>
                 )}
                 
+                {/* Lifecycle Analytics Dashboard Link */}
+                <Link to="/analytics/dashboard">
+                  <Button className="w-full mt-4 bg-brand-gradient hover:bg-brand-navy">
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    Lifecycle Analytics
+                  </Button>
+                </Link>
+                
                 {/* Collector Dashboard Link */}
                 <Link to="/collector">
                   <Button className="w-full mt-4 bg-brand-navy hover:bg-brand-steel">

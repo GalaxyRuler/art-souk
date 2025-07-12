@@ -73,6 +73,25 @@
       "sold": "مباع"
     },
     "noData": "لا توجد بيانات متاحة لهذه الفترة",
+    "title": "لوحة التحليلات",
+    "subtitle": "تتبع رحلة المستخدم وأداء المنصة",
+    "totalUsers": "إجمالي المستخدمين",
+    "allStages": "جميع المراحل",
+    "activeUsers": "المستخدمون النشطون",
+    "exploring": "يتصفحون المحتوى",
+    "transacting": "المستخدمون المتعاملون",
+    "making purchases": "يقومون بالشراء",
+    "advocates": "المروجون",
+    "promoting": "يروجون للمنصة",
+    "funnel": "مسار التحويل",
+    "conversions": "التحويلات",
+    "interactions": "التفاعلات",
+    "transitions": "الانتقالات",
+    "lifecycleFunnel": "مسار دورة الحياة",
+    "stageBreakdown": "تفصيل المراحل",
+    "conversionRates": "معدلات التحويل",
+    "recentInteractions": "التفاعلات الأخيرة",
+    "stageTransitions": "انتقالات المراحل",
     "performance": "الأداء",
     "recentActivity": "النشاط الأخير",
     "sales": "المبيعات",
@@ -1282,5 +1301,15 @@
     "upcoming": "ورش عمل قادمة",
     "waitlist": "انضم لقائمة الانتظار",
     "whatYouWillLearn": "ما ستتعلمه"
+  },
+  "lifecycle": {
+    "stages": {
+      "aware": "الوعي",
+      "join": "الانضمام",
+      "explore": "الاستكشاف",
+      "transact": "التعامل",
+      "retain": "الاحتفاظ",
+      "advocate": "الترويج"
+    }
   }
 }
