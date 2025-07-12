@@ -1,0 +1,1173 @@
+# TASK: Implement Value-Driven Marketplace Features for Art Souk
+
+## OBJECTIVE
+Enhance the Art Souk platform with value-focused user onboarding, improved admin panel, and enhanced external payment system - all without any pricing or monetization references.
+
+## IMPLEMENTATION PRIORITY
+
+### 🔥 PHASE 1: Enhanced User Onboarding (Implement First)
+
+#### 1. Update Artist Onboarding Flow
+```typescript
+// FILE: client/src/pages/RoleSelection.tsx
+// TASK: Replace current messaging with value-driven content
+
+const artistWelcomeContent = {
+  headline: "Showcase Your Art to GCC Collectors",
+  valuePropositions: [
+    "🎨 Professional artist portfolio",
+    "🌍 Reach collectors across the GCC", 
+    "💼 Direct buyer connections",
+    "📈 Track your artwork performance",
+    "🤝 Join established artist community"
+  ],
+  
+  ctaText: "Create Your Artist Profile",
+  description: "Join hundreds of artists already connecting with collectors"
+};
+
+const galleryWelcomeContent = {
+  headline: "Expand Your Gallery's Digital Presence",
+  valuePropositions: [
+    "🏛️ Professional gallery storefront",
+    "👥 Manage multiple artist portfolios",
+    "🎭 Host virtual exhibitions", 
+    "📊 Access collector insights",
+    "🤝 Network with other galleries"
+  ],
+  
+  ctaText: "Create Your Gallery Profile",
+  description: "Transform your gallery with digital tools"
+};
+
+const collectorWelcomeContent = {
+  headline: "Discover Authentic GCC Art",
+  valuePropositions: [
+    "🎨 Curated artwork from verified artists",
+    "🤝 Direct artist communication",
+    "🔍 Advanced discovery tools",
+    "💎 Access to emerging talent",
+    "📱 Seamless browsing experience"
+  ],
+  
+  ctaText: "Start Discovering Art",
+  description: "Explore the finest contemporary art from the region"
+};
+2. Create Welcome Email Templates
+typescript// FILE: server/emailTemplates/welcomeTemplates.ts
+// TASK: Create new file with enhanced welcome email content
+
+export const welcomeEmailTemplates = {
+  artist: {
+    subject: "Welcome to Art Souk - Your Creative Journey Begins",
+    content: `
+      <h2>Welcome to the GCC's Premier Art Platform</h2>
+      
+      <p>Your artist profile is now live and ready to connect with collectors across the region.</p>
+      
+      <h3>Next Steps to Maximize Your Success:</h3>
+      <ul>
+        <li>Upload 3-5 of your best artworks</li>
+        <li>Complete your artist biography</li>
+        <li>Add your payment preferences</li>
+        <li>Connect your social media accounts</li>
+      </ul>
+      
+      <h3>Pro Tips from Successful Artists:</h3>
+      <ul>
+        <li>High-quality photos increase inquiries by 300%</li>
+        <li>Complete profiles get 5x more collector interest</li>
+        <li>Regular uploads keep you visible to new collectors</li>
+      </ul>
+      
+      <p>Need help? Our team is here to support your artistic journey.</p>
+    `,
+    followUpSchedule: [3, 7, 14] // Days for follow-up emails
+  },
+  
+  gallery: {
+    subject: "Welcome to Art Souk - Amplify Your Gallery's Reach",
+    content: `
+      <h2>Your Digital Gallery Space is Ready</h2>
+      
+      <p>Welcome to the platform connecting galleries with collectors across the GCC.</p>
+      
+      <h3>Maximize Your Gallery's Impact:</h3>
+      <ul>
+        <li>Invite your represented artists to join</li>
+        <li>Create your first virtual exhibition</li>
+        <li>Complete your gallery verification</li>
+        <li>Schedule upcoming events</li>
+      </ul>
+      
+      <h3>Gallery Success Stories:</h3>
+      <p>Galleries on our platform report 40% increase in collector inquiries and expanded reach beyond their local market.</p>
+      
+      <p>Ready to showcase your artists to a wider audience?</p>
+    `
+  },
+  
+  collector: {
+    subject: "Welcome to Art Souk - Your Art Discovery Begins",
+    content: `
+      <h2>Discover Authentic GCC Art</h2>
+      
+      <p>You now have access to the region's finest contemporary art collection.</p>
+      
+      <h3>Start Your Collection Journey:</h3>
+      <ul>
+        <li>Browse curated artwork collections</li>
+        <li>Follow your favorite artists</li>
+        <li>Set up artwork alerts for new pieces</li>
+        <li>Connect directly with artists and galleries</li>
+      </ul>
+      
+      <h3>Collector Benefits:</h3>
+      <ul>
+        <li>Direct artist communication ensures authenticity</li>
+        <li>Flexible payment arrangements</li>
+        <li>Discover emerging talent before they gain recognition</li>
+        <li>Support the growing GCC art community</li>
+      </ul>
+    `
+  }
+};
+🔥 PHASE 2: Enhanced Admin Panel
+3. Create Comprehensive Admin Dashboard
+typescript// FILE: client/src/pages/AdminDashboard.tsx
+// TASK: Replace existing admin dashboard with comprehensive marketplace management
+
+import React, { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+export default function AdminDashboard() {
+  return (
+    <div className="container mx-auto p-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">Art Souk Admin Dashboard</h1>
+        <p className="text-gray-600 mt-2">Marketplace management and analytics</p>
+      </div>
+
+      <Tabs defaultValue="overview" className="space-y-6">
+        <TabsList className="grid grid-cols-6 w-full">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="users">Users</TabsTrigger>
+          <TabsTrigger value="content">Content</TabsTrigger>
+          <TabsTrigger value="transactions">Transactions</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+        </TabsList>
+
+        {/* Overview Tab */}
+        <TabsContent value="overview">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            <MetricCard 
+              title="Total Users" 
+              value="1,247" 
+              change="+12%" 
+              description="Active platform participants"
+            />
+            <MetricCard 
+              title="Artworks Listed" 
+              value="3,521" 
+              change="+8%" 
+              description="Available artworks"
+            />
+            <MetricCard 
+              title="Monthly Inquiries" 
+              value="89" 
+              change="+23%" 
+              description="Buyer-seller connections"
+            />
+            <MetricCard 
+              title="Completed Sales" 
+              value="34" 
+              change="+15%" 
+              description="Successful transactions"
+            />
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <RecentActivityCard />
+            <SystemHealthCard />
+          </div>
+        </TabsContent>
+
+        {/* Users Tab */}
+        <TabsContent value="users">
+          <UserManagementPanel />
+        </TabsContent>
+
+        {/* Content Tab */}
+        <TabsContent value="content">
+          <ContentModerationPanel />
+        </TabsContent>
+
+        {/* Transactions Tab */}
+        <TabsContent value="transactions">
+          <TransactionManagementPanel />
+        </TabsContent>
+
+        {/* Analytics Tab */}
+        <TabsContent value="analytics">
+          <AnalyticsPanel />
+        </TabsContent>
+
+        {/* Settings Tab */}
+        <TabsContent value="settings">
+          <PlatformSettingsPanel />
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
+
+// Component implementations
+const MetricCard = ({ title, value, change, description }) => (
+  <Card>
+    <CardHeader className="pb-2">
+      <CardDescription>{title}</CardDescription>
+      <CardTitle className="text-2xl">{value}</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="text-xs text-muted-foreground">
+        <span className="text-green-600">{change}</span> from last month
+      </div>
+      <p className="text-xs text-muted-foreground mt-1">{description}</p>
+    </CardContent>
+  </Card>
+);
+
+// Add other component implementations...
+4. Create User Management Panel
+typescript// FILE: client/src/components/admin/UserManagementPanel.tsx
+// TASK: Create comprehensive user management interface
+
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+
+export function UserManagementPanel() {
+  const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterRole, setFilterRole] = useState('all');
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('/api/admin/users');
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+    }
+  };
+
+  const handleUserAction = async (userId, action) => {
+    try {
+      await fetch(`/api/admin/users/${userId}/action`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action })
+      });
+      fetchUsers(); // Refresh list
+    } catch (error) {
+      console.error('User action failed:', error);
+    }
+  };
+
+  const filteredUsers = users.filter(user => {
+    const matchesSearch = user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         user.email?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRole = filterRole === 'all' || user.roles?.includes(filterRole);
+    return matchesSearch && matchesRole;
+  });
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row gap-4">
+        <Input
+          placeholder="Search users by name or email..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="max-w-sm"
+        />
+        <select 
+          value={filterRole} 
+          onChange={(e) => setFilterRole(e.target.value)}
+          className="border rounded px-3 py-2"
+        >
+          <option value="all">All Roles</option>
+          <option value="artist">Artists</option>
+          <option value="gallery">Galleries</option>
+          <option value="collector">Collectors</option>
+        </select>
+      </div>
+
+      <div className="border rounded-lg">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>User</TableHead>
+              <TableHead>Roles</TableHead>
+              <TableHead>Joined</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredUsers.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>
+                  <div>
+                    <div className="font-medium">{user.firstName} {user.lastName}</div>
+                    <div className="text-sm text-gray-500">{user.email}</div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-1">
+                    {user.roles?.map(role => (
+                      <Badge key={role} variant="secondary">{role}</Badge>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {new Date(user.createdAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  <Badge variant={user.isActive ? "default" : "destructive"}>
+                    {user.isActive ? "Active" : "Suspended"}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleUserAction(user.id, 'verify')}
+                    >
+                      Verify
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleUserAction(user.id, user.isActive ? 'suspend' : 'activate')}
+                    >
+                      {user.isActive ? 'Suspend' : 'Activate'}
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+}
+🔥 PHASE 3: Enhanced Payment System
+5. Improve Payment Method Management
+typescript// FILE: client/src/components/payment/PaymentMethodManager.tsx
+// TASK: Create comprehensive payment method management for sellers
+
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+
+export function PaymentMethodManager({ userType = 'artist' }) {
+  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [isAddingMethod, setIsAddingMethod] = useState(false);
+  const [selectedMethodType, setSelectedMethodType] = useState('');
+
+  const paymentMethodTypes = {
+    saudi_bank: {
+      label: "Saudi Bank Transfer",
+      icon: "🏦",
+      fields: [
+        { name: 'bank_name', label: 'Bank Name', type: 'text', required: true },
+        { name: 'iban', label: 'IBAN', type: 'text', required: true },
+        { name: 'account_holder', label: 'Account Holder Name', type: 'text', required: true }
+      ]
+    },
+    stc_pay: {
+      label: "STC Pay",
+      icon: "📱",
+      fields: [
+        { name: 'phone_number', label: 'Phone Number', type: 'tel', required: true },
+        { name: 'account_name', label: 'Account Name', type: 'text', required: true }
+      ]
+    },
+    paypal: {
+      label: "PayPal (International)",
+      icon: "💳",
+      fields: [
+        { name: 'paypal_email', label: 'PayPal Email', type: 'email', required: true }
+      ]
+    },
+    wise: {
+      label: "Wise Transfer",
+      icon: "🌍",
+      fields: [
+        { name: 'wise_email', label: 'Wise Email', type: 'email', required: true },
+        { name: 'preferred_currency', label: 'Preferred Currency', type: 'select', 
+          options: ['SAR', 'USD', 'EUR', 'GBP'], required: true }
+      ]
+    }
+  };
+
+  useEffect(() => {
+    fetchPaymentMethods();
+  }, []);
+
+  const fetchPaymentMethods = async () => {
+    try {
+      const response = await fetch('/api/seller/payment-methods');
+      const data = await response.json();
+      setPaymentMethods(data);
+    } catch (error) {
+      console.error('Failed to fetch payment methods:', error);
+    }
+  };
+
+  const handleAddPaymentMethod = async (methodData) => {
+    try {
+      const response = await fetch('/api/seller/payment-methods', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(methodData)
+      });
+      
+      if (response.ok) {
+        setIsAddingMethod(false);
+        setSelectedMethodType('');
+        fetchPaymentMethods();
+      }
+    } catch (error) {
+      console.error('Failed to add payment method:', error);
+    }
+  };
+
+  const handleDeletePaymentMethod = async (methodId) => {
+    try {
+      await fetch(`/api/seller/payment-methods/${methodId}`, {
+        method: 'DELETE'
+      });
+      fetchPaymentMethods();
+    } catch (error) {
+      console.error('Failed to delete payment method:', error);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h3 className="text-lg font-semibold">Payment Methods</h3>
+          <p className="text-sm text-gray-600">
+            Manage how you receive payments from collectors
+          </p>
+        </div>
+        <Button 
+          onClick={() => setIsAddingMethod(true)}
+          disabled={isAddingMethod}
+        >
+          Add Payment Method
+        </Button>
+      </div>
+
+      {/* Existing Payment Methods */}
+      <div className="grid gap-4">
+        {paymentMethods.map((method) => (
+          <Card key={method.id}>
+            <CardHeader className="pb-3">
+              <div className="flex justify-between items-start">
+                <div>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <span>{paymentMethodTypes[method.type]?.icon}</span>
+                    {paymentMethodTypes[method.type]?.label}
+                    {method.isDefault && <Badge variant="secondary">Default</Badge>}
+                  </CardTitle>
+                  <CardDescription>
+                    {method.display_info}
+                  </CardDescription>
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline">Edit</Button>
+                  <Button 
+                    size="sm" 
+                    variant="destructive" 
+                    onClick={() => handleDeletePaymentMethod(method.id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+        ))}
+      </div>
+
+      {/* Add New Payment Method */}
+      {isAddingMethod && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Add New Payment Method</CardTitle>
+            <CardDescription>
+              Choose a payment method to receive funds from collectors
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {!selectedMethodType ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Object.entries(paymentMethodTypes).map(([type, config]) => (
+                  <Button
+                    key={type}
+                    variant="outline"
+                    className="h-auto p-4 flex flex-col items-center gap-2"
+                    onClick={() => setSelectedMethodType(type)}
+                  >
+                    <span className="text-2xl">{config.icon}</span>
+                    <span>{config.label}</span>
+                  </Button>
+                ))}
+              </div>
+            ) : (
+              <PaymentMethodForm
+                methodType={selectedMethodType}
+                config={paymentMethodTypes[selectedMethodType]}
+                onSubmit={handleAddPaymentMethod}
+                onCancel={() => {
+                  setSelectedMethodType('');
+                  setIsAddingMethod(false);
+                }}
+              />
+            )}
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
+
+// Payment method form component
+const PaymentMethodForm = ({ methodType, config, onSubmit, onCancel }) => {
+  const [formData, setFormData] = useState({});
+  const [customInstructions, setCustomInstructions] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit({
+      type: methodType,
+      details: formData,
+      customInstructions,
+      isDefault: Object.keys(formData).length === 0 // First method becomes default
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-xl">{config.icon}</span>
+        <h4 className="font-semibold">{config.label}</h4>
+      </div>
+
+      {config.fields.map((field) => (
+        <div key={field.name}>
+          <Label htmlFor={field.name}>{field.label}</Label>
+          {field.type === 'select' ? (
+            <select
+              id={field.name}
+              className="w-full border rounded px-3 py-2 mt-1"
+              required={field.required}
+              onChange={(e) => setFormData({...formData, [field.name]: e.target.value})}
+            >
+              <option value="">Select {field.label}</option>
+              {field.options.map(option => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+          ) : (
+            <Input
+              id={field.name}
+              type={field.type}
+              required={field.required}
+              onChange={(e) => setFormData({...formData, [field.name]: e.target.value})}
+            />
+          )}
+        </div>
+      ))}
+
+      <div>
+        <Label htmlFor="instructions">Special Instructions (Optional)</Label>
+        <Textarea
+          id="instructions"
+          placeholder="Any special payment instructions for buyers..."
+          value={customInstructions}
+          onChange={(e) => setCustomInstructions(e.target.value)}
+        />
+      </div>
+
+      <div className="flex gap-2 pt-4">
+        <Button type="submit">Add Payment Method</Button>
+        <Button type="button" variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
+      </div>
+    </form>
+  );
+};
+🔥 PHASE 4: Backend API Enhancements
+6. Add Admin API Endpoints
+typescript// FILE: server/routes/admin.ts
+// TASK: Create comprehensive admin API endpoints
+
+import { Router } from 'express';
+import { isAuthenticated, requireRole } from '../middleware/auth';
+import { db } from '../db/connection';
+import { users, artists, galleries, artworks, purchaseOrders } from '@shared/schema';
+import { eq, desc, count, sql } from 'drizzle-orm';
+
+const adminRouter = Router();
+
+// Middleware to require admin role
+const requireAdmin = requireRole('admin');
+
+// Dashboard Overview Metrics
+adminRouter.get('/metrics/overview', isAuthenticated, requireAdmin, async (req, res) => {
+  try {
+    const [
+      totalUsers,
+      totalArtworks,
+      monthlyInquiries,
+      completedSales
+    ] = await Promise.all([
+      db.select({ count: count() }).from(users),
+      db.select({ count: count() }).from(artworks),
+      db.select({ count: count() }).from(purchaseOrders)
+        .where(sql`created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)`),
+      db.select({ count: count() }).from(purchaseOrders)
+        .where(eq(purchaseOrders.status, 'delivered'))
+    ]);
+
+    res.json({
+      totalUsers: totalUsers[0].count,
+      totalArtworks: totalArtworks[0].count,
+      monthlyInquiries: monthlyInquiries[0].count,
+      completedSales: completedSales[0].count
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch metrics' });
+  }
+});
+
+// User Management
+adminRouter.get('/users', isAuthenticated, requireAdmin, async (req, res) => {
+  try {
+    const { page = 1, limit = 50, search, role } = req.query;
+    
+    let query = db.select({
+      id: users.id,
+      firstName: users.firstName,
+      lastName: users.lastName,
+      email: users.email,
+      roles: users.roles,
+      createdAt: users.createdAt,
+      lifecycleStage: users.lifecycleStage
+    }).from(users);
+
+    if (search) {
+      query = query.where(sql`
+        LOWER(${users.firstName}) LIKE ${`%${search.toLowerCase()}%`} OR
+        LOWER(${users.lastName}) LIKE ${`%${search.toLowerCase()}%`} OR
+        LOWER(${users.email}) LIKE ${`%${search.toLowerCase()}%`}
+      `);
+    }
+
+    if (role && role !== 'all') {
+      query = query.where(sql`JSON_CONTAINS(${users.roles}, ${JSON.stringify([role])})`);
+    }
+
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const userList = await query.limit(parseInt(limit)).offset(offset).orderBy(desc(users.createdAt));
+
+    res.json(userList);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+});
+
+// User Actions (verify, suspend, etc.)
+adminRouter.post('/users/:userId/action', isAuthenticated, requireAdmin, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { action } = req.body;
+
+    switch (action) {
+      case 'verify':
+        // Add verification logic
+        break;
+      case 'suspend':
+        // Add suspension logic
+        break;
+      case 'activate':
+        // Add activation logic
+        break;
+      default:
+        return res.status(400).json({ error: 'Invalid action' });
+    }
+
+    res.json({ success: true, action });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to perform user action' });
+  }
+});
+
+// Content Moderation
+adminRouter.get('/content/pending', isAuthenticated, requireAdmin, async (req, res) => {
+  try {
+    const pendingArtworks = await db.select({
+      id: artworks.id,
+      title: artworks.title,
+      artistId: artworks.artistId,
+      createdAt: artworks.createdAt,
+      images: artworks.images
+    }).from(artworks)
+    .where(eq(artworks.status, 'pending'))
+    .orderBy(desc(artworks.createdAt));
+
+    res.json(pendingArtworks);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch pending content' });
+  }
+});
+
+// Approve/Reject Artwork
+adminRouter.post('/content/:artworkId/moderate', isAuthenticated, requireAdmin, async (req, res) => {
+  try {
+    const { artworkId } = req.params;
+    const { action, reason } = req.body;
+
+    const status = action === 'approve' ? 'approved' : 'rejected';
+    
+    await db.update(artworks)
+      .set({ 
+        status,
+        moderationReason: reason,
+        moderatedAt: new Date(),
+        moderatedBy: req.user.id
+      })
+      .where(eq(artworks.id, parseInt(artworkId)));
+
+    res.json({ success: true, status });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to moderate content' });
+  }
+});
+
+// Featured Content Management
+adminRouter.get('/featured', isAuthenticated, requireAdmin, async (req, res) => {
+  try {
+    const featuredArtworks = await db.select()
+      .from(artworks)
+      .where(eq(artworks.featured, true))
+      .orderBy(desc(artworks.createdAt));
+
+    res.json(featuredArtworks);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch featured content' });
+  }
+});
+
+adminRouter.post('/featured/artwork/:artworkId', isAuthenticated, requireAdmin, async (req, res) => {
+  try {
+    const { artworkId } = req.params;
+    const { featured } = req.body;
+
+    await db.update(artworks)
+      .set({ featured })
+      .where(eq(artworks.id, parseInt(artworkId)));
+
+    res.json({ success: true, featured });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update featured status' });
+  }
+});
+
+export { adminRouter };
+7. Enhance Payment Method API
+typescript// FILE: server/routes/seller.ts
+// TASK: Add comprehensive payment method management endpoints
+
+import { Router } from 'express';
+import { isAuthenticated } from '../middleware/auth';
+import { db } from '../db/connection';
+import { artists, galleries } from '@shared/schema';
+import { eq } from 'drizzle-orm';
+
+const sellerRouter = Router();
+
+// Get seller payment methods
+sellerRouter.get('/payment-methods', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    // Check if user is artist or gallery
+    const [artist] = await db.select().from(artists).where(eq(artists.userId, userId));
+    const [gallery] = await db.select().from(galleries).where(eq(galleries.userId, userId));
+    
+    const seller = artist || gallery;
+    if (!seller) {
+      return res.status(404).json({ error: 'Seller profile not found' });
+    }
+
+    const paymentMethods = seller.paymentMethods || [];
+    
+    res.json(paymentMethods.map(method => ({
+      id: method.id,
+      type: method.type,
+      display_info: method.displayInfo,
+      isDefault: method.isDefault,
+      createdAt: method.createdAt
+    })));
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch payment methods' });
+  }
+});
+
+// Add new payment method
+sellerRouter.post('/payment-methods', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { type, details, customInstructions, isDefault } = req.body;
+    
+    // Validate payment method type
+    const validTypes = ['saudi_bank', 'stc_pay', 'paypal', 'wise'];
+    if (!validTypes.includes(type)) {
+      return res.status(400).json({ error: 'Invalid payment method type' });
+    }
+
+    // Get seller profile
+    const [artist] = await db.select().from(artists).where(eq(artists.userId, userId));
+    const [gallery] = await db.select().from(galleries).where(eq(galleries.userId, userId));
+    
+    const sellerRetryAContinueEdittypescript   const seller = artist || gallery;
+   if (!seller) {
+     return res.status(404).json({ error: 'Seller profile not found' });
+   }
+
+   const table = artist ? artists : galleries;
+   const existingMethods = seller.paymentMethods || [];
+   
+   // Create new payment method
+   const newMethod = {
+     id: `pm_${Date.now()}`,
+     type,
+     details,
+     customInstructions,
+     isDefault: isDefault || existingMethods.length === 0, // First method becomes default
+     displayInfo: generateDisplayInfo(type, details),
+     createdAt: new Date().toISOString()
+   };
+
+   // If this is set as default, remove default from others
+   const updatedMethods = existingMethods.map(method => ({
+     ...method,
+     isDefault: newMethod.isDefault ? false : method.isDefault
+   }));
+
+   updatedMethods.push(newMethod);
+
+   // Update seller profile
+   await db.update(table)
+     .set({ paymentMethods: updatedMethods })
+     .where(eq(table.userId, userId));
+
+   res.json({ success: true, paymentMethod: newMethod });
+ } catch (error) {
+   res.status(500).json({ error: 'Failed to add payment method' });
+ }
+});
+
+// Delete payment method
+sellerRouter.delete('/payment-methods/:methodId', isAuthenticated, async (req, res) => {
+ try {
+   const userId = req.user.id;
+   const { methodId } = req.params;
+   
+   // Get seller profile
+   const [artist] = await db.select().from(artists).where(eq(artists.userId, userId));
+   const [gallery] = await db.select().from(galleries).where(eq(galleries.userId, userId));
+   
+   const seller = artist || gallery;
+   if (!seller) {
+     return res.status(404).json({ error: 'Seller profile not found' });
+   }
+
+   const table = artist ? artists : galleries;
+   const existingMethods = seller.paymentMethods || [];
+   
+   // Remove the method
+   const updatedMethods = existingMethods.filter(method => method.id !== methodId);
+   
+   // If deleted method was default and others exist, make first one default
+   if (updatedMethods.length > 0 && !updatedMethods.some(m => m.isDefault)) {
+     updatedMethods[0].isDefault = true;
+   }
+
+   // Update seller profile
+   await db.update(table)
+     .set({ paymentMethods: updatedMethods })
+     .where(eq(table.userId, userId));
+
+   res.json({ success: true });
+ } catch (error) {
+   res.status(500).json({ error: 'Failed to delete payment method' });
+ }
+});
+
+// Helper function to generate display info
+function generateDisplayInfo(type, details) {
+ switch (type) {
+   case 'saudi_bank':
+     return `${details.bank_name} - ${details.iban?.slice(-4)}`;
+   case 'stc_pay':
+     return `STC Pay - ${details.phone_number}`;
+   case 'paypal':
+     return `PayPal - ${details.paypal_email}`;
+   case 'wise':
+     return `Wise - ${details.wise_email} (${details.preferred_currency})`;
+   default:
+     return 'Payment Method';
+ }
+}
+
+export { sellerRouter };
+🔥 PHASE 5: Email Template Updates
+8. Update Email Service with New Templates
+typescript// FILE: server/emailService.ts
+// TASK: Add enhanced welcome email sending
+
+import { welcomeEmailTemplates } from './emailTemplates/welcomeTemplates';
+
+export class EmailService {
+  // ... existing methods
+
+  async sendWelcomeEmail(user, userType) {
+    const template = welcomeEmailTemplates[userType];
+    if (!template) {
+      console.error(`No welcome template found for user type: ${userType}`);
+      return;
+    }
+
+    const emailData = {
+      to: user.email,
+      subject: template.subject,
+      content: this.personalizeEmailContent(template.content, user),
+      templateType: 'welcome',
+      userType
+    };
+
+    await this.queueEmail(emailData);
+
+    // Schedule follow-up emails if configured
+    if (template.followUpSchedule) {
+      for (const days of template.followUpSchedule) {
+        await this.scheduleFollowUpEmail(user, userType, days);
+      }
+    }
+  }
+
+  private personalizeEmailContent(content, user) {
+    return content
+      .replace(/{{firstName}}/g, user.firstName || 'Artist')
+      .replace(/{{lastName}}/g, user.lastName || '')
+      .replace(/{{fullName}}/g, `${user.firstName || ''} ${user.lastName || ''}`.trim());
+  }
+
+  private async scheduleFollowUpEmail(user, userType, days) {
+    const sendDate = new Date();
+    sendDate.setDate(sendDate.getDate() + days);
+
+    const followUpContent = this.getFollowUpContent(userType, days);
+    
+    await this.queueEmail({
+      to: user.email,
+      subject: followUpContent.subject,
+      content: followUpContent.content,
+      templateType: 'followup',
+      scheduledFor: sendDate
+    });
+  }
+
+  private getFollowUpContent(userType, days) {
+    const followUpTemplates = {
+      artist: {
+        3: {
+          subject: "Quick Start Guide - Optimize Your Art Profile",
+          content: `
+            <h2>Hi again! Let's optimize your artist profile</h2>
+            <p>It's been a few days since you joined Art Souk. Here are some quick tips to boost your visibility:</p>
+            <ul>
+              <li>📸 High-quality photos get 3x more views</li>
+              <li>📝 Complete artist bio increases inquiries by 250%</li>
+              <li>💰 Competitive pricing attracts more collectors</li>
+            </ul>
+            <p><a href="${process.env.PLATFORM_URL}/artworks/manage">Complete your profile →</a></p>
+          `
+        },
+        7: {
+          subject: "Success Story: How Sarah Sold Her First Piece in Week 1",
+          content: `
+            <h2>Inspiration from the Art Souk Community</h2>
+            <p>Sarah, a Riyadh-based artist, sold her first artwork within a week of joining. Her secret?</p>
+            <ol>
+              <li>Professional photography of her pieces</li>
+              <li>Engaging artist story in her bio</li>
+              <li>Active engagement with collector inquiries</li>
+            </ol>
+            <p>Ready to follow in her footsteps?</p>
+            <p><a href="${process.env.PLATFORM_URL}/dashboard">View your dashboard →</a></p>
+          `
+        }
+      },
+      gallery: {
+        3: {
+          subject: "Gallery Success Tips - Maximize Your Digital Presence",
+          content: `
+            <h2>Take your gallery to the next level</h2>
+            <p>Successful galleries on our platform typically:</p>
+            <ul>
+              <li>🎨 Feature 15+ artists in their roster</li>
+              <li>📅 Host monthly virtual exhibitions</li>
+              <li>📱 Maintain active social media presence</li>
+            </ul>
+            <p><a href="${process.env.PLATFORM_URL}/manage/artists">Invite your artists →</a></p>
+          `
+        }
+      },
+      collector: {
+        3: {
+          subject: "Discover Your First Piece - Curated Recommendations",
+          content: `
+            <h2>Artworks selected just for you</h2>
+            <p>Based on your interests, here are some pieces you might love:</p>
+            <p>Our curators have selected artworks that match your preferences for contemporary GCC art.</p>
+            <p><a href="${process.env.PLATFORM_URL}/artworks/featured">View recommendations →</a></p>
+          `
+        }
+      }
+    };
+
+    return followUpTemplates[userType]?.[days] || {
+      subject: "Continue Your Art Journey",
+      content: "<p>Thank you for being part of the Art Souk community!</p>"
+    };
+  }
+}
+🔥 PHASE 6: Register New Routes
+9. Update Main Routes Registration
+typescript// FILE: server/routes.ts
+// TASK: Add new admin and seller routes to main registration
+
+import { adminRouter } from './routes/admin';
+import { sellerRouter } from './routes/seller';
+
+export async function registerRoutes(app: Express) {
+  // ... existing route registrations
+
+  // Admin routes
+  app.use('/api/admin', adminRouter);
+
+  // Enhanced seller routes
+  app.use('/api/seller', sellerRouter);
+
+  // ... rest of existing routes
+}
+10. Update Role-Based Access Control
+typescript// FILE: server/middleware/auth.ts
+// TASK: Add role-based access control middleware
+
+export const requireRole = (requiredRole: string) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    const userRoles = req.user.roles || [];
+    
+    if (!userRoles.includes(requiredRole)) {
+      return res.status(403).json({ 
+        message: `Access denied. Required role: ${requiredRole}` 
+      });
+    }
+
+    next();
+  };
+};
+
+export const requireAnyRole = (allowedRoles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    const userRoles = req.user.roles || [];
+    const hasRequiredRole = allowedRoles.some(role => userRoles.includes(role));
+    
+    if (!hasRequiredRole) {
+      return res.status(403).json({ 
+        message: `Access denied. Required roles: ${allowedRoles.join(', ')}` 
+      });
+    }
+
+    next();
+  };
+};
+🔥 PHASE 7: Frontend Navigation Updates
+11. Update Navigation to Remove Pricing References
+typescript// FILE: client/src/components/Navbar.tsx
+// TASK: Update navigation messaging to be value-focused
+
+const navigationContent = {
+  unauthenticated: {
+    ctaText: "Join Art Souk",
+    description: "Connect with the GCC's finest art community"
+  },
+  
+  authenticated: {
+    artistLinks: [
+      { label: "My Artworks", href: "/artworks/manage" },
+      { label: "Performance", href: "/analytics" },
+      { label: "Payment Setup", href: "/seller" }
+    ],
+    
+    galleryLinks: [
+      { label: "Manage Artists", href: "/manage/artists" },
+      { label: "Exhibitions", href: "/manage/events" },
+      { label: "Gallery Analytics", href: "/analytics" }
+    ],
+    
+    collectorLinks: [
+      { label: "My Favorites", href: "/collector" },
+      { label: "Saved Searches", href: "/preferences" },
+      { label: "Purchase History", href: "/collector?tab=history" }
+    ]
+  }
+};
+TESTING REQUIREMENTS
+After implementation, test these key flows:
+
+User Onboarding: Verify new welcome messaging appears correctly
+Admin Panel: Test user management and content moderation features
+Payment Methods: Test adding/removing payment methods for artists/galleries
+Email System: Verify welcome emails are sent with new templates
+Role Access: Test admin-only routes are properly protected

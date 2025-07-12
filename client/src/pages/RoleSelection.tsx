@@ -47,21 +47,21 @@ export default function RoleSelection() {
       icon: ShoppingBag,
       title: "Art Collector",
       titleAr: "جامع فني",
-      description: "Discover, collect, and invest in exceptional artworks",
-      descriptionAr: "اكتشف واجمع واستثمر في أعمال فنية استثنائية",
+      description: "Discover Authentic GCC Art",
+      descriptionAr: "اكتشف الفن الأصيل لدول مجلس التعاون الخليجي",
       features: [
-        "Browse and purchase artworks",
-        "Participate in auctions",
-        "Create personal collections",
-        "Receive price alerts",
-        "Commission custom pieces"
+        "🎨 Curated artwork from verified artists",
+        "🤝 Direct artist communication",
+        "🔍 Advanced discovery tools",
+        "💎 Access to emerging talent",
+        "📱 Seamless browsing experience"
       ],
       featuresAr: [
-        "تصفح وشراء الأعمال الفنية",
-        "المشاركة في المزادات",
-        "إنشاء مجموعات شخصية",
-        "تلقي تنبيهات الأسعار",
-        "طلب قطع مخصصة"
+        "🎨 أعمال فنية منسقة من فنانين معتمدين",
+        "🤝 تواصل مباشر مع الفنانين",
+        "🔍 أدوات اكتشاف متقدمة",
+        "💎 الوصول إلى المواهب الناشئة",
+        "📱 تجربة تصفح سلسة"
       ],
       primary: true
     },
@@ -70,21 +70,21 @@ export default function RoleSelection() {
       icon: Palette,
       title: "Artist",
       titleAr: "فنان",
-      description: "Showcase your artwork and connect with collectors",
-      descriptionAr: "اعرض أعمالك الفنية وتواصل مع الجامعين",
+      description: "Showcase Your Art to GCC Collectors",
+      descriptionAr: "اعرض فنك أمام جامعي دول مجلس التعاون الخليجي",
       features: [
-        "Create artist profile",
-        "Upload and manage portfolio",
-        "Participate in exhibitions",
-        "Receive commission requests",
-        "Track sales analytics"
+        "🎨 Professional artist portfolio",
+        "🌍 Reach collectors across the GCC",
+        "💼 Direct buyer connections",
+        "📈 Track your artwork performance",
+        "🤝 Join established artist community"
       ],
       featuresAr: [
-        "إنشاء ملف فني شخصي",
-        "رفع وإدارة المعرض",
-        "المشاركة في المعارض",
-        "تلقي طلبات التكليف",
-        "تتبع تحليلات المبيعات"
+        "🎨 ملف فني احترافي",
+        "🌍 الوصول لجامعي دول مجلس التعاون الخليجي",
+        "💼 اتصالات مباشرة مع المشترين",
+        "📈 تتبع أداء أعمالك الفنية",
+        "🤝 انضم لمجتمع الفنانين الراسخ"
       ],
       badge: "Popular",
       badgeAr: "شائع"
@@ -94,21 +94,21 @@ export default function RoleSelection() {
       icon: Building,
       title: "Gallery",
       titleAr: "معرض",
-      description: "Represent artists and manage exhibitions",
-      descriptionAr: "تمثيل الفنانين وإدارة المعارض",
+      description: "Expand Your Gallery's Digital Presence",
+      descriptionAr: "وسّع حضور معرضك الرقمي",
       features: [
-        "Create gallery profile",
-        "Represent multiple artists",
-        "Organize exhibitions",
-        "Manage artist relationships",
-        "Host events and workshops"
+        "🏛️ Professional gallery storefront",
+        "👥 Manage multiple artist portfolios",
+        "🎭 Host virtual exhibitions",
+        "📊 Access collector insights",
+        "🤝 Network with other galleries"
       ],
       featuresAr: [
-        "إنشاء ملف المعرض",
-        "تمثيل عدة فنانين",
-        "تنظيم المعارض",
-        "إدارة علاقات الفنانين",
-        "استضافة فعاليات وورش"
+        "🏛️ واجهة معرض احترافية",
+        "👥 إدارة ملفات عدة فنانين",
+        "🎭 استضافة معارض افتراضية",
+        "📊 الوصول لرؤى الجامعين",
+        "🤝 تواصل مع معارض أخرى"
       ],
       badge: "Professional",
       badgeAr: "مهني"

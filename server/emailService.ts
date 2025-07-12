@@ -9,6 +9,7 @@ import {
   type EmailTemplate
 } from '@shared/schema';
 import { eq, and, lte, or, isNull } from 'drizzle-orm';
+import { welcomeEmailTemplates } from './emailTemplates/welcomeTemplates';
 
 // Initialize SendGrid with API key when available
 if (process.env.SENDGRID_API_KEY) {
@@ -344,6 +345,215 @@ export class EmailService {
       console.error('Error unsubscribing from newsletter:', error);
       throw error;
     }
+  }
+
+  // Send welcome email for new users
+  async sendWelcomeEmail(user: any, userType: 'artist' | 'gallery' | 'collector') {
+    try {
+      const template = welcomeEmailTemplates[userType];
+      if (!template) {
+        console.error(`No welcome template found for user type: ${userType}`);
+        return;
+      }
+
+      const personalizedContent = this.personalizeEmailContent(template.content, user);
+
+      const emailData = {
+        recipientEmail: user.email,
+        recipientUserId: user.id,
+        subject: template.subject,
+        bodyHtml: personalizedContent,
+        priority: 1, // High priority for welcome emails
+      };
+
+      await this.queueEmail(emailData);
+
+      // Schedule follow-up emails if configured
+      if (template.followUpSchedule) {
+        for (const days of template.followUpSchedule) {
+          await this.scheduleFollowUpEmail(user, userType, days);
+        }
+      }
+
+      console.log(`Welcome email queued for ${userType}: ${user.email}`);
+    } catch (error) {
+      console.error('Error sending welcome email:', error);
+      throw error;
+    }
+  }
+
+  // Personalize email content with user data
+  private personalizeEmailContent(content: string, user: any): string {
+    return content
+      .replace(/{{firstName}}/g, user.firstName || 'Friend')
+      .replace(/{{lastName}}/g, user.lastName || '')
+      .replace(/{{fullName}}/g, `${user.firstName || ''} ${user.lastName || ''}`.trim())
+      .replace(/{{email}}/g, user.email || '');
+  }
+
+  // Schedule follow-up email
+  private async scheduleFollowUpEmail(user: any, userType: 'artist' | 'gallery' | 'collector', days: number) {
+    try {
+      const sendDate = new Date();
+      sendDate.setDate(sendDate.getDate() + days);
+
+      const followUpContent = this.getFollowUpContent(userType, days);
+      
+      await this.queueEmail({
+        recipientEmail: user.email,
+        recipientUserId: user.id,
+        subject: followUpContent.subject,
+        bodyHtml: this.personalizeEmailContent(followUpContent.content, user),
+        priority: 5, // Medium priority for follow-ups
+      });
+
+      console.log(`Follow-up email scheduled for ${userType} in ${days} days: ${user.email}`);
+    } catch (error) {
+      console.error('Error scheduling follow-up email:', error);
+    }
+  }
+
+  // Get follow-up content based on user type and days
+  private getFollowUpContent(userType: 'artist' | 'gallery' | 'collector', days: number) {
+    const followUpTemplates = {
+      artist: {
+        3: {
+          subject: "Quick Start Guide - Optimize Your Art Profile",
+          content: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+              <h2 style="color: #7c3aed;">Hi {{firstName}}! Let's optimize your artist profile</h2>
+              <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
+                It's been a few days since you joined Art Souk. Here are some quick tips to boost your visibility:
+              </p>
+              <ul style="color: #4b5563; font-size: 16px; line-height: 1.8;">
+                <li>📸 High-quality photos get 3x more views</li>
+                <li>📝 Complete artist bio increases inquiries by 250%</li>
+                <li>💰 Competitive pricing attracts more collectors</li>
+                <li>📱 Social media integration expands your reach</li>
+              </ul>
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="${process.env.PLATFORM_URL || 'https://artsouk.com'}/artworks/manage" 
+                   style="background: linear-gradient(135deg, #7c3aed 0%, #d97706 100%); 
+                          color: white; 
+                          padding: 15px 30px; 
+                          text-decoration: none; 
+                          border-radius: 8px; 
+                          font-weight: bold; 
+                          font-size: 16px; 
+                          display: inline-block;">
+                  Complete your profile →
+                </a>
+              </div>
+            </div>
+          `
+        },
+        7: {
+          subject: "Success Story: How Artists Thrive on Art Souk",
+          content: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+              <h2 style="color: #7c3aed;">Inspiration from the Art Souk Community</h2>
+              <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
+                Many artists on our platform have found success by focusing on these key areas:
+              </p>
+              <ol style="color: #4b5563; font-size: 16px; line-height: 1.8;">
+                <li>Professional photography of their pieces</li>
+                <li>Engaging artist story in their bio</li>
+                <li>Active engagement with collector inquiries</li>
+                <li>Regular posting of new work</li>
+              </ol>
+              <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
+                Ready to take your art to the next level?
+              </p>
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="${process.env.PLATFORM_URL || 'https://artsouk.com'}/dashboard" 
+                   style="background: linear-gradient(135deg, #7c3aed 0%, #d97706 100%); 
+                          color: white; 
+                          padding: 15px 30px; 
+                          text-decoration: none; 
+                          border-radius: 8px; 
+                          font-weight: bold; 
+                          font-size: 16px; 
+                          display: inline-block;">
+                  View your dashboard →
+                </a>
+              </div>
+            </div>
+          `
+        }
+      },
+      gallery: {
+        3: {
+          subject: "Gallery Success Tips - Maximize Your Digital Presence",
+          content: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+              <h2 style="color: #7c3aed;">Take your gallery to the next level</h2>
+              <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
+                Successful galleries on our platform typically:
+              </p>
+              <ul style="color: #4b5563; font-size: 16px; line-height: 1.8;">
+                <li>🎨 Feature 15+ artists in their roster</li>
+                <li>📅 Host monthly virtual exhibitions</li>
+                <li>📱 Maintain active social media presence</li>
+                <li>🤝 Engage with the collector community</li>
+              </ul>
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="${process.env.PLATFORM_URL || 'https://artsouk.com'}/manage/artists" 
+                   style="background: linear-gradient(135deg, #7c3aed 0%, #d97706 100%); 
+                          color: white; 
+                          padding: 15px 30px; 
+                          text-decoration: none; 
+                          border-radius: 8px; 
+                          font-weight: bold; 
+                          font-size: 16px; 
+                          display: inline-block;">
+                  Invite your artists →
+                </a>
+              </div>
+            </div>
+          `
+        }
+      },
+      collector: {
+        3: {
+          subject: "Discover Your First Piece - Curated Recommendations",
+          content: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+              <h2 style="color: #7c3aed;">Artworks selected just for you</h2>
+              <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
+                Based on your interests, our curators have selected artworks that match your preferences for contemporary GCC art.
+              </p>
+              <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
+                Explore emerging artists and established names in the region's vibrant art scene.
+              </p>
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="${process.env.PLATFORM_URL || 'https://artsouk.com'}/artworks/featured" 
+                   style="background: linear-gradient(135deg, #7c3aed 0%, #d97706 100%); 
+                          color: white; 
+                          padding: 15px 30px; 
+                          text-decoration: none; 
+                          border-radius: 8px; 
+                          font-weight: bold; 
+                          font-size: 16px; 
+                          display: inline-block;">
+                  View recommendations →
+                </a>
+              </div>
+            </div>
+          `
+        }
+      }
+    };
+
+    return followUpTemplates[userType]?.[days as keyof typeof followUpTemplates[typeof userType]] || {
+      subject: "Continue Your Art Journey",
+      content: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
+            Thank you for being part of the Art Souk community!
+          </p>
+        </div>
+      `
+    };
   }
 }
 

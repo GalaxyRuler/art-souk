@@ -5,6 +5,8 @@ import path from 'path';
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { emailService } from "./emailService";
+import { adminRouter } from "./routes/admin";
+import { sellerRouter } from "./routes/seller";
 import { db } from "./db";
 import { eq, desc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
 import { trackStageMiddleware, updateLifecycleMetrics } from "./middleware/trackStage";
@@ -82,6 +84,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Apply lifecycle tracking middleware
   app.use(trackStageMiddleware);
+
+  // Register admin and seller routes
+  app.use('/api/admin', adminRouter);
+  app.use('/api/seller', sellerRouter);
 
   // Auth routes (without aggressive rate limiting for normal usage)
   app.get('/api/auth/user', async (req: any, res) => {
