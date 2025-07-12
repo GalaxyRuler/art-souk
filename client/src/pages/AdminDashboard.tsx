@@ -81,28 +81,34 @@ export default function AdminDashboard() {
   });
 
   // Fetch users
-  const { data: users, isLoading: usersLoading } = useQuery({
+  const { data: usersData, isLoading: usersLoading } = useQuery({
     queryKey: ['/api/admin/users'],
     enabled: selectedTab === 'users',
   });
 
   // Fetch artists
-  const { data: artists, isLoading: artistsLoading } = useQuery({
+  const { data: artistsData, isLoading: artistsLoading } = useQuery({
     queryKey: ['/api/admin/artists'],
     enabled: selectedTab === 'artists',
   });
 
   // Fetch galleries
-  const { data: galleries, isLoading: galleriesLoading } = useQuery({
+  const { data: galleriesData, isLoading: galleriesLoading } = useQuery({
     queryKey: ['/api/admin/galleries'],
     enabled: selectedTab === 'galleries',
   });
 
   // Fetch artworks
-  const { data: artworks, isLoading: artworksLoading } = useQuery({
+  const { data: artworksData, isLoading: artworksLoading } = useQuery({
     queryKey: ['/api/admin/artworks'],
     enabled: selectedTab === 'artworks',
   });
+
+  // Extract arrays from API response
+  const users = usersData?.users || [];
+  const artists = artistsData?.artists || [];
+  const galleries = galleriesData?.galleries || [];
+  const artworks = artworksData?.artworks || [];
 
   // Update user role mutation
   const updateUserRole = useMutation({
@@ -257,9 +263,9 @@ export default function AdminDashboard() {
                     <Users className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{stats?.totalUsers || 0}</div>
+                    <div className="text-2xl font-bold">{stats?.overview?.totalUsers || 0}</div>
                     <p className="text-xs text-muted-foreground">
-                      +{stats?.newUsersThisMonth || 0} {t('admin.thisMonth')}
+                      +{stats?.growth?.newUsersThisMonth || 0} {t('admin.thisMonth')}
                     </p>
                   </CardContent>
                 </Card>
@@ -270,7 +276,7 @@ export default function AdminDashboard() {
                     <Palette className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{stats?.totalArtists || 0}</div>
+                    <div className="text-2xl font-bold">{stats?.overview?.totalArtists || 0}</div>
                     <p className="text-xs text-muted-foreground">
                       {t('admin.activeArtists')}
                     </p>
@@ -283,7 +289,7 @@ export default function AdminDashboard() {
                     <Building className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{stats?.totalGalleries || 0}</div>
+                    <div className="text-2xl font-bold">{stats?.overview?.totalGalleries || 0}</div>
                     <p className="text-xs text-muted-foreground">
                       {t('admin.activeGalleries')}
                     </p>
@@ -296,7 +302,7 @@ export default function AdminDashboard() {
                     <ImageIcon className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{stats?.totalArtworks || 0}</div>
+                    <div className="text-2xl font-bold">{stats?.overview?.totalArtworks || 0}</div>
                     <p className="text-xs text-muted-foreground">
                       {t('admin.listedArtworks')}
                     </p>
