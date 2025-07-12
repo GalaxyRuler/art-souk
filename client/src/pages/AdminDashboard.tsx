@@ -91,22 +91,53 @@ export default function AdminDashboard() {
   const queryClient = useQueryClient();
   const [selectedTab, setSelectedTab] = useState('overview');
 
-  // Fetch admin statistics
-  const { data: stats, isLoading: statsLoading } = useQuery({
-    queryKey: ['/stats'],
-    queryFn: () => apiRequest('/stats'),
+  // Check if user is authenticated and has admin role
+  const { data: user, isLoading: userLoading } = useQuery({
+    queryKey: ['/api/auth/user'],
+    queryFn: () => apiRequest('/api/auth/user'),
   });
 
-  // Fetch users
+  // Check if user needs to become admin first
+  const isAdmin = user?.roles?.includes('admin');
+
+  // Admin setup mutation
+  const adminSetupMutation = useMutation({
+    mutationFn: () => apiRequest('/api/admin/setup', { method: 'POST' }),
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Admin privileges granted successfully",
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to setup admin",
+        variant: 'destructive',
+      });
+    },
+  });
+
+  // Fetch admin statistics (only if user is admin)
+  const { data: stats, isLoading: statsLoading } = useQuery({
+    queryKey: ['/api/admin/stats'],
+    queryFn: () => apiRequest('/api/admin/stats'),
+    enabled: isAdmin,
+  });
+
+  // Fetch users (only if user is admin)
   const { data: usersData, isLoading: usersLoading } = useQuery({
     queryKey: ['/api/admin/users'],
     queryFn: () => apiRequest('/api/admin/users'),
+    enabled: isAdmin,
   });
 
-  // Fetch KYC documents
+  // Fetch KYC documents (only if user is admin)
   const { data: kycDocumentsData, isLoading: kycDocumentsLoading } = useQuery({
     queryKey: ['/api/admin/kyc-documents'],
     queryFn: () => apiRequest('/api/admin/kyc-documents'),
+    enabled: isAdmin,
   });
 
   // Update KYC document mutation
@@ -153,21 +184,88 @@ export default function AdminDashboard() {
     },
   });
 
-  const isAdmin = true; // Replace with actual admin check
+  const users = usersData?.users || [];
+  const kycDocuments = kycDocumentsData?.documents || [];
+
+  const overviewStats = stats?.overview || {
+    totalUsers: 0,
+    totalArtists: 0,
+    totalGalleries: 0,
+    totalArtworks: 0,
+    activeAuctions: 0,
+    totalWorkshops: 0,
+    totalEvents: 0,
+    pendingReports: 0,
+  };
+
+  const growthData = stats?.growth || {
+    newUsersThisMonth: 0,
+    newArtworksThisMonth: 0,
+  };
+
+  // Show admin setup if user is not admin
+  if (userLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="mt-4 text-gray-600 dark:text-gray-300">Loading...</p>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Authentication Required</h2>
+              <p className="text-gray-600 dark:text-gray-300">Please log in to access the admin dashboard.</p>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
-          <p className="text-gray-600">You don't have permission to access the admin dashboard.</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <Users className="h-16 w-16 text-blue-500 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Admin Setup Required</h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">You need admin privileges to access this dashboard.</p>
+              <Button
+                onClick={() => adminSetupMutation.mutate()}
+                disabled={adminSetupMutation.isPending}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+              >
+                {adminSetupMutation.isPending ? 'Setting up...' : 'Become Admin'}
+              </Button>
+            </div>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       <Navbar />
       
       <div className="container mx-auto px-4 py-8">
