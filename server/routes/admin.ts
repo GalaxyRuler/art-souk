@@ -18,6 +18,8 @@ import { z } from 'zod';
 
 const adminRouter = Router();
 
+
+
 // Middleware to ensure user is admin
 const requireAdmin = async (req: any, res: any, next: any) => {
   try {
@@ -94,7 +96,47 @@ adminRouter.get('/stats', async (req, res) => {
     res.json(stats);
   } catch (error) {
     console.error('Admin dashboard stats error:', error);
-    res.status(500).json({ error: 'Failed to fetch dashboard stats' });
+    res.status(500).json({ 
+      overview: {
+        totalUsers: 0,
+        totalArtists: 0,
+        totalGalleries: 0,
+        totalArtworks: 0,
+        activeAuctions: 0,
+        totalWorkshops: 0,
+        totalEvents: 0,
+        pendingReports: 0
+      },
+      growth: {
+        newUsersThisMonth: 0,
+        newArtworksThisMonth: 0
+      }
+    });
+  }
+});
+
+// KYC Documents Management
+adminRouter.get('/kyc-documents', async (req, res) => {
+  try {
+    const documents = await storage.getAllKycDocuments();
+    res.json({ documents });
+  } catch (error) {
+    console.error('Error fetching KYC documents:', error);
+    res.status(500).json({ documents: [] });
+  }
+});
+
+// Update KYC document status
+adminRouter.patch('/kyc-documents/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { verificationStatus, verificationNotes } = req.body;
+    
+    const document = await storage.updateKycDocumentStatus(id, verificationStatus, verificationNotes);
+    res.json({ document });
+  } catch (error) {
+    console.error('Error updating KYC document:', error);
+    res.status(500).json({ error: 'Failed to update KYC document' });
   }
 });
 
