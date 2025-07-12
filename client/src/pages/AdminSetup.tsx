@@ -62,16 +62,16 @@ export default function AdminSetup() {
         <CardContent className="space-y-4">
           <div className="text-sm text-muted-foreground">
             <p>Current user: {user?.email}</p>
-            <p>Role: {user?.role || 'user'}</p>
+            <p>Role: {user?.roles?.join(', ') || 'user'}</p>
           </div>
           
-          {user?.role === 'admin' ? (
+          {user?.roles?.includes('admin') ? (
             <div className="space-y-4">
               <p className="text-green-600 font-medium">
                 ✓ You are already an admin!
               </p>
-              <Link href="/">
-                <Button className="w-full">Go to Dashboard</Button>
+              <Link href="/admin">
+                <Button className="w-full">Go to Admin Dashboard</Button>
               </Link>
             </div>
           ) : (

@@ -19,11 +19,31 @@ import { z } from 'zod';
 const adminRouter = Router();
 
 // Middleware to ensure user is admin
-const requireAdmin = (req: any, res: any, next: any) => {
-  if (!req.user || !req.user.roles || !req.user.roles.includes('admin')) {
-    return res.status(403).json({ message: 'Admin access required' });
+const requireAdmin = async (req: any, res: any, next: any) => {
+  try {
+    if (!req.user || !req.user.claims || !req.user.claims.sub) {
+      return res.status(403).json({ message: 'Authentication required' });
+    }
+    
+    const userId = req.user.claims.sub;
+    const user = await storage.getUser(userId);
+    
+    if (!user) {
+      return res.status(403).json({ message: 'User not found' });
+    }
+    
+    // Check if user has admin role
+    if (!user.roles || !user.roles.includes('admin')) {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+    
+    // Attach user to request for later use
+    req.dbUser = user;
+    next();
+  } catch (error) {
+    console.error('Admin middleware error:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
-  next();
 };
 
 // Apply admin middleware to all routes
@@ -31,7 +51,7 @@ adminRouter.use(isAuthenticated);
 adminRouter.use(requireAdmin);
 
 // Dashboard Stats
-adminRouter.get('/dashboard/stats', async (req, res) => {
+adminRouter.get('/stats', async (req, res) => {
   try {
     const [
       totalUsers,
@@ -96,8 +116,9 @@ adminRouter.get('/users', async (req, res) => {
       lastName: users.lastName,
       roles: users.roles,
       createdAt: users.createdAt,
-      emailVerified: users.emailVerified,
-      profileComplete: users.profileComplete
+      lastActiveAt: users.lastActiveAt,
+      profileCompleteness: users.profileCompleteness,
+      lifecycleStage: users.lifecycleStage
     }).from(users);
 
     // Apply filters
@@ -212,6 +233,155 @@ adminRouter.patch('/users/:userId/role', async (req, res) => {
   } catch (error) {
     console.error('Admin update user role error:', error);
     res.status(500).json({ error: 'Failed to update user role' });
+  }
+});
+
+// Artists Management
+adminRouter.get('/artists', async (req, res) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const search = req.query.search as string;
+    const offset = (page - 1) * limit;
+    
+    let query = db.select({
+      id: artists.id,
+      userId: artists.userId,
+      name: artists.name,
+      nameAr: artists.nameAr,
+      nationality: artists.nationality,
+      featured: artists.featured,
+      createdAt: artists.createdAt
+    }).from(artists);
+
+    if (search) {
+      query = query.where(
+        or(
+          ilike(artists.name, `%${search}%`),
+          ilike(artists.nameAr, `%${search}%`)
+        )
+      );
+    }
+
+    const artistsList = await query
+      .orderBy(desc(artists.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+    const totalCount = await db.select({ count: count() }).from(artists);
+
+    res.json({
+      artists: artistsList,
+      pagination: {
+        page,
+        limit,
+        total: totalCount[0].count,
+        pages: Math.ceil(totalCount[0].count / limit)
+      }
+    });
+  } catch (error) {
+    console.error('Admin artists list error:', error);
+    res.status(500).json({ error: 'Failed to fetch artists' });
+  }
+});
+
+// Galleries Management
+adminRouter.get('/galleries', async (req, res) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const search = req.query.search as string;
+    const offset = (page - 1) * limit;
+    
+    let query = db.select({
+      id: galleries.id,
+      userId: galleries.userId,
+      name: galleries.name,
+      nameAr: galleries.nameAr,
+      location: galleries.location,
+      featured: galleries.featured,
+      createdAt: galleries.createdAt
+    }).from(galleries);
+
+    if (search) {
+      query = query.where(
+        or(
+          ilike(galleries.name, `%${search}%`),
+          ilike(galleries.nameAr, `%${search}%`)
+        )
+      );
+    }
+
+    const galleriesList = await query
+      .orderBy(desc(galleries.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+    const totalCount = await db.select({ count: count() }).from(galleries);
+
+    res.json({
+      galleries: galleriesList,
+      pagination: {
+        page,
+        limit,
+        total: totalCount[0].count,
+        pages: Math.ceil(totalCount[0].count / limit)
+      }
+    });
+  } catch (error) {
+    console.error('Admin galleries list error:', error);
+    res.status(500).json({ error: 'Failed to fetch galleries' });
+  }
+});
+
+// Artworks Management
+adminRouter.get('/artworks', async (req, res) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const search = req.query.search as string;
+    const offset = (page - 1) * limit;
+    
+    let query = db.select({
+      id: artworks.id,
+      title: artworks.title,
+      titleAr: artworks.titleAr,
+      artistId: artworks.artistId,
+      price: artworks.price,
+      currency: artworks.currency,
+      availability: artworks.availability,
+      featured: artworks.featured,
+      createdAt: artworks.createdAt
+    }).from(artworks);
+
+    if (search) {
+      query = query.where(
+        or(
+          ilike(artworks.title, `%${search}%`),
+          ilike(artworks.titleAr, `%${search}%`)
+        )
+      );
+    }
+
+    const artworksList = await query
+      .orderBy(desc(artworks.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+    const totalCount = await db.select({ count: count() }).from(artworks);
+
+    res.json({
+      artworks: artworksList,
+      pagination: {
+        page,
+        limit,
+        total: totalCount[0].count,
+        pages: Math.ceil(totalCount[0].count / limit)
+      }
+    });
+  } catch (error) {
+    console.error('Admin artworks list error:', error);
+    res.status(500).json({ error: 'Failed to fetch artworks' });
   }
 });
 

@@ -210,15 +210,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const allUsers = await storage.getAllUsers();
       
       // Check if there are any admins already
-      const hasAdmin = allUsers.some(user => user.role === 'admin');
+      const hasAdmin = allUsers.some(user => user.roles && user.roles.includes('admin'));
       
       if (hasAdmin) {
         return res.status(400).json({ message: "Admin already exists" });
       }
       
-      // Make this user an admin
-      const adminUser = await storage.updateUserRole(userId, 'admin');
-      res.json({ message: "Admin user created successfully", user: adminUser });
+      // Get current user
+      let user = await storage.getUser(userId);
+      if (!user) {
+        // Create user if not exists
+        user = await storage.upsertUser({
+          id: userId,
+          email: req.user.claims.email || null,
+          firstName: req.user.claims.first_name || null,
+          lastName: req.user.claims.last_name || null,
+          profileImageUrl: req.user.claims.profile_image_url || null,
+        });
+      }
+      
+      // Add admin role to user's roles
+      const currentRoles = user.roles || [];
+      const newRoles = [...currentRoles, 'admin'];
+      await storage.updateUserRoles(userId, newRoles);
+      
+      const updatedUser = await storage.getUser(userId);
+      res.json({ message: "Admin user created successfully", user: updatedUser });
     } catch (error) {
       console.error("Error creating admin:", error);
       res.status(500).json({ message: "Failed to create admin user" });
