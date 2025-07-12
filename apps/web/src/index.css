@@ -1,0 +1,225 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(230, 24%, 12%);
+  --muted: hsl(210, 10%, 96%);
+  --muted-foreground: hsl(230, 6%, 44%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(230, 24%, 12%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(230, 24%, 12%);
+  --border: hsl(210, 15%, 88%);
+  --input: hsl(210, 15%, 88%);
+  --primary: hsl(217, 91%, 35%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(210, 10%, 96%);
+  --secondary-foreground: hsl(230, 24%, 12%);
+  --accent: hsl(35, 65%, 85%);
+  --accent-foreground: hsl(230, 24%, 12%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(217, 91%, 35%);
+  --radius: 0.5rem;
+  
+  /* Custom brand colors */
+  --brand-gold: hsl(35, 65%, 55%);
+  --brand-navy: hsl(217, 91%, 35%);
+  --brand-deep-navy: hsl(217, 91%, 25%);
+  --brand-steel: hsl(210, 10%, 96%);
+  --brand-charcoal: hsl(230, 24%, 12%);
+  --brand-light-gold: hsl(35, 65%, 85%);
+}
+
+.dark {
+  --background: hsl(230, 24%, 8%);
+  --foreground: hsl(0, 0%, 96%);
+  --muted: hsl(230, 12%, 16%);
+  --muted-foreground: hsl(230, 6%, 64%);
+  --popover: hsl(230, 24%, 8%);
+  --popover-foreground: hsl(0, 0%, 96%);
+  --card: hsl(230, 20%, 12%);
+  --card-foreground: hsl(0, 0%, 96%);
+  --border: hsl(230, 12%, 20%);
+  --input: hsl(230, 12%, 20%);
+  --primary: hsl(217, 71%, 50%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(230, 12%, 16%);
+  --secondary-foreground: hsl(0, 0%, 96%);
+  --accent: hsl(230, 12%, 20%);
+  --accent-foreground: hsl(0, 0%, 96%);
+  --destructive: hsl(0, 84%, 65%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(217, 71%, 50%);
+  --radius: 0.5rem;
+  
+  /* Custom brand colors for dark mode */
+  --brand-gold: hsl(35, 65%, 65%);
+  --brand-navy: hsl(217, 71%, 50%);
+  --brand-deep-navy: hsl(217, 91%, 35%);
+  --brand-steel: hsl(230, 12%, 16%);
+  --brand-charcoal: hsl(0, 0%, 96%);
+  --brand-light-gold: hsl(35, 45%, 25%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-feature-settings: "cv05", "cv11";
+  }
+  
+  /* Typography improvements */
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight font-semibold;
+  }
+  
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold;
+    font-family: "Playfair Display", serif;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+    font-family: "Playfair Display", serif;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl;
+    font-family: "Playfair Display", serif;
+  }
+  
+  h4 {
+    @apply text-xl md:text-2xl;
+  }
+  
+  /* Arabic typography */
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3 {
+    font-family: "Noto Sans Arabic", sans-serif;
+    font-weight: 700;
+  }
+  
+  [dir="rtl"] body {
+    font-family: "Noto Sans Arabic", sans-serif;
+  }
+  
+  /* Custom gradient backgrounds */
+  .bg-brand-gradient {
+    background: linear-gradient(135deg, hsl(217, 91%, 35%) 0%, hsl(217, 91%, 25%) 100%);
+  }
+  
+  .bg-gold-gradient {
+    background: linear-gradient(135deg, hsl(35, 65%, 55%) 0%, hsl(35, 65%, 45%) 100%);
+  }
+  
+  .bg-hero-gradient {
+    background: linear-gradient(135deg, hsl(217, 91%, 25%) 0%, hsl(217, 91%, 35%) 50%, hsl(230, 24%, 12%) 100%);
+  }
+  
+  .bg-mesh-gradient {
+    background-color: hsl(210, 20%, 98%);
+    background-image: radial-gradient(at 40% 20%, hsl(217, 40%, 93%) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, hsl(210, 20%, 90%) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, hsl(217, 30%, 95%) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, hsl(35, 20%, 92%) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsl(217, 40%, 90%) 0px, transparent 50%);
+  }
+  
+  /* Enhanced shadows */
+  .shadow-brand {
+    box-shadow: 0 10px 25px -5px hsla(217, 91%, 35%, 0.1), 0 10px 10px -5px hsla(217, 91%, 35%, 0.04);
+  }
+  
+  .shadow-gold {
+    box-shadow: 0 10px 25px -5px hsla(35, 65%, 55%, 0.1), 0 10px 10px -5px hsla(35, 65%, 55%, 0.04);
+  }
+  
+  .shadow-glow {
+    box-shadow: 0 0 30px -10px hsla(217, 91%, 35%, 0.2);
+  }
+  
+  /* Improved focus states */
+  .focus-brand:focus {
+    @apply ring-2 ring-offset-2;
+    ring-color: hsl(217, 91%, 35%);
+  }
+  
+  /* Card enhancements */
+  .card-elevated {
+    @apply bg-card border shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+  
+  .card-brand {
+    @apply bg-gradient-to-br from-slate-50 to-gray-50 dark:from-slate-900/20 dark:to-gray-900/20;
+  }
+  
+  .card-glass {
+    background: rgba(255, 255, 255, 1);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark .card-glass {
+    background: rgba(17, 24, 39, 1);
+    border: 1px solid rgba(31, 41, 55, 0.3);
+  }
+  
+  /* Smooth animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  /* Interactive elements */
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+  
+  /* Gradient text */
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-navy to-brand-charcoal bg-clip-text text-transparent;
+  }
+  
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Force text to be fully opaque */
+  p, span, div, h1, h2, h3, h4, h5, h6 {
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
+    text-rendering: optimizeLegibility !important;
+  }
+
+  /* Remove all webkit text fill color issues */
+  body * {
+    -webkit-text-fill-color: unset !important;
+  }
+
+  /* Ensure text gradient only affects elements with this class */
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(217, 91%, 35%) 0%, hsl(217, 91%, 25%) 100%);
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+  
+  /* Removed overly broad selectors */
+}

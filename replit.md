@@ -6,6 +6,13 @@ Art Souk is a bilingual art marketplace web application focused on the Saudi Ara
 
 ## System Architecture
 
+### Production-Grade Monorepo Structure
+- **Monorepo**: Turborepo for coordinated development and building
+- **Apps**: Separated web (React) and api (Express) applications
+- **Packages**: Shared database, UI components, and TypeScript configurations
+- **Build System**: Optimized build pipeline with dependency caching
+- **Development**: Hot reloading and fast refresh across all packages
+
 ### Frontend Architecture
 - **Framework**: React 18 with TypeScript
 - **Routing**: Wouter for client-side routing
@@ -14,6 +21,7 @@ Art Souk is a bilingual art marketplace web application focused on the Saudi Ara
 - **State Management**: TanStack Query for server state management
 - **Internationalization**: react-i18next for bilingual support (Arabic/English)
 - **Build Tool**: Vite for development and production builds
+- **Real-time**: Socket.io-client for live auction bidding
 
 ### Backend Architecture
 - **Runtime**: Node.js with Express.js
@@ -21,6 +29,16 @@ Art Souk is a bilingual art marketplace web application focused on the Saudi Ara
 - **Authentication**: Replit Auth with OpenID Connect
 - **Session Management**: Express sessions with PostgreSQL storage
 - **API Design**: RESTful API with type-safe endpoints
+- **Real-time**: Socket.io server with Redis adapter for scaling
+- **Background Jobs**: BullMQ with Redis for email processing
+- **Security**: Modern CSRF protection, rate limiting, file validation
+
+### Infrastructure Architecture
+- **Horizontal Scaling**: Multi-instance API servers with load balancing
+- **Caching**: Redis for sessions, real-time data, and job queues
+- **CDN**: Ready for Cloudflare integration for static assets
+- **Monitoring**: Built-in health checks and performance monitoring
+- **Testing**: Comprehensive test coverage with automated CI/CD
 
 ### Database Design
 - **ORM**: Drizzle ORM with PostgreSQL dialect
@@ -105,17 +123,38 @@ Art Souk is a bilingual art marketplace web application focused on the Saudi Ara
 - **react-i18next**: Internationalization
 - **@radix-ui/***: UI component primitives
 - **tailwindcss**: Utility-first CSS framework
+- **socket.io**: Real-time bidding and notifications
+- **bullmq**: Background job processing
+- **ioredis**: Redis client for caching and sessions
 
 ### Development Dependencies
+- **turbo**: Monorepo build system and task runner
 - **vite**: Build tool and development server
 - **typescript**: Type checking and development experience
 - **@replit/vite-plugin-***: Replit-specific development tools
+- **vitest**: Unit testing framework
+- **@playwright/test**: End-to-end testing
+- **k6**: Load testing framework
+- **supertest**: API integration testing
 
 ### Authentication Dependencies
 - **openid-client**: OpenID Connect client
 - **passport**: Authentication middleware
 - **express-session**: Session management
 - **connect-pg-simple**: PostgreSQL session store
+
+### Security Dependencies
+- **helmet**: Security headers middleware
+- **express-rate-limit**: Rate limiting middleware
+- **multer**: File upload handling with validation
+- **bcrypt**: Password hashing
+
+### Testing Dependencies
+- **vitest**: Modern testing framework
+- **@testing-library/react**: React component testing
+- **@playwright/test**: Browser automation testing
+- **k6**: Performance and load testing
+- **supertest**: HTTP assertion library
 
 ## Deployment Strategy
 
@@ -125,21 +164,45 @@ Art Souk is a bilingual art marketplace web application focused on the Saudi Ara
 - **Authentication**: Replit Auth integration for seamless development
 
 ### Production Build
+- **Monorepo**: Turborepo coordinated build across all packages
 - **Frontend**: Vite production build with optimized assets
 - **Backend**: ESBuild compilation for Node.js deployment
 - **Database**: PostgreSQL with Drizzle migrations
-- **Static Assets**: Served through Express static middleware
+- **Static Assets**: CDN-ready with optimized delivery
+- **Real-time**: Socket.io server with Redis scaling adapter
+- **Background Jobs**: BullMQ workers for email processing
 
 ### Environment Configuration
 - **Database**: `DATABASE_URL` environment variable required
 - **Authentication**: Replit Auth configuration with `REPL_ID` and session secrets
-- **Deployment**: Single-command deployment with `npm run build` and `npm start`
+- **Redis**: `REDIS_URL` for caching and real-time features
+- **Email**: `SENDGRID_API_KEY` for email notifications
+- **Deployment**: Turborepo build with `turbo build` and coordinated deployment
+
+### CI/CD Pipeline
+- **GitHub Actions**: Automated testing and deployment
+- **Code Quality**: ESLint, TypeScript checking, Prettier formatting
+- **Testing**: Unit tests (Vitest), Integration tests (Supertest), E2E tests (Playwright), Load tests (k6)
+- **Security**: Dependency scanning, vulnerability assessment
+- **Coverage**: Code coverage reporting with thresholds
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
+
+- January 17, 2025: Production-Grade Architecture Transformation (COMPLETED)
+  ✓ **Monorepo Structure**: Complete Turborepo conversion with apps/web, apps/api, packages/db, packages/ui
+  ✓ **Real-time Bidding**: Socket.io server with Redis adapter for multi-instance scaling
+  ✓ **Security Hardening**: Modern CSRF protection, comprehensive rate limiting, file validation, security headers
+  ✓ **Background Processing**: BullMQ email queue system with Redis for scalable job processing
+  ✓ **Testing Infrastructure**: Vitest unit tests, Playwright E2E tests, k6 load tests, Supertest integration tests
+  ✓ **CI/CD Pipeline**: GitHub Actions workflow with automated testing, security scanning, and deployment
+  ✓ **Living Documentation**: Complete documentation system with README, CHANGELOG, CONTRIBUTING, SECURITY, TESTING guides
+  ✓ **Performance Optimization**: Horizontal scaling architecture, Redis caching, CDN-ready asset delivery
+  ✓ **Type Safety**: Enhanced TypeScript configurations across all packages
+  ✓ **Developer Experience**: Hot reloading, automated dependency management, comprehensive tooling
 
 - January 17, 2025: Role Selection System Implementation
   ✓ Enhanced user schema to support multiple roles (collector, artist, gallery)

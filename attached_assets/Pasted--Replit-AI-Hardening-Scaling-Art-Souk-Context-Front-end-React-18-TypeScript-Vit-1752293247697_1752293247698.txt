@@ -1,0 +1,107 @@
+# Replit AI – Hardening & Scaling “Art Souk”
+
+## Context
+- Front end: React 18 + TypeScript + Vite  
+- Back end: Node/Express + PostgreSQL (Drizzle ORM)  
+- Styling: Tailwind + Radix UI, state via TanStack Query  
+- Auth: Replit Auth (Google, Apple, X, GitHub, Email)  
+- ~120 REST endpoints, 42 tables (users, auctions, events, compliance)  
+
+## Mission
+Transform this prototype into a **production-grade** platform by:  
+1. Restructuring the codebase as a monorepo.  
+2. Adding real-time bidding.  
+3. Hardening security.  
+4. Boosting performance & scalability.  
+5. Implementing full test coverage with CI/CD.  
+6. Generating and maintaining a living documentation set for every change.
+
+--------------------------------------------------------------------
+### 1 · Monorepo Setup
+- Convert to **Turborepo** (or Nx):
+
+    /apps  
+      web   (React front-end)  
+      api   (Express back-end)  
+    /packages  
+      db           # Drizzle schema + migrations  
+      ui           # Shadcn/Radix component library  
+      tsconfig     # Shared TS config  
+
+- Export Drizzle types to the front end for autocomplete.  
+- Add `turbo.json` tasks: `dev`, `build`, `lint`, `test`, `e2e`.
+
+--------------------------------------------------------------------
+### 2 · Real-Time Auctions
+1. Install **Socket.io** in `/apps/api`.  
+2. Emit bids to rooms named `auction:${auctionId}`.  
+3. Subscribe in React with `socket.io-client` for instant UI updates.  
+4. Use Redis Pub/Sub adapter for multi-instance scaling.
+
+--------------------------------------------------------------------
+### 3 · Security Hardening
+Concern    → Action  
+CSRF     → `csurf({ cookie:true })` on POST/PUT/DELETE routes  
+Rate limiting → `express-rate-limit` (100 req / 15 min) on auth & bidding  
+File uploads → Validate MIME, ≤ 25 MB, ClamAV scan, store in S3/R2  
+Refresh tokens → Rotate on every use, encrypt, add `revokeAfter` column  
+
+Install:  
+  pnpm add csurf express-rate-limit helmet multer
+
+--------------------------------------------------------------------
+### 4 · Performance & Ops
+- Serve media via **Cloudflare Images** (or S3 + CloudFront); store only signed URLs.  
+- Replace cron emails with **BullMQ + Redis** job queue.  
+- Enable SSR on artwork/landing pages with **Vite SSR** or migrate to **Next.js**.
+
+--------------------------------------------------------------------
+### 5 · Testing & CI/CD
+Add dev dependencies:  
+  pnpm add -D vitest c8 @testing-library/react @testing-library/jest-dom supertest  
+  pnpm add -D playwright @playwright/test  
+  pnpm add -D k6  
+
+Coverage targets:  
+- **Unit**: Vitest (≥ 20 % to start)  
+- **Integration**: Supertest  
+- **E2E**: Playwright (signup → role select → artwork upload → live bid)  
+- **Load**: k6 (500 concurrent bidders, p95 < 100 ms)
+
+Sample **GitHub Actions** workflow:
+
+    name: CI
+    on: [push, pull_request]
+    jobs:
+      build-test:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+          - uses: pnpm/action-setup@v3
+          - run: pnpm install
+          - run: pnpm lint
+          - run: pnpm test
+          - run: pnpm build
+          - run: pnpm playwright test
+
+--------------------------------------------------------------------
+### 6 · Living Documentation Set (generate/update on every merge)
+Create-and-maintain the following Markdown (or generated) files **inside the repo** so every contributor—and Replit AI—has up-to-date visibility:
+
+| File / Folder | Purpose & Contents |
+|---------------|-------------------|
+| **README.md** | Project overview, tech stack, local quick-start, architecture diagram thumbnail |
+| **CHANGELOG.md** | Human-friendly release notes; auto-append via semantic-release |
+| **docs/ARCHITECTURE.md** | C4 context & container diagrams, data-flow, key components |
+| **docs/API_REFERENCE** (`openapi.yaml` + Swagger UI) | Auto-generated REST spec; update after each route change |
+| **docs/ERD.svg** | Auto-generated DB ERD (`drizzle-kit generate:pg-erd`) |
+| **docs/ADRs/** | Architecture-Decision Records (`0001-choose-drizzle.md`, etc.) |
+| **CONTRIBUTING.md** | Branch naming, commit message convention, PR checklist |
+| **SECURITY.md** | Threat model, dependency scanning policy, disclosure process |
+| **TESTING.md** | How to run unit, integration, E2E, load tests; coverage thresholds |
+| **DEPLOYMENT.md** | CI/CD pipeline, environment matrix, rollback steps |
+| **ROADMAP.md** | 90-day engineering milestones and feature back-log |
+| **INCIDENTS/** | Post-mortems for any Sev-1/Sev-2 incidents |
+| **RELEASE_CHECKLIST.md** | Pre-prod “go-live” gates (tests green, latency ≤ 200 ms, 0 high vulns) |
+
+Automate doc generation where possible (OpenAPI, ERD, CHANGELOG). Enforce updates via a GitHub Actions job that fails the build if any critical doc drifts from source-of-truth.
