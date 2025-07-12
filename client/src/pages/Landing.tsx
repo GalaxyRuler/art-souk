@@ -1,83 +1,92 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Calendar, Crown, Star, Sparkles, Palette, Users, TrendingUp, Heart, Globe, Shield, Zap } from 'lucide-react';
+import { ArrowRight, Calendar, Crown, Star, Sparkles, Palette, Users, TrendingUp, Heart, Globe, Shield, Zap, Clock, CheckCircle, XCircle } from 'lucide-react';
 
-const FloatingPatterns = () => (
+const IslamicGeometricPattern = () => (
   <div className="absolute inset-0">
     <div className="absolute top-20 left-10 w-32 h-32 bg-amber-500/5 rounded-full blur-xl animate-pulse" />
     <div className="absolute top-40 right-20 w-48 h-48 bg-blue-500/5 rounded-full blur-xl animate-pulse delay-1000" />
     <div className="absolute bottom-20 left-1/3 w-40 h-40 bg-emerald-500/5 rounded-full blur-xl animate-pulse delay-2000" />
     <div className="absolute bottom-40 right-1/4 w-36 h-36 bg-purple-500/5 rounded-full blur-xl animate-pulse delay-3000" />
+    {/* Islamic geometric patterns */}
+    <div className="absolute top-1/4 left-1/4 w-24 h-24 border border-amber-500/10 rotate-45 animate-spin" style={{ animationDuration: '20s' }} />
+    <div className="absolute bottom-1/4 right-1/4 w-32 h-32 border border-blue-500/10 rotate-12 animate-spin" style={{ animationDuration: '25s' }} />
   </div>
 );
 
-const PreLaunchHero = () => {
+const CompetitiveLandingHero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated background with art-inspired patterns */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-amber-900">
-          {/* Floating geometric patterns inspired by Islamic art */}
-          <div className="absolute inset-0 opacity-10">
-            <FloatingPatterns />
-          </div>
-        </div>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-amber-900">
+      {/* Geometric Islamic patterns background */}
+      <div className="absolute inset-0 opacity-10">
+        <IslamicGeometricPattern />
       </div>
-
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Launch announcement badge */}
-        <div className="inline-flex items-center px-6 py-2 bg-amber-500/20 border border-amber-400/30 rounded-full text-amber-300 text-sm font-medium mb-8">
-          <Sparkles className="w-4 h-4 mr-2" />
-          Coming Soon - Early Access Available
+      
+      <div className="relative z-10 max-w-6xl mx-auto px-4 text-center">
+        {/* Market positioning badge */}
+        <div className="inline-flex items-center px-6 py-3 bg-amber-500/20 border border-amber-400/30 rounded-full text-amber-300 font-medium mb-8">
+          <Crown className="w-5 h-5 mr-2" />
+          The First Comprehensive GCC Art Marketplace
         </div>
 
-        {/* Main headline */}
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
-          <span className="bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 bg-clip-text text-transparent">
-            Art Souk
-          </span>
+        {/* Competitive headline */}
+        <h1 className="text-5xl md:text-7xl font-bold mb-6">
+          <span className="text-white">Beyond Galleries.</span>
           <br />
-          <span className="text-white text-3xl md:text-4xl lg:text-5xl font-normal">
-            The Future of GCC Art
+          <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
+            Beyond Borders.
           </span>
         </h1>
 
-        {/* Vision statement */}
-        <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
-          The first digital marketplace designed exclusively for Saudi Arabia and GCC artists, 
-          galleries, and collectors. Where tradition meets innovation.
+        {/* Market gap statement */}
+        <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto">
+          While galleries showcase select artists and craft sites serve artisans, 
+          no platform unites the entire GCC art ecosystem. Until now.
         </p>
 
-        {/* Launch timeline */}
-        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 mb-8 max-w-2xl mx-auto">
-          <div className="flex items-center justify-center gap-4 text-white">
-            <Calendar className="w-5 h-5 text-amber-400" />
-            <span className="text-lg">Launching Q2 2025</span>
+        {/* Market size proof */}
+        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+            <div>
+              <div className="text-2xl font-bold text-amber-400">$27M</div>
+              <div className="text-sm text-gray-300">GCC Art Market Size</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-amber-400">6 Countries</div>
+              <div className="text-sm text-gray-300">Untapped Markets</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-amber-400">5,000+</div>
+              <div className="text-sm text-gray-300">Artists Without Platform</div>
+            </div>
           </div>
         </div>
 
-        {/* Early access CTAs */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+        {/* Launch timeline with urgency */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="bg-red-500/20 border border-red-400/30 rounded-full px-4 py-2 text-red-300 text-sm mb-4">
+            Limited Founding Member Spots Available
+          </div>
+          <p className="text-amber-300 font-semibold">Launching Q2 2025 • Early Access Now Open</p>
+        </div>
+
+        {/* Competitive CTAs */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button 
             size="lg" 
             className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-semibold px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
           >
-            Join Early Access
+            Secure Founding Member Spot
             <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
           <Button 
             size="lg" 
             variant="outline" 
-            className="border-2 border-white text-white hover:bg-white hover:text-black px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
+            className="border-2 border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-black px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
           >
-            Learn More
+            See What We're Building
           </Button>
         </div>
-
-        {/* Platform promise */}
-        <p className="text-gray-400 text-sm">
-          Be among the first 100 founding members to shape the future of GCC art
-        </p>
       </div>
     </section>
   );
@@ -100,61 +109,95 @@ const FeatureCard = ({ icon, title, description }: { icon: string; title: string
   </div>
 );
 
-const VisionSection = () => {
+const ComparisonCard = ({ title, subtitle, limitations, advantages, color, isArtSouk }: {
+  title: string;
+  subtitle: string;
+  limitations?: string[];
+  advantages?: string[];
+  color: string;
+  isArtSouk?: boolean;
+}) => (
+  <div className={`rounded-2xl p-8 ${isArtSouk ? 'bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border-2 border-amber-400/30' : 'bg-gray-800/50 border border-gray-700'}`}>
+    <div className="text-center mb-6">
+      <h3 className="text-2xl font-bold text-white mb-2">{title}</h3>
+      <p className={`text-sm ${isArtSouk ? 'text-amber-300' : 'text-gray-400'}`}>{subtitle}</p>
+    </div>
+    
+    <ul className="space-y-3">
+      {limitations && limitations.map((limitation, index) => (
+        <li key={index} className="flex items-start">
+          <XCircle className="w-5 h-5 text-red-400 mr-3 mt-0.5 flex-shrink-0" />
+          <span className="text-gray-300">{limitation}</span>
+        </li>
+      ))}
+      {advantages && advantages.map((advantage, index) => (
+        <li key={index} className="flex items-start">
+          <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
+          <span className="text-gray-300">{advantage}</span>
+        </li>
+      ))}
+    </ul>
+    
+    {isArtSouk && (
+      <div className="mt-6 text-center">
+        <div className="bg-amber-400/20 rounded-full px-4 py-2 text-amber-300 text-sm font-medium">
+          Complete Ecosystem
+        </div>
+      </div>
+    )}
+  </div>
+);
+
+const CompetitiveAdvantageSection = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-slate-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Problem & Opportunity */}
+    <section className="py-20 bg-slate-900">
+      <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            A New Chapter for GCC Art
+          <h2 className="text-4xl font-bold text-white mb-6">
+            Why Art Souk vs The Rest?
           </h2>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-12">
-            The GCC art scene is exploding with talent, but artists and collectors 
-            lack a dedicated platform that truly understands our culture and market.
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            While others focus on one piece of the puzzle, we're building the complete ecosystem.
           </p>
-          
-          {/* Market opportunity stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <OpportunityCard
-              icon="📈"
-              stat="40% Growth"
-              description="Annual growth in GCC art market value"
-              source="Gulf Art Report 2024"
-            />
-            <OpportunityCard
-              icon="🎨"
-              stat="5,000+"
-              description="Active artists across Saudi Arabia and GCC"
-              source="Cultural Ministry Data"
-            />
-            <OpportunityCard
-              icon="💰"
-              stat="$2.3B"
-              description="GCC art market size and growing"
-              source="Art Market Analysis"
-            />
-          </div>
         </div>
 
-        {/* The Solution */}
-        <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl p-12 text-white">
-          <div className="text-center">
-            <h3 className="text-3xl md:text-4xl font-bold mb-6">
-              Art Souk: Built for Our Market
-            </h3>
-            <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              A platform that speaks Arabic and English, understands Islamic art principles, 
-              supports local payment methods, and celebrates GCC artistic heritage.
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <FeatureCard icon="🌍" title="Bilingual Platform" description="Arabic & English support" />
-              <FeatureCard icon="💳" title="Local Payments" description="STC Pay, Saudi banks" />
-              <FeatureCard icon="🕌" title="Cultural Respect" description="Islamic art principles" />
-              <FeatureCard icon="🤝" title="Regional Focus" description="GCC market expertise" />
-            </div>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <ComparisonCard
+            title="Traditional Galleries"
+            subtitle="ATHR, Local Galleries"
+            limitations={[
+              "Limited to represented artists",
+              "Physical location constraints", 
+              "High commission fees",
+              "Exclusive, not accessible"
+            ]}
+            color="red"
+          />
+          
+          <ComparisonCard
+            title="Craft Marketplaces"
+            subtitle="Al Bon, Etsy"
+            limitations={[
+              "Focus on crafts, not fine art",
+              "No gallery partnerships",
+              "Limited collector features",
+              "No auction capabilities"
+            ]}
+            color="yellow"
+          />
+          
+          <ComparisonCard
+            title="Art Souk"
+            subtitle="Complete Ecosystem"
+            advantages={[
+              "All artists, all mediums",
+              "Digital + physical integration",
+              "Direct artist-collector connection",
+              "Comprehensive GCC coverage"
+            ]}
+            color="green"
+            isArtSouk={true}
+          />
         </div>
       </div>
     </section>
@@ -192,71 +235,52 @@ const FoundingMemberCard = ({ userType, icon, benefits, cta, color }: {
   </div>
 );
 
-const FoundingMemberSection = () => {
+const FoundingMemberUrgencySection = () => {
   return (
-    <section className="py-20 bg-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 bg-amber-500/20 border border-amber-400/30 rounded-full text-amber-300 text-sm font-medium mb-6">
-            <Crown className="w-4 h-4 mr-2" />
-            Founding Member Program
+    <section className="py-20 bg-gradient-to-r from-red-900/20 to-amber-900/20">
+      <div className="max-w-4xl mx-auto px-4 text-center">
+        <div className="bg-red-500/20 border border-red-400/30 rounded-full px-6 py-2 text-red-300 text-sm font-medium mb-6 inline-block">
+          Only 47 Founding Member Spots Remaining
+        </div>
+        
+        <h2 className="text-4xl font-bold text-white mb-6">
+          The GCC Art Revolution Starts With 100 Founding Members
+        </h2>
+        
+        <p className="text-xl text-gray-300 mb-8">
+          Join the exclusive group that will shape the future of art in Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, and Oman.
+        </p>
+
+        {/* Countdown timer */}
+        <div className="bg-black/30 rounded-2xl p-6 mb-8">
+          <div className="text-sm text-gray-400 mb-2">Early Access Closes In:</div>
+          <div className="grid grid-cols-4 gap-4 max-w-md mx-auto">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-amber-400">23</div>
+              <div className="text-xs text-gray-400">DAYS</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-amber-400">14</div>
+              <div className="text-xs text-gray-400">HOURS</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-amber-400">32</div>
+              <div className="text-xs text-gray-400">MINS</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-amber-400">45</div>
+              <div className="text-xs text-gray-400">SECS</div>
+            </div>
           </div>
-          
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Shape the Future of GCC Art
-          </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Join our exclusive founding member program and help us build 
-            the platform that will transform the regional art market.
-          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <FoundingMemberCard
-            userType="Artists"
-            icon="🎨"
-            benefits={[
-              "Founding Artist badge for life",
-              "Featured placement in launch campaign",
-              "Direct feedback line to development team",
-              "Commission-free sales for first 6 months",
-              "Priority customer support",
-              "Beta access to new features"
-            ]}
-            cta="Become Founding Artist"
-            color="amber"
-          />
-          
-          <FoundingMemberCard
-            userType="Galleries"
-            icon="🏛️"
-            benefits={[
-              "Founding Gallery status",
-              "Launch partnership opportunities",
-              "Custom gallery features development",
-              "Marketing co-promotion at launch",
-              "Direct platform development input",
-              "Premium tools early access"
-            ]}
-            cta="Partner With Us"
-            color="blue"
-          />
-          
-          <FoundingMemberCard
-            userType="Collectors"
-            icon="💎"
-            benefits={[
-              "First access to all artworks",
-              "Founding Collector community",
-              "Early discovery of emerging artists",
-              "Exclusive pre-launch art previews",
-              "VIP events and exhibitions",
-              "Influence platform collecting features"
-            ]}
-            cta="Join Collector Circle"
-            color="emerald"
-          />
-        </div>
+        <Button 
+          size="lg"
+          className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-bold px-12 py-4 text-xl rounded-full transform hover:scale-105 transition-all duration-200"
+        >
+          Claim Your Founding Member Spot
+          <ArrowRight className="ml-2 w-6 h-6" />
+        </Button>
       </div>
     </section>
   );
@@ -269,108 +293,74 @@ const FeatureListItem = ({ text }: { text: string }) => (
   </li>
 );
 
-const PlatformPreviewSection = () => {
+const MarketFactCard = ({ stat, description, source }: { stat: string; description: string; source: string }) => (
+  <div className="flex items-start space-x-4">
+    <div className="bg-amber-500/20 rounded-full p-3">
+      <TrendingUp className="w-6 h-6 text-amber-500" />
+    </div>
+    <div>
+      <div className="text-2xl font-bold text-gray-900 mb-1">{stat}</div>
+      <p className="text-gray-700 mb-1">{description}</p>
+      <p className="text-sm text-gray-500">{source}</p>
+    </div>
+  </div>
+);
+
+const VisionListItem = ({ text }: { text: string }) => (
+  <li className="flex items-center">
+    <CheckCircle className="w-5 h-5 text-amber-400 mr-3 flex-shrink-0" />
+    <span className="text-gray-300">{text}</span>
+  </li>
+);
+
+const MarketProofSection = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-amber-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            A Glimpse Into the Future
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            See how Art Souk will revolutionize the way GCC artists and collectors connect
-          </p>
-        </div>
-
-        {/* Platform feature previews */}
-        <div className="space-y-20">
-          {/* Artist Portfolio Preview */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                Professional Artist Portfolios
-              </h3>
-              <p className="text-lg text-gray-600 mb-6">
-                Beautiful, mobile-optimized portfolios that showcase artwork 
-                with the respect and elegance it deserves.
-              </p>
-              <ul className="space-y-3">
-                <FeatureListItem text="High-resolution image galleries" />
-                <FeatureListItem text="Bilingual artist statements" />
-                <FeatureListItem text="Exhibition history showcase" />
-                <FeatureListItem text="Direct collector messaging" />
-              </ul>
+    <section className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              The Market Is Ready. The Technology Is Here.
+            </h2>
+            
+            <div className="space-y-6">
+              <MarketFactCard 
+                stat="300% Growth"
+                description="Saudi art market growth since Vision 2030 launch"
+                source="Visual Arts Commission data"
+              />
+              <MarketFactCard 
+                stat="1M+ Visitors"
+                description="To UAE art events in 2018 alone"
+                source="Louvre Abu Dhabi reports"
+              />
+              <MarketFactCard 
+                stat="$27M Market"
+                description="Combined GCC visual arts market value"
+                source="Regional art market analysis"
+              />
             </div>
-            <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-6">
-                <div className="bg-gradient-to-br from-amber-50 to-slate-50 rounded-lg h-64 flex items-center justify-center">
-                  <div className="text-center">
-                    <Palette className="w-12 h-12 text-amber-500 mx-auto mb-2" />
-                    <p className="text-gray-600 font-medium">Artist Portfolio Preview</p>
-                    <p className="text-sm text-gray-500">Elegant & Professional</p>
-                  </div>
-                </div>
-              </div>
+
+            <div className="mt-8 p-6 bg-amber-50 rounded-xl">
+              <h4 className="font-semibold text-gray-900 mb-2">The Missing Piece</h4>
+              <p className="text-gray-700">
+                While the market grows and artists flourish, there's no unified platform 
+                serving the entire ecosystem. Art Souk bridges this gap.
+              </p>
             </div>
           </div>
-
-          {/* Discovery Features */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="lg:order-2">
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                Smart Art Discovery
-              </h3>
-              <p className="text-lg text-gray-600 mb-6">
-                AI-powered recommendations that understand your taste and 
-                connect you with emerging GCC artists.
-              </p>
+          
+          <div className="space-y-6">
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 text-white">
+              <h3 className="text-2xl font-bold mb-4">What We're Building</h3>
               <ul className="space-y-3">
-                <FeatureListItem text="Personalized artwork recommendations" />
-                <FeatureListItem text="Cultural style matching" />
-                <FeatureListItem text="Price range optimization" />
-                <FeatureListItem text="Emerging artist discovery" />
+                <VisionListItem text="GCC's first comprehensive art marketplace" />
+                <VisionListItem text="Direct artist-to-collector connections" />
+                <VisionListItem text="Virtual gallery and exhibition tools" />
+                <VisionListItem text="Live auction platform" />
+                <VisionListItem text="Cultural heritage preservation" />
+                <VisionListItem text="Cross-border art discovery" />
               </ul>
-            </div>
-            <div className="lg:order-1">
-              <div className="bg-white rounded-2xl shadow-2xl p-6">
-                <div className="bg-gradient-to-br from-blue-50 to-slate-50 rounded-lg h-64 flex items-center justify-center">
-                  <div className="text-center">
-                    <TrendingUp className="w-12 h-12 text-blue-500 mx-auto mb-2" />
-                    <p className="text-gray-600 font-medium">Discovery Engine</p>
-                    <p className="text-sm text-gray-500">AI-Powered Matching</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Community Features */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                Vibrant Art Community
-              </h3>
-              <p className="text-lg text-gray-600 mb-6">
-                Connect with fellow art enthusiasts, join exhibitions, 
-                and participate in the growing GCC art movement.
-              </p>
-              <ul className="space-y-3">
-                <FeatureListItem text="Virtual exhibition spaces" />
-                <FeatureListItem text="Artist-collector direct messaging" />
-                <FeatureListItem text="Community events and workshops" />
-                <FeatureListItem text="Cultural art discussions" />
-              </ul>
-            </div>
-            <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-6">
-                <div className="bg-gradient-to-br from-emerald-50 to-slate-50 rounded-lg h-64 flex items-center justify-center">
-                  <div className="text-center">
-                    <Users className="w-12 h-12 text-emerald-500 mx-auto mb-2" />
-                    <p className="text-gray-600 font-medium">Community Hub</p>
-                    <p className="text-sm text-gray-500">Connect & Collaborate</p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -488,10 +478,10 @@ const Footer = () => {
 export default function Landing() {
   return (
     <div className="min-h-screen">
-      <PreLaunchHero />
-      <VisionSection />
-      <FoundingMemberSection />
-      <PlatformPreviewSection />
+      <CompetitiveLandingHero />
+      <CompetitiveAdvantageSection />
+      <MarketProofSection />
+      <FoundingMemberUrgencySection />
       <EarlyAccessSection />
       <Footer />
     </div>

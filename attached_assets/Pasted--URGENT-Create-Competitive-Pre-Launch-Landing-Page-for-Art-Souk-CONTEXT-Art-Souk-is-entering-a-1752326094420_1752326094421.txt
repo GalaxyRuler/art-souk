@@ -1,0 +1,257 @@
+# URGENT: Create Competitive Pre-Launch Landing Page for Art Souk
+
+## CONTEXT
+Art Souk is entering a growing but competitive Saudi art market with established players like ATHR Gallery and Al Bon. We need a landing page that positions us uniquely as the comprehensive digital marketplace for the entire GCC art ecosystem.
+
+## COMPETITIVE DIFFERENTIATION STRATEGY
+Position Art Souk as:
+- The FIRST comprehensive GCC-wide art marketplace (not just Saudi)
+- The ONLY platform serving artists, galleries, AND collectors equally
+- The bridge between traditional and contemporary art across the region
+
+## IMPLEMENTATION TASKS
+
+### 1. Hero Section with Competitive Positioning
+```typescript
+// FILE: client/src/pages/Landing.tsx
+// TASK: Replace existing landing with competitive positioning
+
+const CompetitiveLandingHero = () => {
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-amber-900">
+      {/* Geometric Islamic patterns background */}
+      <div className="absolute inset-0 opacity-10">
+        <IslamicGeometricPattern />
+      </div>
+      
+      <div className="relative z-10 max-w-6xl mx-auto px-4 text-center">
+        {/* Market positioning badge */}
+        <div className="inline-flex items-center px-6 py-3 bg-amber-500/20 border border-amber-400/30 rounded-full text-amber-300 font-medium mb-8">
+          <Crown className="w-5 h-5 mr-2" />
+          The First Comprehensive GCC Art Marketplace
+        </div>
+
+        {/* Competitive headline */}
+        <h1 className="text-5xl md:text-7xl font-bold mb-6">
+          <span className="text-white">Beyond Galleries.</span>
+          <br />
+          <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
+            Beyond Borders.
+          </span>
+        </h1>
+
+        {/* Market gap statement */}
+        <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto">
+          While galleries showcase select artists and craft sites serve artisans, 
+          no platform unites the entire GCC art ecosystem. Until now.
+        </p>
+
+        {/* Market size proof */}
+        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+            <div>
+              <div className="text-2xl font-bold text-amber-400">$27M</div>
+              <div className="text-sm text-gray-300">GCC Art Market Size</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-amber-400">6 Countries</div>
+              <div className="text-sm text-gray-300">Untapped Markets</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-amber-400">5,000+</div>
+              <div className="text-sm text-gray-300">Artists Without Platform</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Launch timeline with urgency */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="bg-red-500/20 border border-red-400/30 rounded-full px-4 py-2 text-red-300 text-sm mb-4">
+            Limited Founding Member Spots Available
+          </div>
+          <p className="text-amber-300 font-semibold">Launching Q2 2025 • Early Access Now Open</p>
+        </div>
+
+        {/* Competitive CTAs */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button 
+            size="lg" 
+            className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-semibold px-8 py-4 text-lg rounded-full"
+          >
+            Secure Founding Member Spot
+          </Button>
+          <Button 
+            size="lg" 
+            variant="outline" 
+            className="border-2 border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-black px-8 py-4 text-lg rounded-full"
+          >
+            See What We're Building
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+};
+2. Competitive Analysis Section
+typescriptconst CompetitiveAdvantageSection = () => {
+  return (
+    <section className="py-20 bg-slate-900">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-6">
+            Why Art Souk vs The Rest?
+          </h2>
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            While others focus on one piece of the puzzle, we're building the complete ecosystem.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <ComparisonCard
+            title="Traditional Galleries"
+            subtitle="ATHR, Local Galleries"
+            limitations={[
+              "Limited to represented artists",
+              "Physical location constraints", 
+              "High commission fees",
+              "Exclusive, not accessible"
+            ]}
+            color="red"
+          />
+          
+          <ComparisonCard
+            title="Craft Marketplaces"
+            subtitle="Al Bon, Etsy"
+            limitations={[
+              "Focus on crafts, not fine art",
+              "No gallery partnerships",
+              "Limited collector features",
+              "No auction capabilities"
+            ]}
+            color="yellow"
+          />
+          
+          <ComparisonCard
+            title="Art Souk"
+            subtitle="Complete Ecosystem"
+            advantages={[
+              "All artists, all mediums",
+              "Digital + physical integration",
+              "Direct artist-collector connection",
+              "Comprehensive GCC coverage"
+            ]}
+            color="green"
+            isArtSouk={true}
+          />
+        </div>
+      </div>
+    </section>
+  );
+};
+3. Founding Member Urgency Section
+typescriptconst FoundingMemberUrgencySection = () => {
+  return (
+    <section className="py-20 bg-gradient-to-r from-red-900/20 to-amber-900/20">
+      <div className="max-w-4xl mx-auto px-4 text-center">
+        <div className="bg-red-500/20 border border-red-400/30 rounded-full px-6 py-2 text-red-300 text-sm font-medium mb-6 inline-block">
+          Only 47 Founding Member Spots Remaining
+        </div>
+        
+        <h2 className="text-4xl font-bold text-white mb-6">
+          The GCC Art Revolution Starts With 100 Founding Members
+        </h2>
+        
+        <p className="text-xl text-gray-300 mb-8">
+          Join the exclusive group that will shape the future of art in Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, and Oman.
+        </p>
+
+        {/* Countdown timer */}
+        <div className="bg-black/30 rounded-2xl p-6 mb-8">
+          <div className="text-sm text-gray-400 mb-2">Early Access Closes In:</div>
+          <div className="grid grid-cols-4 gap-4 max-w-md mx-auto">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-amber-400">23</div>
+              <div className="text-xs text-gray-400">DAYS</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-amber-400">14</div>
+              <div className="text-xs text-gray-400">HOURS</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-amber-400">32</div>
+              <div className="text-xs text-gray-400">MINS</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-amber-400">45</div>
+              <div className="text-xs text-gray-400">SECS</div>
+            </div>
+          </div>
+        </div>
+
+        <Button 
+          size="lg"
+          className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-bold px-12 py-4 text-xl rounded-full transform hover:scale-105 transition-all duration-200"
+        >
+          Claim Your Founding Member Spot
+          <ArrowRight className="ml-2 w-6 h-6" />
+        </Button>
+      </div>
+    </section>
+  );
+};
+4. Market Proof & Vision Section
+typescriptconst MarketProofSection = () => {
+  return (
+    <section className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              The Market Is Ready. The Technology Is Here.
+            </h2>
+            
+            <div className="space-y-6">
+              <MarketFactCard 
+                stat="300% Growth"
+                description="Saudi art market growth since Vision 2030 launch"
+                source="Visual Arts Commission data"
+              />
+              <MarketFactCard 
+                stat="1M+ Visitors"
+                description="To UAE art events in 2018 alone"
+                source="Louvre Abu Dhabi reports"
+              />
+              <MarketFactCard 
+                stat="$27M Market"
+                description="Combined GCC visual arts market value"
+                source="Regional art market analysis"
+              />
+            </div>
+
+            <div className="mt-8 p-6 bg-amber-50 rounded-xl">
+              <h4 className="font-semibold text-gray-900 mb-2">The Missing Piece</h4>
+              <p className="text-gray-700">
+                While the market grows and artists flourish, there's no unified platform 
+                serving the entire ecosystem. Art Souk bridges this gap.
+              </p>
+            </div>
+          </div>
+          
+          <div className="space-y-6">
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 text-white">
+              <h3 className="text-2xl font-bold mb-4">What We're Building</h3>
+              <ul className="space-y-3">
+                <VisionListItem text="GCC's first comprehensive art marketplace" />
+                <VisionListItem text="Direct artist-to-collector connections" />
+                <VisionListItem text="Virtual gallery and exhibition tools" />
+                <VisionListItem text="Live auction platform" />
+                <VisionListItem text="Cultural heritage preservation" />
+                <VisionListItem text="Cross-border art discovery" />
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
