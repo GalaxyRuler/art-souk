@@ -10,8 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Users, Palette, Building, ImageIcon, Star, TrendingUp, Activity, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 
 interface AdminStats {
   totalUsers: number;

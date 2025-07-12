@@ -18,8 +18,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 
 interface PaymentMethod {
   id: string;
