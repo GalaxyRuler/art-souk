@@ -405,6 +405,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin KYC Documents
+  app.get('/api/admin/kyc-documents', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const kycDocuments = await storage.getAllKycDocuments();
+      res.json({ documents: kycDocuments });
+    } catch (error) {
+      console.error("Error fetching KYC documents:", error);
+      res.status(500).json({ message: "Failed to fetch KYC documents" });
+    }
+  });
+
+  // Admin KYC Document Update
+  app.patch('/api/admin/kyc-documents/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+
+      const { id } = req.params;
+      const { verificationStatus, verificationNotes } = req.body;
+
+      const updated = await storage.updateSellerKycDoc(parseInt(id), {
+        verificationStatus,
+        verificationNotes,
+        reviewedBy: userId,
+        reviewedAt: new Date(),
+      });
+
+      res.json({ message: 'Document updated successfully', document: updated });
+    } catch (error) {
+      console.error("Error updating KYC document:", error);
+      res.status(500).json({ message: "Failed to update KYC document" });
+    }
+  });
+
   // Admin-only route to manage user roles
   app.put('/api/admin/users/:userId/role', isAuthenticated, async (req: any, res) => {
     try {

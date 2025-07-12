@@ -68,6 +68,26 @@ interface Artwork {
   createdAt: string;
 }
 
+interface KycDocument {
+  id: string;
+  userId: string;
+  sellerType: string;
+  sellerId: string;
+  documentType: string;
+  documentName: string;
+  verificationStatus: string;
+  verificationNotes: string;
+  uploadedAt: string;
+  reviewedBy: string;
+  reviewedAt: string;
+  expiresAt: string;
+  userFirstName: string;
+  userLastName: string;
+  userEmail: string;
+  artistName: string;
+  galleryName: string;
+}
+
 export default function AdminDashboard() {
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -102,6 +122,29 @@ export default function AdminDashboard() {
   const { data: artworksData, isLoading: artworksLoading } = useQuery({
     queryKey: ['/api/admin/artworks'],
     enabled: selectedTab === 'artworks',
+  });
+
+  // Fetch KYC documents
+  const { data: kycDocumentsData, isLoading: kycDocumentsLoading } = useQuery({
+    queryKey: ['/api/admin/kyc-documents'],
+    enabled: selectedTab === 'kyc-documents',
+  });
+
+  // Update KYC document status
+  const updateKycDocumentMutation = useMutation({
+    mutationFn: async ({ id, status, notes }: { id: string; status: string; notes: string }) => {
+      return apiRequest(`/api/admin/kyc-documents/${id}`, {
+        method: 'PATCH',
+        body: { verificationStatus: status, verificationNotes: notes },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/kyc-documents'] });
+      toast({ title: t('admin.documentUpdated'), description: t('admin.documentUpdateSuccess') });
+    },
+    onError: (error) => {
+      toast({ title: t('admin.error'), description: error.message, variant: 'destructive' });
+    },
   });
 
   // Extract arrays from API response
@@ -213,7 +256,7 @@ export default function AdminDashboard() {
         </div>
 
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
-          <TabsList className="grid grid-cols-5 w-full max-w-2xl">
+          <TabsList className="grid grid-cols-6 w-full max-w-3xl">
             <TabsTrigger value="overview" className="flex items-center space-x-2">
               <Activity className="w-4 h-4" />
               <span>{t('admin.overview')}</span>
@@ -233,6 +276,10 @@ export default function AdminDashboard() {
             <TabsTrigger value="artworks" className="flex items-center space-x-2">
               <ImageIcon className="w-4 h-4" />
               <span>{t('admin.artworks')}</span>
+            </TabsTrigger>
+            <TabsTrigger value="kyc-documents" className="flex items-center space-x-2">
+              <AlertCircle className="w-4 h-4" />
+              <span>{t('admin.kycDocuments')}</span>
             </TabsTrigger>
           </TabsList>
 
@@ -345,7 +392,7 @@ export default function AdminDashboard() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {users?.map((user: User) => (
+                        {usersData?.users?.map((user: User) => (
                           <TableRow key={user.id}>
                             <TableCell className="font-medium">
                               {user.firstName} {user.lastName}
@@ -428,7 +475,7 @@ export default function AdminDashboard() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {artists?.map((artist: Artist) => (
+                        {artistsData?.artists?.map((artist: Artist) => (
                           <TableRow key={artist.id}>
                             <TableCell className="font-medium">{artist.name}</TableCell>
                             <TableCell>{artist.email}</TableCell>
@@ -504,7 +551,7 @@ export default function AdminDashboard() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {galleries?.map((gallery: Gallery) => (
+                        {galleriesData?.galleries?.map((gallery: Gallery) => (
                           <TableRow key={gallery.id}>
                             <TableCell className="font-medium">{gallery.name}</TableCell>
                             <TableCell>{gallery.email}</TableCell>
@@ -580,7 +627,7 @@ export default function AdminDashboard() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {artworks?.map((artwork: Artwork) => (
+                        {artworksData?.artworks?.map((artwork: Artwork) => (
                           <TableRow key={artwork.id}>
                             <TableCell className="font-medium">{artwork.title}</TableCell>
                             <TableCell>{artwork.artistName}</TableCell>
@@ -617,6 +664,104 @@ export default function AdminDashboard() {
                               >
                                 {artwork.featured ? t('admin.unfeature') : t('admin.feature')}
                               </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* KYC Documents Tab */}
+          <TabsContent value="kyc-documents" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('admin.kycDocuments')}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {kycDocumentsLoading ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="animate-pulse flex items-center space-x-4">
+                        <div className="h-16 w-16 bg-gray-200 rounded"></div>
+                        <div className="flex-1 space-y-2">
+                          <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                          <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>{t('admin.seller')}</TableHead>
+                          <TableHead>{t('admin.sellerType')}</TableHead>
+                          <TableHead>{t('admin.documentType')}</TableHead>
+                          <TableHead>{t('admin.status')}</TableHead>
+                          <TableHead>{t('admin.uploadDate')}</TableHead>
+                          <TableHead>{t('admin.actions')}</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {kycDocumentsData?.documents?.map((document: KycDocument) => (
+                          <TableRow key={document.id}>
+                            <TableCell className="font-medium">
+                              {document.sellerType === 'artist' ? 
+                                (document.artistName || `${document.userFirstName} ${document.userLastName}`) : 
+                                (document.galleryName || `${document.userFirstName} ${document.userLastName}`)
+                              }
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant={document.sellerType === 'artist' ? 'default' : 'secondary'}>
+                                {document.sellerType}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="outline">
+                                {document.documentType.replace('_', ' ').toUpperCase()}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge 
+                                variant={
+                                  document.verificationStatus === 'approved' ? 'default' :
+                                  document.verificationStatus === 'pending' ? 'secondary' :
+                                  document.verificationStatus === 'rejected' ? 'destructive' :
+                                  'outline'
+                                }
+                              >
+                                {document.verificationStatus}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>{formatDate(document.uploadedAt)}</TableCell>
+                            <TableCell>
+                              <div className="flex gap-2">
+                                <Select
+                                  value={document.verificationStatus}
+                                  onValueChange={(value) => {
+                                    updateKycDocumentMutation.mutate({
+                                      id: document.id,
+                                      status: value,
+                                      notes: document.verificationNotes || ''
+                                    });
+                                  }}
+                                >
+                                  <SelectTrigger className="w-32">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="pending">Pending</SelectItem>
+                                    <SelectItem value="approved">Approved</SelectItem>
+                                    <SelectItem value="rejected">Rejected</SelectItem>
+                                    <SelectItem value="expired">Expired</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
                             </TableCell>
                           </TableRow>
                         ))}

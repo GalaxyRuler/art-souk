@@ -462,6 +462,7 @@ export interface IStorage {
   // Seller KYC
   createSellerKycDoc(doc: InsertSellerKycDoc): Promise<SellerKycDoc>;
   getSellerKycDocs(sellerType: string, sellerId: number): Promise<SellerKycDoc[]>;
+  getAllKycDocuments(): Promise<SellerKycDoc[]>;
   updateSellerKycDoc(id: number, update: Partial<InsertSellerKycDoc>): Promise<SellerKycDoc>;
   
   // Shipping Addresses
@@ -3137,6 +3138,12 @@ export class DatabaseStorage implements IStorage {
         eq(sellerKycDocs.sellerType, sellerType),
         eq(sellerKycDocs.sellerId, sellerId)
       ))
+      .orderBy(desc(sellerKycDocs.uploadedAt));
+  }
+
+  async getAllKycDocuments(): Promise<SellerKycDoc[]> {
+    return await db.select()
+      .from(sellerKycDocs)
       .orderBy(desc(sellerKycDocs.uploadedAt));
   }
 
