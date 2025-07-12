@@ -94,6 +94,20 @@ process.on('uncaughtException', (error) => {
 (async () => {
   const server = await registerRoutes(app);
 
+  // SEO-friendly headers middleware
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    // SEO-friendly headers
+    res.setHeader('X-Robots-Tag', 'index, follow');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    
+    // For main page requests
+    if (req.path === '/' || req.path === '/index.html') {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    }
+    
+    next();
+  });
+
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";

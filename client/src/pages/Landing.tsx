@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowRight, Calendar, Crown, Star, Sparkles, Palette, Users, TrendingUp, Heart, Globe, Shield, Zap, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { StructuredData } from '@/components/StructuredData';
 
 const IslamicGeometricPattern = () => (
   <div className="absolute inset-0">
@@ -597,6 +598,7 @@ const Footer = () => {
 export default function Landing() {
   return (
     <div className="min-h-screen">
+      <StructuredData />
       <CompetitiveLandingHero />
       <CompetitiveAdvantageSection />
       <MarketProofSection />
