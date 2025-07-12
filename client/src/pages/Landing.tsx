@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { ArrowRight, Calendar, Crown, Star, Sparkles, Palette, Users, TrendingUp, Heart, Globe, Shield, Zap, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const IslamicGeometricPattern = () => (
   <div className="absolute inset-0">
@@ -14,7 +18,101 @@ const IslamicGeometricPattern = () => (
   </div>
 );
 
+const EarlyAccessModal = ({ children }: { children: React.ReactNode }) => {
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [userType, setUserType] = useState('');
+  const { toast } = useToast();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !name || !userType) {
+      toast({
+        title: "Please fill all fields",
+        description: "All fields are required to join the founding member program.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    toast({
+      title: "Welcome to Art Souk!",
+      description: "You're now on the founding member list. We'll contact you soon with exclusive updates.",
+    });
+    
+    // Reset form
+    setEmail('');
+    setName('');
+    setUserType('');
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        {children}
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-amber-500 to-yellow-600 bg-clip-text text-transparent">
+            Join Art Souk Founding Members
+          </DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label htmlFor="name">Full Name</Label>
+            <Input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="email">Email Address</Label>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email address"
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="userType">I am a...</Label>
+            <select
+              id="userType"
+              value={userType}
+              onChange={(e) => setUserType(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+              required
+            >
+              <option value="">Select your role</option>
+              <option value="artist">Artist</option>
+              <option value="gallery">Gallery Owner</option>
+              <option value="collector">Art Collector</option>
+              <option value="enthusiast">Art Enthusiast</option>
+            </select>
+          </div>
+          <Button type="submit" className="w-full bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-semibold">
+            Claim Your Founding Member Spot
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 const CompetitiveLandingHero = () => {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-amber-900">
       {/* Geometric Islamic patterns background */}
@@ -76,17 +174,20 @@ const CompetitiveLandingHero = () => {
 
         {/* Competitive CTAs */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button 
-            size="lg" 
-            className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-semibold px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
-          >
-            Secure Founding Member Spot
-            <ArrowRight className="ml-2 w-5 h-5" />
-          </Button>
+          <EarlyAccessModal>
+            <Button 
+              size="lg" 
+              className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-semibold px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
+            >
+              Secure Founding Member Spot
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Button>
+          </EarlyAccessModal>
           <Button 
             size="lg" 
             variant="outline" 
             className="border-2 border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-black px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
+            onClick={() => scrollToSection('market-proof')}
           >
             See What We're Building
           </Button>
@@ -278,13 +379,15 @@ const FoundingMemberUrgencySection = () => {
           </div>
         </div>
 
-        <Button 
-          size="lg"
-          className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-bold px-12 py-4 text-xl rounded-full transform hover:scale-105 transition-all duration-200"
-        >
-          Claim Your Founding Member Spot
-          <ArrowRight className="ml-2 w-6 h-6" />
-        </Button>
+        <EarlyAccessModal>
+          <Button 
+            size="lg"
+            className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-bold px-12 py-4 text-xl rounded-full transform hover:scale-105 transition-all duration-200"
+          >
+            Claim Your Founding Member Spot
+            <ArrowRight className="ml-2 w-6 h-6" />
+          </Button>
+        </EarlyAccessModal>
       </div>
     </section>
   );
@@ -319,7 +422,7 @@ const VisionListItem = ({ text }: { text: string }) => (
 
 const MarketProofSection = () => {
   return (
-    <section className="py-20 bg-white">
+    <section id="market-proof" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
@@ -374,6 +477,15 @@ const MarketProofSection = () => {
 };
 
 const EarlyAccessSection = () => {
+  const { toast } = useToast();
+  
+  const handleLearnMore = () => {
+    toast({
+      title: "Coming Soon!",
+      description: "More detailed information about Art Souk will be available as we get closer to launch.",
+    });
+  };
+
   return (
     <section className="py-20 bg-gradient-to-r from-amber-500 to-yellow-600">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -403,17 +515,20 @@ const EarlyAccessSection = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button 
-            size="lg" 
-            className="bg-white text-amber-600 hover:bg-amber-50 font-semibold px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
-          >
-            <Heart className="mr-2 w-5 h-5" />
-            Join Early Access
-          </Button>
+          <EarlyAccessModal>
+            <Button 
+              size="lg" 
+              className="bg-white text-amber-600 hover:bg-amber-50 font-semibold px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
+            >
+              <Heart className="mr-2 w-5 h-5" />
+              Join Early Access
+            </Button>
+          </EarlyAccessModal>
           <Button 
             size="lg" 
             variant="outline" 
             className="border-2 border-amber-800 text-amber-800 hover:bg-amber-800 hover:text-white px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
+            onClick={handleLearnMore}
           >
             <Globe className="mr-2 w-5 h-5" />
             Learn More
