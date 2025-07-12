@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { ArrowRight, Calendar, Crown, Star, Sparkles, Palette, Users, TrendingUp, Heart, Globe, Shield, Zap, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { StructuredData } from '@/components/StructuredData';
+import { useLocation } from 'wouter';
 
 const IslamicGeometricPattern = () => (
   <div className="absolute inset-0">
@@ -107,11 +108,17 @@ const EarlyAccessModal = ({ children }: { children: React.ReactNode }) => {
 };
 
 const CompetitiveLandingHero = () => {
+  const [, setLocation] = useLocation();
+  
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handleJoinClick = () => {
+    setLocation('/auth');
   };
 
   return (
@@ -175,15 +182,14 @@ const CompetitiveLandingHero = () => {
 
         {/* Competitive CTAs */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <EarlyAccessModal>
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-semibold px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
-            >
-              Secure Founding Member Spot
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
-          </EarlyAccessModal>
+          <Button 
+            size="lg" 
+            className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-semibold px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
+            onClick={handleJoinClick}
+          >
+            Secure Founding Member Spot
+            <ArrowRight className="ml-2 w-5 h-5" />
+          </Button>
           <Button 
             size="lg" 
             variant="outline" 
@@ -342,6 +348,8 @@ const FoundingMemberCard = ({ userType, icon, benefits, cta, color }: {
 );
 
 const FoundingMemberUrgencySection = () => {
+  const [, setLocation] = useLocation();
+  
   return (
     <section className="py-20 bg-slate-900">
       <div className="max-w-4xl mx-auto px-4 text-center">
@@ -380,15 +388,14 @@ const FoundingMemberUrgencySection = () => {
           </div>
         </div>
 
-        <EarlyAccessModal>
-          <Button 
-            size="lg"
-            className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-bold px-12 py-4 text-xl rounded-full transform hover:scale-105 transition-all duration-200"
-          >
-            Claim Your Founding Member Spot
-            <ArrowRight className="ml-2 w-6 h-6" />
-          </Button>
-        </EarlyAccessModal>
+        <Button 
+          size="lg"
+          className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-bold px-12 py-4 text-xl rounded-full transform hover:scale-105 transition-all duration-200"
+          onClick={() => setLocation('/auth')}
+        >
+          Claim Your Founding Member Spot
+          <ArrowRight className="ml-2 w-6 h-6" />
+        </Button>
       </div>
     </section>
   );
@@ -479,12 +486,17 @@ const MarketProofSection = () => {
 
 const EarlyAccessSection = () => {
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
   
   const handleLearnMore = () => {
     toast({
       title: "Coming Soon!",
       description: "More detailed information about Art Souk will be available as we get closer to launch.",
     });
+  };
+
+  const handleJoinClick = () => {
+    setLocation('/auth');
   };
 
   return (
@@ -516,15 +528,14 @@ const EarlyAccessSection = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <EarlyAccessModal>
-            <Button 
-              size="lg" 
-              className="bg-white text-amber-600 hover:bg-amber-50 font-semibold px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
-            >
-              <Heart className="mr-2 w-5 h-5" />
-              Join Early Access
-            </Button>
-          </EarlyAccessModal>
+          <Button 
+            size="lg" 
+            className="bg-white text-amber-600 hover:bg-amber-50 font-semibold px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
+            onClick={handleJoinClick}
+          >
+            <Heart className="mr-2 w-5 h-5" />
+            Join Early Access
+          </Button>
           <Button 
             size="lg" 
             variant="outline" 

@@ -224,6 +224,7 @@ Preferred communication style: Simple, everyday language.
     • Smooth scroll navigation to different sections
     • Toast notifications for user actions
     • Professional form handling with user type selection
+    • All "Join" buttons now redirect to sign-up page (/auth) for complete registration
 
 - January 17, 2025: Competitive Pre-Launch Landing Page Implementation (COMPLETED)
   ✓ **Competitive Positioning Strategy**: Transformed landing page to position Art Souk against established competitors
