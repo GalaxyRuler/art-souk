@@ -7,6 +7,7 @@ import { setupAuth, isAuthenticated } from "./replitAuth";
 import { emailService } from "./emailService";
 import { db } from "./db";
 import { eq, desc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
+import { trackStageMiddleware, updateLifecycleMetrics } from "./middleware/trackStage";
 import { 
   insertArtistSchema, 
   insertGallerySchema, 
@@ -63,6 +64,9 @@ interface AuthenticatedRequest extends Request {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
+  
+  // Apply lifecycle tracking middleware
+  app.use(trackStageMiddleware);
 
   // Auth routes
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
@@ -3822,6 +3826,182 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: 'Failed to export translations' });
     }
   });
+
+  // Lifecycle Funnel API endpoints
+  app.get('/api/lifecycle/funnel-metrics', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const metrics = await storage.getLifecycleFunnelMetrics();
+      res.json(metrics);
+    } catch (error) {
+      console.error("Error fetching funnel metrics:", error);
+      res.status(500).json({ message: "Failed to fetch funnel metrics" });
+    }
+  });
+
+  app.get('/api/lifecycle/user-interactions', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const limit = parseInt(req.query.limit as string) || 50;
+      const interactions = await storage.getUserInteractionsByUser(userId, limit);
+      res.json(interactions);
+    } catch (error) {
+      console.error("Error fetching user interactions:", error);
+      res.status(500).json({ message: "Failed to fetch user interactions" });
+    }
+  });
+
+  app.get('/api/lifecycle/user-transitions', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const limit = parseInt(req.query.limit as string) || 20;
+      const transitions = await storage.getLifecycleTransitionsByUser(userId, limit);
+      res.json(transitions);
+    } catch (error) {
+      console.error("Error fetching user transitions:", error);
+      res.status(500).json({ message: "Failed to fetch user transitions" });
+    }
+  });
+
+  app.get('/api/lifecycle/admin/metrics', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user || !user.roles.includes('admin')) {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+      
+      const metrics = await storage.getLifecycleFunnelMetrics();
+      res.json(metrics);
+    } catch (error) {
+      console.error("Error fetching admin metrics:", error);
+      res.status(500).json({ message: "Failed to fetch admin metrics" });
+    }
+  });
+
+  app.post('/api/lifecycle/admin/update-metrics', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user || !user.roles.includes('admin')) {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+      
+      // Trigger manual metric updates
+      await updateLifecycleMetrics();
+      res.json({ message: 'Metrics updated successfully' });
+    } catch (error) {
+      console.error("Error updating metrics:", error);
+      res.status(500).json({ message: "Failed to update metrics" });
+    }
+  });
+
+  // Universal Search API endpoints
+  app.get('/api/search/universal', async (req, res) => {
+    try {
+      const query = req.query.q as string;
+      const entityTypes = req.query.types ? (req.query.types as string).split(',') : undefined;
+      const limit = parseInt(req.query.limit as string) || 20;
+      
+      if (!query) {
+        return res.status(400).json({ message: 'Query parameter is required' });
+      }
+      
+      const results = await storage.searchUniversal(query, entityTypes, limit);
+      res.json(results);
+    } catch (error) {
+      console.error("Error performing universal search:", error);
+      res.status(500).json({ message: "Failed to perform search" });
+    }
+  });
+
+  // Universal Messaging API endpoints
+  app.post('/api/conversations', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { type, entityType, entityId, participants, title } = req.body;
+      
+      const conversation = await storage.createConversation({
+        type,
+        entityType,
+        entityId,
+        participants: Array.isArray(participants) ? participants : [userId],
+        title,
+        status: 'active'
+      });
+      
+      res.json(conversation);
+    } catch (error) {
+      console.error("Error creating conversation:", error);
+      res.status(500).json({ message: "Failed to create conversation" });
+    }
+  });
+
+  app.get('/api/conversations', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const conversations = await storage.getUserConversations(userId);
+      res.json(conversations);
+    } catch (error) {
+      console.error("Error fetching conversations:", error);
+      res.status(500).json({ message: "Failed to fetch conversations" });
+    }
+  });
+
+  app.get('/api/conversations/:id/messages', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const conversationId = parseInt(req.params.id);
+      const messages = await storage.getConversationMessages(conversationId);
+      res.json(messages);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+      res.status(500).json({ message: "Failed to fetch messages" });
+    }
+  });
+
+  app.post('/api/conversations/:id/messages', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const conversationId = parseInt(req.params.id);
+      const { body, messageType, attachments } = req.body;
+      
+      const message = await storage.createMessage({
+        conversationId,
+        senderId: userId,
+        body,
+        messageType: messageType || 'text',
+        attachments: attachments || []
+      });
+      
+      res.json(message);
+    } catch (error) {
+      console.error("Error creating message:", error);
+      res.status(500).json({ message: "Failed to create message" });
+    }
+  });
+
+  app.post('/api/messages/:id/read', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const messageId = parseInt(req.params.id);
+      
+      await storage.markMessageAsRead(messageId, userId);
+      res.json({ message: 'Message marked as read' });
+    } catch (error) {
+      console.error("Error marking message as read:", error);
+      res.status(500).json({ message: "Failed to mark message as read" });
+    }
+  });
+
+  // Start periodic metric updates (every hour)
+  setInterval(async () => {
+    try {
+      await updateLifecycleMetrics();
+    } catch (error) {
+      console.error('Error updating periodic metrics:', error);
+    }
+  }, 60 * 60 * 1000); // 1 hour
 
   const httpServer = createServer(app);
   return httpServer;

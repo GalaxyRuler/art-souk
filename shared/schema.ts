@@ -12,10 +12,21 @@ import {
   uuid,
   date,
   unique,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+
+// Lifecycle Stage Enum - User Journey Funnel
+export const lifecycleStage = pgEnum('lifecycle_stage', [
+  'aware',     // Just discovered the platform
+  'join',      // Signed up but haven't fully explored
+  'explore',   // Browsing artworks, artists, galleries
+  'transact',  // Made their first purchase/bid/commission
+  'retain',    // Regular user with multiple interactions
+  'advocate'   // Active promoter, referring others
+]);
 
 // Session storage table for Replit Auth
 export const sessions = pgTable(
@@ -38,6 +49,11 @@ export const users = pgTable("users", {
   role: varchar("role").default("user"), // user, artist, gallery, admin
   roles: jsonb("roles").default([]), // Array of roles: ["collector", "artist", "gallery"]
   roleSetupComplete: boolean("role_setup_complete").default(false),
+  lifecycleStage: lifecycleStage("lifecycle_stage").default("aware"),
+  stageTransitionAt: timestamp("stage_transition_at").defaultNow(),
+  profileCompleteness: integer("profile_completeness").default(20), // Percentage 0-100
+  riskLevel: varchar("risk_level").default("low"), // low, medium, high for PDPL compliance
+  lastActiveAt: timestamp("last_active_at").defaultNow(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -1250,6 +1266,119 @@ export const insertEventReminderSchema = createInsertSchema(eventReminders).omit
 export const insertCalendarIntegrationSchema = createInsertSchema(calendarIntegrations).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertParticipantListSchema = createInsertSchema(participantLists).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertWaitlistEntrySchema = createInsertSchema(waitlistEntries).omit({ id: true, createdAt: true, updatedAt: true });
+
+// Lifecycle Funnel Infrastructure Tables
+
+// Metrics table for KPIs and analytics
+export const metrics = pgTable("metrics", {
+  id: serial("id").primaryKey(),
+  metric: varchar("metric").notNull(), // e.g., "daily_signups", "conversion_rate", "retention_rate"
+  value: decimal("value", { precision: 12, scale: 4 }).notNull(),
+  stage: varchar("stage"), // lifecycle stage this metric applies to
+  category: varchar("category"), // e.g., "funnel", "engagement", "revenue"
+  metadata: jsonb("metadata").default({}), // additional context
+  collectedAt: timestamp("collected_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// User interactions for lifecycle tracking
+export const userInteractions = pgTable("user_interactions", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  action: varchar("action").notNull(), // e.g., "view_artwork", "place_bid", "add_favorite"
+  entityType: varchar("entity_type"), // e.g., "artwork", "artist", "gallery"
+  entityId: varchar("entity_id"), // ID of the entity being interacted with
+  previousStage: varchar("previous_stage"),
+  newStage: varchar("new_stage"),
+  metadata: jsonb("metadata").default({}), // Additional context like search terms, filters used
+  sessionId: varchar("session_id"),
+  ipAddress: varchar("ip_address"),
+  userAgent: varchar("user_agent"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Universal conversations system
+export const conversations = pgTable("conversations", {
+  id: serial("id").primaryKey(),
+  type: varchar("type").notNull(), // e.g., "artwork_inquiry", "commission_negotiation", "auction_question"
+  entityType: varchar("entity_type"), // e.g., "artwork", "commission", "auction"
+  entityId: integer("entity_id"), // ID of the related entity
+  participants: jsonb("participants").notNull(), // Array of user IDs
+  title: varchar("title"),
+  status: varchar("status").default("active"), // active, archived, closed
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Messages within conversations
+export const messages = pgTable("messages", {
+  id: serial("id").primaryKey(),
+  conversationId: integer("conversation_id").notNull().references(() => conversations.id, { onDelete: "cascade" }),
+  senderId: varchar("sender_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  body: text("body").notNull(),
+  messageType: varchar("message_type").default("text"), // text, image, file, system
+  attachments: jsonb("attachments").default([]),
+  readBy: jsonb("read_by").default([]), // Array of user IDs who have read the message
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Search index for universal search (materialized view support)
+export const searchIndex = pgTable("search_index", {
+  id: serial("id").primaryKey(),
+  entityType: varchar("entity_type").notNull(), // artwork, artist, gallery, event, workshop
+  entityId: integer("entity_id").notNull(),
+  title: varchar("title").notNull(),
+  titleAr: varchar("title_ar"),
+  description: text("description"),
+  descriptionAr: text("description_ar"),
+  searchVector: text("search_vector"), // tsvector for full-text search
+  weight: decimal("weight", { precision: 3, scale: 2 }).default("1.0"), // relevance weight
+  tags: jsonb("tags").default([]),
+  metadata: jsonb("metadata").default({}),
+  lastIndexed: timestamp("last_indexed").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("search_index_entity_idx").on(table.entityType, table.entityId),
+  index("search_index_title_idx").on(table.title),
+  index("search_index_vector_idx").on(table.searchVector),
+]);
+
+// Lifecycle transitions tracking
+export const lifecycleTransitions = pgTable("lifecycle_transitions", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  fromStage: varchar("from_stage").notNull(),
+  toStage: varchar("to_stage").notNull(),
+  trigger: varchar("trigger").notNull(), // e.g., "first_purchase", "profile_completed", "shared_artwork"
+  metadata: jsonb("metadata").default({}),
+  transitionAt: timestamp("transition_at").defaultNow(),
+});
+
+// Lifecycle Funnel Types
+export type Metric = typeof metrics.$inferSelect;
+export type InsertMetric = typeof metrics.$inferInsert;
+export type UserInteraction = typeof userInteractions.$inferSelect;
+export type InsertUserInteraction = typeof userInteractions.$inferInsert;
+export type Conversation = typeof conversations.$inferSelect;
+export type InsertConversation = typeof conversations.$inferInsert;
+export type Message = typeof messages.$inferSelect;
+export type InsertMessage = typeof messages.$inferInsert;
+export type SearchIndex = typeof searchIndex.$inferSelect;
+export type InsertSearchIndex = typeof searchIndex.$inferInsert;
+export type LifecycleTransition = typeof lifecycleTransitions.$inferSelect;
+export type InsertLifecycleTransition = typeof lifecycleTransitions.$inferInsert;
+
+// Lifecycle Funnel Schemas
+export const insertMetricSchema = createInsertSchema(metrics).omit({ id: true, createdAt: true, collectedAt: true });
+export const insertUserInteractionSchema = createInsertSchema(userInteractions).omit({ id: true, createdAt: true });
+export const insertConversationSchema = createInsertSchema(conversations).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertSearchIndexSchema = createInsertSchema(searchIndex).omit({ id: true, createdAt: true, updatedAt: true, lastIndexed: true });
+export const insertLifecycleTransitionSchema = createInsertSchema(lifecycleTransitions).omit({ id: true, transitionAt: true });
 
 // Privacy and Trust/Safety exports
 export * from './schema/privacy';

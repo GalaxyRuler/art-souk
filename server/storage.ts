@@ -158,6 +158,26 @@ import {
   commissionContracts,
   type CommissionContract,
   type InsertCommissionContract,
+  // Lifecycle funnel tables
+  metrics,
+  userInteractions,
+  conversations,
+  messages,
+  searchIndex,
+  lifecycleTransitions,
+  // Lifecycle funnel types
+  type Metric,
+  type InsertMetric,
+  type UserInteraction,
+  type InsertUserInteraction,
+  type Conversation,
+  type InsertConversation,
+  type Message,
+  type InsertMessage,
+  type SearchIndex,
+  type InsertSearchIndex,
+  type LifecycleTransition,
+  type InsertLifecycleTransition,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
@@ -477,6 +497,29 @@ export interface IStorage {
   getCommissionContract(requestId: number): Promise<CommissionContract | undefined>;
   createCommissionContract(contract: InsertCommissionContract): Promise<CommissionContract>;
   updateCommissionContract(id: number, contract: Partial<InsertCommissionContract>): Promise<CommissionContract>;
+  
+  // Lifecycle Funnel operations
+  trackUserInteraction(interaction: InsertUserInteraction): Promise<UserInteraction>;
+  trackLifecycleTransition(transition: InsertLifecycleTransition): Promise<LifecycleTransition>;
+  trackMetric(metric: InsertMetric): Promise<Metric>;
+  updateUserStage(userId: string, stage: string): Promise<User>;
+  getUserCountByStage(stage: string): Promise<number>;
+  getUserById(id: string): Promise<User | undefined>;
+  getLifecycleFunnelMetrics(): Promise<{ stage: string; count: number }[]>;
+  getUserInteractionsByUser(userId: string, limit?: number): Promise<UserInteraction[]>;
+  getLifecycleTransitionsByUser(userId: string, limit?: number): Promise<LifecycleTransition[]>;
+  
+  // Universal Search operations
+  updateSearchIndex(item: InsertSearchIndex): Promise<SearchIndex>;
+  searchUniversal(query: string, entityTypes?: string[], limit?: number): Promise<SearchIndex[]>;
+  
+  // Universal Messaging operations
+  createConversation(conversation: InsertConversation): Promise<Conversation>;
+  getConversation(id: number): Promise<Conversation | undefined>;
+  getUserConversations(userId: string): Promise<Conversation[]>;
+  createMessage(message: InsertMessage): Promise<Message>;
+  getConversationMessages(conversationId: number): Promise<Message[]>;
+  markMessageAsRead(messageId: number, userId: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -3595,6 +3638,176 @@ export class DatabaseStorage implements IStorage {
     return updated;
   }
 
+  // Lifecycle Funnel implementations
+  async trackUserInteraction(interaction: InsertUserInteraction): Promise<UserInteraction> {
+    const [tracked] = await db.insert(userInteractions).values(interaction).returning();
+    return tracked;
+  }
+
+  async trackLifecycleTransition(transition: InsertLifecycleTransition): Promise<LifecycleTransition> {
+    const [tracked] = await db.insert(lifecycleTransitions).values(transition).returning();
+    return tracked;
+  }
+
+  async trackMetric(metric: InsertMetric): Promise<Metric> {
+    const [tracked] = await db.insert(metrics).values(metric).returning();
+    return tracked;
+  }
+
+  async updateUserStage(userId: string, stage: string): Promise<User> {
+    const [updated] = await db.update(users)
+      .set({ lifecycleStage: stage, updatedAt: new Date() })
+      .where(eq(users.id, userId))
+      .returning();
+    return updated;
+  }
+
+  async getUserCountByStage(stage: string): Promise<number> {
+    if (stage === 'all') {
+      const [result] = await db.select({ count: count() }).from(users);
+      return result.count;
+    }
+    
+    const [result] = await db.select({ count: count() }).from(users).where(eq(users.lifecycleStage, stage));
+    return result.count;
+  }
+
+  async getUserById(id: string): Promise<User | undefined> {
+    return await this.getUser(id);
+  }
+
+  async getLifecycleFunnelMetrics(): Promise<{ stage: string; count: number }[]> {
+    const stages = ['aware', 'join', 'explore', 'transact', 'retain', 'advocate'];
+    const results: { stage: string; count: number }[] = [];
+    
+    for (const stage of stages) {
+      const count = await this.getUserCountByStage(stage);
+      results.push({ stage, count });
+    }
+    
+    return results;
+  }
+
+  async getUserInteractionsByUser(userId: string, limit = 50): Promise<UserInteraction[]> {
+    return await db.select()
+      .from(userInteractions)
+      .where(eq(userInteractions.userId, userId))
+      .orderBy(desc(userInteractions.createdAt))
+      .limit(limit);
+  }
+
+  async getLifecycleTransitionsByUser(userId: string, limit = 20): Promise<LifecycleTransition[]> {
+    return await db.select()
+      .from(lifecycleTransitions)
+      .where(eq(lifecycleTransitions.userId, userId))
+      .orderBy(desc(lifecycleTransitions.transitionAt))
+      .limit(limit);
+  }
+
+  // Universal Search implementations
+  async updateSearchIndex(item: InsertSearchIndex): Promise<SearchIndex> {
+    const [updated] = await db.insert(searchIndex)
+      .values(item)
+      .onConflictDoUpdate({
+        target: [searchIndex.entityType, searchIndex.entityId],
+        set: {
+          title: item.title,
+          titleAr: item.titleAr,
+          description: item.description,
+          descriptionAr: item.descriptionAr,
+          searchVector: item.searchVector,
+          tags: item.tags,
+          weight: item.weight,
+          metadata: item.metadata,
+          lastIndexed: new Date(),
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    
+    return updated;
+  }
+
+  async searchUniversal(query: string, entityTypes?: string[], limit = 20): Promise<SearchIndex[]> {
+    let queryBuilder = db.select().from(searchIndex);
+    
+    if (entityTypes && entityTypes.length > 0) {
+      queryBuilder = queryBuilder.where(
+        and(
+          or(
+            ilike(searchIndex.title, `%${query}%`),
+            ilike(searchIndex.titleAr, `%${query}%`),
+            ilike(searchIndex.description, `%${query}%`),
+            ilike(searchIndex.descriptionAr, `%${query}%`)
+          ),
+          or(...entityTypes.map(type => eq(searchIndex.entityType, type)))
+        )
+      );
+    } else {
+      queryBuilder = queryBuilder.where(
+        or(
+          ilike(searchIndex.title, `%${query}%`),
+          ilike(searchIndex.titleAr, `%${query}%`),
+          ilike(searchIndex.description, `%${query}%`),
+          ilike(searchIndex.descriptionAr, `%${query}%`)
+        )
+      );
+    }
+    
+    return await queryBuilder
+      .orderBy(desc(searchIndex.weight))
+      .limit(limit);
+  }
+
+  // Universal Messaging implementations
+  async createConversation(conversation: InsertConversation): Promise<Conversation> {
+    const [created] = await db.insert(conversations).values(conversation).returning();
+    return created;
+  }
+
+  async getConversation(id: number): Promise<Conversation | undefined> {
+    const [conversation] = await db.select().from(conversations).where(eq(conversations.id, id));
+    return conversation;
+  }
+
+  async getUserConversations(userId: string): Promise<Conversation[]> {
+    return await db.select()
+      .from(conversations)
+      .where(sql`${conversations.participants} @> ${JSON.stringify([userId])}`)
+      .orderBy(desc(conversations.updatedAt));
+  }
+
+  async createMessage(message: InsertMessage): Promise<Message> {
+    const [created] = await db.insert(messages).values(message).returning();
+    
+    // Update conversation timestamp
+    await db.update(conversations)
+      .set({ updatedAt: new Date() })
+      .where(eq(conversations.id, message.conversationId));
+    
+    return created;
+  }
+
+  async getConversationMessages(conversationId: number): Promise<Message[]> {
+    return await db.select()
+      .from(messages)
+      .where(eq(messages.conversationId, conversationId))
+      .orderBy(asc(messages.createdAt));
+  }
+
+  async markMessageAsRead(messageId: number, userId: string): Promise<void> {
+    const [message] = await db.select().from(messages).where(eq(messages.id, messageId));
+    
+    if (message) {
+      const readBy = Array.isArray(message.readBy) ? message.readBy : [];
+      if (!readBy.includes(userId)) {
+        readBy.push(userId);
+        await db.update(messages)
+          .set({ readBy, updatedAt: new Date() })
+          .where(eq(messages.id, messageId));
+      }
+    }
+  }
 
 }
 

@@ -1,0 +1,57 @@
+1 · Wire the Lifecycle Funnel Into the Data Layer
+Goal: Make every funnel stage (“Aware → Join → Explore → Transact → Retain → Advocate”) a first-class object in your analytics and product logic.
+
+Task	How to do it (stack-specific)
+1.1 Add lifecycleStage enum	ts // drizzle/users.ts import { pgEnum } from 'drizzle-orm/pg-core'; export const lifecycleStage = pgEnum('lifecycle_stage', ['aware','join','explore','transact','retain','advocate']); export const users = pgTable('users', { …, lifecycleStage: lifecycleStage('lifecycle_stage').default('aware'), … });
+1.2 Capture transitions	• Server-side middleware (/server/middleware/trackStage.ts) inspects each request, updates users.lifecycleStage when a “stage success” event fires (e.g., POST /api/collector/wishlist → retain).
+• Fire a parallel row in userInteractions for time-series analysis.
+1.3 Expose in API	ts GET /api/analytics/lifecycle-funnel → { aware: 12000, join: 3800, explore: 2600, ... } (simple GROUP BY on users.lifecycleStage).
+
+2 · Refactor Role-Selection & Onboarding Flow
+Goal: Collapse friction while preserving multi-role power.
+
+Step	Client (React 18 + Vite)	Server (Node + Express)
+2.1 Replace current /RoleSelection page with a wizard modal embedded on first dashboard load.	• Create <RoleWizard /> component using Radix Dialog + shadcn/UI steps.
+• Persist draft role choices in localStorage so reloads resume.	n/a
+2.2 Make role choice skippable (collector default).	If user clicks “Skip for now,” set roles=['collector'] and roleSetupComplete=true.	PATCH /api/user/roles to accept {preset:'collector'}.
+2.3 Defer non-critical profile fields.	In dashboards show a Tailwind progress bar (“Profile 40 % complete”). Link to /Settings/Profile.	No change.
+
+Result: You preserve multi-role power but cut signup time to ~15 s.
+
+3 · Surface Universal Capabilities (Search, Messaging, Payments)
+3.1 Universal Search Service
+Item	Implementation
+Backend	• Create materialised view search_index that UNION ALL artworks, artists, galleries with weighted tsvector columns.
+• Expose /api/search?query= that runs SELECT … ORDER BY ts_rank_cd.
+Frontend	• New useUniversalSearch(query) TanStack Query hook.
+• Single <SearchResults /> component with entity-specific card renderers.
+Indexing	Add Gin index on search_index.vector. Refresh MV every 5 min via CRON or pg_notify.
+
+3.2 Messaging / Negotiation
+Step	Details
+Schema	New table conversations(id pk, type text, participants text[]) + messages(id pk, conversationId fk, senderId fk, body text, createdAt ts).
+Migration	Migrate commissionMessages & auction Q&A into this generic schema.
+API	/api/conversations CRUD with WS push (socket.io) for real-time.
+UI	<ChatDrawer entityType="artwork" entityId={42} />—reusable across Auctions, Commissions, Orders.
+
+3.3 Payments Hub
+What	How
+Split-payout flow	Integrate Stripe Connect (or Moyassar for KSA) via a new payments micro-service.
+Route: POST /api/payments/checkout-session returns URL; client redirects.
+Ledger table	transactions(id, orderId, amount, fee, sellerId, status) for audit & PDPL.
+
+4 · KPIs + Confidence + Risk Tags in Code
+metrics table (metric text, value numeric, stage text, collectedAt ts).
+
+CRON job aggregates daily counts.
+
+Admin dashboard (/pages/AdminAnalytics.tsx) visualises funnel bars with recharts.
+
+Add riskLevel column to any table holding PII (users, shippingAddresses) → easier PDPL compliance scans.
+
+5 · Developer-Facing Documentation & Board
+Deliverable	Tool / Repo	Key pointers
+Lifecycle Map Miro board	/docs/ux/lifecycle-map.png commit hash in repo for traceability.	
+ADR-004-Lifecycle-Stages.md	/docs/architecture/ – explains enum, KPIs, middleware pattern.	
+Epic tickets	JIRA (or GitHub Projects). Create Epics: ONBOARD-REFRESH, SEARCH-SERVICE, UNIVERSAL-CHAT, PAYMENTS-HUB. Include acceptance tests (“User reaches dashboard in ≤ 15 s on 3G”).	
+
