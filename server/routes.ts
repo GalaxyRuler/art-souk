@@ -203,130 +203,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Admin setup endpoint - can be called once to make first user admin
-  app.post('/api/admin/setup', rateLimiters.auth, isAuthenticated, async (req: any, res) => {
+  // First-time admin setup endpoint - allows creating the first admin without authentication
+  app.post('/api/admin/setup', rateLimiters.auth, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      // First check if there are any admins already
       const allUsers = await storage.getAllUsers();
-      
-      // Check if there are any admins already
       const hasAdmin = allUsers.some(user => user.roles && user.roles.includes('admin'));
       
       if (hasAdmin) {
         return res.status(400).json({ message: "Admin already exists" });
       }
       
-      // Get current user
-      let user = await storage.getUser(userId);
-      if (!user) {
-        // Create user if not exists
-        user = await storage.upsertUser({
-          id: userId,
-          email: req.user.claims.email || null,
-          firstName: req.user.claims.first_name || null,
-          lastName: req.user.claims.last_name || null,
-          profileImageUrl: req.user.claims.profile_image_url || null,
+      // If no admin exists, and user is authenticated, make them admin
+      if (req.user && req.user.claims && req.user.claims.sub) {
+        const userId = req.user.claims.sub;
+        
+        // Get current user or create if not exists
+        let user = await storage.getUser(userId);
+        if (!user) {
+          user = await storage.upsertUser({
+            id: userId,
+            email: req.user.claims.email || null,
+            firstName: req.user.claims.first_name || null,
+            lastName: req.user.claims.last_name || null,
+            profileImageUrl: req.user.claims.profile_image_url || null,
+          });
+        }
+        
+        // Add admin role to user's roles
+        const currentRoles = user.roles || [];
+        const newRoles = [...currentRoles, 'admin'];
+        await storage.updateUserRoles(userId, newRoles);
+        
+        const updatedUser = await storage.getUser(userId);
+        res.json({ message: "Admin user created successfully", user: updatedUser });
+      } else {
+        // User not authenticated - return instructions to authenticate first
+        res.status(401).json({ 
+          message: "Please log in first to become admin", 
+          loginUrl: "/api/login" 
         });
       }
-      
-      // Add admin role to user's roles
-      const currentRoles = user.roles || [];
-      const newRoles = [...currentRoles, 'admin'];
-      await storage.updateUserRoles(userId, newRoles);
-      
-      const updatedUser = await storage.getUser(userId);
-      res.json({ message: "Admin user created successfully", user: updatedUser });
     } catch (error) {
       console.error("Error creating admin:", error);
       res.status(500).json({ message: "Failed to create admin user" });
     }
   });
 
-  // Admin stats endpoint
-  app.get('/api/admin/stats', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
-      }
-
-      const stats = {
-        totalUsers: await storage.getUserCount(),
-        totalArtists: await storage.getArtistCount(),
-        totalGalleries: await storage.getGalleryCount(),
-        totalArtworks: await storage.getArtworkCount(),
-        totalAuctions: await storage.getAuctionCount(),
-        totalArticles: 0, // Articles feature removed
-        totalInquiries: await storage.getInquiryCount(),
-        totalFavorites: await storage.getFavoriteCount(),
-        recentUsers: 0,
-        recentArtworks: 0,
-        liveAuctions: 0,
-        featuredArtworks: 0,
-      };
-
-      res.json(stats);
-    } catch (error) {
-      console.error("Error fetching admin stats:", error);
-      res.status(500).json({ message: "Failed to fetch admin stats" });
-    }
-  });
-
-  // Admin users endpoint
-  app.get('/api/admin/users', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
-      }
-
-      const users = await storage.getAllUsers();
-      res.json(users);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      res.status(500).json({ message: "Failed to fetch users" });
-    }
-  });
-
-  // Admin artists endpoint
-  app.get('/api/admin/artists', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
-      }
-
-      const artists = await storage.getArtists(100, 0);
-      res.json(artists);
-    } catch (error) {
-      console.error("Error fetching artists:", error);
-      res.status(500).json({ message: "Failed to fetch artists" });
-    }
-  });
-
-  // Admin galleries endpoint
-  app.get('/api/admin/galleries', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
-      }
-
-      const galleries = await storage.getGalleries(100, 0);
-      res.json(galleries);
-    } catch (error) {
-      console.error("Error fetching galleries:", error);
-      res.status(500).json({ message: "Failed to fetch galleries" });
-    }
-  });
+  // Note: Admin endpoints are now handled by the admin router at /api/admin/*
+  // This provides proper middleware and role checking
 
   // Admin artworks endpoint
   app.get('/api/admin/artworks', isAuthenticated, async (req: AuthenticatedRequest, res) => {

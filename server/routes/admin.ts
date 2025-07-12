@@ -34,8 +34,9 @@ const requireAdmin = async (req: any, res: any, next: any) => {
       return res.status(403).json({ message: 'User not found' });
     }
     
-    // Check if user has admin role
-    if (!user.roles || !user.roles.includes('admin')) {
+    // Check if user has admin role (check both old role field and new roles array)
+    const hasAdminRole = user.roles?.includes('admin') || user.role === 'admin';
+    if (!hasAdminRole) {
       return res.status(403).json({ message: 'Admin access required' });
     }
     
