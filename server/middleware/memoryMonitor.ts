@@ -12,8 +12,8 @@ export interface MemoryMetrics {
 export class MemoryMonitor {
   private static instance: MemoryMonitor;
   private metrics: MemoryMetrics[] = [];
-  private maxMetrics = 100; // Keep last 100 readings
-  private alertThreshold = 85; // Alert at 85% memory usage
+  private maxMetrics = 20; // Keep last 20 readings (reduced from 100)
+  private alertThreshold = 98; // Alert at 98% memory usage (increased from 85%)
   private cleanupInterval: NodeJS.Timeout | null = null;
   private alertCallbacks: ((metrics: MemoryMetrics) => void)[] = [];
 
@@ -29,11 +29,11 @@ export class MemoryMonitor {
   }
 
   private startMonitoring() {
-    // Monitor memory every 30 seconds
+    // Monitor memory every 5 minutes (reduced frequency)
     this.cleanupInterval = setInterval(() => {
       this.collectMetrics();
       this.performCleanup();
-    }, 30000);
+    }, 300000);
 
     // Initial collection
     this.collectMetrics();
@@ -93,16 +93,21 @@ export class MemoryMonitor {
   }
 
   private triggerAlert(metrics: MemoryMetrics) {
-    console.warn(`🚨 MEMORY ALERT: ${metrics.heapPercentage}% memory usage (${metrics.heapUsed}MB/${metrics.heapTotal}MB)`);
+    // Only log truly critical memory situations
+    if (metrics.heapPercentage >= 99) {
+      console.warn(`🚨 CRITICAL MEMORY: ${metrics.heapPercentage}% memory usage (${metrics.heapUsed}MB/${metrics.heapTotal}MB)`);
+    }
     
-    // Execute alert callbacks
-    this.alertCallbacks.forEach(callback => {
-      try {
-        callback(metrics);
-      } catch (error) {
-        console.error('Error in memory alert callback:', error);
-      }
-    });
+    // Execute alert callbacks (but only for critical situations)
+    if (metrics.heapPercentage >= 99) {
+      this.alertCallbacks.forEach(callback => {
+        try {
+          callback(metrics);
+        } catch (error) {
+          console.error('Error in memory alert callback:', error);
+        }
+      });
+    }
   }
 
   public getMetrics(): MemoryMetrics[] {

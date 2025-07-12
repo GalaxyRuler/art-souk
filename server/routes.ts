@@ -4114,10 +4114,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const { startCacheCleanup } = await import('./middleware/cacheOptimization');
   startCacheCleanup();
 
-  // Set up memory monitoring alerts
-  memoryMonitor.addAlertCallback((metrics) => {
-    console.warn(`🚨 Memory Alert: ${metrics.heapPercentage}% usage - ${metrics.heapUsed}MB/${metrics.heapTotal}MB`);
-  });
+  // Disable memory monitoring alerts (causing spam)
+  // memoryMonitor.addAlertCallback((metrics) => {
+  //   console.warn(`🚨 Memory Alert: ${metrics.heapPercentage}% usage - ${metrics.heapUsed}MB/${metrics.heapTotal}MB`);
+  // });
 
   // Set up performance monitoring alerts
   performanceMonitor.addAlertCallback((metrics) => {

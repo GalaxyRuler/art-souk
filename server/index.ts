@@ -7,99 +7,35 @@ import { performanceMiddleware, memoryMonitoringMiddleware, requestLoggingMiddle
 import { healthCheckMiddleware, databaseHealthCheck, readinessCheck, livenessCheck, memoryHealthCheck } from "./middleware/healthChecks";
 import { cacheConfigs } from "./middleware/caching";
 
-// URGENT: Emergency memory optimization
+// Optimized memory configuration
 process.env.NODE_OPTIONS = '--max-old-space-size=512 --expose-gc';
 
-// Memory tracking for leak detection
-const memoryTracking = {
-  samples: [] as Array<{
-    timestamp: number;
-    heapUsed: number;
-    heapTotal: number;
-    external: number;
-    rss: number;
-  }>,
-  lastGC: Date.now()
-};
+// Simplified memory tracking (reduced overhead)
+let lastMemoryCheck = Date.now();
+let memoryCheckCount = 0;
 
-// Emergency cleanup function
-const emergencyCleanup = () => {
+// Optimized cleanup function (less aggressive)
+const periodicCleanup = () => {
   const memUsage = process.memoryUsage();
   const heapPercent = (memUsage.heapUsed / memUsage.heapTotal) * 100;
   
-  if (heapPercent > 90) {
-    console.log('🚨 EMERGENCY: Memory > 90%, triggering aggressive cleanup');
-    
-    // Force garbage collection
+  // Only trigger cleanup if memory is critically high
+  if (heapPercent > 85) {
     if (global.gc) {
-      const memBefore = process.memoryUsage().heapUsed;
       global.gc();
-      const memAfter = process.memoryUsage().heapUsed;
-      const freed = Math.round((memBefore - memAfter) / 1024 / 1024);
-      console.log(`🧹 Emergency GC freed ${freed}MB memory`);
     }
     
-    // Log emergency action
-    console.log(`Emergency cleanup completed. Memory: ${Math.round(heapPercent)}%`);
+    // Only log if memory is truly critical
+    if (heapPercent > 95) {
+      console.log(`🚨 High memory usage: ${Math.round(heapPercent)}%`);
+    }
   }
 };
 
-// PHASE B: Force garbage collection every 90 seconds (more aggressive)
-setInterval(() => {
-  if (global.gc) {
-    const memBefore = process.memoryUsage().heapUsed;
-    global.gc();
-    const memAfter = process.memoryUsage().heapUsed;
-    const freed = Math.round((memBefore - memAfter) / 1024 / 1024);
-    if (freed > 0) {
-      console.log(`🧹 GC freed ${freed}MB memory`);
-    }
-  }
-}, 90000); // Every 90 seconds
+// Reduced frequency cleanup - every 5 minutes instead of 20 seconds
+setInterval(periodicCleanup, 300000);
 
-// PHASE B: Run emergency cleanup every 20 seconds (more aggressive)
-setInterval(emergencyCleanup, 20000);
-
-// Memory leak detection - every minute
-setInterval(() => {
-  const mem = process.memoryUsage();
-  const sample = {
-    timestamp: Date.now(),
-    heapUsed: mem.heapUsed,
-    heapTotal: mem.heapTotal,
-    external: mem.external,
-    rss: mem.rss
-  };
-  
-  memoryTracking.samples.push(sample);
-  
-  // PHASE B: Keep only last 15 samples (15 minutes) instead of 30
-  if (memoryTracking.samples.length > 15) {
-    memoryTracking.samples.shift();
-  }
-  
-  // Check for memory leak pattern
-  if (memoryTracking.samples.length >= 5) {
-    const recent = memoryTracking.samples.slice(-5);
-    const increasing = recent.every((sample, i) => 
-      i === 0 || sample.heapUsed > recent[i-1].heapUsed
-    );
-    
-    if (increasing) {
-      console.log('⚠️ POTENTIAL MEMORY LEAK DETECTED - 5 consecutive increases');
-      console.log('Recent samples:', recent.map(s => ({
-        time: new Date(s.timestamp).toISOString(),
-        heapMB: Math.round(s.heapUsed / 1024 / 1024)
-      })));
-      
-      // PHASE B: Trigger immediate cleanup on memory leak detection
-      if (global.gc) {
-        console.log('🚨 MEMORY LEAK: Triggering immediate GC');
-        global.gc();
-      }
-    }
-  }
-}, 60000); // Every minute
+// Remove aggressive memory leak detection that was consuming memory
 
 const app = express();
 

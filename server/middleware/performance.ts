@@ -27,7 +27,7 @@ class PerformanceMonitor {
   };
   
   private responseTimes: number[] = [];
-  private readonly maxResponseTimes = 1000; // Keep last 1000 response times
+  private readonly maxResponseTimes = 50; // Keep last 50 response times (reduced from 1000)
 
   static getInstance(): PerformanceMonitor {
     if (!PerformanceMonitor.instance) {
@@ -60,8 +60,10 @@ class PerformanceMonitor {
       this.metrics.slowRequestCount++;
     }
     
-    // Update memory usage
-    this.metrics.memoryUsage = process.memoryUsage();
+    // Update memory usage less frequently to save resources
+    if (this.metrics.requestCount % 10 === 0) {
+      this.metrics.memoryUsage = process.memoryUsage();
+    }
   }
 
   incrementActiveRequests() {
