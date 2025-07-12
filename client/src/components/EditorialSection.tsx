@@ -23,9 +23,9 @@ export function EditorialSection() {
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
 
-  const { data: articles = [], isLoading } = useQuery<Article[]>({
-    queryKey: ["/api/articles/featured"],
-  });
+  // Articles feature removed - using empty array
+  const articles: Article[] = [];
+  const isLoading = false;
 
   if (isLoading) {
     return (

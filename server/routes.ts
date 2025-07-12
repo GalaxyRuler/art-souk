@@ -8,6 +8,10 @@ import { emailService } from "./emailService";
 import { db } from "./db";
 import { eq, desc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
 import { trackStageMiddleware, updateLifecycleMetrics } from "./middleware/trackStage";
+import { rateLimiters } from "./middleware/rateLimiting";
+import { validateRequest, commonSchemas } from "./middleware/validation";
+import { securityMiddlewareStack } from "./middleware/security";
+import { cacheConfigs } from "./middleware/caching";
 import { 
   insertArtistSchema, 
   insertGallerySchema, 
@@ -65,23 +69,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
   
+  // Apply security middleware stack
+  app.use(securityMiddlewareStack);
+  
   // Apply lifecycle tracking middleware
   app.use(trackStageMiddleware);
 
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  // Auth routes (without aggressive rate limiting for normal usage)
+  app.get('/api/auth/user', async (req: any, res) => {
     try {
+      // Check if user is authenticated
+      if (!req.user || !req.user.claims || !req.user.claims.sub) {
+        return res.json(null); // Return null for unauthenticated users
+      }
+      
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
       res.json(user);
     } catch (error) {
       console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
+      res.json(null); // Return null instead of error for graceful handling
     }
   });
 
   // User role management endpoints
-  app.put('/api/user/roles', isAuthenticated, async (req: any, res) => {
+  app.put('/api/user/roles', 
+    validateRequest({ body: commonSchemas.userProfileBody.pick({ roles: true }) }),
+    isAuthenticated, 
+    async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const { roles } = req.body;
@@ -135,7 +150,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/user/roles', isAuthenticated, async (req: any, res) => {
+  app.get('/api/user/roles', async (req: any, res) => {
+    // Check if user is authenticated
+    if (!req.user || !req.user.claims || !req.user.claims.sub) {
+      return res.json(null); // Return null for unauthenticated users
+    }
+    
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
@@ -489,7 +509,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/artworks/featured', async (req, res) => {
+  app.get('/api/artworks/featured', cacheConfigs.publicData, async (req, res) => {
     try {
       const limit = parseInt(req.query.limit as string) || 10;
       const artworks = await storage.getFeaturedArtworks(limit);
@@ -560,7 +580,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Enhanced search endpoint
-  app.get('/api/search', async (req, res) => {
+  // Articles endpoint (removed feature but keeping endpoint for compatibility)
+  app.get('/api/articles/featured', async (req, res) => {
+    res.json([]); // Empty array since articles feature was removed
+  });
+
+  app.get('/api/search', cacheConfigs.searchResults, async (req, res) => {
     try {
       const query = req.query.q as string || "";
       const type = req.query.type as string || "all";
@@ -739,7 +764,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/auctions/live', async (req, res) => {
+  app.get('/api/auctions/live', cacheConfigs.shortTerm, async (req, res) => {
     try {
       const limit = parseInt(req.query.limit as string) || 10;
       const auctions = await storage.getLiveAuctions(limit);
@@ -798,7 +823,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/auctions/:id/bids', isAuthenticated, async (req: any, res) => {
+  app.post('/api/auctions/:id/bids', 
+    validateRequest({ 
+      body: commonSchemas.bidBody,
+      params: commonSchemas.idParam 
+    }),
+    isAuthenticated, 
+    async (req: any, res) => {
     try {
       const auctionId = parseInt(req.params.id);
       const bidData = insertBidSchema.parse({

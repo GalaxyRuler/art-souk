@@ -2,40 +2,32 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { configureProduction } from "./production";
+import { rateLimiters } from "./middleware/rateLimiting";
+import { performanceMiddleware, memoryMonitoringMiddleware, requestLoggingMiddleware } from "./middleware/performance";
+import { healthCheckMiddleware, databaseHealthCheck, readinessCheck, livenessCheck } from "./middleware/healthChecks";
+import { cacheConfigs } from "./middleware/caching";
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
-app.use((req, res, next) => {
-  const start = Date.now();
-  const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
+// Trust proxy for accurate IP addresses
+app.set('trust proxy', 1);
 
-  const originalResJson = res.json;
-  res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
-    return originalResJson.apply(res, [bodyJson, ...args]);
-  };
+// Body parsing middleware
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: false, limit: '10mb' }));
 
-  res.on("finish", () => {
-    const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
-      }
+// Performance monitoring middleware
+app.use(performanceMiddleware);
+app.use(memoryMonitoringMiddleware);
+app.use(requestLoggingMiddleware);
 
-      if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + "…";
-      }
+// Apply rate limiting only to specific sensitive endpoints, not globally
 
-      log(logLine);
-    }
-  });
-
-  next();
-});
+// Health check endpoints (before auth)
+app.get('/health', healthCheckMiddleware);
+app.get('/health/db', databaseHealthCheck);
+app.get('/health/ready', readinessCheck);
+app.get('/health/live', livenessCheck);
 
 // Configure production security and static files
 configureProduction(app);

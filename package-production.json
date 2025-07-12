@@ -1,0 +1,24 @@
+{
+  "scripts": {
+    "start": "NODE_ENV=production node server/production.js",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build client",
+    "build:server": "tsc server/index.ts --outDir dist --target es2020 --module commonjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:load": "k6 run tests/load.js",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "db:push": "drizzle-kit push:pg",
+    "health-check": "curl -f http://localhost:5000/health || exit 1"
+  },
+  "healthCheck": {
+    "command": "npm run health-check",
+    "interval": "30s",
+    "timeout": "10s",
+    "retries": 3
+  }
+}

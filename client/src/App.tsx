@@ -7,115 +7,137 @@ import { I18nextProvider } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { useRoleSetup } from "@/hooks/useRoleSetup";
 import { i18n } from "@/lib/i18n";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import { lazy, Suspense } from "react";
+import { Spinner } from "@/components/ui/spinner";
+
+// Eagerly load critical pages
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/Landing";
 import Home from "@/pages/Home";
-import Artists from "@/pages/Artists";
-import Galleries from "@/pages/Galleries";
-import Auctions from "@/pages/Auctions";
-import ArtworkDetail from "@/pages/ArtworkDetail";
-import ArtistProfile from "@/pages/ArtistProfile";
-import Search from "@/pages/Search";
-import Dashboard from "@/pages/Dashboard";
-import GalleryProfile from "@/pages/GalleryProfile";
-import AuctionDetail from "@/pages/AuctionDetail";
-import Workshops from "@/pages/Workshops";
-import Events from "@/pages/Events";
-import Analytics from "@/pages/Analytics";
-import AnalyticsDashboard from "@/pages/AnalyticsDashboard";
-import UserPreferences from "@/pages/UserPreferences";
-import CollectorDashboard from "@/pages/CollectorDashboard";
-import SellerDashboard from "@/pages/SellerDashboard";
-import EmailTest from "@/pages/EmailTest";
-import AchievementsPage from "@/pages/AchievementsPage";
-import ManageWorkshops from "@/pages/ManageWorkshops";
-import ManageEvents from "@/pages/ManageEvents";
-import { CommissionRequests } from "@/pages/CommissionRequests";
-import { CommissionDetail } from "@/pages/CommissionDetail";
-import TestCommissions from "@/pages/TestCommissions";
-import RoleSelection from "@/pages/RoleSelection";
-import ArtworkManagement from "@/pages/ArtworkManagement";
-// import TapPaymentSetup from "@/pages/TapPaymentSetup"; // Disabled until sufficient traffic
-
 import Auth from "@/pages/Auth";
-import AdminSetup from "@/pages/AdminSetup";
-import AdminDashboard from "@/pages/AdminDashboard";
-import AdminTest from "@/pages/AdminTest";
-import AuthTest from "@/pages/AuthTest";
+
+// Lazy load non-critical pages for better performance
+const Artists = lazy(() => import("@/pages/Artists"));
+const Galleries = lazy(() => import("@/pages/Galleries"));
+const Auctions = lazy(() => import("@/pages/Auctions"));
+const ArtworkDetail = lazy(() => import("@/pages/ArtworkDetail"));
+const ArtistProfile = lazy(() => import("@/pages/ArtistProfile"));
+const Search = lazy(() => import("@/pages/Search"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const GalleryProfile = lazy(() => import("@/pages/GalleryProfile"));
+const AuctionDetail = lazy(() => import("@/pages/AuctionDetail"));
+const Workshops = lazy(() => import("@/pages/Workshops"));
+const Events = lazy(() => import("@/pages/Events"));
+const Analytics = lazy(() => import("@/pages/Analytics"));
+const AnalyticsDashboard = lazy(() => import("@/pages/AnalyticsDashboard"));
+const UserPreferences = lazy(() => import("@/pages/UserPreferences"));
+const CollectorDashboard = lazy(() => import("@/pages/CollectorDashboard"));
+const SellerDashboard = lazy(() => import("@/pages/SellerDashboard"));
+const EmailTest = lazy(() => import("@/pages/EmailTest"));
+const AchievementsPage = lazy(() => import("@/pages/AchievementsPage"));
+const ManageWorkshops = lazy(() => import("@/pages/ManageWorkshops"));
+const ManageEvents = lazy(() => import("@/pages/ManageEvents"));
+const CommissionRequests = lazy(() => import("@/pages/CommissionRequests").then(m => ({ default: m.CommissionRequests })));
+const CommissionDetail = lazy(() => import("@/pages/CommissionDetail").then(m => ({ default: m.CommissionDetail })));
+const TestCommissions = lazy(() => import("@/pages/TestCommissions"));
+const RoleSelection = lazy(() => import("@/pages/RoleSelection"));
+const ArtworkManagement = lazy(() => import("@/pages/ArtworkManagement"));
+// const TapPaymentSetup = lazy(() => import("@/pages/TapPaymentSetup")); // Disabled until sufficient traffic
+
+// Admin pages
+const AdminSetup = lazy(() => import("@/pages/AdminSetup"));
+const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
+const AdminTest = lazy(() => import("@/pages/AdminTest"));
+const AuthTest = lazy(() => import("@/pages/AuthTest"));
+
+// Loading component
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="text-center">
+      <Spinner className="h-8 w-8 mx-auto mb-4" />
+      <p className="text-gray-600">Loading...</p>
+    </div>
+  </div>
+);
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
   const { setupComplete, isLoading: roleLoading } = useRoleSetup();
 
+  // Loading state
+  if (isLoading || roleLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <Switch>
-      {isLoading || !isAuthenticated ? (
-        <Route path="/" component={Landing} />
-      ) : (
-        <>
-          <Route path="/" component={Home} />
-          <Route path="/artists" component={Artists} />
-          <Route path="/artists/:id" component={ArtistProfile} />
-          <Route path="/galleries" component={Galleries} />
-          <Route path="/galleries/:id" component={GalleryProfile} />
-          <Route path="/auctions" component={Auctions} />
-          <Route path="/auctions/:id" component={AuctionDetail} />
-          <Route path="/workshops" component={Workshops} />
-          <Route path="/events" component={Events} />
-
-          <Route path="/artwork/:id" component={ArtworkDetail} />
-          <Route path="/search" component={Search} />
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/analytics" component={Analytics} />
-          <Route path="/analytics/dashboard" component={AnalyticsDashboard} />
-          <Route path="/preferences" component={UserPreferences} />
-          <Route path="/collector" component={CollectorDashboard} />
-          <Route path="/seller" component={SellerDashboard} />
-          <Route path="/achievements/:id" component={AchievementsPage} />
-          <Route path="/manage/workshops" component={ManageWorkshops} />
-          <Route path="/manage/events" component={ManageEvents} />
-          <Route path="/commissions" component={CommissionRequests} />
-          <Route path="/commissions/:id" component={CommissionDetail} />
-          <Route path="/artworks/manage" component={ArtworkManagement} />
-          <Route path="/role-selection" component={RoleSelection} />
-          {/* <Route path="/tap-payment-setup" component={TapPaymentSetup} /> */}
-        </>
-      )}
-      {/* Public routes accessible to all users */}
-      <Route path="/artists" component={Artists} />
-      <Route path="/artists/:id" component={ArtistProfile} />
-      <Route path="/galleries" component={Galleries} />
-      <Route path="/galleries/:id" component={GalleryProfile} />
-      <Route path="/auctions" component={Auctions} />
-      <Route path="/auctions/:id" component={AuctionDetail} />
-      <Route path="/workshops" component={Workshops} />
-      <Route path="/events" component={Events} />
-
-      <Route path="/artwork/:id" component={ArtworkDetail} />
-      <Route path="/search" component={Search} />
-      <Route path="/achievements/:id" component={AchievementsPage} />
-      <Route path="/auth" component={Auth} />
-      <Route path="/role-selection" component={RoleSelection} />
-      <Route path="/admin/setup" component={AdminSetup} />
-      <Route path="/admin/test" component={AdminTest} />
-      <Route path="/admin" component={AdminDashboard} />
-      <Route path="/auth/test" component={AuthTest} />
-      <Route path="/email/test" component={EmailTest} />
-      <Route component={NotFound} />
-    </Switch>
+    <Suspense fallback={<PageLoader />}>
+      <Switch>
+        {/* Home route - different for authenticated vs unauthenticated */}
+        <Route path="/" component={isAuthenticated ? Home : Landing} />
+        
+        {/* Public routes - accessible to all users */}
+        <Route path="/artists" component={Artists} />
+        <Route path="/artists/:id" component={ArtistProfile} />
+        <Route path="/galleries" component={Galleries} />
+        <Route path="/galleries/:id" component={GalleryProfile} />
+        <Route path="/auctions" component={Auctions} />
+        <Route path="/auctions/:id" component={AuctionDetail} />
+        <Route path="/workshops" component={Workshops} />
+        <Route path="/events" component={Events} />
+        <Route path="/artwork/:id" component={ArtworkDetail} />
+        <Route path="/search" component={Search} />
+        <Route path="/achievements/:id" component={AchievementsPage} />
+        <Route path="/auth" component={Auth} />
+        <Route path="/commissions" component={CommissionRequests} />
+        <Route path="/commissions/:id" component={CommissionDetail} />
+        
+        {/* Admin routes */}
+        <Route path="/admin/setup" component={AdminSetup} />
+        <Route path="/admin/test" component={AdminTest} />
+        <Route path="/admin" component={AdminDashboard} />
+        
+        {/* Test routes */}
+        <Route path="/auth/test" component={AuthTest} />
+        <Route path="/email/test" component={EmailTest} />
+        <Route path="/test/commissions" component={TestCommissions} />
+        
+        {/* Authenticated-only routes */}
+        {isAuthenticated && (
+          <>
+            <Route path="/dashboard" component={Dashboard} />
+            <Route path="/analytics" component={Analytics} />
+            <Route path="/analytics/dashboard" component={AnalyticsDashboard} />
+            <Route path="/preferences" component={UserPreferences} />
+            <Route path="/collector" component={CollectorDashboard} />
+            <Route path="/seller" component={SellerDashboard} />
+            <Route path="/manage/workshops" component={ManageWorkshops} />
+            <Route path="/manage/events" component={ManageEvents} />
+            <Route path="/artworks/manage" component={ArtworkManagement} />
+            <Route path="/role-selection" component={RoleSelection} />
+            {/* <Route path="/tap-payment-setup" component={TapPaymentSetup} /> */}
+          </>
+        )}
+        
+        {/* 404 Route */}
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <I18nextProvider i18n={i18n}>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </I18nextProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <I18nextProvider i18n={i18n}>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </I18nextProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 
