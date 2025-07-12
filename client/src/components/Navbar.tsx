@@ -150,6 +150,53 @@ export function Navbar() {
                   {t(`nav.${item.key}`)}
                 </Link>
               ))}
+              
+              {/* Mobile User Actions */}
+              <div className="border-t border-brand-light-gold pt-4 mt-4">
+                {isAuthenticated ? (
+                  <div className="flex flex-col space-y-3">
+                    <Link
+                      href="/dashboard"
+                      className="text-foreground hover:text-brand-purple transition-colors font-medium text-lg py-2"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {t("nav.dashboard") || "Dashboard"}
+                    </Link>
+                    {user?.role === 'admin' && (
+                      <Link
+                        href="/admin"
+                        className="text-foreground hover:text-brand-purple transition-colors font-medium text-lg py-2"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Admin
+                      </Link>
+                    )}
+                    <button
+                      className="text-left text-foreground hover:text-brand-purple transition-colors font-medium text-lg py-2"
+                      onClick={() => (window.location.href = "/api/logout")}
+                    >
+                      {t("auth.logout")}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col space-y-3">
+                    <Link
+                      href="/auth"
+                      className="text-foreground hover:text-brand-purple transition-colors font-medium text-lg py-2"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {t("auth.signin")}
+                    </Link>
+                    <Link
+                      href="/auth"
+                      className="text-foreground hover:text-brand-purple transition-colors font-medium text-lg py-2"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {t("auth.signup")}
+                    </Link>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
