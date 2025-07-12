@@ -7,8 +7,8 @@ import { performanceMiddleware, memoryMonitoringMiddleware, requestLoggingMiddle
 import { healthCheckMiddleware, databaseHealthCheck, readinessCheck, livenessCheck, memoryHealthCheck } from "./middleware/healthChecks";
 import { cacheConfigs } from "./middleware/caching";
 
-// Optimized memory configuration
-process.env.NODE_OPTIONS = '--max-old-space-size=512 --expose-gc';
+// Increased memory configuration for better performance
+process.env.NODE_OPTIONS = '--max-old-space-size=1024 --expose-gc';
 
 // Simplified memory tracking (reduced overhead)
 let lastMemoryCheck = Date.now();
