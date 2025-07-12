@@ -1,0 +1,161 @@
+Emergency Memory Optimization
+Immediate Actions for Replit AI to Implement:
+typescript// 1. URGENT: Increase Node.js memory limit
+// FILE: package.json - Update start script
+{
+  "scripts": {
+    "start": "NODE_ENV=production node --max-old-space-size=512 dist/index.js",
+    "dev": "NODE_ENV=development node --max-old-space-size=512 tsx server/index.ts"
+  }
+}
+typescript// 2. URGENT: Aggressive garbage collection
+// FILE: server/index.ts - Add at the top
+process.env.NODE_OPTIONS = '--max-old-space-size=512 --expose-gc';
+
+// Force garbage collection every 2 minutes
+setInterval(() => {
+  if (global.gc) {
+    const memBefore = process.memoryUsage().heapUsed;
+    global.gc();
+    const memAfter = process.memoryUsage().heapUsed;
+    const freed = Math.round((memBefore - memAfter) / 1024 / 1024);
+    if (freed > 0) {
+      console.log(`🧹 GC freed ${freed}MB memory`);
+    }
+  }
+}, 120000); // Every 2 minutes
+typescript// 3. URGENT: Emergency cache cleanup
+// FILE: server/middleware/performance.ts
+const emergencyCleanup = () => {
+  const memUsage = process.memoryUsage();
+  const heapPercent = (memUsage.heapUsed / memUsage.heapTotal) * 100;
+  
+  if (heapPercent > 90) {
+    console.log('🚨 EMERGENCY: Memory > 90%, triggering aggressive cleanup');
+    
+    // Clear all caches immediately
+    if (global.cache) {
+      global.cache.flushAll();
+    }
+    
+    // Force garbage collection
+    if (global.gc) {
+      global.gc();
+    }
+    
+    // Log emergency action
+    console.log(`Emergency cleanup completed. Memory: ${Math.round(heapPercent)}%`);
+  }
+};
+
+// Run emergency cleanup every 30 seconds
+setInterval(emergencyCleanup, 30000);
+
+📊 Memory Investigation Priorities
+Most Likely Culprits (Check These First):
+
+Database Connections - Leaking connections
+Image Buffers - Large artwork images in memory
+Query Cache - TanStack Query cache too large
+Session Storage - User sessions accumulating
+Socket Connections - Auction WebSocket connections
+
+Diagnostic Commands:
+bash# Check memory details every minute
+watch -n 60 "curl -s https://soukk.art/health/memory | jq"
+
+# Monitor cache usage
+curl https://soukk.art/health/cache
+
+# Check database connections
+curl https://soukk.art/health/db
+
+🔍 Memory Leak Detection
+typescript// Add this to server/index.ts for leak detection
+const memoryTracking = {
+  samples: [],
+  lastGC: Date.now()
+};
+
+setInterval(() => {
+  const mem = process.memoryUsage();
+  const sample = {
+    timestamp: Date.now(),
+    heapUsed: mem.heapUsed,
+    heapTotal: mem.heapTotal,
+    external: mem.external,
+    rss: mem.rss
+  };
+  
+  memoryTracking.samples.push(sample);
+  
+  // Keep only last 30 samples (30 minutes if run every minute)
+  if (memoryTracking.samples.length > 30) {
+    memoryTracking.samples.shift();
+  }
+  
+  // Check for memory leak pattern
+  if (memoryTracking.samples.length >= 5) {
+    const recent = memoryTracking.samples.slice(-5);
+    const increasing = recent.every((sample, i) => 
+      i === 0 || sample.heapUsed > recent[i-1].heapUsed
+    );
+    
+    if (increasing) {
+      console.log('⚠️ POTENTIAL MEMORY LEAK DETECTED - 5 consecutive increases');
+      console.log('Recent samples:', recent.map(s => ({
+        time: new Date(s.timestamp).toISOString(),
+        heapMB: Math.round(s.heapUsed / 1024 / 1024)
+      })));
+    }
+  }
+}, 60000); // Every minute
+
+// Add endpoint to check memory trends
+app.get('/health/memory-trend', (req, res) => {
+  res.json({
+    samples: memoryTracking.samples.map(s => ({
+      timestamp: s.timestamp,
+      heapUsedMB: Math.round(s.heapUsed / 1024 / 1024),
+      heapTotalMB: Math.round(s.heapTotal / 1024 / 1024),
+      heapPercentage: Math.round((s.heapUsed / s.heapTotal) * 100)
+    })),
+    trend: memoryTracking.samples.length >= 2 ? 
+      (memoryTracking.samples[memoryTracking.samples.length - 1].heapUsed > 
+       memoryTracking.samples[memoryTracking.samples.length - 2].heapUsed ? 'increasing' : 'decreasing') : 'unknown'
+  });
+});
+
+🎯 Recovery Plan
+Phase 1: Immediate Stabilization (Next 30 minutes)
+
+✅ Increase Node.js memory limit to 512MB
+✅ Enable aggressive garbage collection
+✅ Add emergency cleanup every 30 seconds
+✅ Monitor memory trend endpoint
+
+Phase 2: Root Cause Analysis (Next 2 hours)
+
+🔍 Identify memory leak source using trend data
+🔍 Check database connection pooling
+🔍 Audit image processing pipeline
+🔍 Review query cache configuration
+
+Phase 3: Permanent Fix (Next 24 hours)
+
+🔧 Fix identified memory leak
+🔧 Optimize resource usage
+🔧 Add automated scaling triggers
+🔧 Implement memory alerts
+
+
+📱 Monitoring Commands
+Run these to track the fix:
+bash# Watch memory in real-time
+watch -n 10 "echo '=== MEMORY STATUS ===' && curl -s https://soukk.art/health/memory | jq && echo '\n=== OVERALL HEALTH ===' && curl -s https://soukk.art/health | jq"
+
+# Check memory trend
+curl https://soukk.art/health/memory-trend | jq
+
+# Monitor emergency cleanups
+curl -s https://soukk.art/health/performance | jq

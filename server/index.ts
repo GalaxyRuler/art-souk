@@ -7,6 +7,94 @@ import { performanceMiddleware, memoryMonitoringMiddleware, requestLoggingMiddle
 import { healthCheckMiddleware, databaseHealthCheck, readinessCheck, livenessCheck, memoryHealthCheck } from "./middleware/healthChecks";
 import { cacheConfigs } from "./middleware/caching";
 
+// URGENT: Emergency memory optimization
+process.env.NODE_OPTIONS = '--max-old-space-size=512 --expose-gc';
+
+// Memory tracking for leak detection
+const memoryTracking = {
+  samples: [] as Array<{
+    timestamp: number;
+    heapUsed: number;
+    heapTotal: number;
+    external: number;
+    rss: number;
+  }>,
+  lastGC: Date.now()
+};
+
+// Emergency cleanup function
+const emergencyCleanup = () => {
+  const memUsage = process.memoryUsage();
+  const heapPercent = (memUsage.heapUsed / memUsage.heapTotal) * 100;
+  
+  if (heapPercent > 90) {
+    console.log('🚨 EMERGENCY: Memory > 90%, triggering aggressive cleanup');
+    
+    // Force garbage collection
+    if (global.gc) {
+      const memBefore = process.memoryUsage().heapUsed;
+      global.gc();
+      const memAfter = process.memoryUsage().heapUsed;
+      const freed = Math.round((memBefore - memAfter) / 1024 / 1024);
+      console.log(`🧹 Emergency GC freed ${freed}MB memory`);
+    }
+    
+    // Log emergency action
+    console.log(`Emergency cleanup completed. Memory: ${Math.round(heapPercent)}%`);
+  }
+};
+
+// Force garbage collection every 2 minutes
+setInterval(() => {
+  if (global.gc) {
+    const memBefore = process.memoryUsage().heapUsed;
+    global.gc();
+    const memAfter = process.memoryUsage().heapUsed;
+    const freed = Math.round((memBefore - memAfter) / 1024 / 1024);
+    if (freed > 0) {
+      console.log(`🧹 GC freed ${freed}MB memory`);
+    }
+  }
+}, 120000); // Every 2 minutes
+
+// Run emergency cleanup every 30 seconds
+setInterval(emergencyCleanup, 30000);
+
+// Memory leak detection - every minute
+setInterval(() => {
+  const mem = process.memoryUsage();
+  const sample = {
+    timestamp: Date.now(),
+    heapUsed: mem.heapUsed,
+    heapTotal: mem.heapTotal,
+    external: mem.external,
+    rss: mem.rss
+  };
+  
+  memoryTracking.samples.push(sample);
+  
+  // Keep only last 30 samples (30 minutes)
+  if (memoryTracking.samples.length > 30) {
+    memoryTracking.samples.shift();
+  }
+  
+  // Check for memory leak pattern
+  if (memoryTracking.samples.length >= 5) {
+    const recent = memoryTracking.samples.slice(-5);
+    const increasing = recent.every((sample, i) => 
+      i === 0 || sample.heapUsed > recent[i-1].heapUsed
+    );
+    
+    if (increasing) {
+      console.log('⚠️ POTENTIAL MEMORY LEAK DETECTED - 5 consecutive increases');
+      console.log('Recent samples:', recent.map(s => ({
+        time: new Date(s.timestamp).toISOString(),
+        heapMB: Math.round(s.heapUsed / 1024 / 1024)
+      })));
+    }
+  }
+}, 60000); // Every minute
+
 const app = express();
 
 // Trust proxy for accurate IP addresses
@@ -31,6 +119,21 @@ app.get('/health/ready', readinessCheck);
 app.get('/health/live', livenessCheck);
 
 // Additional monitoring endpoints will be added by routes.ts
+
+// Memory trend endpoint
+app.get('/health/memory-trend', (req, res) => {
+  res.json({
+    samples: memoryTracking.samples.map(s => ({
+      timestamp: s.timestamp,
+      heapUsedMB: Math.round(s.heapUsed / 1024 / 1024),
+      heapTotalMB: Math.round(s.heapTotal / 1024 / 1024),
+      heapPercentage: Math.round((s.heapUsed / s.heapTotal) * 100)
+    })),
+    trend: memoryTracking.samples.length >= 2 ? 
+      (memoryTracking.samples[memoryTracking.samples.length - 1].heapUsed > 
+       memoryTracking.samples[memoryTracking.samples.length - 2].heapUsed ? 'increasing' : 'decreasing') : 'unknown'
+  });
+});
 
 // Configure production security and static files
 configureProduction(app);
