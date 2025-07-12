@@ -18,6 +18,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { cn, formatPrice } from "@/lib/utils";
+import { Navbar } from "@/components/Navbar";
 import { 
   Users, 
   Palette, 
@@ -489,18 +490,20 @@ export default function AdminDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className={cn("flex items-center justify-between mb-8", isRTL && "flex-row-reverse")}>
-          <div>
-            <h1 className="text-3xl font-bold text-primary">Admin Dashboard</h1>
-            <p className="text-muted-foreground">Manage your Art Souk platform</p>
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className={cn("flex items-center justify-between mb-8", isRTL && "flex-row-reverse")}>
+            <div>
+              <h1 className="text-3xl font-bold text-primary">Admin Dashboard</h1>
+              <p className="text-muted-foreground">Manage your Art Souk platform</p>
+            </div>
+            <Badge variant="destructive" className="px-4 py-2">
+              <Crown className="h-4 w-4 mr-2" />
+              Admin Access
+            </Badge>
           </div>
-          <Badge variant="destructive" className="px-4 py-2">
-            <Crown className="h-4 w-4 mr-2" />
-            Admin Access
-          </Badge>
-        </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-9">
@@ -1502,6 +1505,7 @@ export default function AdminDashboard() {
         </Dialog>
       </div>
     </div>
+    </>
   );
 }
 
