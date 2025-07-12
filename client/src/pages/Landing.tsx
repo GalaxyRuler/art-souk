@@ -241,9 +241,9 @@ const FoundingMemberCard = ({ userType, icon, benefits, cta, color }: {
 
 const FoundingMemberUrgencySection = () => {
   return (
-    <section className="py-20 bg-gradient-to-r from-red-900/20 to-amber-900/20">
+    <section className="py-20 bg-slate-900">
       <div className="max-w-4xl mx-auto px-4 text-center">
-        <div className="bg-red-500/20 border border-red-400/30 rounded-full px-6 py-2 text-red-300 text-sm font-medium mb-6 inline-block">
+        <div className="bg-amber-500/20 border border-amber-400/30 rounded-full px-6 py-2 text-amber-300 text-sm font-medium mb-6 inline-block">
           Only 47 Founding Member Spots Remaining
         </div>
         
@@ -256,7 +256,7 @@ const FoundingMemberUrgencySection = () => {
         </p>
 
         {/* Countdown timer */}
-        <div className="bg-black/30 rounded-2xl p-6 mb-8">
+        <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 mb-8 border border-slate-700/50">
           <div className="text-sm text-gray-400 mb-2">Early Access Closes In:</div>
           <div className="grid grid-cols-4 gap-4 max-w-md mx-auto">
             <div className="text-center">
