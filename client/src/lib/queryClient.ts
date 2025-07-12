@@ -47,7 +47,8 @@ export const queryClient = new QueryClient({
       queryFn: getQueryFn({ on401: "throw" }),
       refetchInterval: false,
       refetchOnWindowFocus: false,
-      staleTime: Infinity,
+      staleTime: 1 * 60 * 1000, // Reduce from Infinity to 1min
+      cacheTime: 2 * 60 * 1000, // Reduce from 10min to 2min
       retry: false,
     },
     mutations: {
@@ -55,3 +56,9 @@ export const queryClient = new QueryClient({
     },
   },
 });
+
+// PHASE B: Aggressive cache cleanup every 5 minutes
+setInterval(() => {
+  console.log('🧹 Clearing query cache for memory optimization');
+  queryClient.clear(); // Clear all cached queries
+}, 5 * 60 * 1000); // Every 5 minutes

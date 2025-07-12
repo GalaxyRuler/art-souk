@@ -35,8 +35,8 @@ export function configureProduction(app: Express) {
   if (process.env.NODE_ENV === 'production') {
     const staticPath = path.join(__dirname, '..', 'dist', 'client');
     app.use(express.static(staticPath, {
-      maxAge: '1y',
-      etag: true,
+      maxAge: '1d', // PHASE B: Reduce from 1y to 1d for memory optimization
+      etag: false,  // PHASE B: Disable etag to save memory
       lastModified: true,
       setHeaders: (res, path) => {
         if (path.endsWith('.html')) {

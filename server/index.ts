@@ -44,7 +44,7 @@ const emergencyCleanup = () => {
   }
 };
 
-// Force garbage collection every 2 minutes
+// PHASE B: Force garbage collection every 90 seconds (more aggressive)
 setInterval(() => {
   if (global.gc) {
     const memBefore = process.memoryUsage().heapUsed;
@@ -55,10 +55,10 @@ setInterval(() => {
       console.log(`🧹 GC freed ${freed}MB memory`);
     }
   }
-}, 120000); // Every 2 minutes
+}, 90000); // Every 90 seconds
 
-// Run emergency cleanup every 30 seconds
-setInterval(emergencyCleanup, 30000);
+// PHASE B: Run emergency cleanup every 20 seconds (more aggressive)
+setInterval(emergencyCleanup, 20000);
 
 // Memory leak detection - every minute
 setInterval(() => {
@@ -73,8 +73,8 @@ setInterval(() => {
   
   memoryTracking.samples.push(sample);
   
-  // Keep only last 30 samples (30 minutes)
-  if (memoryTracking.samples.length > 30) {
+  // PHASE B: Keep only last 15 samples (15 minutes) instead of 30
+  if (memoryTracking.samples.length > 15) {
     memoryTracking.samples.shift();
   }
   
@@ -91,6 +91,12 @@ setInterval(() => {
         time: new Date(s.timestamp).toISOString(),
         heapMB: Math.round(s.heapUsed / 1024 / 1024)
       })));
+      
+      // PHASE B: Trigger immediate cleanup on memory leak detection
+      if (global.gc) {
+        console.log('🚨 MEMORY LEAK: Triggering immediate GC');
+        global.gc();
+      }
     }
   }
 }, 60000); // Every minute
