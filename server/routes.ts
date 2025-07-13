@@ -108,7 +108,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Post-logout success handler
   app.get('/auth/logout-success', (req, res) => {
-    console.log('✅ Logout success - user returned from OpenID Connect');
+    console.log('✅ Logout success page reached');
+    
+    // Clear session cookie again to be sure
+    res.clearCookie('connect.sid', {
+      path: '/',
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax'
+    });
     
     // Clear any remaining session data
     if (req.session) {
@@ -124,24 +132,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Logged Out</title>
-          <meta http-equiv="refresh" content="2;url=/">
+          <title>Logged Out - Art Souk</title>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+              margin: 0;
+              background-color: #f5f5f5;
+            }
+            .logout-container {
+              text-align: center;
+              padding: 40px;
+              background: white;
+              border-radius: 8px;
+              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            h2 {
+              color: #333;
+              margin-bottom: 10px;
+            }
+            p {
+              color: #666;
+            }
+          </style>
         </head>
         <body>
+          <div class="logout-container">
+            <h2>You have been logged out successfully</h2>
+            <p>Redirecting to home page...</p>
+          </div>
           <script>
-            // Clear any client-side storage
-            localStorage.clear();
-            sessionStorage.clear();
+            // Clear all client-side storage
+            try {
+              localStorage.clear();
+              sessionStorage.clear();
+              
+              // Clear cookies accessible from JavaScript
+              document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+              });
+              
+              // Clear IndexedDB if used
+              if (window.indexedDB && indexedDB.databases) {
+                indexedDB.databases().then(databases => {
+                  databases.forEach(db => indexedDB.deleteDatabase(db.name));
+                });
+              }
+            } catch (e) {
+              console.error('Error clearing storage:', e);
+            }
             
             // Redirect to home after clearing storage
             setTimeout(() => {
               window.location.href = '/';
-            }, 1000);
+            }, 1500);
           </script>
-          <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
-            <h2>You have been logged out successfully</h2>
-            <p>Redirecting to home page...</p>
-          </div>
         </body>
       </html>
     `);

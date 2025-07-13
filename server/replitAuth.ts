@@ -151,44 +151,37 @@ export async function setupAuth(app: Express) {
   });
 
   app.get("/api/logout", (req, res) => {
-    console.log('🔓 Logout initiated for user:', req.session?.user?.id);
+    console.log('🔓 Logout initiated');
     
-    // Destroy the session completely
-    req.session.destroy((err) => {
-      if (err) {
-        console.error('❌ Session destruction error:', err);
-      } else {
-        console.log('✅ Session destroyed successfully');
-      }
+    // Clear the session cookie first
+    res.clearCookie('connect.sid', {
+      path: '/',
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax'
     });
     
-    // Clear the session cookie
-    res.clearCookie('connect.sid');
+    // Destroy session if it exists
+    if (req.session) {
+      req.session.destroy((err) => {
+        if (err) {
+          console.error('❌ Session destruction error:', err);
+        } else {
+          console.log('✅ Session destroyed');
+        }
+      });
+    }
     
-    // Passport logout
-    req.logout((err) => {
-      if (err) {
-        console.error('❌ Passport logout error:', err);
-        return res.redirect('/');
-      }
-      
-      console.log('✅ Passport logout successful');
-      
-      try {
-        // Try to redirect to OpenID Connect logout
-        const logoutUrl = client.buildEndSessionUrl(config, {
-          client_id: process.env.REPL_ID!,
-          post_logout_redirect_uri: `${req.protocol}://${req.hostname}/auth/logout-success`,
-        }).href;
-        
-        console.log('🔄 Redirecting to logout URL:', logoutUrl);
-        res.redirect(logoutUrl);
-      } catch (error) {
-        console.error('❌ Error building logout URL:', error);
-        // Fallback to simple redirect
-        res.redirect('/');
-      }
-    });
+    // Passport logout (don't wait for callback)
+    if (req.logout && typeof req.logout === 'function') {
+      req.logout(() => {
+        console.log('✅ Passport logout complete');
+      });
+    }
+    
+    // Immediately redirect to logout success page
+    console.log('🔄 Redirecting to logout success page');
+    res.redirect('/auth/logout-success');
   });
 }
 
