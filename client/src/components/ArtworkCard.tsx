@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { useTranslation } from "react-i18next";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,8 @@ import { Heart, Eye } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 
 interface ArtworkCardProps {
   artwork: {
@@ -46,8 +49,9 @@ export function ArtworkCard({
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
   const { isAuthenticated } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [isHovered, setIsHovered] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
 
   const title = isRTL && artwork.titleAr ? artwork.titleAr : artwork.title;
   const artistName = isRTL && artwork.artist?.nameAr ? artwork.artist.nameAr : artwork.artist?.name;
@@ -55,12 +59,52 @@ export function ArtworkCard({
   const medium = isRTL && artwork.mediumAr ? artwork.mediumAr : artwork.medium;
   const category = isRTL && artwork.categoryAr ? artwork.categoryAr : artwork.category;
 
+  // Check if artwork is favorited
+  const { data: isFavorite } = useQuery({
+    queryKey: [`/api/favorites/${artwork.id}/check`],
+    enabled: isAuthenticated,
+  });
+
+  // Favorites mutation
+  const favoriteMutation = useMutation({
+    mutationFn: async () => {
+      if (isFavorite?.isFavorite) {
+        await apiRequest(`/api/favorites/${artwork.id}`, { method: 'DELETE' });
+      } else {
+        await apiRequest('/api/favorites', {
+          method: 'POST',
+          body: { artworkId: artwork.id },
+        });
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/favorites/${artwork.id}/check`] });
+      queryClient.invalidateQueries({ queryKey: ['/api/favorites'] });
+      toast({
+        title: isFavorite?.isFavorite ? t("favorites.removed") : t("favorites.added"),
+        description: isFavorite?.isFavorite ? t("favorites.removedDesc") : t("favorites.addedDesc"),
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: t("common.error"),
+        description: t("favorites.error"),
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleFavorite = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (isAuthenticated) {
-      setIsFavorited(!isFavorited);
-      // TODO: Implement API call to add/remove favorite
+      favoriteMutation.mutate();
+    } else {
+      toast({
+        title: t("auth.loginRequired"),
+        description: t("favorites.loginToFavorite"),
+        variant: "destructive",
+      });
     }
   };
 
@@ -107,11 +151,13 @@ export function ArtworkCard({
                   size="sm"
                   className="bg-white/90 hover:bg-white h-10 w-10 p-0 rounded-full shadow-lg backdrop-blur-sm"
                   onClick={handleFavorite}
+                  disabled={favoriteMutation.isPending}
                 >
                   <Heart
                     className={cn(
-                      "h-5 w-5",
-                      isFavorited ? "fill-brand-purple text-brand-purple" : "text-brand-charcoal"
+                      "h-5 w-5 transition-colors",
+                      isFavorite?.isFavorite ? "fill-red-500 text-red-500" : "text-brand-charcoal",
+                      favoriteMutation.isPending && "opacity-50"
                     )}
                   />
                 </Button>

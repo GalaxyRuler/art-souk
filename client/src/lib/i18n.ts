@@ -34,6 +34,7 @@ const resources = {
         logout: "Logout",
         backToHome: "Back to Home",
         badge: "Member",
+        loginRequired: "Login Required",
         features: {
           discover: "Discover Art",
           discoverDesc: "Browse thousands of artworks from GCC artists",
@@ -105,6 +106,14 @@ const resources = {
         commentUpdated: "Comment Updated",
         commentUpdatedDesc: "Your comment has been updated",
         commentDeleted: "Comment Deleted"
+      },
+      favorites: {
+        added: "Added to Favorites",
+        addedDesc: "Artwork saved to your collection",
+        removed: "Removed from Favorites", 
+        removedDesc: "Artwork removed from your collection",
+        error: "Failed to update favorites",
+        loginToFavorite: "Please sign in to save favorites"
       },
       common: {
         siteName: "Art Souk",
@@ -780,6 +789,7 @@ const resources = {
         logout: "تسجيل الخروج",
         backToHome: "العودة للرئيسية",
         badge: "منصة فنية متميزة",
+        loginRequired: "يجب تسجيل الدخول",
         features: {
           discover: "اكتشف الفن",
           discoverDesc: "اكتشف آلاف الأعمال المعاصرة",
@@ -851,6 +861,14 @@ const resources = {
         commentUpdated: "تم تحديث التعليق",
         commentUpdatedDesc: "تم تحديث تعليقك",
         commentDeleted: "تم حذف التعليق"
+      },
+      favorites: {
+        added: "تمت إضافة إلى المفضلات",
+        addedDesc: "تم حفظ العمل الفني في مجموعتك",
+        removed: "تم حذف من المفضلات", 
+        removedDesc: "تم حذف العمل الفني من مجموعتك",
+        error: "فشل في تحديث المفضلات",
+        loginToFavorite: "يرجى تسجيل الدخول لحفظ المفضلات"
       },
       common: {
         siteName: "سوق آرت",
