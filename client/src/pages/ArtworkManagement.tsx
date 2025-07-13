@@ -798,23 +798,47 @@ function ArtworkForm({
           <div>
             <Label>{t("artworks.images")}</Label>
             <div className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <div className="space-y-2">
-                  <p className="text-sm text-gray-600">
+              <div 
+                className="border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg p-8 text-center transition-colors cursor-pointer bg-gray-50 hover:bg-gray-100"
+                onClick={() => document.getElementById('file-upload')?.click()}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onDragEnter={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const files = Array.from(e.dataTransfer.files);
+                  // Handle dropped files here
+                }}
+              >
+                <Upload className="h-16 w-16 text-blue-500 mx-auto mb-4" />
+                <div className="space-y-3">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {t("artworks.selectImages")}
+                  </h3>
+                  <p className="text-sm text-gray-600 max-w-md mx-auto">
                     {t("artworks.uploadInstructions")}
                   </p>
                   <div className="flex justify-center">
                     <Button
                       type="button"
-                      variant="outline"
-                      onClick={() => document.getElementById('file-upload')?.click()}
+                      variant="default"
+                      size="lg"
                       disabled={uploadingImages}
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
                     >
-                      <Upload className="h-4 w-4 mr-2" />
+                      <Upload className="h-5 w-5 mr-2" />
                       {t("artworks.selectImages")}
                     </Button>
                   </div>
+                  <p className="text-xs text-gray-500">
+                    Supported formats: JPG, PNG, GIF • Max size: 5MB per image
+                  </p>
                 </div>
               </div>
               <Input
