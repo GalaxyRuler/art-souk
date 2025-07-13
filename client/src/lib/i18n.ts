@@ -597,6 +597,7 @@ const resources = {
         digital: "Digital Art",
         mixed_media: "Mixed Media",
         installation: "Installation",
+        Installation: "Installation",
         performance: "Performance",
         video: "Video Art",
         drawing: "Drawing",
@@ -606,6 +607,8 @@ const resources = {
         textile: "Textile",
         calligraphy: "Calligraphy",
         Calligraphy: "Calligraphy",
+        portrait: "Portrait",
+        Portrait: "Portrait",
         other: "Other"
       },
       admin: {
@@ -1029,6 +1032,7 @@ const resources = {
         digital: "فن رقمي",
         mixed_media: "وسائط متعددة",
         installation: "تركيب",
+        Installation: "تركيب",
         performance: "أداء",
         video: "فيديو آرت",
         drawing: "رسم",
@@ -1038,6 +1042,8 @@ const resources = {
         textile: "نسيج",
         calligraphy: "خط عربي",
         Calligraphy: "خط عربي",
+        portrait: "بورتريه",
+        Portrait: "بورتريه",
         other: "أخرى"
       },
       countries: {
