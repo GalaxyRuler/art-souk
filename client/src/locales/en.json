@@ -1,4 +1,8 @@
 {
+  "common": {
+    "siteName": "Art Souk",
+    "siteNameAr": "آرت سوق"
+  },
   "site": {
     "name": "Art Souk",
     "tagline": "Saudi & GCC Art"
@@ -443,6 +447,8 @@
     }
   },
   "auth": {
+    "welcome": "Welcome to",
+    "subtitle": "Discover and collect authentic art from across the GCC region",
     "signIn": "Sign In",
     "signin": "Sign In",
     "signup": "Sign Up",
