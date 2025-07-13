@@ -1,10 +1,12 @@
 import { createContext, useContext, forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
-const TabsContext = createContext<{
+interface TabsContextType {
   value: string;
   onValueChange: (value: string) => void;
-}>({
+}
+
+const TabsContext = createContext<TabsContextType>({
   value: "",
   onValueChange: () => {},
 });
@@ -47,7 +49,8 @@ const TabsTrigger = forwardRef<
     value: string;
   }
 >(({ className, value: triggerValue, ...props }, ref) => {
-  const { value, onValueChange } = useContext(TabsContext);
+  const context = useContext(TabsContext);
+  const { value, onValueChange } = context || { value: "", onValueChange: () => {} };
   return (
     <button
       ref={ref}
@@ -59,7 +62,7 @@ const TabsTrigger = forwardRef<
         className
       )}
       onClick={() => {
-        if (typeof onValueChange === 'function') {
+        if (onValueChange && typeof onValueChange === 'function') {
           onValueChange(triggerValue);
         }
       }}
