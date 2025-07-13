@@ -603,6 +603,82 @@ export const shippingTracking = pgTable("shipping_tracking", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// ZATCA-compliant invoices table for Saudi Arabia
+export const invoices = pgTable("invoices", {
+  id: serial("id").primaryKey(),
+  invoiceNumber: varchar("invoice_number").unique().notNull(), // ZATCA-compliant format
+  orderId: integer("order_id").references(() => purchaseOrders.id).notNull(),
+  sellerId: varchar("seller_id").references(() => users.id).notNull(), // Artist or Gallery
+  sellerType: varchar("seller_type").notNull(), // 'artist' or 'gallery'
+  buyerId: varchar("buyer_id").references(() => users.id).notNull(),
+  
+  // ZATCA Required Fields
+  vatNumber: varchar("vat_number"), // VAT registration number
+  vatRate: decimal("vat_rate", { precision: 5, scale: 2 }).default("15.00"), // 15% VAT in Saudi Arabia
+  subtotal: decimal("subtotal", { precision: 10, scale: 2 }).notNull(),
+  vatAmount: decimal("vat_amount", { precision: 10, scale: 2 }).notNull(),
+  totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
+  currency: varchar("currency").default("SAR"),
+  
+  // Bilingual invoice details
+  itemDescription: text("item_description").notNull(),
+  itemDescriptionAr: text("item_description_ar").notNull(),
+  
+  // ZATCA compliance fields
+  qrCode: text("qr_code"), // ZATCA QR code
+  digitalSignature: text("digital_signature"), // Digital signature hash
+  zatcaUuid: varchar("zatca_uuid"), // ZATCA Universal Unique Identifier
+  invoiceHash: varchar("invoice_hash"), // Cryptographic hash
+  previousInvoiceHash: varchar("previous_invoice_hash"), // Hash of previous invoice
+  
+  // Invoice status
+  status: varchar("status").default("draft"), // draft, sent, paid, cancelled
+  issueDate: timestamp("issue_date").defaultNow(),
+  dueDate: timestamp("due_date"),
+  paidDate: timestamp("paid_date"),
+  
+  // Additional business info
+  sellerBusinessName: varchar("seller_business_name").notNull(),
+  sellerBusinessNameAr: varchar("seller_business_name_ar").notNull(),
+  sellerAddress: jsonb("seller_address").notNull(), // Full address with postal code
+  buyerAddress: jsonb("buyer_address").notNull(),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Shipping management for Artists and Galleries
+export const shippingProfiles = pgTable("shipping_profiles", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  userType: varchar("user_type").notNull(), // 'artist' or 'gallery'
+  
+  // Business shipping info
+  businessName: varchar("business_name").notNull(),
+  businessNameAr: varchar("business_name_ar"),
+  contactPerson: varchar("contact_person").notNull(),
+  contactPhone: varchar("contact_phone").notNull(),
+  contactEmail: varchar("contact_email").notNull(),
+  
+  // Address details
+  address: jsonb("address").notNull(), // {street, city, state, country, postalCode}
+  defaultCarrier: varchar("default_carrier"), // Aramex, DHL, FedEx, etc.
+  
+  // Shipping preferences
+  packagingInstructions: text("packaging_instructions"),
+  packagingInstructionsAr: text("packaging_instructions_ar"),
+  handlingTime: integer("handling_time").default(3), // Days to prepare shipment
+  
+  // Shipping rates
+  domesticShippingRate: decimal("domestic_shipping_rate", { precision: 10, scale: 2 }),
+  internationalShippingRate: decimal("international_shipping_rate", { precision: 10, scale: 2 }),
+  freeShippingThreshold: decimal("free_shipping_threshold", { precision: 10, scale: 2 }),
+  
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const collectorProfiles = pgTable("collector_profiles", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").references(() => users.id).unique().notNull(),
@@ -1032,6 +1108,16 @@ export const shippingTrackingRelations = relations(shippingTracking, ({ one }) =
   order: one(purchaseOrders, { fields: [shippingTracking.orderId], references: [purchaseOrders.id] }),
 }));
 
+export const invoicesRelations = relations(invoices, ({ one }) => ({
+  order: one(purchaseOrders, { fields: [invoices.orderId], references: [purchaseOrders.id] }),
+  seller: one(users, { fields: [invoices.sellerId], references: [users.id] }),
+  buyer: one(users, { fields: [invoices.buyerId], references: [users.id] }),
+}));
+
+export const shippingProfilesRelations = relations(shippingProfiles, ({ one }) => ({
+  user: one(users, { fields: [shippingProfiles.userId], references: [users.id] }),
+}));
+
 export const collectorProfilesRelations = relations(collectorProfiles, ({ one }) => ({
   user: one(users, { fields: [collectorProfiles.userId], references: [users.id] }),
 }));
@@ -1247,6 +1333,16 @@ export const insertAchievementBadgeSchema = createInsertSchema(achievementBadges
 export const insertArtistAchievementSchema = createInsertSchema(artistAchievements).omit({ id: true, earnedAt: true });
 export const insertArtistStatsSchema = createInsertSchema(artistStats).omit({ id: true, updatedAt: true });
 export const insertBadgeProgressSchema = createInsertSchema(badgeProgress).omit({ id: true, updatedAt: true });
+
+// Invoice and Shipping types
+export type Invoice = typeof invoices.$inferSelect;
+export type InsertInvoice = typeof invoices.$inferInsert;
+export type ShippingProfile = typeof shippingProfiles.$inferSelect;
+export type InsertShippingProfile = typeof shippingProfiles.$inferInsert;
+
+// Invoice and Shipping schemas
+export const insertInvoiceSchema = createInsertSchema(invoices).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertShippingProfileSchema = createInsertSchema(shippingProfiles).omit({ id: true, createdAt: true, updatedAt: true });
 
 // Scheduling and Participant Management types
 export type SchedulingConflict = typeof schedulingConflicts.$inferSelect;

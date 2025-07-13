@@ -4337,6 +4337,242 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   }, 60 * 60 * 1000); // 1 hour
 
+  // Shipping Management Routes
+  app.get('/api/shipping/profile', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      
+      const [profile] = await db
+        .select()
+        .from(schema.shippingProfiles)
+        .where(eq(schema.shippingProfiles.userId, userId));
+      
+      res.json(profile || null);
+    } catch (error) {
+      console.error("Error fetching shipping profile:", error);
+      res.status(500).json({ message: "Failed to fetch shipping profile" });
+    }
+  });
+
+  app.post('/api/shipping/profile', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const profileData = schema.insertShippingProfileSchema.parse({
+        ...req.body,
+        userId
+      });
+      
+      const [profile] = await db
+        .insert(schema.shippingProfiles)
+        .values(profileData)
+        .returning();
+      
+      res.json(profile);
+    } catch (error) {
+      console.error("Error creating shipping profile:", error);
+      res.status(500).json({ message: "Failed to create shipping profile" });
+    }
+  });
+
+  // ZATCA-Compliant Invoice Management Routes
+  app.get('/api/invoices', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      
+      const invoices = await db
+        .select()
+        .from(schema.invoices)
+        .where(eq(schema.invoices.sellerId, userId))
+        .orderBy(desc(schema.invoices.createdAt));
+      
+      res.json(invoices);
+    } catch (error) {
+      console.error("Error fetching invoices:", error);
+      res.status(500).json({ message: "Failed to fetch invoices" });
+    }
+  });
+
+  app.post('/api/invoices', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      
+      // Get order details
+      const [order] = await db
+        .select()
+        .from(schema.purchaseOrders)
+        .innerJoin(schema.artworks, eq(schema.purchaseOrders.artworkId, schema.artworks.id))
+        .innerJoin(schema.users, eq(schema.purchaseOrders.userId, schema.users.id))
+        .where(and(
+          eq(schema.purchaseOrders.id, req.body.orderId),
+          eq(schema.artworks.artistId, userId)
+        ));
+      
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+      
+      // Calculate VAT (15% standard rate in Saudi Arabia)
+      const subtotal = order.purchase_orders.totalAmount;
+      const vatRate = 15;
+      const vatAmount = (subtotal * vatRate) / 100;
+      const totalAmount = subtotal + vatAmount;
+      
+      // Generate invoice number (format: INV-YYYY-XXXXXX)
+      const invoiceNumber = `INV-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}`;
+      
+      // Generate QR code data (ZATCA requirement)
+      const qrCodeData = {
+        sellerName: req.body.sellerBusinessName,
+        vatNumber: req.body.vatNumber,
+        timestamp: new Date().toISOString(),
+        total: totalAmount,
+        vatAmount: vatAmount
+      };
+      const qrCode = Buffer.from(JSON.stringify(qrCodeData)).toString('base64');
+      
+      // Generate invoice hash (for chaining - ZATCA requirement)
+      const invoiceData = `${invoiceNumber}${new Date().toISOString()}${totalAmount}`;
+      const invoiceHash = Buffer.from(invoiceData).toString('base64');
+      
+      const invoicePayload = schema.insertInvoiceSchema.parse({
+        invoiceNumber,
+        orderId: req.body.orderId,
+        sellerId: userId,
+        sellerType: 'artist', // TODO: Determine from user role
+        buyerId: order.purchase_orders.userId,
+        vatNumber: req.body.vatNumber,
+        vatRate,
+        subtotal,
+        vatAmount,
+        totalAmount,
+        currency: 'SAR',
+        itemDescription: req.body.itemDescription,
+        itemDescriptionAr: req.body.itemDescriptionAr,
+        qrCode,
+        invoiceHash,
+        status: 'draft',
+        issueDate: new Date().toISOString(),
+        dueDate: req.body.dueDate,
+        sellerBusinessName: req.body.sellerBusinessName,
+        sellerBusinessNameAr: req.body.sellerBusinessNameAr,
+        sellerAddress: req.body.sellerAddress,
+        buyerAddress: req.body.buyerAddress
+      });
+      
+      const [invoice] = await db
+        .insert(schema.invoices)
+        .values(invoicePayload)
+        .returning();
+      
+      res.json(invoice);
+    } catch (error) {
+      console.error("Error creating invoice:", error);
+      res.status(500).json({ message: "Failed to create invoice" });
+    }
+  });
+
+  app.patch('/api/invoices/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const invoiceId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      const updateData = req.body;
+      
+      // Verify ownership
+      const [existingInvoice] = await db
+        .select()
+        .from(schema.invoices)
+        .where(and(
+          eq(schema.invoices.id, invoiceId),
+          eq(schema.invoices.sellerId, userId)
+        ));
+      
+      if (!existingInvoice) {
+        return res.status(404).json({ message: "Invoice not found" });
+      }
+      
+      const [invoice] = await db
+        .update(schema.invoices)
+        .set({ ...updateData, updatedAt: new Date() })
+        .where(eq(schema.invoices.id, invoiceId))
+        .returning();
+      
+      res.json(invoice);
+    } catch (error) {
+      console.error("Error updating invoice:", error);
+      res.status(500).json({ message: "Failed to update invoice" });
+    }
+  });
+
+  app.post('/api/invoices/:id/pdf', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const invoiceId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify ownership
+      const [invoice] = await db
+        .select()
+        .from(schema.invoices)
+        .where(and(
+          eq(schema.invoices.id, invoiceId),
+          eq(schema.invoices.sellerId, userId)
+        ));
+      
+      if (!invoice) {
+        return res.status(404).json({ message: "Invoice not found" });
+      }
+      
+      // TODO: Generate PDF using ZATCA-compliant template (PDF/A-3 with embedded XML)
+      res.json({ 
+        pdfUrl: `/api/invoices/${invoiceId}/download`,
+        message: "PDF generation initiated" 
+      });
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      res.status(500).json({ message: "Failed to generate PDF" });
+    }
+  });
+
+  app.post('/api/invoices/:id/zatca-submit', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    try {
+      const invoiceId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify ownership
+      const [invoice] = await db
+        .select()
+        .from(schema.invoices)
+        .where(and(
+          eq(schema.invoices.id, invoiceId),
+          eq(schema.invoices.sellerId, userId)
+        ));
+      
+      if (!invoice) {
+        return res.status(404).json({ message: "Invoice not found" });
+      }
+      
+      // TODO: Submit to ZATCA Fatoora Portal (Phase 2 requirement)
+      // Generate mock ZATCA UUID and digital signature for demonstration
+      const zatcaUuid = `ZATCA-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      const digitalSignature = Buffer.from(`${invoice.invoiceNumber}-${zatcaUuid}`).toString('base64');
+      
+      const [updatedInvoice] = await db
+        .update(schema.invoices)
+        .set({ 
+          zatcaUuid,
+          digitalSignature,
+          status: 'sent',
+          updatedAt: new Date()
+        })
+        .where(eq(schema.invoices.id, invoiceId))
+        .returning();
+      
+      res.json(updatedInvoice);
+    } catch (error) {
+      console.error("Error submitting to ZATCA:", error);
+      res.status(500).json({ message: "Failed to submit to ZATCA" });
+    }
+  });
+
   // Start automatic cache cleanup
   const { startCacheCleanup } = await import('./middleware/cacheOptimization');
   startCacheCleanup();

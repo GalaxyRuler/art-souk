@@ -389,6 +389,26 @@ export default function Dashboard() {
                     </Button>
                   </Link>
                 )}
+                
+                {/* Shipping Management Link for Artists/Galleries */}
+                {(user?.role === 'artist' || user?.role === 'gallery') && (
+                  <Link to="/shipping-management">
+                    <Button className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white">
+                      <Package className="h-4 w-4 mr-2" />
+                      {t("shipping.title")}
+                    </Button>
+                  </Link>
+                )}
+                
+                {/* Invoice Management Link for Artists/Galleries */}
+                {(user?.role === 'artist' || user?.role === 'gallery') && (
+                  <Link to="/invoice-management">
+                    <Button className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white">
+                      <Settings className="h-4 w-4 mr-2" />
+                      {t("invoice.title")}
+                    </Button>
+                  </Link>
+                )}
               </CardContent>
             </Card>
           </div>
