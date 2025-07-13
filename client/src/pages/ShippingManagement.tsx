@@ -14,7 +14,7 @@ import { toast } from '@/hooks/use-toast';
 import { Truck, Package, MapPin, Clock, Settings, Phone, Mail, Building, Plus, Edit, Trash2, Check } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import { Footer } from '@/components/Footer';
 
 interface ShippingProfile {
   id: number;

@@ -14,7 +14,7 @@ import { toast } from '@/hooks/use-toast';
 import { FileText, Download, Send, Eye, Plus, Edit, Check, QrCode, Shield, Building2, Calculator } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import { Footer } from '@/components/Footer';
 
 interface Invoice {
   id: number;
