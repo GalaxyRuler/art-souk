@@ -8,6 +8,7 @@ import { emailService } from "./emailService";
 import { adminRouter } from "./routes/admin";
 import { sellerRouter } from "./routes/seller";
 import { db } from "./db";
+import * as schema from "@shared/schema";
 import { eq, desc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
 import { trackStageMiddleware, updateLifecycleMetrics } from "./middleware/trackStage";
 import { rateLimiters } from "./middleware/rateLimiting";
@@ -222,6 +223,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Test admin route directly (bypassing router issues)
   app.get('/api/admin/stats', async (req: any, res) => {
     try {
+      console.log('Direct admin route called:', {
+        sessionID: req.sessionID,
+        hasSession: !!req.session,
+        sessionUser: req.session?.user,
+        passportUser: req.user
+      });
+      
       // Force use the same session logic as working routes
       const userId = '44377424'; // Hardcoded for testing
       const user = await storage.getUser(userId);
@@ -249,13 +257,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         totalWorkshops,
         totalEvents
       ] = await Promise.all([
-        db.select({ count: count() }).from(users),
-        db.select({ count: count() }).from(artists),
-        db.select({ count: count() }).from(galleries),
-        db.select({ count: count() }).from(artworks),
-        db.select({ count: count() }).from(auctions).where(eq(auctions.status, 'live')),
-        db.select({ count: count() }).from(workshops),
-        db.select({ count: count() }).from(events)
+        db.select({ count: count() }).from(schema.users),
+        db.select({ count: count() }).from(schema.artists),
+        db.select({ count: count() }).from(schema.galleries),
+        db.select({ count: count() }).from(schema.artworks),
+        db.select({ count: count() }).from(schema.auctions).where(eq(schema.auctions.status, 'live')),
+        db.select({ count: count() }).from(schema.workshops),
+        db.select({ count: count() }).from(schema.events)
       ]);
 
       const stats = {
