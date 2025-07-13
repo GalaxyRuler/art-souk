@@ -229,7 +229,20 @@ const resources = {
         noExhibitionsTitle: "No Exhibitions",
         noExhibitionsDescription: "This artist has not participated in any exhibitions yet.",
         noArtworksTitle: "No Artworks",
-        noArtworksDescription: "This artist has not uploaded any artworks yet."
+        noArtworksDescription: "This artist has not uploaded any artworks yet.",
+        totalSales: "Total Sales",
+        averagePrice: "Average Price",
+        categories: "Categories",
+        website: "Website",
+        instagram: "Instagram",
+        email: "Email",
+        additionalInfo: "Additional Info",
+        style: "Style",
+        primaryMedium: "Primary Medium",
+        education: "Education",
+        awards: "Awards",
+        soloExhibitions: "Solo Exhibitions",
+        groupExhibitions: "Group Exhibitions"
       },
       artists: {
         viewAll: "View All Artists"
@@ -710,7 +723,20 @@ const resources = {
         noExhibitionsTitle: "لا توجد معارض",
         noExhibitionsDescription: "لم يشارك هذا الفنان في أي معارض حتى الآن.",
         noArtworksTitle: "لا توجد أعمال فنية",
-        noArtworksDescription: "لم يقم هذا الفنان بتحميل أي أعمال فنية حتى الآن."
+        noArtworksDescription: "لم يقم هذا الفنان بتحميل أي أعمال فنية حتى الآن.",
+        totalSales: "إجمالي المبيعات",
+        averagePrice: "متوسط السعر",
+        categories: "الفئات",
+        website: "الموقع الإلكتروني",
+        instagram: "إنستغرام",
+        email: "البريد الإلكتروني",
+        additionalInfo: "معلومات إضافية",
+        style: "الأسلوب",
+        primaryMedium: "الوسط الأساسي",
+        education: "التعليم",
+        awards: "الجوائز",
+        soloExhibitions: "المعارض الفردية",
+        groupExhibitions: "المعارض الجماعية"
       },
       commissions: {
         title: "الطلبات المخصصة",
