@@ -220,7 +220,16 @@ const resources = {
         share: "Share",
         aboutArtist: "About Artist",
         statistics: "Statistics",
-        totalArtworks: "Total Artworks"
+        totalArtworks: "Total Artworks",
+        contactSocial: "Contact & Social",
+        tabs: {
+          artworks: "Artworks"
+        },
+        exhibitions: "Exhibitions",
+        noExhibitionsTitle: "No Exhibitions",
+        noExhibitionsDescription: "This artist has not participated in any exhibitions yet.",
+        noArtworksTitle: "No Artworks",
+        noArtworksDescription: "This artist has not uploaded any artworks yet."
       },
       artists: {
         viewAll: "View All Artists"
@@ -372,8 +381,12 @@ const resources = {
           subtitle: "Browse available commission opportunities",
           postRequest: "Post Request",
           viewDetails: "View Details",
-          placeBid: "Place Bid"
+          placeBid: "Place Bid",
+          bidsCount: "{{count}} bids",
+          noRequestsDescription: "Browse through available commission opportunities or post your own request.",
+          postFirstRequest: "Post First Request"
         },
+        featured: "Featured",
         status: {
           open: "Open",
           closed: "Closed",
@@ -387,6 +400,23 @@ const resources = {
         dimensions: "Dimensions",
         description: "Description",
         requirements: "Requirements"
+      },
+      categories: {
+        painting: "Painting",
+        sculpture: "Sculpture",
+        photography: "Photography",
+        digital: "Digital Art",
+        mixed_media: "Mixed Media",
+        installation: "Installation",
+        performance: "Performance",
+        video: "Video Art",
+        drawing: "Drawing",
+        printmaking: "Printmaking",
+        ceramics: "Ceramics",
+        jewelry: "Jewelry",
+        textile: "Textile",
+        calligraphy: "Calligraphy",
+        other: "Other"
       },
       admin: {
         dashboard: "Admin Dashboard",
@@ -671,7 +701,61 @@ const resources = {
         share: "مشاركة",
         aboutArtist: "عن الفنان",
         statistics: "الإحصائيات",
-        totalArtworks: "إجمالي الأعمال الفنية"
+        totalArtworks: "إجمالي الأعمال الفنية",
+        contactSocial: "التواصل والشبكات الاجتماعية",
+        tabs: {
+          artworks: "الأعمال الفنية"
+        },
+        exhibitions: "المعارض",
+        noExhibitionsTitle: "لا توجد معارض",
+        noExhibitionsDescription: "لم يشارك هذا الفنان في أي معارض حتى الآن.",
+        noArtworksTitle: "لا توجد أعمال فنية",
+        noArtworksDescription: "لم يقم هذا الفنان بتحميل أي أعمال فنية حتى الآن."
+      },
+      commissions: {
+        title: "الطلبات المخصصة",
+        subtitle: "اطلب أعمالاً فنية مخصصة من فنانين موهوبين",
+        requests: {
+          title: "طلبات الأعمال المخصصة",
+          subtitle: "تصفح الفرص المتاحة للطلبات المخصصة",
+          postRequest: "نشر طلب",
+          viewDetails: "عرض التفاصيل",
+          placeBid: "ضع عرضاً",
+          bidsCount: "{{count}} عروض",
+          noRequestsDescription: "تصفح الفرص المتاحة للطلبات المخصصة أو انشر طلبك الخاص.",
+          postFirstRequest: "نشر أول طلب"
+        },
+        featured: "مميز",
+        status: {
+          open: "مفتوح",
+          closed: "مغلق",
+          inProgress: "قيد التنفيذ",
+          completed: "مكتمل",
+          cancelled: "ملغي"
+        },
+        budget: "الميزانية",
+        deadline: "الموعد النهائي",
+        materials: "المواد",
+        dimensions: "الأبعاد",
+        description: "الوصف",
+        requirements: "المتطلبات"
+      },
+      categories: {
+        painting: "رسم",
+        sculpture: "نحت",
+        photography: "تصوير",
+        digital: "فن رقمي",
+        mixed_media: "وسائط متعددة",
+        installation: "تركيب",
+        performance: "أداء",
+        video: "فيديو آرت",
+        drawing: "رسم",
+        printmaking: "طباعة",
+        ceramics: "سيراميك",
+        jewelry: "مجوهرات",
+        textile: "نسيج",
+        calligraphy: "خط عربي",
+        other: "أخرى"
       },
       artists: {
         title: "الفنانون",
