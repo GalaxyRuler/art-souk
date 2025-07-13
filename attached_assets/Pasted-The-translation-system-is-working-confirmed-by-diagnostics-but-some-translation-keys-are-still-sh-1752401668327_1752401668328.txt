@@ -1,0 +1,78 @@
+The translation system is working (confirmed by diagnostics), but some translation keys are still showing in the UI. Fix the remaining translation key displays:
+
+TASKS:
+
+1. SEARCH AND FIX ALL T() CALLS:
+   Search for all instances of {t(" in the entire codebase
+   For each one found, verify the key exists in the inline resources in i18n.ts
+   If any key is missing, add it to the inline resources
+
+2. CHECK FOR INCORRECT KEY PATHS:
+   Search for patterns like:
+   - t('nav.home') when it should be t('nav.artworks')
+   - t('common.loading') when it should be t('common.loading')
+   
+3. FIX DYNAMIC KEY CONSTRUCTION:
+   Find patterns like: t(`nav.${variable}`)
+   Ensure the variable values match actual keys in resources
+   Add console.log before these to debug what key is being requested
+
+4. ADD MISSING KEYS TO INLINE RESOURCES:
+   In client/src/lib/i18n.ts, add any missing keys found:
+   - If you find t('workshops.title') being used but not defined
+   - Add it to the resources object in both en and ar sections
+
+5. CHECK CONDITIONAL RENDERING:
+   Look for patterns where translation might be called before ready:
+   ```typescript
+   const { t, ready } = useTranslation();
+   if (!ready) return null;
+
+SEARCH FOR RAW STRING KEYS:
+Search for any hardcoded strings that look like translation keys:
+
+"nav.home" (with quotes)
+'auth.login' (with quotes)
+These might be displayed directly instead of being translated
+
+
+CHECK FOR TEMPLATE LITERAL ISSUES:
+Find and fix patterns like:
+
+{t("key")} should be {t("key")}
+"${t('key')}" should be {t('key')}
+
+
+VERIFY ALL COMPONENTS IMPORT useTranslation:
+Search for components that display text but don't have:
+import { useTranslation } from 'react-i18next';
+ADD COMPREHENSIVE LOGGING:
+In any component still showing keys, add:
+typescriptconsole.log('Component X - Key:', 'nav.home', 'Value:', t('nav.home'));
+
+SPECIFICALLY CHECK THESE COMMON PROBLEM AREAS:
+
+Footer component
+Dashboard pages
+Modal/Dialog components
+Error messages
+Form labels
+Button texts
+Placeholder texts
+
+
+LOOK FOR NESTED KEYS NOT IN RESOURCES:
+The inline resources might be missing deeply nested keys like:
+
+dashboard.artist.stats.totalArtworks
+forms.validation.required
+errors.network.timeout
+
+
+
+For each missing key found, add it to the inline resources in i18n.ts.
+Report back with:
+
+List of components that were still showing keys
+List of missing keys that were added
+Confirmation that all keys now display proper text

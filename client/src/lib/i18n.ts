@@ -220,7 +220,8 @@ const resources = {
         all: "All",
         latest: "Latest",
         popular: "Popular",
-        alphabetical: "Alphabetical"
+        alphabetical: "Alphabetical",
+        viewAll: "View All Artists"
       },
       galleries: {
         title: "Galleries", 
@@ -378,6 +379,16 @@ const resources = {
           auctions: "Participate in live auctions",
           personalized: "Get personalized recommendations"
         }
+      },
+      editorial: {
+        title: "Editorial",
+        description: "Latest insights and stories from the GCC art world",
+        viewAll: "View All Articles",
+        readMore: "Read More",
+        category: "Category",
+        publishedOn: "Published on",
+        byAuthor: "By",
+        relatedArticles: "Related Articles"
       }
     }
   },
@@ -544,6 +555,16 @@ const resources = {
         featured: "مميز"
       },
       artists: {
+        title: "الفنانون",
+        subtitle: "اكتشف الفنانين الموهوبين من منطقة دول الخليج",
+        featured: "الفنانون المميزون",
+        searchPlaceholder: "البحث عن الفنانين...",
+        sortBy: "ترتيب حسب",
+        nationality: "الجنسية",
+        all: "الكل",
+        latest: "الأحدث",
+        popular: "الأكثر شعبية",
+        alphabetical: "أبجدياً",
         viewAll: "عرض جميع الفنانين"
       },
       artwork: {
@@ -553,6 +574,16 @@ const resources = {
       },
       artworks: {
         viewAll: "عرض جميع الأعمال"
+      },
+      editorial: {
+        title: "الافتتاحية",
+        description: "آخر المقالات والقصص من عالم الفن الخليجي",
+        viewAll: "عرض جميع المقالات",
+        readMore: "اقرأ المزيد",
+        category: "الفئة",
+        publishedOn: "نشر في",
+        byAuthor: "بواسطة",
+        relatedArticles: "مقالات ذات صلة"
       }
     }
   }
