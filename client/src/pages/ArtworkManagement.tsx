@@ -572,10 +572,11 @@ function ArtworkForm({
 }) {
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
+  const [activeTab, setActiveTab] = useState("basic");
 
   return (
     <form onSubmit={onSubmit} className="space-y-6">
-      <Tabs defaultValue="basic" className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="basic">{t("artworks.basicInfo")}</TabsTrigger>
           <TabsTrigger value="details">{t("artworks.details")}</TabsTrigger>
