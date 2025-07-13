@@ -176,14 +176,32 @@ export default function Galleries() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">{t("galleries.filters.allLocations")}</SelectItem>
+                    {/* Saudi Arabia */}
                     <SelectItem value="Riyadh">{t("cities.riyadh")}</SelectItem>
                     <SelectItem value="Jeddah">{t("cities.jeddah")}</SelectItem>
+                    <SelectItem value="Dammam">{t("cities.dammam")}</SelectItem>
+                    <SelectItem value="Khobar">{t("cities.khobar")}</SelectItem>
+                    <SelectItem value="Makkah">{t("cities.makkah")}</SelectItem>
+                    <SelectItem value="Madinah">{t("cities.madinah")}</SelectItem>
+                    <SelectItem value="Tabuk">{t("cities.tabuk")}</SelectItem>
+                    <SelectItem value="Abha">{t("cities.abha")}</SelectItem>
+                    {/* UAE */}
                     <SelectItem value="Dubai">{t("cities.dubai")}</SelectItem>
                     <SelectItem value="Abu Dhabi">{t("cities.abuDhabi")}</SelectItem>
+                    <SelectItem value="Sharjah">{t("cities.sharjah")}</SelectItem>
+                    <SelectItem value="Ajman">{t("cities.ajman")}</SelectItem>
+                    <SelectItem value="Fujairah">{t("cities.fujairah")}</SelectItem>
+                    <SelectItem value="Ras Al Khaimah">{t("cities.rasAlKhaimah")}</SelectItem>
+                    {/* Kuwait */}
                     <SelectItem value="Kuwait City">{t("cities.kuwaitCity")}</SelectItem>
+                    {/* Qatar */}
                     <SelectItem value="Doha">{t("cities.doha")}</SelectItem>
+                    {/* Bahrain */}
                     <SelectItem value="Manama">{t("cities.manama")}</SelectItem>
+                    {/* Oman */}
                     <SelectItem value="Muscat">{t("cities.muscat")}</SelectItem>
+                    <SelectItem value="Salalah">{t("cities.salalah")}</SelectItem>
+                    <SelectItem value="Sohar">{t("cities.sohar")}</SelectItem>
                   </SelectContent>
                 </Select>
 

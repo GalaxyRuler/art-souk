@@ -500,12 +500,24 @@ const resources = {
       cities: {
         riyadh: "Riyadh",
         jeddah: "Jeddah",
+        dammam: "Dammam",
+        khobar: "Khobar",
+        makkah: "Makkah",
+        madinah: "Madinah",
+        tabuk: "Tabuk",
+        abha: "Abha",
         dubai: "Dubai",
         abuDhabi: "Abu Dhabi",
+        sharjah: "Sharjah",
+        ajman: "Ajman",
+        fujairah: "Fujairah",
+        rasAlKhaimah: "Ras Al Khaimah",
         kuwaitCity: "Kuwait City",
         doha: "Doha",
         manama: "Manama",
-        muscat: "Muscat"
+        muscat: "Muscat",
+        salalah: "Salalah",
+        sohar: "Sohar"
       },
       categories: {
         painting: "Painting",
@@ -887,12 +899,24 @@ const resources = {
       cities: {
         riyadh: "الرياض",
         jeddah: "جدة",
+        dammam: "الدمام",
+        khobar: "الخبر",
+        makkah: "مكة المكرمة",
+        madinah: "المدينة المنورة",
+        tabuk: "تبوك",
+        abha: "أبها",
         dubai: "دبي",
         abuDhabi: "أبو ظبي",
+        sharjah: "الشارقة",
+        ajman: "عجمان",
+        fujairah: "الفجيرة",
+        rasAlKhaimah: "رأس الخيمة",
         kuwaitCity: "مدينة الكويت",
         doha: "الدوحة",
         manama: "المنامة",
-        muscat: "مسقط"
+        muscat: "مسقط",
+        salalah: "صلالة",
+        sohar: "صحار"
       },
       artists: {
         title: "الفنانون",
