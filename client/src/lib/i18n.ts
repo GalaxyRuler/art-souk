@@ -178,6 +178,24 @@ const resources = {
         upcoming: "Upcoming",
         ended: "Ended",
         endingSoon: "Ending Soon",
+        notFound: "Auction Not Found",
+        browseAuctions: "Browse Auctions",
+        liveAuction: "Live Auction",
+        linkCopiedDesc: "Auction link copied to clipboard",
+        backToAuctions: "Back to Auctions",
+        estimate: "Estimate",
+        yourBid: "Your Bid",
+        enterBidAmount: "Enter bid amount",
+        starts: "Starts",
+        auctionEnded: "Auction Ended",
+        finalBid: "Final Bid",
+        liveBidding: "Live Bidding",
+        updatesAutomatically: "Updates Automatically",
+        biddingActivity: "Bidding Activity",
+        leading: "Leading",
+        noBidsYet: "No bids yet",
+        beFirstToBid: "Be the first to bid",
+        termsAndConditions: "Terms & Conditions",
         timeRemaining: {
           days: "{{count}} day remaining",
           days_plural: "{{count}} days remaining",
@@ -194,6 +212,19 @@ const resources = {
         bidHistory: "Bid History",
         placeBidButton: "Place Bid",
         loginToBid: "Login to Bid",
+        bidding: {
+          invalidAmount: "Invalid Bid Amount",
+          invalidAmountDesc: "Please enter a valid bid amount",
+          bidTooLow: "Bid Too Low",
+          bidTooLowDesc: "Your bid must be higher than the current bid of {{amount}}",
+          incrementTooSmall: "Increment Too Small",
+          incrementTooSmallDesc: "Minimum bid increment is {{amount}}"
+        },
+        statusText: {
+          liveNow: "Live Now",
+          startingSoon: "Starting Soon",
+          ended: "Ended"
+        },
         tabs: {
           live: "Live",
           upcoming: "Upcoming",
@@ -204,6 +235,18 @@ const resources = {
           upcoming: "Upcoming",
           total: "Total",
           totalBids: "Total Bids"
+        },
+        noLive: {
+          title: "No Live Auctions",
+          description: "There are no live auctions at the moment"
+        },
+        noUpcoming: {
+          title: "No Upcoming Auctions",
+          description: "There are no upcoming auctions scheduled"
+        },
+        noAuctions: {
+          title: "No Auctions",
+          description: "There are no auctions available"
         },
         timeRemaining: "Time Remaining"
       },
@@ -785,24 +828,75 @@ const resources = {
         upcoming: "قادم",
         ended: "انتهى",
         endingSoon: "ينتهي قريباً",
-        currentBid: "المزايدة الحالية",
-        startingPrice: "السعر الأولي",
+        notFound: "المزاد غير موجود",
+        browseAuctions: "تصفح المزادات",
+        liveAuction: "مزاد مباشر",
+        linkCopiedDesc: "تم نسخ رابط المزاد",
+        backToAuctions: "العودة للمزادات",
+        estimate: "التقدير",
+        yourBid: "عرضك",
+        enterBidAmount: "أدخل مبلغ العرض",
+        starts: "يبدأ",
+        auctionEnded: "انتهى المزاد",
+        finalBid: "العرض الأخير",
+        liveBidding: "المزايدة المباشرة",
+        updatesAutomatically: "يتم التحديث تلقائياً",
+        biddingActivity: "نشاط المزايدة",
+        leading: "الأول",
+        noBidsYet: "لا توجد عروض حتى الآن",
+        beFirstToBid: "كن أول من يضع عرضاً",
+        termsAndConditions: "الشروط والأحكام",
+        timeRemaining: {
+          days: "يوم واحد متبقي",
+          days_plural: "{{count}} أيام متبقية",
+          hours: "ساعة واحدة متبقية",
+          hours_plural: "{{count}} ساعات متبقية",
+          minutes: "دقيقة واحدة متبقية",
+          minutes_plural: "{{count}} دقائق متبقية"
+        },
+        currentBid: "العرض الحالي",
+        startingPrice: "السعر الابتدائي",
         bidCount: "عدد العروض",
         timeLeft: "الوقت المتبقي",
         auctionDetails: "تفاصيل المزاد",
         bidHistory: "تاريخ العروض",
         placeBidButton: "ضع عرضاً",
-        loginToBid: "سجل دخولك للمزايدة",
+        loginToBid: "سجل الدخول للمزايدة",
+        bidding: {
+          invalidAmount: "مبلغ العرض غير صحيح",
+          invalidAmountDesc: "يرجى إدخال مبلغ عرض صحيح",
+          bidTooLow: "العرض منخفض جداً",
+          bidTooLowDesc: "يجب أن يكون عرضك أعلى من العرض الحالي {{amount}}",
+          incrementTooSmall: "الزيادة صغيرة جداً",
+          incrementTooSmallDesc: "الحد الأدنى لزيادة العرض هو {{amount}}"
+        },
+        statusText: {
+          liveNow: "مباشر الآن",
+          startingSoon: "يبدأ قريباً",
+          ended: "انتهى"
+        },
         tabs: {
           live: "مباشر",
           upcoming: "قادم",
-          all: "جميع المزادات"
+          all: "الكل"
         },
         stats: {
           live: "مباشر",
           upcoming: "قادم",
           total: "المجموع",
           totalBids: "إجمالي العروض"
+        },
+        noLive: {
+          title: "لا توجد مزادات مباشرة",
+          description: "لا توجد مزادات مباشرة في الوقت الحالي"
+        },
+        noUpcoming: {
+          title: "لا توجد مزادات قادمة",
+          description: "لا توجد مزادات مجدولة قادمة"
+        },
+        noAuctions: {
+          title: "لا توجد مزادات",
+          description: "لا توجد مزادات متاحة"
         },
         timeRemaining: "الوقت المتبقي"
       },
