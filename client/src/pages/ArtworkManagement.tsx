@@ -763,12 +763,33 @@ function ArtworkForm({
           <div>
             <Label>{t("artworks.images")}</Label>
             <div className="space-y-4">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-600">
+                    {t("artworks.uploadInstructions")}
+                  </p>
+                  <div className="flex justify-center">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => document.getElementById('file-upload')?.click()}
+                      disabled={uploadingImages}
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      {t("artworks.selectImages")}
+                    </Button>
+                  </div>
+                </div>
+              </div>
               <Input
+                id="file-upload"
                 type="file"
                 accept="image/*"
                 multiple
                 onChange={handleImageUpload}
                 disabled={uploadingImages}
+                className="hidden"
               />
               
               {selectedImages.length > 0 && (

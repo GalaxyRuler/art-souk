@@ -368,6 +368,8 @@ const resources = {
         onLoan: "On Loan",
         mainImage: "Main Image",
         uploadingImages: "Uploading Images...",
+        uploadInstructions: "Drag and drop your images here or click to select files",
+        selectImages: "Select Images",
         filters: {
           category: "Category",
           medium: "Medium",
@@ -1327,6 +1329,8 @@ const resources = {
         onLoan: "معار",
         mainImage: "الصورة الرئيسية",
         uploadingImages: "جاري تحميل الصور...",
+        uploadInstructions: "اسحب وأفلت الصور هنا أو انقر لاختيار الملفات",
+        selectImages: "اختر الصور",
         filters: {
           category: "الفئة",
           medium: "الوسط",
