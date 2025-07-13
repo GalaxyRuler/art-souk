@@ -297,6 +297,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Full profile endpoint with user data including roles
+  app.get('/api/profile/full', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user) {
+        return res.json(null);
+      }
+      
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching full user profile:", error);
+      res.json(null);
+    }
+  });
+
   app.get('/api/user/roles', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
@@ -2215,8 +2232,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/profile', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
-      const profile = await storage.getUserProfile(userId);
-      res.json(profile);
+      const user = await storage.getUser(userId);
+      res.json(user);
     } catch (error) {
       console.error("Error fetching profile:", error);
       res.status(500).json({ message: "Failed to fetch profile" });
