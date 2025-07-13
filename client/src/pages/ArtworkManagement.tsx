@@ -205,8 +205,10 @@ export default function ArtworkManagement() {
         materialsAr: artworkData.materialsAr.filter(Boolean)
       };
       
-      const response = await apiRequest('POST', '/api/artworks', payload);
-      return response.json();
+      return await apiRequest('/api/artworks', {
+        method: 'POST',
+        body: payload
+      });
     },
     onSuccess: () => {
       toast({
@@ -237,8 +239,10 @@ export default function ArtworkManagement() {
         materialsAr: artworkData.materialsAr.filter(Boolean)
       };
       
-      const response = await apiRequest('PUT', `/api/artworks/${id}`, payload);
-      return response.json();
+      return await apiRequest(`/api/artworks/${id}`, {
+        method: 'PUT',
+        body: payload
+      });
     },
     onSuccess: () => {
       toast({
@@ -261,7 +265,9 @@ export default function ArtworkManagement() {
   // Delete artwork mutation
   const deleteArtworkMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest('DELETE', `/api/artworks/${id}`);
+      return await apiRequest(`/api/artworks/${id}`, {
+        method: 'DELETE'
+      });
     },
     onSuccess: () => {
       toast({
