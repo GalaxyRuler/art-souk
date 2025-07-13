@@ -147,8 +147,7 @@ const resources = {
         no: "No",
         allCategories: "All Categories",
         allStatus: "All Status",
-        published: "Published",
-        featured: "Featured"
+        published: "Published"
       },
       site: {
         name: "Art Souk",

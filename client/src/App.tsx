@@ -78,6 +78,9 @@ function Router() {
         <Route path="/home" component={Home} />
         <Route path="/landing" component={Landing} />
         
+        {/* Make artwork management publicly accessible for testing */}
+        <Route path="/artworks/manage" component={ArtworkManagement} />
+        
         {/* Public routes - accessible to all users */}
         <Route path="/artists" component={Artists} />
         <Route path="/artists/:id" component={ArtistProfile} />
