@@ -664,6 +664,12 @@
       "intermediate": "Intermediate",
       "advanced": "Advanced"
     },
+    "skillLevel": {
+      "all": "All Levels",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
     "duration": "Duration",
     "materials": "Materials",
     "instructor": "Instructor",
@@ -671,6 +677,7 @@
     "seats": "Available Seats",
     "registered": "Registered",
     "register": "Register",
+    "participants": "{{current}}/{{max}} participants",
     "registerSuccess": "Registration Successful",
     "registerSuccessDesc": "You have successfully registered for this workshop",
     "registerFailed": "Registration Failed",
