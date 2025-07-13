@@ -134,7 +134,11 @@ const resources = {
         submit: "Submit",
         confirm: "Confirm",
         yes: "Yes",
-        no: "No"
+        no: "No",
+        allCategories: "All Categories",
+        allStatus: "All Status",
+        published: "Published",
+        featured: "Featured"
       },
       site: {
         name: "Art Souk",
@@ -189,7 +193,19 @@ const resources = {
         auctionDetails: "Auction Details",
         bidHistory: "Bid History",
         placeBidButton: "Place Bid",
-        loginToBid: "Login to Bid"
+        loginToBid: "Login to Bid",
+        tabs: {
+          live: "Live",
+          upcoming: "Upcoming",
+          all: "All"
+        },
+        stats: {
+          live: "Live",
+          upcoming: "Upcoming",
+          total: "Total",
+          totalBids: "Total Bids"
+        },
+        timeRemaining: "Time Remaining"
       },
       artist: {
         featured: "Featured"
@@ -245,6 +261,7 @@ const resources = {
         registrationSuccess: "Registration Successful",
         registrationSuccessDesc: "You have successfully registered for the workshop",
         registrationFailed: "Registration Failed",
+        registrationFailedDesc: "Unable to register for workshop. Please try again.",
         loginToRegister: "Please login to register for workshops",
         duration: "Duration",
         materials: "Materials",
@@ -259,7 +276,23 @@ const resources = {
         beginner: "Beginner",
         intermediate: "Intermediate",
         advanced: "Advanced",
-        all: "All Levels"
+        all: "All Levels",
+        loading: "Loading workshops...",
+        search: "Search workshops...",
+        filter: "Filter",
+        categories: {
+          painting: "Painting",
+          sculpture: "Sculpture",
+          drawing: "Drawing",
+          digital_art: "Digital Art",
+          photography: "Photography"
+        },
+        skillLevel: {
+          all: "All Levels",
+          beginner: "Beginner",
+          intermediate: "Intermediate",
+          advanced: "Advanced"
+        }
       },
       events: {
         title: "Events",
@@ -284,7 +317,17 @@ const resources = {
         ongoing: "Ongoing",
         completed: "Completed",
         cancelled: "Cancelled",
+        loading: "Loading events...",
+        search: "Search events...",
+        filter: "Filter",
+        online: "Online",
+        attending: "Attending",
+        maybeAttending: "Maybe",
+        all: "All Events",
+        rsvpFailed: "RSVP Failed",
+        rsvpFailedDesc: "Unable to process your RSVP. Please try again.",
         categories: {
+          all: "All Categories",
           Exhibition: "Exhibition",
           Workshop: "Workshop",
           Conference: "Conference",
@@ -299,7 +342,11 @@ const resources = {
           Performance: "Performance",
           Screening: "Screening",
           Tour: "Tour",
-          Other: "Other"
+          Other: "Other",
+          exhibition: "Exhibition",
+          workshop: "Workshop",
+          talk: "Talk",
+          networking: "Networking"
         }
       },
       commissions: {
@@ -533,7 +580,13 @@ const resources = {
         submit: "إرسال",
         confirm: "تأكيد",
         yes: "نعم",
-        no: "لا"
+        no: "لا",
+        upcoming: "قادم",
+        completed: "مكتمل",
+        allCategories: "جميع الفئات",
+        allStatus: "جميع الحالات",
+        published: "منشور",
+        featured: "مميز"
       },
       site: {
         name: "سوق آرت",
@@ -567,7 +620,32 @@ const resources = {
         live: "مباشر",
         viewAll: "عرض جميع المزادات",
         bids: "عروض",
-        placeBid: "ضع عرضاً"
+        placeBid: "ضع عرضاً",
+        title: "المزادات",
+        subtitle: "شارك في مزادات الفن المباشرة",
+        upcoming: "قادم",
+        ended: "انتهى",
+        endingSoon: "ينتهي قريباً",
+        currentBid: "المزايدة الحالية",
+        startingPrice: "السعر الأولي",
+        bidCount: "عدد العروض",
+        timeLeft: "الوقت المتبقي",
+        auctionDetails: "تفاصيل المزاد",
+        bidHistory: "تاريخ العروض",
+        placeBidButton: "ضع عرضاً",
+        loginToBid: "سجل دخولك للمزايدة",
+        tabs: {
+          live: "مباشر",
+          upcoming: "قادم",
+          all: "جميع المزادات"
+        },
+        stats: {
+          live: "مباشر",
+          upcoming: "قادم",
+          total: "المجموع",
+          totalBids: "إجمالي العروض"
+        },
+        timeRemaining: "الوقت المتبقي"
       },
       artist: {
         featured: "مميز"
@@ -626,7 +704,17 @@ const resources = {
         ongoing: "جاري",
         completed: "مكتمل",
         cancelled: "ملغي",
+        loading: "جاري تحميل الفعاليات...",
+        search: "البحث عن الفعاليات...",
+        filter: "تصفية",
+        online: "عبر الإنترنت",
+        attending: "سأحضر",
+        maybeAttending: "ربما",
+        all: "جميع الفعاليات",
+        rsvpFailed: "فشل في تأكيد الحضور",
+        rsvpFailedDesc: "لا يمكن معالجة تأكيد حضورك. يرجى المحاولة مرة أخرى.",
         categories: {
+          all: "جميع الفئات",
           Exhibition: "معرض",
           Workshop: "ورشة عمل",
           Conference: "مؤتمر",
@@ -641,7 +729,55 @@ const resources = {
           Performance: "أداء",
           Screening: "عرض",
           Tour: "جولة",
-          Other: "أخرى"
+          Other: "أخرى",
+          exhibition: "معرض",
+          workshop: "ورشة عمل",
+          talk: "محاضرة",
+          networking: "تواصل"
+        }
+      },
+      workshops: {
+        title: "ورش العمل",
+        subtitle: "تعلم من الفنانين الخبراء وطور مهاراتك",
+        featured: "ورش العمل المميزة",
+        searchPlaceholder: "البحث عن ورش العمل...",
+        category: "الفئة",
+        level: "المستوى",
+        register: "التسجيل",
+        registrationSuccess: "تم التسجيل بنجاح",
+        registrationSuccessDesc: "لقد تم تسجيلك بنجاح في ورشة العمل",
+        registrationFailed: "فشل التسجيل",
+        registrationFailedDesc: "لا يمكن التسجيل في ورشة العمل. يرجى المحاولة مرة أخرى.",
+        loginToRegister: "يرجى تسجيل الدخول للتسجيل في ورش العمل",
+        duration: "المدة",
+        materials: "المواد",
+        instructor: "المدرب",
+        participants: "المشاركون",
+        price: "السعر",
+        date: "التاريخ",
+        time: "الوقت",
+        location: "المكان",
+        online: "عبر الإنترنت",
+        inPerson: "حضوري",
+        beginner: "مبتدئ",
+        intermediate: "متوسط",
+        advanced: "متقدم",
+        all: "جميع المستويات",
+        loading: "جاري تحميل ورش العمل...",
+        search: "البحث عن ورش العمل...",
+        filter: "تصفية",
+        categories: {
+          painting: "الرسم",
+          sculpture: "النحت",
+          drawing: "الرسم",
+          digital_art: "الفن الرقمي",
+          photography: "التصوير"
+        },
+        skillLevel: {
+          all: "جميع المستويات",
+          beginner: "مبتدئ",
+          intermediate: "متوسط",
+          advanced: "متقدم"
         }
       }
     }

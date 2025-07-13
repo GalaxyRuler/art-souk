@@ -1,0 +1,195 @@
+Here's a targeted prompt to fix the Events page and ensure all pages have proper translations:
+
+```
+Fix translation keys showing on the Events page and verify ALL pages in the application have working translations.
+
+COMPLETE PAGE AUDIT:
+
+1. CHECK ALL MAIN PAGES:
+   Go through EACH page file and verify translations:
+   - client/src/pages/Home.tsx
+   - client/src/pages/Events.tsx ⚠️ (reported issue)
+   - client/src/pages/Workshops.tsx
+   - client/src/pages/Artworks.tsx
+   - client/src/pages/ArtworkDetail.tsx
+   - client/src/pages/Artists.tsx
+   - client/src/pages/ArtistProfile.tsx
+   - client/src/pages/Galleries.tsx
+   - client/src/pages/GalleryProfile.tsx
+   - client/src/pages/Auctions.tsx
+   - client/src/pages/AuctionDetail.tsx
+   - client/src/pages/CommissionRequests.tsx
+   - client/src/pages/CommissionDetail.tsx
+   - client/src/pages/Dashboard.tsx
+   - client/src/pages/CollectorDashboard.tsx
+   - client/src/pages/SellerDashboard.tsx
+   - client/src/pages/Analytics.tsx
+   - client/src/pages/UserPreferences.tsx
+   - client/src/pages/Search.tsx
+   - client/src/pages/Collections.tsx
+   - client/src/pages/CollectionDetail.tsx
+   - client/src/pages/Articles.tsx
+   - client/src/pages/ArticleDetail.tsx
+   - client/src/pages/VirtualExhibitions.tsx
+   - client/src/pages/VirtualExhibitionDetail.tsx
+   - client/src/pages/RoleSelection.tsx
+
+2. SPECIFICALLY FIX EVENTS PAGE:
+   In client/src/pages/Events.tsx:
+   - List ALL t() calls used in this file
+   - Check each key exists in i18n.ts resources
+   - Add any missing keys like:
+     * events.title
+     * events.subtitle
+     * events.featured
+     * events.upcoming
+     * events.categories.*
+     * events.filters.*
+     * events.noResults
+     * events.viewDetails
+     * events.register
+     * events.free
+     * events.paid
+
+3. ADD COMPREHENSIVE EVENTS TRANSLATIONS:
+   In client/src/lib/i18n.ts, add to resources:
+   ```typescript
+   events: {
+     title: "Art Events",
+     subtitle: "Discover exhibitions, talks, and networking opportunities",
+     featured: "Featured Events",
+     upcoming: "Upcoming Events",
+     allEvents: "All Events",
+     categories: {
+       all: "All Categories",
+       exhibition: "Exhibition",
+       talk: "Talk",
+       workshop: "Workshop",
+       networking: "Networking",
+       auction: "Auction",
+       opening: "Opening"
+     },
+     filters: {
+       date: "Date",
+       category: "Category",
+       location: "Location",
+       price: "Price",
+       online: "Online Events",
+       inPerson: "In-Person Events"
+     },
+     status: {
+       upcoming: "Upcoming",
+       ongoing: "Ongoing",
+       completed: "Completed",
+       cancelled: "Cancelled"
+     },
+     details: {
+       about: "About This Event",
+       date: "Date & Time",
+       location: "Location",
+       organizer: "Organized by",
+       price: "Price",
+       free: "Free",
+       register: "Register",
+       registered: "Registered",
+       attendees: "Attendees",
+       maxAttendees: "Max Attendees",
+       description: "Description",
+       agenda: "Agenda",
+       speakers: "Speakers"
+     },
+     noResults: "No events found",
+     viewDetails: "View Details",
+     register: "Register Now",
+     share: "Share Event"
+   }
+   ```
+
+4. CHECK WORKSHOPS PAGE TOO:
+   Since Events and Workshops are similar, ensure Workshops has all keys:
+   ```typescript
+   workshops: {
+     title: "Art Workshops",
+     subtitle: "Learn from master artists and develop your skills",
+     featured: "Featured Workshops",
+     upcoming: "Upcoming Workshops",
+     skillLevels: {
+       all: "All Levels",
+       beginner: "Beginner",
+       intermediate: "Intermediate", 
+       advanced: "Advanced"
+     },
+     // ... similar structure to events
+   }
+   ```
+
+5. TEST NAVIGATION TO ALL PAGES:
+   - Click through EVERY menu item
+   - Visit EVERY page type
+   - Note ANY page showing translation keys
+   - Fix them immediately
+
+6. ADD MISSING PAGE TITLES:
+   Ensure these exist in resources:
+   ```typescript
+   pageTitle: {
+     home: "Home",
+     artworks: "Browse Artworks",
+     artists: "Discover Artists",
+     galleries: "Art Galleries",
+     auctions: "Live Auctions",
+     events: "Art Events",
+     workshops: "Art Workshops",
+     commissions: "Commission Requests",
+     dashboard: "My Dashboard",
+     profile: "Profile",
+     settings: "Settings"
+   }
+   ```
+
+7. CREATE A PAGE CHECKLIST:
+   Create file: pages-translation-check.txt
+   ```
+   ✅ Home - All translations working
+   ❌ Events - Missing keys: [list them]
+   ✅ Workshops - All translations working
+   ... check every page
+   ```
+
+8. QUICK FIX FOR ANY REMAINING KEYS:
+   For any page still showing keys, add this temporary fix at the top:
+   ```typescript
+   const { t, i18n } = useTranslation();
+   
+   // Debug helper
+   useEffect(() => {
+     console.log(`${PageName} page - Language:`, i18n.language);
+     console.log(`${PageName} page - Sample key:`, t('events.title'));
+   }, [i18n.language]);
+   ```
+
+9. VERIFY ARABIC TRANSLATIONS:
+   For every English key added, ensure Arabic exists:
+   ```typescript
+   ar: {
+     events: {
+       title: "الفعاليات الفنية",
+       subtitle: "اكتشف المعارض والمحاضرات وفرص التواصل",
+       // ... etc
+     }
+   }
+   ```
+
+10. FINAL VERIFICATION:
+    - Visit /events page
+    - Confirm no translation keys visible
+    - Switch to Arabic and verify
+    - Test all interactive elements
+
+Report back with:
+1. Confirmation that Events page is fixed
+2. List of any other pages that had issues
+3. Total number of missing keys that were added
+```
+
+This will ensure the Events page and all other pages display proper translations instead of keys.
