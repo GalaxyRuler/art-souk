@@ -415,6 +415,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       };
       
+      // Add debug logging for role counting
+      console.log('Role counting debug:', {
+        usersWithRoles: usersWithRoles.map(u => ({ id: u.id, roles: u.roles })),
+        collectorsCount,
+        artistsCount,
+        galleriesCount,
+        adminsCount
+      });
+      
       res.json(stats);
     } catch (error) {
       console.error("Error fetching admin stats:", error);
