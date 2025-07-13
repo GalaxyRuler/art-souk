@@ -124,7 +124,7 @@ export default function AdminDashboard() {
   const { data: stats, isLoading: statsLoading, error: statsError } = useQuery({
     queryKey: ['/api/admin/stats'],
     queryFn: () => apiRequest('/api/admin/stats'),
-    enabled: isAdmin,
+    enabled: isAdmin && !!user,
     retry: 1,
     refetchOnWindowFocus: false,
   });
@@ -133,7 +133,7 @@ export default function AdminDashboard() {
   const { data: usersData, isLoading: usersLoading, error: usersError } = useQuery({
     queryKey: ['/api/admin/users'],
     queryFn: () => apiRequest('/api/admin/users'),
-    enabled: isAdmin,
+    enabled: isAdmin && !!user,
     retry: 1,
     refetchOnWindowFocus: false,
   });
@@ -142,7 +142,7 @@ export default function AdminDashboard() {
   const { data: kycDocumentsData, isLoading: kycDocumentsLoading, error: kycError } = useQuery({
     queryKey: ['/api/admin/kyc-documents'],
     queryFn: () => apiRequest('/api/admin/kyc-documents'),
-    enabled: isAdmin,
+    enabled: isAdmin && !!user,
     retry: 1,
     refetchOnWindowFocus: false,
   });
@@ -219,7 +219,7 @@ export default function AdminDashboard() {
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600 dark:text-gray-300">Loading...</p>
+              <p className="mt-4 text-gray-600 dark:text-gray-300">{t('admin.loadingData')}</p>
             </div>
           </div>
         </div>

@@ -585,7 +585,7 @@ export default function Dashboard() {
                           Customize your interests for personalized recommendations
                         </p>
                       </div>
-                      <Link href="/preferences">
+                      <Link to="/preferences">
                         <Button variant="outline" size="sm">
                           Configure
                         </Button>
@@ -601,7 +601,7 @@ export default function Dashboard() {
                           Receive updates about new artworks and auctions
                         </p>
                       </div>
-                      <Link href="/preferences">
+                      <Link to="/preferences">
                         <Button variant="outline" size="sm">
                           Configure
                         </Button>
@@ -617,7 +617,7 @@ export default function Dashboard() {
                           Stay updated with art market news and insights
                         </p>
                       </div>
-                      <Link href="/preferences">
+                      <Link to="/preferences">
                         <Button variant="outline" size="sm">
                           Configure
                         </Button>
@@ -633,7 +633,7 @@ export default function Dashboard() {
                           Manage your data and privacy preferences
                         </p>
                       </div>
-                      <Link href="/preferences">
+                      <Link to="/preferences">
                         <Button variant="outline" size="sm">
                           Manage
                         </Button>
