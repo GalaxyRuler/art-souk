@@ -450,9 +450,9 @@ const MarketProofSection = () => {
                 source="Louvre Abu Dhabi reports"
               />
               <MarketFactCard 
-                stat="$2.5B by 2026"
-                description="Projected value of artwork imports/exports"
-                source="Late 2023 market projections"
+                stat="$46M by 2026"
+                description="Saudi Arabia's projected art exports"
+                source="Latest market projections"
               />
             </div>
 
