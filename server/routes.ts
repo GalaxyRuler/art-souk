@@ -327,7 +327,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Test admin route directly (bypassing router issues)
-  app.get('/api/admin/stats', async (req: any, res) => {
+  app.get('/api/admin/stats', isAuthenticated, async (req: any, res) => {
     try {
       console.log('Direct admin route called:', {
         sessionID: req.sessionID,
@@ -336,8 +336,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         passportUser: req.user
       });
       
-      // Force use the same session logic as working routes
-      const userId = '44377424'; // Hardcoded for testing
+      // Use proper authentication from middleware
+      const userId = req.user?.claims?.sub || req.user?.id || req.session?.user?.id;
+      
+      if (!userId) {
+        return res.status(401).json({ message: 'Authentication required' });
+      }
+      
       const user = await storage.getUser(userId);
       
       if (!user) {
