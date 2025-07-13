@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -32,7 +32,9 @@ import {
   Tag,
   Star,
   Save,
-  Loader2
+  Loader2,
+  Users,
+  Brush
 } from "lucide-react";
 
 interface Artwork {
@@ -74,6 +76,13 @@ interface Gallery {
   nameAr?: string;
 }
 
+interface ArtworkManagementContentProps {
+  mode: 'artist' | 'gallery';
+  title: string;
+  description: string;
+  buttonText: string;
+}
+
 export default function ArtworkManagement() {
   const { t } = useTranslation();
   const { user } = useAuth();
@@ -86,6 +95,7 @@ export default function ArtworkManagement() {
   const [editingArtwork, setEditingArtwork] = useState<Artwork | null>(null);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [uploadingImages, setUploadingImages] = useState(false);
+  const [activeRole, setActiveRole] = useState<'artist' | 'gallery'>('artist');
   const [userType, setUserType] = useState<'artist' | 'gallery' | null>(null);
   const [userProfile, setUserProfile] = useState<Artist | Gallery | null>(null);
 
@@ -382,6 +392,11 @@ export default function ArtworkManagement() {
     );
   }
 
+  // Check if user has both artist and gallery roles
+  const hasArtistRole = userRoles?.roles?.includes('artist');
+  const hasGalleryRole = userRoles?.roles?.includes('gallery');
+  const hasBothRoles = hasArtistRole && hasGalleryRole;
+
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -391,8 +406,87 @@ export default function ArtworkManagement() {
               {t("artworks.management")}
             </h1>
             <p className="text-muted-foreground">
-              {userType === 'artist' ? t("artworks.artistDesc") : t("artworks.galleryDesc")}
+              {hasBothRoles 
+                ? "Manage your artworks as an Artist or Gallery Owner"
+                : userType === 'artist' 
+                  ? t("artworks.artistDesc") 
+                  : t("artworks.galleryDesc")
+              }
             </p>
+          </div>
+        </div>
+
+        {hasBothRoles ? (
+          <Tabs value={activeRole} onValueChange={(value) => setActiveRole(value as 'artist' | 'gallery')} className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-8">
+              <TabsTrigger value="artist" className="flex items-center gap-2">
+                <Brush className="h-4 w-4" />
+                Artist Mode
+              </TabsTrigger>
+              <TabsTrigger value="gallery" className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                Gallery Mode
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="artist" className="space-y-6">
+              <ArtworkManagementContent 
+                mode="artist"
+                title="🎨 Manage Your Creative Works"
+                description="Upload and manage artworks you've created as an artist"
+                buttonText="Add Your Artwork"
+              />
+            </TabsContent>
+            
+            <TabsContent value="gallery" className="space-y-6">
+              <ArtworkManagementContent 
+                mode="gallery"
+                title="🏛️ Manage Gallery Collection"
+                description="Manage artworks from artists represented by your gallery"
+                buttonText="Add Gallery Artwork"
+              />
+            </TabsContent>
+          </Tabs>
+        ) : (
+          <ArtworkManagementContent 
+            mode={userType || 'artist'}
+            title={userType === 'artist' ? "🎨 Manage Your Creative Works" : "🏛️ Manage Gallery Collection"}
+            description={userType === 'artist' 
+              ? "Upload and manage artworks you've created as an artist"
+              : "Manage artworks from artists represented by your gallery"
+            }
+            buttonText={userType === 'artist' ? "Add Your Artwork" : "Add Gallery Artwork"}
+          />
+        )}
+      </div>
+    </div>
+  );
+
+  // ArtworkManagementContent component for reusable content
+  function ArtworkManagementContent({ mode, title, description, buttonText }: ArtworkManagementContentProps) {
+    return (
+      <div>
+        <div className={cn("flex items-center justify-between mb-8", isRTL && "flex-row-reverse")}>
+          <div>
+            <h2 className="text-2xl font-bold text-primary mb-2">
+              {title}
+            </h2>
+            <p className="text-muted-foreground">
+              {description}
+            </p>
+            <div className="mt-3 flex items-center gap-2 text-sm">
+              {mode === 'artist' ? (
+                <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 rounded-full">
+                  <Brush className="h-4 w-4" />
+                  <span className="font-medium">Artist Mode</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 px-3 py-1 bg-purple-50 text-purple-700 rounded-full">
+                  <Users className="h-4 w-4" />
+                  <span className="font-medium">Gallery Mode</span>
+                </div>
+              )}
+            </div>
           </div>
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
@@ -402,12 +496,12 @@ export default function ArtworkManagement() {
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-lg font-semibold shadow-lg"
               >
                 <Plus className="h-5 w-5 mr-2" />
-                {t("artworks.addArtwork")}
+                {buttonText}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>{t("artworks.addArtwork")}</DialogTitle>
+                <DialogTitle>{buttonText}</DialogTitle>
               </DialogHeader>
               <ArtworkForm
                 formData={formData}
@@ -454,7 +548,7 @@ export default function ArtworkManagement() {
                   className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold shadow-lg"
                 >
                   <Plus className="h-5 w-5 mr-2" />
-                  {t("artworks.addFirst")}
+                  {buttonText}
                 </Button>
               </CardContent>
             </Card>
@@ -548,8 +642,8 @@ export default function ArtworkManagement() {
           </DialogContent>
         </Dialog>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 // Artwork Form Component
