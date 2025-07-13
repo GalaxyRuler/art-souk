@@ -248,6 +248,8 @@ const resources = {
           title: "No Auctions",
           description: "There are no auctions available"
         },
+        minimumBid: "Minimum Bid",
+        biddingIncrements: "Bidding Increments",
         timeRemaining: "Time Remaining"
       },
       artist: {
@@ -898,6 +900,8 @@ const resources = {
           title: "لا توجد مزادات",
           description: "لا توجد مزادات متاحة"
         },
+        minimumBid: "الحد الأدنى للمزايدة",
+        biddingIncrements: "زيادات المزايدة",
         timeRemaining: "الوقت المتبقي"
       },
       artist: {
