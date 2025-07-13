@@ -78,9 +78,6 @@ export default function Dashboard() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-
-  // Debug: Log user object to see what's actually being returned
-  console.log('Dashboard user object:', user);
   const [isEditing, setIsEditing] = useState(false);
   const [profileForm, setProfileForm] = useState({
     firstName: '',
@@ -412,16 +409,7 @@ export default function Dashboard() {
                     </Button>
                   </Link>
                 )}
-                
-                {/* Debug: Show user info */}
-                {user && (
-                  <div className="mt-4 p-2 bg-gray-100 text-xs rounded">
-                    <div>User ID: {user.id}</div>
-                    <div>Roles: {JSON.stringify(user.roles)}</div>
-                    <div>Has artist role: {user.roles?.includes('artist') ? 'Yes' : 'No'}</div>
-                    <div>Has gallery role: {user.roles?.includes('gallery') ? 'Yes' : 'No'}</div>
-                  </div>
-                )}
+
               </CardContent>
             </Card>
           </div>

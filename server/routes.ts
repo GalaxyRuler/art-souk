@@ -198,17 +198,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Auth routes (without aggressive rate limiting for normal usage)
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  app.get('/api/auth/user', async (req: any, res) => {
     try {
-      // Use the same authentication logic as other protected endpoints
-      const userId = req.user.claims.sub;
+      // Use the same authentication logic as session debugging middleware
+      const userId = req.session?.user?.id;
       
-      console.log('Auth user check (with isAuthenticated middleware):', {
+      console.log('Auth user check (direct session access):', {
         userId,
-        hasUser: !!req.user,
-        userClaims: req.user?.claims,
-        sessionID: req.sessionID
+        hasSession: !!req.session,
+        hasSessionUser: !!req.session?.user,
+        sessionID: req.sessionID,
+        sessionKeys: req.session ? Object.keys(req.session) : []
       });
+      
+      // If no user found in session, return null (not authenticated)
+      if (!userId) {
+        console.log('No user ID found in session - user is not authenticated');
+        return res.json(null);
+      }
       
       const user = await storage.getUser(userId);
       
