@@ -200,25 +200,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes (without aggressive rate limiting for normal usage)
   app.get('/api/auth/user', async (req: any, res) => {
     try {
-      // Check for authenticated user in session or passport
-      let userId = req.user?.claims?.sub || req.user?.id || req.session?.user?.id;
-      
-      // Also check passport user for Replit auth
-      if (!userId && req.user && req.user.id) {
-        userId = req.user.id;
-      }
-      
-      // Check session for user directly
-      if (!userId && req.session && req.session.passport && req.session.passport.user) {
-        userId = req.session.passport.user;
-      }
+      // Use the same logic as session debugging middleware
+      const userId = req.session?.user?.id;
       
       console.log('Auth user check:', {
         userId,
-        hasUser: !!req.user,
         hasSession: !!req.session,
+        hasSessionUser: !!req.session?.user,
         sessionKeys: req.session ? Object.keys(req.session) : [],
-        passportUser: req.session?.passport?.user
+        userEmail: req.session?.user?.email
       });
       
       // If no user found in session, return null (not authenticated)
