@@ -699,6 +699,51 @@ const resources = {
         Portrait: "Portrait",
         other: "Other"
       },
+      dashboard: {
+        title: "Dashboard", 
+        welcomeBack: "Welcome Back",
+        profile: {
+          edit: "Edit Profile",
+          bio: "Bio",
+          location: "Location",
+          website: "Website",
+          instagram: "Instagram",
+          twitter: "Twitter",
+          facebook: "Facebook",
+          save: "Save Changes",
+          cancel: "Cancel",
+          updated: "Profile Updated",
+          updatedDesc: "Your profile has been updated successfully"
+        },
+        quickStats: {
+          title: "Quick Stats",
+          favorites: "Favorites",
+          inquiries: "Inquiries", 
+          views: "Profile Views"
+        },
+        viewAnalytics: "View Analytics",
+        collectorDashboard: "Collector Dashboard",
+        sellerDashboard: "Seller Dashboard",
+        artworkManagement: "Artwork Management",
+        favorites: {
+          title: "My Favorites",
+          empty: "No favorites yet",
+          emptyDesc: "Save artworks you love to see them here"
+        },
+        inquiries: {
+          title: "My Inquiries", 
+          empty: "No inquiries yet",
+          emptyDesc: "Your artwork inquiries will appear here"
+        },
+        settings: {
+          title: "Settings",
+          preferences: "Preferences", 
+          notifications: "Notifications",
+          privacy: "Privacy",
+          language: "Language",
+          theme: "Theme"
+        }
+      },
       admin: {
         dashboard: "Admin Dashboard",
         dashboardDescription: "Manage platform settings and content",
@@ -1488,6 +1533,51 @@ const resources = {
           Talk: "محاضرة",
           Technology: "التكنولوجيا",
           "Traditional Arts": "الفنون التقليدية"
+        }
+      },
+      dashboard: {
+        title: "لوحة التحكم", 
+        welcomeBack: "مرحباً بعودتك",
+        profile: {
+          edit: "تعديل الملف الشخصي",
+          bio: "السيرة الذاتية",
+          location: "الموقع",
+          website: "الموقع الإلكتروني",
+          instagram: "إنستجرام",
+          twitter: "تويتر",
+          facebook: "فيسبوك",
+          save: "حفظ التغييرات",
+          cancel: "إلغاء",
+          updated: "تم تحديث الملف الشخصي",
+          updatedDesc: "تم تحديث ملفك الشخصي بنجاح"
+        },
+        quickStats: {
+          title: "إحصائيات سريعة",
+          favorites: "المفضلة",
+          inquiries: "الاستفسارات", 
+          views: "مشاهدات الملف الشخصي"
+        },
+        viewAnalytics: "عرض التحليلات",
+        collectorDashboard: "لوحة المجمع",
+        sellerDashboard: "لوحة البائع",
+        artworkManagement: "إدارة الأعمال الفنية",
+        favorites: {
+          title: "مفضلاتي",
+          empty: "لا توجد مفضلات بعد",
+          emptyDesc: "احفظ الأعمال الفنية التي تحبها لرؤيتها هنا"
+        },
+        inquiries: {
+          title: "استفساراتي", 
+          empty: "لا توجد استفسارات بعد",
+          emptyDesc: "ستظهر استفساراتك حول الأعمال الفنية هنا"
+        },
+        settings: {
+          title: "الإعدادات",
+          preferences: "التفضيلات", 
+          notifications: "الإشعارات",
+          privacy: "الخصوصية",
+          language: "اللغة",
+          theme: "السمة"
         }
       },
       workshops: {
