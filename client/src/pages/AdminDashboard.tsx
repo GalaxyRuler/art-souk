@@ -98,7 +98,16 @@ export default function AdminDashboard() {
   });
 
   // Check if user needs to become admin first
-  const isAdmin = user?.roles?.includes('admin');
+  const isAdmin = user?.roles?.includes('admin') || user?.role === 'admin';
+  
+  // Debug logging to see what's happening
+  console.log('Admin Dashboard Debug:', {
+    user,
+    userRoles: user?.roles,
+    userRole: user?.role,
+    isAdmin,
+    hasUser: !!user
+  });
 
   // Admin setup mutation
   const adminSetupMutation = useMutation({
