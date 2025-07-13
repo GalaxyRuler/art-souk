@@ -271,7 +271,20 @@ const resources = {
         latest: "Latest",
         popular: "Popular",
         alphabetical: "Alphabetical",
-        viewAll: "View All Artists"
+        viewAll: "View All Artists",
+        search: {
+          placeholder: "Search artists..."
+        },
+        filters: {
+          nationality: "Nationality",
+          allCountries: "All Countries"
+        },
+        sort: {
+          latest: "Latest",
+          name: "Name",
+          featured: "Featured"
+        },
+        results: "Results"
       },
       galleries: {
         title: "Galleries", 
@@ -413,6 +426,14 @@ const resources = {
         dimensions: "Dimensions",
         description: "Description",
         requirements: "Requirements"
+      },
+      countries: {
+        saudiArabia: "Saudi Arabia",
+        uae: "United Arab Emirates",
+        kuwait: "Kuwait",
+        qatar: "Qatar",
+        bahrain: "Bahrain",
+        oman: "Oman"
       },
       categories: {
         painting: "Painting",
@@ -783,6 +804,14 @@ const resources = {
         calligraphy: "خط عربي",
         other: "أخرى"
       },
+      countries: {
+        saudiArabia: "المملكة العربية السعودية",
+        uae: "الإمارات العربية المتحدة",
+        kuwait: "الكويت",
+        qatar: "قطر",
+        bahrain: "البحرين",
+        oman: "عمان"
+      },
       artists: {
         title: "الفنانون",
         subtitle: "اكتشف الفنانين الموهوبين من منطقة دول الخليج",
@@ -794,7 +823,20 @@ const resources = {
         latest: "الأحدث",
         popular: "الأكثر شعبية",
         alphabetical: "أبجدياً",
-        viewAll: "عرض جميع الفنانين"
+        viewAll: "عرض جميع الفنانين",
+        search: {
+          placeholder: "البحث عن الفنانين..."
+        },
+        filters: {
+          nationality: "الجنسية",
+          allCountries: "جميع البلدان"
+        },
+        sort: {
+          latest: "الأحدث",
+          name: "الاسم",
+          featured: "مميز"
+        },
+        results: "النتائج"
       },
       artwork: {
         status: {
