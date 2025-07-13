@@ -1,4 +1,17 @@
 {
+  "site": {
+    "name": "آرت سوق",
+    "tagline": "Art Souk"
+  },
+  "nav": {
+    "artists": "الفنانين",
+    "galleries": "المعارض",
+    "auctions": "المزادات",
+    "workshops": "ورش العمل",
+    "events": "الفعاليات",
+    "commissions": "الطلبات الخاصة",
+    "dashboard": "لوحة التحكم"
+  },
   "achievements": {
     "achievementPoints": "نقاط الإنجاز",
     "artistNotFound": "الفنان غير موجود",
