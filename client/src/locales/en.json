@@ -1,11 +1,4 @@
 {
-  "common": {
-    "siteName": "Art Souk",
-    "siteNameAr": "آرت سوق",
-    "allCategories": "All Categories",
-    "allStatus": "All Status",
-    "anonymous": "Anonymous"
-  },
   "site": {
     "name": "Art Souk",
     "tagline": "Saudi & GCC Art"
@@ -542,6 +535,8 @@
     "requestNotFound": "Commission request not found"
   },
   "common": {
+    "siteName": "Art Souk",
+    "siteNameAr": "آرت سوق",
     "allCategories": "All Categories",
     "allStatus": "All Status",
     "anonymous": "Anonymous"
