@@ -109,6 +109,12 @@ export default function AdminDashboard() {
     hasUser: !!user
   });
 
+  // Clear cache on mount for fresh data
+  const clearCacheAndRefetch = () => {
+    queryClient.invalidateQueries({ queryKey: ['/api/admin/stats'] });
+    queryClient.removeQueries({ queryKey: ['/api/admin/stats'] });
+  };
+
   // Admin setup mutation
   const adminSetupMutation = useMutation({
     mutationFn: () => apiRequest('/api/admin/setup', { method: 'POST' }),
@@ -131,11 +137,13 @@ export default function AdminDashboard() {
 
   // Fetch admin statistics (only if user is admin)
   const { data: stats, isLoading: statsLoading, error: statsError } = useQuery({
-    queryKey: ['/api/admin/stats'],
-    queryFn: () => apiRequest('/api/admin/stats'),
+    queryKey: ['/api/admin/stats', Date.now()],
+    queryFn: () => apiRequest(`/api/admin/stats?_t=${Date.now()}`),
     enabled: isAdmin && !!user,
     retry: 1,
     refetchOnWindowFocus: false,
+    staleTime: 0, // Always treat as stale
+    gcTime: 0, // Don't cache (was cacheTime in v4)
   });
 
   // Fetch users (only if user is admin)
@@ -202,6 +210,16 @@ export default function AdminDashboard() {
 
   const users = usersData?.users || [];
   const kycDocuments = kycDocumentsData?.documents || [];
+
+  // Debug logging for stats data
+  console.log('Admin Stats Data:', {
+    stats,
+    statsLoading,
+    statsError,
+    overview: stats?.overview,
+    usersByRole: stats?.usersByRole,
+    collectorsCount: stats?.usersByRole?.collectors
+  });
 
   const overviewStats = stats?.overview || {
     totalUsers: 0,

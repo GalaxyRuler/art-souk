@@ -424,6 +424,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         adminsCount
       });
       
+      // Disable caching for admin stats to ensure fresh data
+      res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.set('Pragma', 'no-cache');
+      res.set('Expires', '0');
+      
       res.json(stats);
     } catch (error) {
       console.error("Error fetching admin stats:", error);
