@@ -154,8 +154,8 @@ const CompetitiveLandingHero = () => {
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8 max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
             <div>
-              <div className="text-2xl font-bold text-amber-400">$27M</div>
-              <div className="text-sm text-gray-300">Current Saudi Market</div>
+              <div className="text-2xl font-bold text-amber-400">$46M</div>
+              <div className="text-sm text-gray-300">Saudi Art Exports by 2026</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-amber-400">$2.5B</div>
