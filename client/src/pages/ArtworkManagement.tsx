@@ -396,8 +396,12 @@ export default function ArtworkManagement() {
           </div>
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
-              <Button onClick={() => resetForm()}>
-                <Plus className="h-4 w-4 mr-2" />
+              <Button 
+                onClick={() => resetForm()} 
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-lg font-semibold shadow-lg"
+              >
+                <Plus className="h-5 w-5 mr-2" />
                 {t("artworks.addArtwork")}
               </Button>
             </DialogTrigger>
@@ -444,8 +448,12 @@ export default function ArtworkManagement() {
                 <p className="text-muted-foreground mb-4">
                   {t("artworks.noArtworksDesc")}
                 </p>
-                <Button onClick={() => setIsAddDialogOpen(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
+                <Button 
+                  onClick={() => setIsAddDialogOpen(true)}
+                  size="lg"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold shadow-lg"
+                >
+                  <Plus className="h-5 w-5 mr-2" />
                   {t("artworks.addFirst")}
                 </Button>
               </CardContent>
@@ -572,12 +580,23 @@ function ArtworkForm({
 }) {
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
-  const [activeTab, setActiveTab] = useState("basic");
+  const [activeTab, setActiveTab] = useState("images");
 
   return (
     <form onSubmit={onSubmit} className="space-y-6">
       <div className="w-full">
         <div className="flex space-x-1 rounded-md bg-muted p-1">
+          <button
+            type="button"
+            onClick={() => setActiveTab("images")}
+            className={`flex-1 rounded-sm px-3 py-1.5 text-sm font-medium transition-all ${
+              activeTab === "images"
+                ? "bg-blue-600 text-white shadow-lg"
+                : "hover:bg-muted hover:text-foreground"
+            }`}
+          >
+            📸 {t("artworks.images")}
+          </button>
           <button
             type="button"
             onClick={() => setActiveTab("basic")}
@@ -599,17 +618,6 @@ function ArtworkForm({
             }`}
           >
             {t("artworks.details")}
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab("images")}
-            className={`flex-1 rounded-sm px-3 py-1.5 text-sm font-medium transition-all ${
-              activeTab === "images"
-                ? "bg-background text-foreground shadow-sm"
-                : "hover:bg-muted hover:text-foreground"
-            }`}
-          >
-            {t("artworks.images")}
           </button>
         </div>
 

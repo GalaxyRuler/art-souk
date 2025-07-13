@@ -75,6 +75,8 @@ function Router() {
       <Switch>
         {/* Home route - different for authenticated vs unauthenticated */}
         <Route path="/" component={isAuthenticated ? Home : Landing} />
+        <Route path="/home" component={Home} />
+        <Route path="/landing" component={Landing} />
         
         {/* Public routes - accessible to all users */}
         <Route path="/artists" component={Artists} />
