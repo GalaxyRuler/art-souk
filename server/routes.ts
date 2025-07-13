@@ -18,6 +18,7 @@ import { memoryMonitor, memoryTrackingMiddleware } from "./middleware/memoryMoni
 import { performanceMiddleware, performanceMonitor } from "./middleware/performanceMonitor";
 import { cacheInstances, optimizedCacheMiddleware, cacheKeys, getCacheStats } from "./middleware/cacheOptimization";
 import { databaseOptimizer } from "./middleware/databaseOptimization";
+import { sessionDebugMiddleware, sessionRecoveryMiddleware } from "./middleware/sessionDebug";
 import { 
   insertArtistSchema, 
   insertGallerySchema, 
@@ -75,6 +76,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware must be first
   await setupAuth(app);
   
+  // Apply session debugging and recovery middleware
+  app.use(sessionDebugMiddleware);
+  app.use(sessionRecoveryMiddleware);
+  
   // Apply security middleware stack
   app.use(securityMiddlewareStack);
 
@@ -85,15 +90,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Apply lifecycle tracking middleware
   app.use(trackStageMiddleware);
 
+  // Debug session endpoint
+  app.get('/api/debug/session', (req, res) => {
+    res.json({
+      sessionID: req.sessionID,
+      hasSession: !!req.session,
+      sessionKeys: req.session ? Object.keys(req.session) : [],
+      user: req.session?.user || null,
+      passportUser: req.user || null,
+      isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false,
+      cookie: req.session?.cookie || null
+    });
+  });
+
   // Auth routes (without aggressive rate limiting for normal usage)
   app.get('/api/auth/user', async (req: any, res) => {
     try {
       // Check if user is authenticated
-      if (!req.user || !req.user.claims || !req.user.claims.sub) {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
         return res.json(null); // Return null for unauthenticated users
       }
       
-      const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
       res.json(user);
     } catch (error) {

@@ -115,7 +115,39 @@ export async function setupAuth(app: Express) {
     passport.authenticate(`replitauth:${req.hostname}`, {
       successReturnToOrRedirect: "/auth/success",
       failureRedirect: "/api/login",
-    })(req, res, next);
+    })(req, res, (err) => {
+      if (err) {
+        console.error('❌ Auth callback error:', err);
+        return next(err);
+      }
+      
+      // Ensure session is properly set
+      if (req.user) {
+        const passportUser = req.user as any;
+        req.session.user = {
+          id: passportUser.claims?.sub,
+          email: passportUser.claims?.email,
+          firstName: passportUser.claims?.first_name,
+          lastName: passportUser.claims?.last_name,
+          roles: [] // Will be populated from database
+        };
+        
+        // Force session save
+        req.session.save((saveErr) => {
+          if (saveErr) {
+            console.error('❌ Session save error:', saveErr);
+          } else {
+            console.log('✅ Session saved successfully:', {
+              sessionId: req.sessionID,
+              userId: req.session.user?.id
+            });
+          }
+          next();
+        });
+      } else {
+        next();
+      }
+    });
   });
 
   app.get("/api/logout", (req, res) => {
@@ -131,29 +163,89 @@ export async function setupAuth(app: Express) {
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
-  const user = req.user as any;
-
-  if (!req.isAuthenticated() || !user || !user.expires_at) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  const now = Math.floor(Date.now() / 1000);
-  
-  if (now <= user.expires_at) {
-    return next();
-  }
-
-  const refreshToken = user.refresh_token;
-  if (!refreshToken) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
   try {
-    const config = await getOidcConfig();
-    const tokenResponse = await client.refreshTokenGrant(config, refreshToken);
-    updateUserSession(user, tokenResponse);
-    return next();
+    // Multiple ways to check authentication
+    const sessionUser = req.session?.user;
+    const passportUser = req.user as any;
+    const userId = sessionUser?.id || passportUser?.claims?.sub;
+    const userEmail = sessionUser?.email || passportUser?.claims?.email;
+
+    console.log('🔍 Auth check:', {
+      hasSession: !!req.session,
+      hasSessionUser: !!sessionUser,
+      hasPassportUser: !!passportUser,
+      isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false,
+      userId: userId,
+      userEmail: userEmail,
+      requestMethod: req.method,
+      requestPath: req.path
+    });
+
+    // Check for user data in multiple places
+    if (!userId && !userEmail) {
+      console.log('❌ No valid user identification found');
+      return res.status(401).json({
+        message: 'Authentication required'
+      });
+    }
+
+    // If we have passport user but no session user, populate session
+    if (!sessionUser && passportUser?.claims) {
+      req.session.user = {
+        id: passportUser.claims.sub,
+        email: passportUser.claims.email,
+        firstName: passportUser.claims.first_name,
+        lastName: passportUser.claims.last_name,
+        roles: [] // Will be populated from database
+      };
+      
+      // Force session save to ensure persistence
+      req.session.save((err) => {
+        if (err) {
+          console.error('❌ Session save error during auth:', err);
+        }
+      });
+    }
+
+    // Ensure req.user is populated for downstream middleware
+    if (!req.user && sessionUser) {
+      req.user = sessionUser;
+    } else if (!req.user && passportUser?.claims) {
+      req.user = {
+        id: passportUser.claims.sub,
+        email: passportUser.claims.email,
+        firstName: passportUser.claims.first_name,
+        lastName: passportUser.claims.last_name,
+        roles: []
+      };
+    }
+
+    // For passport users, check token expiration
+    if (passportUser?.expires_at) {
+      const now = Math.floor(Date.now() / 1000);
+      
+      if (now > passportUser.expires_at) {
+        const refreshToken = passportUser.refresh_token;
+        if (!refreshToken) {
+          return res.status(401).json({ message: "Session expired" });
+        }
+
+        try {
+          const config = await getOidcConfig();
+          const tokenResponse = await client.refreshTokenGrant(config, refreshToken);
+          updateUserSession(passportUser, tokenResponse);
+        } catch (error) {
+          return res.status(401).json({ message: "Session expired" });
+        }
+      }
+    }
+
+    console.log('✅ Authentication successful for user:', req.user?.id);
+    next();
   } catch (error) {
-    return res.status(401).json({ message: "Unauthorized" });
+    console.error('🚨 Auth middleware error:', error);
+    res.status(500).json({
+      message: 'Authentication system error'
+    });
   }
 };

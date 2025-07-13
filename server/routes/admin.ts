@@ -23,11 +23,13 @@ const adminRouter = Router();
 // Middleware to ensure user is admin
 const requireAdmin = async (req: any, res: any, next: any) => {
   try {
-    if (!req.user || !req.user.claims || !req.user.claims.sub) {
+    // Get user ID from multiple sources
+    const userId = req.user?.id || req.user?.claims?.sub;
+    
+    if (!userId) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
     
-    const userId = req.user.claims.sub;
     const user = await storage.getUser(userId);
     
     if (!user) {
