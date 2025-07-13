@@ -11,11 +11,13 @@ const getInitialLanguage = () => {
   return 'en';
 };
 
+const resources = {
+  en: { translation: en },
+  ar: { translation: ar },
+};
+
 i18n.use(initReactI18next).init({
-  resources: {
-    en: { translation: en },
-    ar: { translation: ar },
-  },
+  resources,
   lng: getInitialLanguage(),
   fallbackLng: "en",
   debug: true, // Temporarily enable debug mode
@@ -31,6 +33,12 @@ i18n.use(initReactI18next).init({
   returnNull: false,
   returnObjects: false,
 });
+
+// Log to verify
+console.log('i18n initialized with resources:', resources);
+console.log('Sample translation nav.home:', i18n.t('nav.home'));
+console.log('Sample translation auth.login:', i18n.t('auth.login'));
+console.log('Sample translation hero.title:', i18n.t('hero.title'));
 
 // Save language changes to localStorage
 i18n.on('languageChanged', (lng) => {
