@@ -139,13 +139,14 @@ export default function AdminDashboard() {
 
   // Fetch admin statistics (only if user is admin)
   const { data: stats, isLoading: statsLoading, error: statsError } = useQuery({
-    queryKey: ['/api/admin/stats', Date.now()],
+    queryKey: ['/api/admin/stats'],
     queryFn: () => apiRequest(`/api/admin/stats?_t=${Date.now()}`),
     enabled: isAdmin && !!user,
-    retry: 1,
-    refetchOnWindowFocus: false,
+    retry: 3,
+    refetchOnWindowFocus: true,
+    refetchInterval: 10000, // Refetch every 10 seconds
     staleTime: 0, // Always treat as stale
-    gcTime: 0, // Don't cache (was cacheTime in v4)
+    gcTime: 60000, // Keep in cache for 1 minute
   });
 
   // Fetch users (only if user is admin)
@@ -222,6 +223,9 @@ export default function AdminDashboard() {
   console.log('Stats usersByRole:', stats?.usersByRole);
   console.log('Collectors count:', stats?.usersByRole?.collectors);
   console.log('Raw stats JSON:', JSON.stringify(stats, null, 2));
+  console.log('Query enabled:', isAdmin && !!user);
+  console.log('IsAdmin:', isAdmin);
+  console.log('User exists:', !!user);
   console.log('=== END DEBUG ===');
 
   const overviewStats = stats?.overview || {
@@ -475,6 +479,9 @@ export default function AdminDashboard() {
                 <CardContent>
                   <div className="text-2xl font-bold" key={`collectors-${Date.now()}`}>
                     {stats?.usersByRole?.collectors || 0}
+                  </div>
+                  <div className="text-xs text-blue-500 mt-1">
+                    Live: {stats?.usersByRole?.collectors || 'null'}
                   </div>
                   <p className="text-xs text-muted-foreground">Art collectors</p>
                   <Button 

@@ -61,11 +61,18 @@ export const queryClient = new QueryClient({
   },
 });
 
-// PHASE B: Aggressive cache cleanup every 5 minutes
+// PHASE B: Selective cache cleanup every 10 minutes (but preserve admin stats)
 setInterval(() => {
-  console.log('🧹 Clearing query cache for memory optimization');
-  queryClient.clear(); // Clear all cached queries
-}, 5 * 60 * 1000); // Every 5 minutes
+  console.log('🧹 Selective cache cleanup for memory optimization');
+  // Don't clear admin stats cache - only clear other old queries
+  const adminStatsKeys = ['/api/admin/stats'];
+  queryClient.getQueryCache().getAll().forEach(query => {
+    const queryKey = query.queryKey[0] as string;
+    if (!adminStatsKeys.some(key => queryKey.includes(key))) {
+      queryClient.removeQueries({ queryKey: query.queryKey });
+    }
+  });
+}, 10 * 60 * 1000); // Every 10 minutes
 
 // Add function to clear auth cache on logout
 export function clearAuthCache() {
