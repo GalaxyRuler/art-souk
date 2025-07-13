@@ -362,6 +362,14 @@ export default function Dashboard() {
                   </Button>
                 </Link>
                 
+                {/* Artwork Management Link - Always Available */}
+                <Link to="/artworks/manage">
+                  <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white">
+                    <Palette className="h-4 w-4 mr-2" />
+                    🎨 Artwork Management
+                  </Button>
+                </Link>
+                
                 {/* Seller Dashboard Link for Artists/Galleries */}
                 {(user?.role === 'artist' || user?.role === 'gallery') && (
                   <Link to="/seller">
