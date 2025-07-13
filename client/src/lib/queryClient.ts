@@ -66,3 +66,10 @@ setInterval(() => {
   console.log('🧹 Clearing query cache for memory optimization');
   queryClient.clear(); // Clear all cached queries
 }, 5 * 60 * 1000); // Every 5 minutes
+
+// Add function to clear auth cache on logout
+export function clearAuthCache() {
+  queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+  queryClient.invalidateQueries({ queryKey: ['/api/user/roles'] });
+  queryClient.clear();
+}
