@@ -1,0 +1,59 @@
+Fix all translation key display issues in the Art Souk React application where translation keys are showing instead of actual translated text.
+
+CONTEXT:
+- React 18 + TypeScript application using react-i18next
+- Translation files located at: client/src/locales/en.json and client/src/locales/ar.json
+- i18n configuration at: client/src/lib/i18n.ts
+- Translation keys are appearing as text (e.g., "nav.home" instead of "Home")
+
+TASKS TO COMPLETE:
+
+1. UPDATE i18n CONFIGURATION (client/src/lib/i18n.ts):
+   - Ensure proper initialization with resources loading
+   - Add debug: true temporarily
+   - Ensure both en and ar translations are properly imported
+   - Set fallbackLng to 'en'
+   - Make sure interpolation.escapeValue is false
+
+2. UPDATE MAIN ENTRY FILE (client/src/main.tsx):
+   - Import './lib/i18n' BEFORE importing App
+   - Ensure i18n is initialized before React renders
+
+3. UPDATE APP.TSX:
+   - Wrap the entire app with I18nextProvider
+   - Import i18n from './lib/i18n'
+   - Ensure QueryClientProvider is inside I18nextProvider
+
+4. CHECK AND FIX ALL TRANSLATION FILES:
+   - Verify JSON structure in en.json and ar.json matches the key usage
+   - Ensure all keys used in components exist in translation files
+   - Fix any missing translations for: nav, auth, workshops, events, commissions, dashboard, artworks, artists, galleries, auctions, common sections
+
+5. FIX COMPONENT IMPORTS:
+   - Search for all useTranslation() usage
+   - Ensure they're imported from 'react-i18next'
+   - Remove any namespace specifications unless needed
+
+6. ADD MISSING TRANSLATIONS:
+   - Search for all t('...') usage in the codebase
+   - Extract all translation keys
+   - Ensure every key exists in both en.json and ar.json files
+
+7. COMMON KEYS TO ENSURE EXIST:
+   - nav.* (home, artworks, artists, galleries, auctions, workshops, events, commissions)
+   - auth.* (login, logout, dashboard)
+   - common.* (search, filter, sort, loading, error, success)
+   - dashboard.* (all dashboard related texts)
+   - workshops.* (all workshop related texts)
+   - events.* (all event related texts)
+   - commissions.* (all commission related texts)
+
+8. TEST THE FIX:
+   - Add console.log in App.tsx to verify translations are loaded
+   - Check that language switching between English and Arabic works
+   - Ensure no translation keys are visible in the UI
+
+9. REMOVE DEBUG MODE:
+   - Once fixed, remove debug: true from i18n config
+
+Please complete all these tasks and ensure that all translation keys throughout the application are replaced with their actual translated text values.
