@@ -151,13 +151,43 @@ export async function setupAuth(app: Express) {
   });
 
   app.get("/api/logout", (req, res) => {
-    req.logout(() => {
-      res.redirect(
-        client.buildEndSessionUrl(config, {
+    console.log('🔓 Logout initiated for user:', req.session?.user?.id);
+    
+    // Destroy the session completely
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('❌ Session destruction error:', err);
+      } else {
+        console.log('✅ Session destroyed successfully');
+      }
+    });
+    
+    // Clear the session cookie
+    res.clearCookie('connect.sid');
+    
+    // Passport logout
+    req.logout((err) => {
+      if (err) {
+        console.error('❌ Passport logout error:', err);
+        return res.redirect('/');
+      }
+      
+      console.log('✅ Passport logout successful');
+      
+      try {
+        // Try to redirect to OpenID Connect logout
+        const logoutUrl = client.buildEndSessionUrl(config, {
           client_id: process.env.REPL_ID!,
-          post_logout_redirect_uri: `${req.protocol}://${req.hostname}`,
-        }).href
-      );
+          post_logout_redirect_uri: `${req.protocol}://${req.hostname}/auth/logout-success`,
+        }).href;
+        
+        console.log('🔄 Redirecting to logout URL:', logoutUrl);
+        res.redirect(logoutUrl);
+      } catch (error) {
+        console.error('❌ Error building logout URL:', error);
+        // Fallback to simple redirect
+        res.redirect('/');
+      }
     });
   });
 }

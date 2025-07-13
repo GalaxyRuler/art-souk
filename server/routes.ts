@@ -106,6 +106,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Post-logout success handler
+  app.get('/auth/logout-success', (req, res) => {
+    console.log('✅ Logout success - user returned from OpenID Connect');
+    
+    // Clear any remaining session data
+    if (req.session) {
+      req.session.destroy((err) => {
+        if (err) {
+          console.error('❌ Final session cleanup error:', err);
+        }
+      });
+    }
+    
+    // Send HTML page that redirects to home and clears local storage
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Logged Out</title>
+          <meta http-equiv="refresh" content="2;url=/">
+        </head>
+        <body>
+          <script>
+            // Clear any client-side storage
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Redirect to home after clearing storage
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 1000);
+          </script>
+          <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+            <h2>You have been logged out successfully</h2>
+            <p>Redirecting to home page...</p>
+          </div>
+        </body>
+      </html>
+    `);
+  });
+
   // Auth routes (without aggressive rate limiting for normal usage)
   app.get('/api/auth/user', async (req: any, res) => {
     try {
