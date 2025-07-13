@@ -16,6 +16,7 @@ import NotFound from "@/pages/not-found";
 import Landing from "@/pages/Landing";
 import Home from "@/pages/Home";
 import Auth from "@/pages/Auth";
+import Dashboard from "@/pages/Dashboard";
 
 // Lazy load non-critical pages for better performance
 const Artists = lazy(() => import("@/pages/Artists"));
@@ -24,7 +25,7 @@ const Auctions = lazy(() => import("@/pages/Auctions"));
 const ArtworkDetail = lazy(() => import("@/pages/ArtworkDetail"));
 const ArtistProfile = lazy(() => import("@/pages/ArtistProfile"));
 const Search = lazy(() => import("@/pages/Search"));
-const Dashboard = lazy(() => import("@/pages/Dashboard"));
+// Dashboard is now eagerly loaded above
 const GalleryProfile = lazy(() => import("@/pages/GalleryProfile"));
 const AuctionDetail = lazy(() => import("@/pages/AuctionDetail"));
 const Workshops = lazy(() => import("@/pages/Workshops"));
@@ -83,9 +84,6 @@ function Router() {
         {/* Make artwork management publicly accessible for testing */}
         <Route path="/artworks/manage" component={ArtworkManagement} />
         
-        {/* Make dashboard publicly accessible for testing translations */}
-        <Route path="/dashboard" component={Dashboard} />
-        
         {/* Public routes - accessible to all users */}
         <Route path="/artists" component={Artists} />
         <Route path="/artists/:id" component={ArtistProfile} />
@@ -112,10 +110,12 @@ function Router() {
         <Route path="/email/test" component={EmailTest} />
         <Route path="/test/commissions" component={TestCommissions} />
         
+        {/* Dashboard route - accessible to authenticated users */}
+        <Route path="/dashboard" component={Dashboard} />
+        
         {/* Authenticated-only routes */}
         {isAuthenticated && (
           <>
-            <Route path="/dashboard" component={Dashboard} />
             <Route path="/analytics" component={Analytics} />
             <Route path="/analytics/dashboard" component={AnalyticsDashboard} />
             <Route path="/preferences" component={UserPreferences} />
