@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -576,14 +576,45 @@ function ArtworkForm({
 
   return (
     <form onSubmit={onSubmit} className="space-y-6">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="basic">{t("artworks.basicInfo")}</TabsTrigger>
-          <TabsTrigger value="details">{t("artworks.details")}</TabsTrigger>
-          <TabsTrigger value="images">{t("artworks.images")}</TabsTrigger>
-        </TabsList>
+      <div className="w-full">
+        <div className="flex space-x-1 rounded-md bg-muted p-1">
+          <button
+            type="button"
+            onClick={() => setActiveTab("basic")}
+            className={`flex-1 rounded-sm px-3 py-1.5 text-sm font-medium transition-all ${
+              activeTab === "basic"
+                ? "bg-background text-foreground shadow-sm"
+                : "hover:bg-muted hover:text-foreground"
+            }`}
+          >
+            {t("artworks.basicInfo")}
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("details")}
+            className={`flex-1 rounded-sm px-3 py-1.5 text-sm font-medium transition-all ${
+              activeTab === "details"
+                ? "bg-background text-foreground shadow-sm"
+                : "hover:bg-muted hover:text-foreground"
+            }`}
+          >
+            {t("artworks.details")}
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("images")}
+            className={`flex-1 rounded-sm px-3 py-1.5 text-sm font-medium transition-all ${
+              activeTab === "images"
+                ? "bg-background text-foreground shadow-sm"
+                : "hover:bg-muted hover:text-foreground"
+            }`}
+          >
+            {t("artworks.images")}
+          </button>
+        </div>
 
-        <TabsContent value="basic" className="space-y-4">
+        {activeTab === "basic" && (
+          <div className="mt-4 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="title">{t("artworks.title")} (English)</Label>
@@ -666,9 +697,11 @@ function ArtworkForm({
               </Select>
             </div>
           </div>
-        </TabsContent>
+          </div>
+        )}
 
-        <TabsContent value="details" className="space-y-4">
+        {activeTab === "details" && (
+          <div className="mt-4 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="medium">{t("artworks.medium")} (English)</Label>
@@ -757,9 +790,11 @@ function ArtworkForm({
               </SelectContent>
             </Select>
           </div>
-        </TabsContent>
+          </div>
+        )}
 
-        <TabsContent value="images" className="space-y-4">
+        {activeTab === "images" && (
+          <div className="mt-4 space-y-4">
           <div>
             <Label>{t("artworks.images")}</Label>
             <div className="space-y-4">
@@ -828,8 +863,9 @@ function ArtworkForm({
               )}
             </div>
           </div>
-        </TabsContent>
-      </Tabs>
+          </div>
+        )}
+      </div>
 
       <div className="flex gap-4 justify-end">
         <Button type="button" variant="outline" onClick={onCancel}>
