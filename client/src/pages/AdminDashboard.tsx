@@ -220,7 +220,8 @@ export default function AdminDashboard() {
     statsError,
     overview: stats?.overview,
     usersByRole: stats?.usersByRole,
-    collectorsCount: stats?.usersByRole?.collectors
+    collectorsCount: stats?.usersByRole?.collectors,
+    rawStatsData: JSON.stringify(stats)
   });
 
   const overviewStats = stats?.overview || {
@@ -472,18 +473,43 @@ export default function AdminDashboard() {
                   <Star className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{stats?.usersByRole?.collectors || 0}</div>
+                  <div className="text-2xl font-bold" key={`collectors-${Date.now()}`}>
+                    {stats?.usersByRole?.collectors || 0}
+                  </div>
                   <p className="text-xs text-muted-foreground">Art collectors</p>
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    onClick={() => window.location.reload()}
+                    onClick={() => {
+                      // Clear all caches and force reload
+                      if ('serviceWorker' in navigator) {
+                        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                          for(let registration of registrations) {
+                            registration.unregister();
+                          }
+                        });
+                      }
+                      // Clear browser cache
+                      if ('caches' in window) {
+                        caches.keys().then(function(names) {
+                          for (let name of names) {
+                            caches.delete(name);
+                          }
+                        });
+                      }
+                      localStorage.clear();
+                      sessionStorage.clear();
+                      window.location.reload(true);
+                    }}
                     className="mt-2"
                   >
-                    Force Refresh
+                    Force Full Refresh
                   </Button>
                   <div className="text-xs text-muted-foreground mt-1">
                     Debug: {JSON.stringify(stats?.usersByRole)}
+                  </div>
+                  <div className="text-xs text-red-500 mt-1">
+                    Cache-bust ID: {Date.now()}
                   </div>
                 </CardContent>
               </Card>
