@@ -423,6 +423,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         galleriesCount,
         adminsCount
       });
+
+      // Log the actual response being sent
+      console.log('FINAL RESPONSE DATA:', JSON.stringify(stats, null, 2));
       
       // Disable caching for admin stats to ensure fresh data
       res.set('Cache-Control', 'no-cache, no-store, must-revalidate');

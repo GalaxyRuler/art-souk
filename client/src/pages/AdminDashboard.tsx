@@ -214,15 +214,15 @@ export default function AdminDashboard() {
   const kycDocuments = kycDocumentsData?.documents || [];
 
   // Debug logging for stats data
-  console.log('Admin Stats Data:', {
-    stats,
-    statsLoading,
-    statsError,
-    overview: stats?.overview,
-    usersByRole: stats?.usersByRole,
-    collectorsCount: stats?.usersByRole?.collectors,
-    rawStatsData: JSON.stringify(stats)
-  });
+  console.log('=== FRONTEND ADMIN STATS DEBUG ===');
+  console.log('Loading:', statsLoading);
+  console.log('Error:', statsError);
+  console.log('Stats object:', stats);
+  console.log('Stats overview:', stats?.overview);
+  console.log('Stats usersByRole:', stats?.usersByRole);
+  console.log('Collectors count:', stats?.usersByRole?.collectors);
+  console.log('Raw stats JSON:', JSON.stringify(stats, null, 2));
+  console.log('=== END DEBUG ===');
 
   const overviewStats = stats?.overview || {
     totalUsers: 0,
