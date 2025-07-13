@@ -295,7 +295,24 @@ const resources = {
         contact: "Contact",
         website: "Website",
         phone: "Phone",
-        email: "Email"
+        email: "Email",
+        search: {
+          placeholder: "Search galleries..."
+        },
+        filters: {
+          location: "Location",
+          allLocations: "All Locations"
+        },
+        sort: {
+          latest: "Latest",
+          name: "Name",
+          featured: "Featured"
+        },
+        results: "{{count}} galleries found",
+        noResults: {
+          title: "No Galleries Found",
+          description: "Try adjusting your search or filters to find galleries"
+        }
       },
       gallery: {
         unfollowedGallery: "Unfollowed Gallery",
@@ -479,6 +496,16 @@ const resources = {
         qatar: "Qatar",
         bahrain: "Bahrain",
         oman: "Oman"
+      },
+      cities: {
+        riyadh: "Riyadh",
+        jeddah: "Jeddah",
+        dubai: "Dubai",
+        abuDhabi: "Abu Dhabi",
+        kuwaitCity: "Kuwait City",
+        doha: "Doha",
+        manama: "Manama",
+        muscat: "Muscat"
       },
       categories: {
         painting: "Painting",
@@ -857,6 +884,16 @@ const resources = {
         bahrain: "البحرين",
         oman: "عمان"
       },
+      cities: {
+        riyadh: "الرياض",
+        jeddah: "جدة",
+        dubai: "دبي",
+        abuDhabi: "أبو ظبي",
+        kuwaitCity: "مدينة الكويت",
+        doha: "الدوحة",
+        manama: "المنامة",
+        muscat: "مسقط"
+      },
       artists: {
         title: "الفنانون",
         subtitle: "اكتشف الفنانين الموهوبين من منطقة دول الخليج",
@@ -900,7 +937,24 @@ const resources = {
         contact: "الاتصال",
         website: "الموقع الإلكتروني",
         phone: "الهاتف",
-        email: "البريد الإلكتروني"
+        email: "البريد الإلكتروني",
+        search: {
+          placeholder: "البحث عن المعارض..."
+        },
+        filters: {
+          location: "الموقع",
+          allLocations: "جميع المواقع"
+        },
+        sort: {
+          latest: "الأحدث",
+          name: "الاسم",
+          featured: "مميز"
+        },
+        results: "تم العثور على {{count}} معرض",
+        noResults: {
+          title: "لم يتم العثور على معارض",
+          description: "حاول تعديل البحث أو المرشحات للعثور على معارض"
+        }
       },
       gallery: {
         unfollowedGallery: "إلغاء متابعة المعرض",
