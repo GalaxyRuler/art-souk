@@ -530,6 +530,7 @@
     "enterTimeline": "Enter timeline (e.g., 2 weeks)",
     "enterProposal": "Describe your approach...",
     "fillAllFields": "Please fill in all fields",
+    "participants": "{{current}}/{{max}} participants",
     "bidSubmitted": "Bid Submitted",
     "bidSubmittedDescription": "Your bid has been submitted successfully",
     "requestNotFound": "Commission request not found"
@@ -607,6 +608,7 @@
     "meetingLink": "Meeting Link",
     "maxAttendees": "Max Attendees",
     "attendees": "Attendees",
+    "participants": "{{current}}/{{max}} participants",
     "images": "Images",
     "isOnline": "Online Event",
     "published": "Published",

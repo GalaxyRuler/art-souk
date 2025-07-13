@@ -676,6 +676,7 @@
     "enterTimeline": "أدخل الجدول الزمني بالأيام",
     "proposal": "الاقتراح",
     "enterProposal": "صف نهجك",
+    "participants": "{{current}}/{{max}} مشارك",
     "requestedBy": "طلب من قبل",
     "collector": "جامع",
     "memberSince": "عضو منذ {{date}}",
@@ -886,6 +887,7 @@
     "all": "جميع الفعاليات",
     "attend": "حضور",
     "attendees": "{{count}} حاضر",
+    "participants": "{{current}}/{{max}} مشارك",
     "attending": "سأحضر",
     "byInvitation": "بدعوة",
     "calendar": {
