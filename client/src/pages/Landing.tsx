@@ -31,7 +31,7 @@ const EarlyAccessModal = ({ children }: { children: React.ReactNode }) => {
     if (!email || !name || !userType) {
       toast({
         title: "Please fill all fields",
-        description: "All fields are required to join the founding member program.",
+        description: "All fields are required to join the early access program.",
         variant: "destructive"
       });
       return;
@@ -39,7 +39,7 @@ const EarlyAccessModal = ({ children }: { children: React.ReactNode }) => {
     
     toast({
       title: "Welcome to Art Souk!",
-      description: "You're now on the founding member list. We'll contact you soon with exclusive updates.",
+      description: "You're now on the early access list. We'll contact you soon with exclusive updates.",
     });
     
     // Reset form
@@ -56,7 +56,7 @@ const EarlyAccessModal = ({ children }: { children: React.ReactNode }) => {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-amber-500 to-yellow-600 bg-clip-text text-transparent">
-            Join Art Souk Founding Members
+            Get Early Access to Art Souk
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -99,7 +99,7 @@ const EarlyAccessModal = ({ children }: { children: React.ReactNode }) => {
             </select>
           </div>
           <Button type="submit" className="w-full bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-semibold">
-            Claim Your Founding Member Spot
+            Get Early Access
           </Button>
         </form>
       </DialogContent>
@@ -175,7 +175,7 @@ const CompetitiveLandingHero = () => {
         {/* Launch timeline with urgency */}
         <div className="flex flex-col items-center mb-8">
           <div className="bg-red-500/20 border border-red-400/30 rounded-full px-4 py-2 text-red-300 text-sm mb-4">
-            Limited Founding Member Spots Available
+            Limited Early Access Spots Available
           </div>
           <p className="text-amber-300 font-semibold">Launching Q2 2025 • Early Access Now Open</p>
         </div>
@@ -187,7 +187,7 @@ const CompetitiveLandingHero = () => {
             className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-semibold px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all duration-200"
             onClick={handleJoinClick}
           >
-            Secure Founding Member Spot
+            Get Early Access
             <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
           <Button 
@@ -316,7 +316,7 @@ const CompetitiveAdvantageSection = () => {
   );
 };
 
-const FoundingMemberCard = ({ userType, icon, benefits, cta, color }: { 
+const EarlyAccessCard = ({ userType, icon, benefits, cta, color }: { 
   userType: string; 
   icon: string; 
   benefits: string[]; 
@@ -328,7 +328,7 @@ const FoundingMemberCard = ({ userType, icon, benefits, cta, color }: {
       <div className="text-6xl mb-4">{icon}</div>
       <h3 className="text-2xl font-bold text-gray-900 mb-2">For {userType}</h3>
       <div className="inline-flex items-center px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
-        Limited to first 50 members
+        Limited to first 50 early access spots
       </div>
     </div>
     
@@ -347,22 +347,22 @@ const FoundingMemberCard = ({ userType, icon, benefits, cta, color }: {
   </div>
 );
 
-const FoundingMemberUrgencySection = () => {
+const EarlyAccessUrgencySection = () => {
   const [, setLocation] = useLocation();
   
   return (
     <section className="py-20 bg-slate-900">
       <div className="max-w-4xl mx-auto px-4 text-center">
         <div className="bg-amber-500/20 border border-amber-400/30 rounded-full px-6 py-2 text-amber-300 text-sm font-medium mb-6 inline-block">
-          Only 47 Founding Member Spots Remaining
+          Only 47 Early Access Spots Remaining
         </div>
         
         <h2 className="text-4xl font-bold text-white mb-6">
-          The GCC Art Revolution Starts With 100 Founding Members
+          Get Early Access to the GCC Art Revolution
         </h2>
         
         <p className="text-xl text-gray-300 mb-8">
-          Join the exclusive group that will shape the future of art in Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, and Oman.
+          Be among the first 100 early access members to experience the platform before it launches to the public across all GCC countries.
         </p>
 
         {/* Countdown timer */}
@@ -393,7 +393,7 @@ const FoundingMemberUrgencySection = () => {
           className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-bold px-12 py-4 text-xl rounded-full transform hover:scale-105 transition-all duration-200"
           onClick={() => setLocation('/auth')}
         >
-          Claim Your Founding Member Spot
+          Get Early Access Now
           <ArrowRight className="ml-2 w-6 h-6" />
         </Button>
       </div>
@@ -506,7 +506,7 @@ const EarlyAccessSection = () => {
           Join the Art Revolution
         </h2>
         <p className="text-xl text-amber-100 mb-8 max-w-2xl mx-auto">
-          Be part of the first 100 founding members who will shape the future of GCC art. 
+          Be part of the first 100 early access members to experience the future of GCC art. 
           Your input will directly influence how we build this platform.
         </p>
         
@@ -613,7 +613,7 @@ export default function Landing() {
       <CompetitiveLandingHero />
       <CompetitiveAdvantageSection />
       <MarketProofSection />
-      <FoundingMemberUrgencySection />
+      <EarlyAccessUrgencySection />
       <EarlyAccessSection />
       <Footer />
     </div>
