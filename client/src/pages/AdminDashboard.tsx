@@ -113,6 +113,8 @@ export default function AdminDashboard() {
   const clearCacheAndRefetch = () => {
     queryClient.invalidateQueries({ queryKey: ['/api/admin/stats'] });
     queryClient.removeQueries({ queryKey: ['/api/admin/stats'] });
+    // Force reload the page to clear any browser cache
+    window.location.reload();
   };
 
   // Admin setup mutation
@@ -472,6 +474,17 @@ export default function AdminDashboard() {
                 <CardContent>
                   <div className="text-2xl font-bold">{stats?.usersByRole?.collectors || 0}</div>
                   <p className="text-xs text-muted-foreground">Art collectors</p>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => window.location.reload()}
+                    className="mt-2"
+                  >
+                    Force Refresh
+                  </Button>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    Debug: {JSON.stringify(stats?.usersByRole)}
+                  </div>
                 </CardContent>
               </Card>
             </div>
