@@ -29,14 +29,23 @@ export const getQueryFn: <T>(options: {
 
 // Simple apiRequest function for admin dashboard
 export const apiRequest = async (url: string, options: RequestInit = {}) => {
-  const response = await fetch(url, {
+  const requestOptions: RequestInit = {
     ...options,
     credentials: 'include', // Ensure cookies are sent
     headers: {
       'Content-Type': 'application/json',
       ...options.headers,
     },
-  });
+  };
+
+  // Properly serialize body to JSON if it exists
+  if (options.body && typeof options.body === 'object') {
+    requestOptions.body = JSON.stringify(options.body);
+  } else if (options.body) {
+    requestOptions.body = options.body;
+  }
+
+  const response = await fetch(url, requestOptions);
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
