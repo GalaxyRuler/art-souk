@@ -1,7 +1,10 @@
 {
   "common": {
     "siteName": "Art Souk",
-    "siteNameAr": "آرت سوق"
+    "siteNameAr": "آرت سوق",
+    "allCategories": "All Categories",
+    "allStatus": "All Status",
+    "anonymous": "Anonymous"
   },
   "site": {
     "name": "Art Souk",

@@ -1,7 +1,14 @@
 {
   "common": {
     "siteName": "آرت سوق",
-    "siteNameAr": "آرت سوق"
+    "siteNameAr": "آرت سوق",
+    "select": "اختر",
+    "enter": "أدخل",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "saving": "جاري الحفظ...",
+    "added": "أضيف",
+    "sar": "ر.س"
   },
   "site": {
     "name": "آرت سوق",
