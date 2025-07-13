@@ -707,7 +707,12 @@
     "siteName": "سوق آرت",
     "siteNameAr": "سوق آرت",
     "upcoming": "قادم",
-    "viewAll": "عرض الكل"
+    "viewAll": "عرض الكل",
+    "select": "اختر",
+    "enter": "أدخل",
+    "saving": "جاري الحفظ...",
+    "added": "أضيف",
+    "sar": "ر.س"
   },
   "countries": {
     "bahrain": "مملكة البحرين",
@@ -1681,17 +1686,7 @@
     "success": "نجح",
     "error": "خطأ"
   },
-  "common": {
-    "siteName": "سوق آرت",
-    "siteNameAr": "سوق آرت",
-    "select": "اختر",
-    "enter": "أدخل",
-    "cancel": "إلغاء",
-    "save": "حفظ",
-    "saving": "جاري الحفظ...",
-    "added": "أضيف",
-    "sar": "ر.س"
-  },
+
   "notifications": {
     "title": "الإشعارات",
     "all": "الكل",

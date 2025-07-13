@@ -202,6 +202,7 @@ Preferred communication style: Simple, everyday language.
   ✓ **Bilingual Consistency**: Both English and Arabic files now properly structured with correct site names
   ✓ **Translation System Operational**: Platform now displays proper text instead of raw translation keys
   ✓ **Landing Page Market Data**: Updated hero section with $46M by 2026 Saudi Arabia art export projection figure
+  ✓ **Workshops Translation Fix**: Fixed duplicate "common" sections in Arabic translation file causing workshops page translation key issues
 
 - January 17, 2025: Complete Logout Functionality Fix (FINAL FIX COMPLETED)
   ✓ **Removed ALL Hardcoded User Fallbacks**: Fixed both `/api/auth/user` and `/api/admin/stats` endpoints that had hardcoded user ID 44377424
