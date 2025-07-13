@@ -297,12 +297,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/user/roles', async (req: any, res) => {
-    // Check if user is authenticated
-    if (!req.user || !req.user.claims || !req.user.claims.sub) {
-      return res.json(null); // Return null for unauthenticated users
-    }
-    
+  app.get('/api/user/roles', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
