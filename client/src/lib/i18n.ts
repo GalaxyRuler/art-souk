@@ -346,7 +346,10 @@ const resources = {
           exhibition: "Exhibition",
           workshop: "Workshop",
           talk: "Talk",
-          networking: "Networking"
+          networking: "Networking",
+          Talk: "Talk",
+          Technology: "Technology",
+          "Traditional Arts": "Traditional Arts"
         }
       },
       commissions: {
@@ -582,11 +585,7 @@ const resources = {
         yes: "نعم",
         no: "لا",
         upcoming: "قادم",
-        completed: "مكتمل",
-        allCategories: "جميع الفئات",
-        allStatus: "جميع الحالات",
-        published: "منشور",
-        featured: "مميز"
+        completed: "مكتمل"
       },
       site: {
         name: "سوق آرت",
@@ -733,7 +732,10 @@ const resources = {
           exhibition: "معرض",
           workshop: "ورشة عمل",
           talk: "محاضرة",
-          networking: "تواصل"
+          networking: "تواصل",
+          Talk: "محاضرة",
+          Technology: "التكنولوجيا",
+          "Traditional Arts": "الفنون التقليدية"
         }
       },
       workshops: {
