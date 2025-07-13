@@ -1,0 +1,32 @@
+Refused to load the stylesheet 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap' because it violates the following Content Security Policy directive: "style-src 'self' 'unsafe-inline'". Note that 'style-src-elem' was not explicitly set, so 'style-src' is used as a fallback.
+Understand this error
+dashboard:1 Refused to load the script 'https://replit.com/public/js/replit-dev-banner.js' because it violates the following Content Security Policy directive: "script-src 'self' 'unsafe-inline' 'unsafe-eval'". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.
+Understand this error
+client:495 [vite] connecting...
+client:618 [vite] connected.
+chunk-RPCDYKBN.js?v=85879243:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+i18next.js?v=85879243:208 i18next: languageChanged en
+i18next.js?v=85879243:208 i18next: initialized Object
+i18n.ts:1980 i18n initialized with inline resources
+i18n.ts:1981 Sample translation nav.home: Home
+i18n.ts:1982 Sample translation auth.login: Sign In
+i18n.ts:1983 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18next.js?v=85879243:208 i18next: languageChanged en
+i18next.js?v=85879243:208 i18next: init: i18next is already initialized. You should call init just once!
+output @ i18next.js?v=85879243:208Understand this warning
+i18next.js?v=85879243:208 i18next: initialized Object
+i18n.ts:1980 i18n initialized with inline resources
+i18n.ts:1981 Sample translation nav.home: Home
+i18n.ts:1982 Sample translation auth.login: Sign In
+i18n.ts:1983 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+content.bundle.js:31149 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+injected.js:1 Script was injected!
+content.js:202 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+i18next.js?v=85879243:208 i18next::translator: missingKey en translation common.items common.items
+i18next.js?v=85879243:208 i18next::translator: missingKey en translation dashboard.inquiries.count dashboard.inquiries.count
+i18next.js?v=85879243:208 i18next::translator: missingKey en translation common.items common.items
+i18next.js?v=85879243:208 i18next::translator: missingKey en translation dashboard.inquiries.count dashboard.inquiries.count
+dashboard:1 Refused to load the stylesheet 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap' because it violates the following Content Security Policy directive: "style-src 'self' 'unsafe-inline'". Note that 'style-src-elem' was not explicitly set, so 'style-src' is used as a fallback.
+Understand this error
+css-generic.js:236 uBOL: Generic cosmetic filtering stopped because no more DOM changes
+3dashboard:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was receivedUnderstand this error

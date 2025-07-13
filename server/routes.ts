@@ -201,7 +201,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/auth/user', async (req: any, res) => {
     try {
       // Check for authenticated user in session or passport
-      const userId = req.user?.claims?.sub || req.user?.id || req.session?.user?.id;
+      let userId = req.user?.claims?.sub || req.user?.id || req.session?.user?.id;
+      
+      // Also check passport user for Replit auth
+      if (!userId && req.user && req.user.id) {
+        userId = req.user.id;
+      }
+      
+      // Check session for user directly
+      if (!userId && req.session && req.session.passport && req.session.passport.user) {
+        userId = req.session.passport.user;
+      }
+      
+      console.log('Auth user check:', {
+        userId,
+        hasUser: !!req.user,
+        hasSession: !!req.session,
+        sessionKeys: req.session ? Object.keys(req.session) : [],
+        passportUser: req.session?.passport?.user
+      });
       
       // If no user found in session, return null (not authenticated)
       if (!userId) {
@@ -212,6 +230,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.getUser(userId);
       
       if (!user) {
+        console.log('User not found in database:', userId);
         return res.json(null);
       }
       
