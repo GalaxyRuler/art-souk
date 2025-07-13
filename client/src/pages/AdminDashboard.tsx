@@ -105,39 +105,46 @@ export default function AdminDashboard() {
     mutationFn: () => apiRequest('/api/admin/setup', { method: 'POST' }),
     onSuccess: () => {
       toast({
-        title: "Success",
-        description: "Admin privileges granted successfully",
+        title: t('admin.success'),
+        description: t('admin.adminSetupSuccess') || "Admin privileges granted successfully",
       });
       queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
     },
     onError: (error: any) => {
+      console.error('Admin setup error:', error);
       toast({
-        title: "Error",
-        description: error.message || "Failed to setup admin",
+        title: t('admin.error'),
+        description: error.message || t('admin.adminSetupError') || "Failed to setup admin",
         variant: 'destructive',
       });
     },
   });
 
   // Fetch admin statistics (only if user is admin)
-  const { data: stats, isLoading: statsLoading } = useQuery({
+  const { data: stats, isLoading: statsLoading, error: statsError } = useQuery({
     queryKey: ['/api/admin/stats'],
     queryFn: () => apiRequest('/api/admin/stats'),
     enabled: isAdmin,
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
 
   // Fetch users (only if user is admin)
-  const { data: usersData, isLoading: usersLoading } = useQuery({
+  const { data: usersData, isLoading: usersLoading, error: usersError } = useQuery({
     queryKey: ['/api/admin/users'],
     queryFn: () => apiRequest('/api/admin/users'),
     enabled: isAdmin,
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
 
   // Fetch KYC documents (only if user is admin)
-  const { data: kycDocumentsData, isLoading: kycDocumentsLoading } = useQuery({
+  const { data: kycDocumentsData, isLoading: kycDocumentsLoading, error: kycError } = useQuery({
     queryKey: ['/api/admin/kyc-documents'],
     queryFn: () => apiRequest('/api/admin/kyc-documents'),
     enabled: isAdmin,
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
 
   // Update KYC document mutation
