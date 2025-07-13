@@ -58,7 +58,11 @@ const TabsTrigger = forwardRef<
           : "hover:bg-muted hover:text-foreground",
         className
       )}
-      onClick={() => onValueChange(triggerValue)}
+      onClick={() => {
+        if (typeof onValueChange === 'function') {
+          onValueChange(triggerValue);
+        }
+      }}
       {...props}
     />
   );
