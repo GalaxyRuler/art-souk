@@ -1,0 +1,66 @@
+Yes! Here's a prompt for Replit AI to generate a comprehensive diagnostic document about the translation issue:
+
+```
+Generate a comprehensive diagnostic document about the translation key display issue in the Art Souk application. Create a single markdown file that includes:
+
+CREATE FILE: translation-diagnostics.md
+
+INCLUDE THE FOLLOWING SECTIONS:
+
+1. CURRENT I18N CONFIGURATION
+   - Full contents of client/src/lib/i18n.ts
+   - How it's imported in main.tsx
+   - How it's used in App.tsx
+
+2. TRANSLATION FILE STRUCTURE
+   - First 50 lines of client/src/locales/en.json
+   - First 50 lines of client/src/locales/ar.json
+   - File format verification (are they valid JSON?)
+
+3. SAMPLE COMPONENT USAGE
+   - Show how useTranslation is used in Navbar.tsx
+   - Show how useTranslation is used in Home.tsx
+   - Show how useTranslation is used in any other 2 components
+
+4. IMPORT CHAIN ANALYSIS
+   - Show the import order in main.tsx
+   - Show all imports in App.tsx
+   - Verify i18n is imported before App component
+
+5. PACKAGE.JSON DEPENDENCIES
+   - List all i18n related packages and their versions
+   - Check if react-i18next and i18next are compatible versions
+
+6. BROWSER CONSOLE OUTPUT
+   - Add console.log statements to i18n.ts to show:
+     * When init is called
+     * What resources are loaded
+     * If init completes successfully
+   - Add console.log to App.tsx to show:
+     * If i18n is ready
+     * Current language
+     * Test translation output
+
+7. VITE BUILD CONFIGURATION
+   - Show relevant parts of vite.config.ts
+   - Check if JSON files are being bundled correctly
+
+8. COMMON TRANSLATION KEYS USED
+   - List all unique t('...') calls found in the codebase
+   - Group them by prefix (nav.*, auth.*, etc.)
+
+9. POTENTIAL ISSUES FOUND
+   - List any mismatches between keys used and keys defined
+   - Note any import order issues
+   - Flag any async/sync loading problems
+   - Check for circular dependencies
+
+10. RECOMMENDED FIXES
+    - Provide specific code changes needed
+    - Include exact file paths and line numbers
+    - Show before/after code snippets
+
+Please search through all relevant files and compile this diagnostic information into a single, well-formatted markdown document that I can review to understand exactly why translations aren't working.
+```
+
+This will create a comprehensive document that shows you exactly what's happening with the translation system, making it much easier to identify and fix the root cause.

@@ -73,6 +73,18 @@ const resources = {
           favorites: "Favorites",
           trending: "Trending",
           liveAuctions: "Live Auctions"
+        },
+        recommendations: {
+          title: "Recommended for You",
+          subtitle: "Discover art based on your interests",
+          exploreArtists: "Explore Artists"
+        },
+        featuredArtists: {
+          title: "Featured Artists",
+          subtitle: "Discover talented artists from the region"
+        },
+        liveAuctions: {
+          title: "Live Auctions"
         }
       },
       social: {
@@ -115,6 +127,50 @@ const resources = {
       site: {
         name: "Art Souk",
         tagline: "Saudi Arabia & GCC Art"
+      },
+      collections: {
+        featured: {
+          title: "Featured Collections",
+          description: "Discover curated art collections from leading galleries and collectors"
+        }
+      },
+      footer: {
+        newsletter: {
+          title: "Stay Updated",
+          description: "Get the latest art news and exclusive access to new collections",
+          placeholder: "Enter your email",
+          subscribe: "Subscribe"
+        },
+        explore: {
+          title: "Explore"
+        },
+        resources: {
+          title: "Resources",
+          guide: "Collector's Guide",
+          investment: "Art Investment",
+          support: "Support"
+        },
+        copyright: "© 2025 Art Souk. All rights reserved."
+      },
+      auctions: {
+        live: "Live",
+        viewAll: "View All Auctions",
+        bids: "bids",
+        placeBid: "Place Bid"
+      },
+      artist: {
+        featured: "Featured"
+      },
+      artists: {
+        viewAll: "View All Artists"
+      },
+      artwork: {
+        status: {
+          available: "Available"
+        }
+      },
+      artworks: {
+        viewAll: "View All Artworks"
       }
     }
   },
@@ -180,6 +236,18 @@ const resources = {
           favorites: "المفضلات",
           trending: "الأكثر رواجاً",
           liveAuctions: "المزادات المباشرة"
+        },
+        recommendations: {
+          title: "موصى لك",
+          subtitle: "اكتشف الفن بناءً على اهتماماتك",
+          exploreArtists: "استكشف الفنانين"
+        },
+        featuredArtists: {
+          title: "الفنانون المميزون",
+          subtitle: "اكتشف الفنانين الموهوبين من المنطقة"
+        },
+        liveAuctions: {
+          title: "المزادات المباشرة"
         }
       },
       social: {
@@ -222,6 +290,50 @@ const resources = {
       site: {
         name: "سوق آرت",
         tagline: "فن السعودية ودول مجلس التعاون"
+      },
+      collections: {
+        featured: {
+          title: "المجموعات المميزة",
+          description: "اكتشف مجموعات فنية منتقاة من أهم المعارض والجامعين"
+        }
+      },
+      footer: {
+        newsletter: {
+          title: "ابق على اطلاع",
+          description: "احصل على آخر أخبار الفن والوصول الحصري للمجموعات الجديدة",
+          placeholder: "أدخل بريدك الإلكتروني",
+          subscribe: "اشترك"
+        },
+        explore: {
+          title: "اكتشف"
+        },
+        resources: {
+          title: "الموارد",
+          guide: "دليل الجامع",
+          investment: "الاستثمار في الفن",
+          support: "الدعم"
+        },
+        copyright: "© 2025 سوق آرت. جميع الحقوق محفوظة."
+      },
+      auctions: {
+        live: "مباشر",
+        viewAll: "عرض جميع المزادات",
+        bids: "عروض",
+        placeBid: "ضع عرضاً"
+      },
+      artist: {
+        featured: "مميز"
+      },
+      artists: {
+        viewAll: "عرض جميع الفنانين"
+      },
+      artwork: {
+        status: {
+          available: "متاح"
+        }
+      },
+      artworks: {
+        viewAll: "عرض جميع الأعمال"
       }
     }
   }
