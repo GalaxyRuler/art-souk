@@ -7,7 +7,7 @@ import { ArtworkCard } from "@/components/ArtworkCard";
 import { ArtistCard } from "@/components/ArtistCard";
 import { Badge } from "@/components/ui/badge";
 import { FeaturedCollectionsFixed } from "@/components/FeaturedCollectionsFixed";
-import { TranslationTest } from "@/components/TranslationTest";
+
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
 import { cn, formatPrice } from "@/lib/utils";
@@ -38,7 +38,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
-      <TranslationTest />
       <Navbar />
       <main>
         {/* Welcome Section */}
