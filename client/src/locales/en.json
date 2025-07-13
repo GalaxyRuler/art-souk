@@ -174,6 +174,693 @@
     "auditLogs": "Audit Logs",
     "viewComplianceReport": "View Compliance Report"
   },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcomeBack": "Welcome back, {{name}}!",
+    "profile": {
+      "edit": "Edit Profile",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phone": "Phone",
+      "location": "Location",
+      "bio": "Bio"
+    },
+    "quickStats": {
+      "title": "Quick Stats",
+      "favorites": "Favorites",
+      "inquiries": "Inquiries",
+      "views": "Profile Views"
+    },
+    "viewAnalytics": "View Analytics",
+    "collectorDashboard": "Collector Dashboard",
+    "sellerDashboard": "Seller Dashboard",
+    "favorites": {
+      "title": "My Favorites",
+      "empty": "No favorites yet",
+      "emptyDescription": "Start exploring and save artworks you love!",
+      "browseArtworks": "Browse Artworks"
+    },
+    "inquiries": {
+      "title": "My Inquiries",
+      "count": "{{count}} active inquiries"
+    }
+  },
+  "collector": {
+    "dashboard": {
+      "title": "Collector Dashboard",
+      "subtitle": "Manage your art collection and orders"
+    },
+    "stats": {
+      "totalOrders": "Total Orders",
+      "inTransit": "In Transit",
+      "wishlist": "Wishlist Items",
+      "activeAlerts": "Active Alerts"
+    },
+    "tabs": {
+      "orders": "Orders",
+      "tracking": "Tracking",
+      "wishlist": "Wishlist",
+      "purchases": "Purchase History"
+    },
+    "order": {
+      "number": "Order #{{number}}"
+    },
+    "tracking": {
+      "number": "Tracking Number",
+      "carrier": "Carrier",
+      "status": "Status",
+      "estimated": "Estimated Delivery",
+      "viewFull": "View Full Details"
+    },
+    "wishlist": {
+      "priceAlerts": "Price alerts enabled"
+    },
+    "purchases": {
+      "orderNumber": "Order",
+      "purchased": "Purchased",
+      "amount": "Amount",
+      "completed": "Completed",
+      "note": "Note",
+      "paymentNote": "Payment arranged directly with seller",
+      "noPurchases": "No purchases yet",
+      "startBuying": "Start Buying"
+    },
+    "noOrders": "No orders yet",
+    "startCollecting": "Start Collecting",
+    "noWishlist": "No wishlist items",
+    "saveForLater": "Save for Later",
+    "viewDetails": "View Details",
+    "pendingPayment": "Pending Payment",
+    "browseArtworks": "Browse Artworks"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "subtitle": "Track your performance and audience insights",
+    "viewsOverTime": "Views Over Time",
+    "viewsDescription": "Track how many people are viewing your profile and artworks",
+    "engagementMetrics": "Engagement Metrics",
+    "engagementDescription": "Monitor likes, shares, and favorites",
+    "searchInsights": "Search Insights",
+    "searchDescription": "See how users find your art",
+    "audiencePreferences": "Audience Preferences",
+    "preferencesDescription": "Understand what your audience likes",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "fromLastMonth": "from last month",
+    "views": "Views",
+    "totalViews": "Total Views",
+    "profileViews": "Profile Views",
+    "artworkViews": "Artwork Views",
+    "engagement": "Engagement",
+    "followers": "Followers",
+    "newFollowers": "New Followers",
+    "new": "New",
+    "inquiries": "Inquiries",
+    "sales": "Sales",
+    "search": "Search",
+    "topCategories": "Top Categories",
+    "topStyles": "Top Styles",
+    "noData": "No data available",
+    "noSearchData": "No search data available"
+  },
+  "artist": {
+    "aboutArtist": "About the Artist",
+    "additionalInfo": "Additional Information"
+  },
+  "artists": {
+    "title": "Artists",
+    "subtitle": "Discover talented artists from Saudi Arabia and the GCC",
+    "featured": "Featured Artists",
+    "viewAll": "View All Artists",
+    "search": {
+      "placeholder": "Search artists..."
+    },
+    "filters": {
+      "nationality": "Nationality",
+      "allCountries": "All Countries"
+    },
+    "sort": {
+      "featured": "Featured",
+      "name": "Name",
+      "latest": "Latest"
+    },
+    "results": "{{count}} artists",
+    "noResults": {
+      "title": "No artists found",
+      "description": "Try adjusting your filters or search terms",
+      "clearFilters": "Clear Filters"
+    }
+  },
+  "artwork": {
+    "artist": "Artist",
+    "gallery": "Gallery",
+    "description": "Description",
+    "details": "Details",
+    "dimensions": "Dimensions",
+    "medium": "Medium",
+    "favorite": "Add to Favorites",
+    "favorited": "Added to Favorites",
+    "inquire": "Inquire About This Artwork",
+    "inquiryTitle": "Inquiry About Artwork",
+    "inquiryMessage": "Message",
+    "inquiryMessagePlaceholder": "I'm interested in this artwork...",
+    "inquiryEmail": "Email",
+    "inquiryPhone": "Phone (optional)"
+  },
+  "artworks": {
+    "addArtwork": "Add Artwork",
+    "editArtwork": "Edit Artwork",
+    "addFirst": "Add your first artwork",
+    "artistDesc": "Manage your portfolio",
+    "availability": "Availability",
+    "available": "Available",
+    "basicInfo": "Basic Information",
+    "category": "Category",
+    "description": "Description",
+    "details": "Additional Details",
+    "dimensions": "Dimensions",
+    "accessDenied": "Access Denied",
+    "accessDeniedDesc": "You don't have permission to manage artworks",
+    "createSuccess": "Artwork created successfully",
+    "createSuccessDesc": "Your artwork has been added to your portfolio",
+    "createError": "Failed to create artwork",
+    "createErrorDesc": "Please check your information and try again",
+    "deleteSuccess": "Artwork deleted successfully",
+    "deleteSuccessDesc": "The artwork has been removed from your portfolio",
+    "deleteError": "Failed to delete artwork",
+    "deleteErrorDesc": "Please try again later",
+    "deleteConfirm": "Are you sure you want to delete this artwork?"
+  },
+  "auctions": {
+    "title": "Auctions",
+    "subtitle": "Bid on exclusive artworks",
+    "live": "Live Auctions",
+    "upcoming": "Upcoming",
+    "viewAll": "View All Auctions",
+    "liveAuction": "Live Auction",
+    "liveBidding": "Live Bidding",
+    "stats": {
+      "live": "Live Now",
+      "total": "Total Auctions",
+      "totalBids": "Total Bids",
+      "upcoming": "Upcoming"
+    },
+    "tabs": {
+      "all": "All Auctions",
+      "live": "Live",
+      "upcoming": "Upcoming"
+    },
+    "status": {
+      "live": "Live",
+      "upcoming": "Upcoming",
+      "ended": "Ended",
+      "unknown": "Unknown"
+    },
+    "statusText": {
+      "liveNow": "Live Now",
+      "startingSoon": "Starting Soon",
+      "ended": "Ended"
+    },
+    "timeRemaining": "Time Remaining",
+    "timeRemaining.days": "{{count}} days",
+    "timeRemaining.hours": "{{count}} hours",
+    "timeRemaining.minutes": "{{count}} minutes",
+    "timeDays": "{{days}}d {{hours}}h",
+    "timeHours": "{{hours}}h {{minutes}}m",
+    "timeEnded": "Ended",
+    "endsIn": "Ends in",
+    "startsIn": "Starts in",
+    "starts": "Starts",
+    "ended": "Ended",
+    "endingSoon": "Ending Soon",
+    "currentBid": "Current Bid",
+    "minimumBid": "Minimum Bid",
+    "finalBid": "Final Bid",
+    "estimate": "Estimate",
+    "bids": "{{count}} bids",
+    "noBidsYet": "No bids yet",
+    "beFirstToBid": "Be the first to bid",
+    "placeBid": "Place Bid",
+    "placingBid": "Placing Bid...",
+    "yourBid": "Your Bid",
+    "enterBidAmount": "Enter bid amount",
+    "leading": "You're leading!",
+    "hasReserve": "Has reserve price",
+    "auctionDetails": "Auction Details",
+    "backToAuctions": "Back to Auctions",
+    "description": "Description",
+    "biddingActivity": "Bidding Activity",
+    "biddingIncrements": "Minimum bid increment",
+    "signInToBid": "Sign In to Bid",
+    "signInToBidDesc": "Please sign in to place a bid",
+    "signInToBidButton": "Sign In",
+    "updatesAutomatically": "Updates automatically",
+    "termsAndConditions": "By bidding, you agree to our terms and conditions",
+    "auctionEnded": "This auction has ended",
+    "auctionStartingSoon": "This auction hasn't started yet",
+    "notFound": "Auction not found",
+    "browseAuctions": "Browse Auctions",
+    "linkCopiedDesc": "Auction link copied to clipboard",
+    "noAuctions": {
+      "title": "No auctions found",
+      "description": "Check back later for new auctions"
+    },
+    "noLive": {
+      "title": "No live auctions",
+      "description": "Check upcoming auctions or browse past results"
+    },
+    "noUpcoming": {
+      "title": "No upcoming auctions",
+      "description": "New auctions will be announced soon"
+    },
+    "bidding": {
+      "invalidAmount": "Invalid bid amount",
+      "invalidAmountDesc": "Please enter a valid amount",
+      "bidTooLow": "Bid too low",
+      "bidTooLowDesc": "Your bid must be higher than the current bid",
+      "incrementTooSmall": "Increment too small",
+      "incrementTooSmallDesc": "Minimum bid increment is {{amount}}"
+    }
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signin": "Sign In",
+    "signup": "Sign Up",
+    "signUpFree": "Sign Up Free",
+    "logout": "Logout",
+    "secureLogin": "Secure Login",
+    "artSouk": "Art Souk",
+    "alreadyMember": "Already a member?",
+    "getStarted": "Get Started",
+    "backToHome": "Back to Home",
+    "required": "Authentication Required",
+    "badge": "Member",
+    "joinCommunity": "Join Our Community",
+    "joinBenefits": "Sign up to unlock exclusive features",
+    "loggingInAgain": "Logging in again...",
+    "features": {
+      "discover": "Discover Art",
+      "discoverDesc": "Browse thousands of artworks from GCC artists",
+      "galleries": "Gallery Access",
+      "galleriesDesc": "Connect with premier galleries in the region",
+      "collections": "Build Collections",
+      "collectionsDesc": "Save and organize your favorite artworks",
+      "community": "Join Community",
+      "communityDesc": "Connect with artists, collectors, and enthusiasts"
+    },
+    "benefits": {
+      "favorites": "Save favorite artworks",
+      "inquiries": "Contact artists directly",
+      "auctions": "Participate in live auctions",
+      "personalized": "Get personalized recommendations"
+    }
+  },
+  "cities": {
+    "riyadh": "Riyadh",
+    "jeddah": "Jeddah",
+    "dubai": "Dubai",
+    "abuDhabi": "Abu Dhabi",
+    "doha": "Doha",
+    "kuwaitCity": "Kuwait City",
+    "manama": "Manama",
+    "muscat": "Muscat"
+  },
+  "collections": {
+    "featured": {
+      "title": "Featured Collections",
+      "description": "Curated selections from our community"
+    }
+  },
+  "commissions": {
+    "requests": {
+      "title": "Commission Requests",
+      "subtitle": "Browse and bid on custom artwork requests",
+      "noRequests": "No commission requests yet",
+      "noRequestsDescription": "Check back later or post your own request",
+      "postRequest": "Post Commission Request",
+      "postFirstRequest": "Post First Request",
+      "bidsCount": "{{count}} bids"
+    },
+    "featured": "Featured Commission",
+    "requestedBy": "Requested by",
+    "collector": "Collector",
+    "memberSince": "Member since",
+    "budget": "Budget",
+    "deadline": "Deadline",
+    "days": "{{count}} days",
+    "category": "Category",
+    "style": "Style",
+    "medium": "Medium",
+    "dimensions": "Dimensions",
+    "description": "Description",
+    "details": "Commission Details",
+    "referenceImages": "Reference Images",
+    "messages": "Messages",
+    "noMessagesYet": "No messages yet",
+    "bids": "Artist Bids",
+    "noBidsYet": "No bids yet",
+    "artistBid": "Artist Bid",
+    "bidAmount": "Bid Amount",
+    "timeline": "Timeline",
+    "proposal": "Proposal",
+    "submitBid": "Submit Bid",
+    "enterBidAmount": "Enter your bid amount",
+    "enterTimeline": "Enter timeline (e.g., 2 weeks)",
+    "enterProposal": "Describe your approach...",
+    "fillAllFields": "Please fill in all fields",
+    "bidSubmitted": "Bid Submitted",
+    "bidSubmittedDescription": "Your bid has been submitted successfully",
+    "requestNotFound": "Commission request not found"
+  },
+  "common": {
+    "allCategories": "All Categories",
+    "allStatus": "All Status",
+    "anonymous": "Anonymous"
+  },
+  "countries": {
+    "saudiArabia": "Saudi Arabia",
+    "uae": "United Arab Emirates",
+    "kuwait": "Kuwait",
+    "qatar": "Qatar",
+    "bahrain": "Bahrain",
+    "oman": "Oman"
+  },
+  "galleries": {
+    "title": "Galleries",
+    "subtitle": "Explore premier art galleries across the GCC",
+    "featured": "Featured Galleries",
+    "viewAll": "View All Galleries",
+    "search": {
+      "placeholder": "Search galleries..."
+    },
+    "filters": {
+      "location": "Location",
+      "allCities": "All Cities"
+    },
+    "sort": {
+      "featured": "Featured",
+      "name": "Name",
+      "latest": "Latest"
+    },
+    "results": "{{count}} galleries",
+    "noResults": {
+      "title": "No galleries found",
+      "description": "Try adjusting your filters or search terms",
+      "clearFilters": "Clear Filters"
+    }
+  },
+  "events": {
+    "title": "Events",
+    "subtitle": "Discover art events and exhibitions",
+    "featured": "Featured Events",
+    "viewAll": "View All Events",
+    "search": "Search events...",
+    "filter": "Filter",
+    "all": "All Events",
+    "online": "Online",
+    "free": "Free",
+    "create": "Create Event",
+    "createFirst": "Create your first event",
+    "edit": "Edit Event",
+    "manage": "Manage Events",
+    "empty": "No events yet",
+    "noEvents": "No events found",
+    "loading": "Loading events...",
+    "category": "Category",
+    "categories": {
+      "all": "All Categories",
+      "exhibition": "Exhibition",
+      "workshop": "Workshop",
+      "talk": "Talk",
+      "networking": "Networking"
+    },
+    "description": "Description",
+    "descriptionAr": "Description (Arabic)",
+    "address": "Address",
+    "addressAr": "Address (Arabic)",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "meetingLink": "Meeting Link",
+    "maxAttendees": "Max Attendees",
+    "attendees": "Attendees",
+    "images": "Images",
+    "isOnline": "Online Event",
+    "published": "Published",
+    "draft": "Draft",
+    "cancelled": "Cancelled",
+    "completed": "Completed",
+    "rsvpSuccess": "RSVP Successful",
+    "rsvpSuccessDesc": "You have successfully registered for this event",
+    "rsvpFailed": "RSVP Failed",
+    "rsvpFailedDesc": "Unable to register for this event",
+    "loginToRSVP": "Login to RSVP",
+    "attending": "Attending",
+    "maybeAttending": "Maybe Attending",
+    "addTag": "Add Tag",
+    "createSuccess": "Event created successfully",
+    "createSuccessDesc": "Your event has been created and published",
+    "createError": "Failed to create event",
+    "deleteSuccess": "Event deleted successfully",
+    "deleteSuccessDesc": "The event has been removed",
+    "deleteConfirm": "Are you sure you want to delete this event?",
+    "onlyForArtistsGalleries": "Events can only be created by artists and galleries"
+  },
+  "workshops": {
+    "title": "Workshops",
+    "subtitle": "Learn from master artists and craftspeople",
+    "featured": "Featured Workshops",
+    "viewAll": "View All Workshops",
+    "search": "Search workshops...",
+    "filter": "Filter",
+    "all": "All Workshops",
+    "online": "Online",
+    "inPerson": "In Person",
+    "free": "Free",
+    "paid": "Paid",
+    "create": "Create Workshop",
+    "createFirst": "Create your first workshop",
+    "edit": "Edit Workshop",
+    "manage": "Manage Workshops",
+    "empty": "No workshops yet",
+    "noWorkshops": "No workshops found",
+    "loading": "Loading workshops...",
+    "category": "Category",
+    "categories": {
+      "all": "All Categories",
+      "painting": "Painting",
+      "sculpture": "Sculpture",
+      "photography": "Photography",
+      "digital": "Digital Art",
+      "traditional": "Traditional Arts"
+    },
+    "level": "Skill Level",
+    "levels": {
+      "all": "All Levels",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "duration": "Duration",
+    "materials": "Materials",
+    "instructor": "Instructor",
+    "price": "Price",
+    "seats": "Available Seats",
+    "registered": "Registered",
+    "register": "Register",
+    "registerSuccess": "Registration Successful",
+    "registerSuccessDesc": "You have successfully registered for this workshop",
+    "registerFailed": "Registration Failed",
+    "registerFailedDesc": "Unable to register for this workshop",
+    "loginToRegister": "Login to Register",
+    "createSuccess": "Workshop created successfully",
+    "createSuccessDesc": "Your workshop has been created and published",
+    "deleteSuccess": "Workshop deleted successfully",
+    "deleteSuccessDesc": "The workshop has been removed",
+    "deleteConfirm": "Are you sure you want to delete this workshop?",
+    "onlyForArtistsGalleries": "Workshops can only be created by artists and galleries"
+  },
+  "curators": {
+    "title": "Curator's Picks",
+    "description": "Hand-selected artworks by our curators",
+    "viewAll": "View All"
+  },
+  "editorial": {
+    "title": "Editorial",
+    "subtitle": "Stories and insights from the art world",
+    "featured": "Featured Articles",
+    "viewAll": "View All Articles",
+    "description": "Latest news and insights",
+    "author": "By {{author}}",
+    "search": {
+      "placeholder": "Search articles..."
+    },
+    "filters": {
+      "category": "Category",
+      "allCategories": "All Categories"
+    },
+    "categories": {
+      "news": "News",
+      "interview": "Interview",
+      "guide": "Guide",
+      "market": "Market",
+      "art": "Art"
+    },
+    "sort": {
+      "featured": "Featured",
+      "latest": "Latest",
+      "popular": "Most Popular"
+    },
+    "results": "{{count}} articles",
+    "noResults": {
+      "title": "No articles found",
+      "description": "Try adjusting your filters or search terms",
+      "clearFilters": "Clear Filters"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Get the latest art news delivered to your inbox",
+      "placeholder": "Enter your email",
+      "subscribe": "Subscribe"
+    }
+  },
+  "community": {
+    "title": "Community",
+    "subtitle": "Connect with artists and collectors",
+    "new": "New Discussion",
+    "newDiscussion": "Start New Discussion",
+    "search": "Search discussions...",
+    "filter": "Filter",
+    "category": "Category",
+    "selectCategory": "Select category",
+    "titlePlaceholder": "Discussion title...",
+    "contentPlaceholder": "Share your thoughts...",
+    "create": "Create",
+    "cancel": "Cancel",
+    "empty": "No discussions yet",
+    "like": "Like",
+    "reply": "Reply"
+  },
+  "footer": {
+    "copyright": "© 2025 Art Souk. All rights reserved.",
+    "explore": {
+      "title": "Explore"
+    },
+    "resources": {
+      "title": "Resources",
+      "guide": "Buyer's Guide",
+      "investment": "Art Investment",
+      "support": "Support"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Stay updated with the latest art news",
+      "placeholder": "Enter your email",
+      "subscribe": "Subscribe"
+    }
+  },
+  "hero": {
+    "title": "Discover Art from Saudi Arabia & the GCC",
+    "subtitle": "Connect with artists, galleries, and collectors",
+    "description": "The region's premier art marketplace",
+    "featuredArt": "Featured Artwork",
+    "featuredArtist": "Featured Artist",
+    "cta": {
+      "browse": "Browse Artworks",
+      "start": "Start Collecting"
+    }
+  },
+  "home": {
+    "welcome": "Welcome to Art Souk",
+    "subtitle": "Discover exceptional art from the region",
+    "user": "User",
+    "stats": {
+      "artists": "Artists",
+      "favorites": "Favorites",
+      "liveAuctions": "Live Auctions",
+      "trending": "Trending Now"
+    },
+    "featuredArtists": {
+      "title": "Featured Artists",
+      "subtitle": "Discover talented artists from the region",
+      "empty": "No featured artists at the moment"
+    },
+    "liveAuctions": {
+      "title": "Live Auctions"
+    },
+    "recommendations": {
+      "title": "Recommended for You",
+      "subtitle": "Based on your interests",
+      "empty": "No recommendations yet",
+      "exploreArtists": "Explore Artists"
+    }
+  },
+  "preferences": {
+    "title": "Preferences",
+    "subtitle": "Customize your Art Souk experience",
+    "artPreferences": "Art Preferences",
+    "artPreferencesDesc": "Select your favorite categories and styles",
+    "categories": "Categories",
+    "styles": "Styles",
+    "priceRange": "Price Range",
+    "notifications": "Notifications",
+    "notificationsDesc": "Choose what updates you'd like to receive",
+    "privacy": "Privacy",
+    "privacyDesc": "Manage your privacy settings",
+    "save": "Save Preferences",
+    "saving": "Saving...",
+    "saved": "Preferences Saved",
+    "savedDesc": "Your preferences have been updated",
+    "error": "Error",
+    "errorDesc": "Failed to save preferences"
+  },
+  "roleSelection": {
+    "chooseRole": "Choose Your Role",
+    "collector": {
+      "title": "Collector",
+      "description": "Discover and collect amazing artworks"
+    },
+    "artist": {
+      "title": "Artist",
+      "description": "Showcase your art to collectors"
+    },
+    "gallery": {
+      "title": "Gallery",
+      "description": "Manage your gallery and artists"
+    },
+    "selectRoles": "Select Your Roles",
+    "continue": "Continue",
+    "skip": "Skip for now"
+  },
+  "search": {
+    "placeholder": "Search..."
+  },
+  "social": {
+    "follow": "Follow",
+    "following": "Following",
+    "followed": "Followed",
+    "followedDesc": "You are now following this user",
+    "unfollowed": "Unfollowed",
+    "unfollowedDesc": "You have unfollowed this user",
+    "liked": "Liked",
+    "likedDesc": "Added to your likes",
+    "unliked": "Unliked",
+    "unlikedDesc": "Removed from your likes",
+    "comments": "Comments",
+    "noComments": "No comments yet",
+    "postComment": "Post Comment",
+    "writeComment": "Write a comment...",
+    "commentAdded": "Comment Added",
+    "commentAddedDesc": "Your comment has been posted",
+    "commentUpdated": "Comment Updated",
+    "commentUpdatedDesc": "Your comment has been updated",
+    "commentDeleted": "Comment Deleted",
+    "commentDeletedDesc": "Your comment has been removed",
+    "confirmDelete": "Are you sure you want to delete this comment?",
+    "signInToComment": "Sign in to comment",
+    "recentActivity": "Recent Activity",
+    "joinedDate": "Joined {{date}}",
+    "website": "Website"
+  },
   "errors": {
     "generic": "Something went wrong",
     "tryAgainLater": "Please try again later.",
