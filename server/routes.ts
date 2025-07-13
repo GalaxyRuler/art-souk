@@ -72,7 +72,7 @@ interface AuthenticatedRequest extends Request {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
+  // Auth middleware must be first
   await setupAuth(app);
   
   // Apply security middleware stack
@@ -84,10 +84,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Apply lifecycle tracking middleware
   app.use(trackStageMiddleware);
-
-  // Register admin and seller routes
-  app.use('/api/admin', adminRouter);
-  app.use('/api/seller', sellerRouter);
 
   // Auth routes (without aggressive rate limiting for normal usage)
   app.get('/api/auth/user', async (req: any, res) => {
@@ -202,6 +198,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.redirect('/');
     }
   });
+
+  // Register admin and seller routes AFTER auth routes
+  app.use('/api/admin', adminRouter);
+  app.use('/api/seller', sellerRouter);
 
   // First-time admin setup endpoint - allows creating the first admin without authentication
   app.post('/api/admin/setup', rateLimiters.auth, async (req: any, res) => {

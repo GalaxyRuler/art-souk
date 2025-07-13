@@ -23,40 +23,26 @@ const adminRouter = Router();
 // Middleware to ensure user is admin
 const requireAdmin = async (req: any, res: any, next: any) => {
   try {
-    console.log('Admin middleware - checking authentication');
-    console.log('Request user:', req.user);
-    console.log('Request session:', req.session);
-    
     if (!req.user || !req.user.claims || !req.user.claims.sub) {
-      console.log('Admin middleware - no user claims found');
-      return res.status(403).json({ message: 'Authentication required' });
+      return res.status(401).json({ message: 'Unauthorized' });
     }
     
     const userId = req.user.claims.sub;
-    console.log('Admin middleware - user ID:', userId);
-    
     const user = await storage.getUser(userId);
-    console.log('Admin middleware - user from DB:', user);
     
     if (!user) {
-      console.log('Admin middleware - user not found in database');
-      return res.status(403).json({ message: 'User not found' });
+      return res.status(401).json({ message: 'Unauthorized' });
     }
     
     // Check if user has admin role (check both old role field and new roles array)
     const hasAdminRole = user.roles?.includes('admin') || user.role === 'admin';
-    console.log('Admin middleware - user roles:', user.roles);
-    console.log('Admin middleware - user role:', user.role);
-    console.log('Admin middleware - has admin role:', hasAdminRole);
     
     if (!hasAdminRole) {
-      console.log('Admin middleware - access denied, no admin role');
       return res.status(403).json({ message: 'Admin access required' });
     }
     
     // Attach user to request for later use
     req.dbUser = user;
-    console.log('Admin middleware - access granted');
     next();
   } catch (error) {
     console.error('Admin middleware error:', error);
