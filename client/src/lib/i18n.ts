@@ -605,6 +605,7 @@ const resources = {
         jewelry: "Jewelry",
         textile: "Textile",
         calligraphy: "Calligraphy",
+        Calligraphy: "Calligraphy",
         other: "Other"
       },
       admin: {
@@ -1036,6 +1037,7 @@ const resources = {
         jewelry: "مجوهرات",
         textile: "نسيج",
         calligraphy: "خط عربي",
+        Calligraphy: "خط عربي",
         other: "أخرى"
       },
       countries: {
