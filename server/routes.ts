@@ -377,6 +377,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         db.select({ count: count() }).from(schema.events)
       ]);
 
+      // Count users by role (users can have multiple roles)
+      const usersWithRoles = await db.select({
+        id: schema.users.id,
+        roles: schema.users.roles
+      }).from(schema.users);
+
+      let collectorsCount = 0;
+      let artistsCount = 0;
+      let galleriesCount = 0;
+      let adminsCount = 0;
+
+      usersWithRoles.forEach(user => {
+        if (user.roles && Array.isArray(user.roles)) {
+          if (user.roles.includes('collector')) collectorsCount++;
+          if (user.roles.includes('artist')) artistsCount++;
+          if (user.roles.includes('gallery')) galleriesCount++;
+          if (user.roles.includes('admin')) adminsCount++;
+        }
+      });
+
       const stats = {
         overview: {
           totalUsers: totalUsers[0].count,
@@ -386,6 +406,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           activeAuctions: activeAuctions[0].count,
           totalWorkshops: totalWorkshops[0].count,
           totalEvents: totalEvents[0].count
+        },
+        usersByRole: {
+          collectors: collectorsCount,
+          artists: artistsCount,
+          galleries: galleriesCount,
+          admins: adminsCount
         }
       };
       

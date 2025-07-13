@@ -430,7 +430,7 @@ export default function AdminDashboard() {
                   <Palette className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{stats?.overview?.totalArtists || 0}</div>
+                  <div className="text-2xl font-bold">{stats?.usersByRole?.artists || 0}</div>
                   <p className="text-xs text-muted-foreground">Active creators</p>
                 </CardContent>
               </Card>
@@ -441,7 +441,7 @@ export default function AdminDashboard() {
                   <Building className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{stats?.overview?.totalGalleries || 0}</div>
+                  <div className="text-2xl font-bold">{stats?.usersByRole?.galleries || 0}</div>
                   <p className="text-xs text-muted-foreground">Partner galleries</p>
                 </CardContent>
               </Card>
@@ -452,7 +452,7 @@ export default function AdminDashboard() {
                   <Star className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{(stats?.overview?.totalUsers || 0) - (stats?.overview?.totalArtists || 0) - (stats?.overview?.totalGalleries || 0)}</div>
+                  <div className="text-2xl font-bold">{stats?.usersByRole?.collectors || 0}</div>
                   <p className="text-xs text-muted-foreground">Art collectors</p>
                 </CardContent>
               </Card>
