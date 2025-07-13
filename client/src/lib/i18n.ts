@@ -208,7 +208,19 @@ const resources = {
         timeRemaining: "Time Remaining"
       },
       artist: {
-        featured: "Featured"
+        featured: "Featured",
+        notFound: "Artist Not Found",
+        browseArtists: "Browse Artists",
+        linkCopied: "Link Copied",
+        linkCopiedDescription: "Artist profile link copied to clipboard",
+        backToArtists: "Back to Artists",
+        born: "Born",
+        died: "Died",
+        artworks: "artworks",
+        share: "Share",
+        aboutArtist: "About Artist",
+        statistics: "Statistics",
+        totalArtworks: "Total Artworks"
       },
       artists: {
         viewAll: "View All Artists"
@@ -647,7 +659,19 @@ const resources = {
         timeRemaining: "الوقت المتبقي"
       },
       artist: {
-        featured: "مميز"
+        featured: "مميز",
+        notFound: "الفنان غير موجود",
+        browseArtists: "تصفح الفنانين",
+        linkCopied: "تم نسخ الرابط",
+        linkCopiedDescription: "تم نسخ رابط الفنان إلى الحافظة",
+        backToArtists: "العودة للفنانين",
+        born: "مولود",
+        died: "متوفى",
+        artworks: "أعمال فنية",
+        share: "مشاركة",
+        aboutArtist: "عن الفنان",
+        statistics: "الإحصائيات",
+        totalArtworks: "إجمالي الأعمال الفنية"
       },
       artists: {
         title: "الفنانون",
