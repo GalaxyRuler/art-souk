@@ -352,7 +352,7 @@ export default function Dashboard() {
                       <Link to="/analytics">
                         <Button className="w-full h-11 bg-slate-700 hover:bg-slate-800 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                           <BarChart3 className="h-4 w-4 mr-3" />
-                          {t("dashboard.viewAnalytics")}
+                          View Analytics - {user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
                         </Button>
                       </Link>
                     </div>
@@ -363,7 +363,7 @@ export default function Dashboard() {
                     <Link to="/analytics/dashboard">
                       <Button className="w-full h-11 bg-violet-600 hover:bg-violet-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                         <BarChart3 className="h-4 w-4 mr-3" />
-                        {t("dashboard.lifecycleAnalytics")}
+                        Lifecycle Analytics - All Users
                       </Button>
                     </Link>
                   </div>
@@ -373,7 +373,7 @@ export default function Dashboard() {
                     <Link to="/collector">
                       <Button className="w-full h-11 bg-cyan-600 hover:bg-cyan-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                         <Package className="h-4 w-4 mr-3" />
-                        {t("dashboard.collectorDashboard")}
+                        Collector Dashboard - Collectors
                       </Button>
                     </Link>
                   </div>
@@ -389,7 +389,7 @@ export default function Dashboard() {
                         <Link to="/seller">
                           <Button className="w-full h-11 bg-orange-600 hover:bg-orange-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                             <Package className="h-4 w-4 mr-3" />
-                            {t("dashboard.sellerDashboard")}
+                            Seller Dashboard - {user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
                           </Button>
                         </Link>
                       </div>
@@ -398,7 +398,7 @@ export default function Dashboard() {
                         <Link to="/artworks/manage">
                           <Button className="w-full h-11 bg-pink-600 hover:bg-pink-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                             <Palette className="h-4 w-4 mr-3" />
-                            {t("dashboard.artworkManagement")}
+                            Artwork Management - {user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
                           </Button>
                         </Link>
                       </div>
@@ -407,7 +407,7 @@ export default function Dashboard() {
                         <Link to="/shipping-management">
                           <Button className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                             <Package className="h-4 w-4 mr-3" />
-                            {t("shipping.title")}
+                            Shipping Management - {user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
                           </Button>
                         </Link>
                       </div>
@@ -416,7 +416,7 @@ export default function Dashboard() {
                         <Link to="/invoice-management">
                           <Button className="w-full h-11 bg-amber-600 hover:bg-amber-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                             <Settings className="h-4 w-4 mr-3" />
-                            {t("invoice.title")}
+                            Invoice Management - {user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
                           </Button>
                         </Link>
                       </div>
