@@ -269,8 +269,9 @@ export default function CollectorDashboard() {
                             <div className="flex items-center justify-between mt-4">
                               <div className="flex items-center gap-4 text-sm">
                                 <span className="flex items-center gap-1">
-                                  <DollarSign className="h-4 w-4 text-gray-500" />
-                                  {language === "ar" ? "ر.س" : order.currency} {parseFloat(order.totalAmount).toLocaleString()}
+                                  <span className="text-gray-500">
+                                    {language === "ar" ? "ر.س" : "SAR"} {parseFloat(order.totalAmount).toLocaleString()}
+                                  </span>
                                 </span>
                                 <span className="flex items-center gap-1">
                                   <Calendar className="h-4 w-4 text-gray-500" />
@@ -397,7 +398,7 @@ export default function CollectorDashboard() {
                             </p>
                             <div className="flex items-center justify-between mt-2">
                               <span className="text-sm font-medium">
-                                {language === "ar" ? "ر.س" : item.artwork.currency} {parseFloat(item.artwork.price).toLocaleString()}
+                                {language === "ar" ? "ر.س" : "SAR"} {parseFloat(item.artwork.price).toLocaleString()}
                               </span>
                               <div className="flex items-center gap-1">
                                 {[...Array(5)].map((_, i) => (

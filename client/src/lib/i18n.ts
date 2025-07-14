@@ -757,6 +757,57 @@ const resources = {
           theme: "Theme"
         }
       },
+      collector: {
+        dashboard: {
+          title: "Collector Dashboard",
+          subtitle: "Manage your art collection and orders"
+        },
+        stats: {
+          totalOrders: "Total Orders",
+          inTransit: "In Transit",
+          wishlist: "Wishlist Items",
+          activeAlerts: "Active Alerts"
+        },
+        tabs: {
+          orders: "Orders",
+          tracking: "Tracking",
+          wishlist: "Wishlist",
+          purchases: "Purchase History"
+        },
+        order: {
+          number: "Order #"
+        },
+        status: {
+          pending: "Pending",
+          confirmed: "Confirmed",
+          processing: "Processing",
+          shipped: "Shipped",
+          delivered: "Delivered",
+          cancelled: "Cancelled"
+        },
+        pendingPayment: "Awaiting payment arrangement",
+        viewDetails: "View Details",
+        noOrders: "No orders yet",
+        startCollecting: "Start building your collection",
+        browseArtworks: "Browse Artworks",
+        tracking: {
+          number: "Tracking #",
+          carrier: "Carrier",
+          status: "Status",
+          estimated: "Estimated Delivery",
+          viewFull: "View Full Tracking"
+        },
+        wishlist: {
+          priceAlerts: "Price alerts enabled"
+        },
+        noWishlist: "No items in wishlist",
+        saveForLater: "Save artworks you love for later",
+        purchases: {
+          note: "All payments are handled directly between you and the artist/gallery",
+          purchased: "Purchased on",
+          completed: "Completed"
+        }
+      },
       admin: {
         dashboard: "Admin Dashboard",
         dashboardDescription: "Manage platform settings and content",
@@ -1876,6 +1927,57 @@ const resources = {
           privacy: "الخصوصية",
           language: "اللغة",
           theme: "السمة"
+        }
+      },
+      collector: {
+        dashboard: {
+          title: "لوحة المجمع",
+          subtitle: "إدارة مجموعة أعمالك الفنية والطلبات"
+        },
+        stats: {
+          totalOrders: "إجمالي الطلبات",
+          inTransit: "في الطريق",
+          wishlist: "عناصر قائمة الرغبات",
+          activeAlerts: "التنبيهات النشطة"
+        },
+        tabs: {
+          orders: "الطلبات",
+          tracking: "التتبع",
+          wishlist: "قائمة الرغبات",
+          purchases: "تاريخ الشراء"
+        },
+        order: {
+          number: "رقم الطلب #"
+        },
+        status: {
+          pending: "في الانتظار",
+          confirmed: "مؤكد",
+          processing: "قيد المعالجة",
+          shipped: "تم الشحن",
+          delivered: "تم التوصيل",
+          cancelled: "ملغي"
+        },
+        pendingPayment: "في انتظار ترتيب الدفع",
+        viewDetails: "عرض التفاصيل",
+        noOrders: "لا توجد طلبات بعد",
+        startCollecting: "ابدأ في بناء مجموعتك",
+        browseArtworks: "تصفح الأعمال الفنية",
+        tracking: {
+          number: "رقم التتبع #",
+          carrier: "الناقل",
+          status: "الحالة",
+          estimated: "التاريخ المتوقع للتسليم",
+          viewFull: "عرض التتبع الكامل"
+        },
+        wishlist: {
+          priceAlerts: "تنبيهات الأسعار مفعلة"
+        },
+        noWishlist: "لا توجد عناصر في قائمة الرغبات",
+        saveForLater: "احفظ الأعمال الفنية التي تحبها لاحقاً",
+        purchases: {
+          note: "جميع المدفوعات تتم مباشرة بينك وبين الفنان/المعرض",
+          purchased: "تم الشراء في",
+          completed: "مكتمل"
         }
       },
       workshops: {
