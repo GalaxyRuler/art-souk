@@ -1,234 +1,257 @@
-import { Server as SocketIOServer } from 'socket.io';
-import { Server as HTTPServer } from 'http';
-import { Redis } from 'ioredis';
-import { createAdapter } from '@socket.io/redis-adapter';
-import { db } from '@art-souk/db';
-import { auctions, bids, users } from '@art-souk/db/schema';
-import { eq, and, gte } from 'drizzle-orm';
+import { Server as SocketServer } from "socket.io";
+import { Server } from "http";
+import { createAdapter } from "@socket.io/redis-adapter";
+import { createClient } from "redis";
+import { asyncHandler } from "./middleware/errorHandler";
 
-export interface BidData {
-  auctionId: number;
-  userId: string;
-  amount: number;
-  timestamp: Date;
+interface SocketUser {
+  id: string;
+  name: string;
+  role: string;
 }
 
-export interface AuctionUpdate {
-  auctionId: number;
-  currentBid: number;
-  bidCount: number;
-  timeRemaining: number;
-  leadingBidder?: string;
+interface AuthenticatedSocket extends Socket {
+  user?: SocketUser;
 }
 
-export class AuctionSocketServer {
-  private io: SocketIOServer;
-  private redis: Redis;
-  private pubClient: Redis;
-  private subClient: Redis;
+export function setupSocketIO(server: Server) {
+  const io = new SocketServer(server, {
+    cors: {
+      origin: process.env.NODE_ENV === "production" ? false : "*",
+      credentials: true,
+    },
+    transports: ["websocket"],
+  });
 
-  constructor(httpServer: HTTPServer) {
-    this.io = new SocketIOServer(httpServer, {
-      cors: {
-        origin: process.env.NODE_ENV === 'production' 
-          ? ['https://yoursite.com'] 
-          : ['http://localhost:5000'],
-        methods: ['GET', 'POST'],
-        credentials: true
-      }
-    });
+  // Redis adapter for scaling across multiple instances
+  if (process.env.REDIS_URL) {
+    const pubClient = createClient({ url: process.env.REDIS_URL });
+    const subClient = pubClient.duplicate();
 
-    // Redis setup for scaling across multiple instances
-    this.redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
-    this.pubClient = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
-    this.subClient = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
-
-    // Set up Redis adapter for multi-instance support
-    this.io.adapter(createAdapter(this.pubClient, this.subClient));
-
-    this.setupEventHandlers();
+    Promise.all([pubClient.connect(), subClient.connect()])
+      .then(() => {
+        io.adapter(createAdapter(pubClient, subClient));
+        console.log("✅ Socket.IO Redis adapter connected");
+      })
+      .catch((error) => {
+        console.error("❌ Redis adapter connection failed:", error);
+      });
   }
 
-  private setupEventHandlers() {
-    this.io.on('connection', (socket) => {
-      console.log(`User ${socket.id} connected`);
-
-      // Join auction room
-      socket.on('join_auction', async (auctionId: number) => {
-        try {
-          await socket.join(`auction:${auctionId}`);
-          
-          // Send current auction state
-          const auctionState = await this.getAuctionState(auctionId);
-          socket.emit('auction_state', auctionState);
-          
-          console.log(`User ${socket.id} joined auction ${auctionId}`);
-        } catch (error) {
-          console.error('Error joining auction:', error);
-          socket.emit('error', { message: 'Failed to join auction' });
-        }
-      });
-
-      // Leave auction room
-      socket.on('leave_auction', (auctionId: number) => {
-        socket.leave(`auction:${auctionId}`);
-        console.log(`User ${socket.id} left auction ${auctionId}`);
-      });
-
-      // Handle new bid
-      socket.on('place_bid', async (bidData: BidData) => {
-        try {
-          const result = await this.processBid(bidData);
-          
-          if (result.success) {
-            // Broadcast to all users in the auction room
-            this.io.to(`auction:${bidData.auctionId}`).emit('bid_placed', {
-              auctionId: bidData.auctionId,
-              bid: result.bid,
-              auctionUpdate: result.auctionUpdate
-            });
-
-            // Store bid in Redis for real-time leaderboard
-            await this.updateBidCache(bidData.auctionId, result.bid);
-          } else {
-            socket.emit('bid_error', { message: result.error });
-          }
-        } catch (error) {
-          console.error('Error placing bid:', error);
-          socket.emit('bid_error', { message: 'Failed to place bid' });
-        }
-      });
-
-      // Handle disconnection
-      socket.on('disconnect', () => {
-        console.log(`User ${socket.id} disconnected`);
-      });
-    });
-  }
-
-  private async processBid(bidData: BidData) {
+  // Authentication middleware
+  io.use(asyncHandler(async (socket: AuthenticatedSocket, next) => {
     try {
-      // Get current auction state
-      const [auction] = await db
-        .select()
-        .from(auctions)
-        .where(eq(auctions.id, bidData.auctionId));
-
-      if (!auction) {
-        return { success: false, error: 'Auction not found' };
+      const token = socket.handshake.auth.token;
+      
+      if (!token) {
+        return next(new Error("Authentication required"));
       }
 
-      // Check if auction is still active
-      if (new Date() > new Date(auction.endTime)) {
-        return { success: false, error: 'Auction has ended' };
+      // Verify token and get user info
+      // This would typically verify a JWT token
+      const user = await verifySocketToken(token);
+      
+      if (!user) {
+        return next(new Error("Invalid authentication token"));
       }
 
-      // Get current highest bid
-      const [currentHighestBid] = await db
-        .select()
-        .from(bids)
-        .where(eq(bids.auctionId, bidData.auctionId))
-        .orderBy(bids.amount.desc())
-        .limit(1);
-
-      // Validate bid amount
-      const minimumBid = currentHighestBid 
-        ? parseFloat(currentHighestBid.amount) + (auction.minimumIncrement || 100)
-        : auction.startingBid || 0;
-
-      if (bidData.amount < minimumBid) {
-        return { 
-          success: false, 
-          error: `Bid must be at least ${minimumBid} ${auction.currency}` 
-        };
-      }
-
-      // Insert new bid
-      const [newBid] = await db
-        .insert(bids)
-        .values({
-          auctionId: bidData.auctionId,
-          userId: bidData.userId,
-          amount: bidData.amount.toString(),
-          timestamp: bidData.timestamp
-        })
-        .returning();
-
-      // Update auction current bid
-      await db
-        .update(auctions)
-        .set({ 
-          currentBid: bidData.amount.toString(),
-          bidCount: (auction.bidCount || 0) + 1
-        })
-        .where(eq(auctions.id, bidData.auctionId));
-
-      // Get bidder info
-      const [bidder] = await db
-        .select({ firstName: users.firstName, lastName: users.lastName })
-        .from(users)
-        .where(eq(users.id, bidData.userId));
-
-      const auctionUpdate: AuctionUpdate = {
-        auctionId: bidData.auctionId,
-        currentBid: bidData.amount,
-        bidCount: (auction.bidCount || 0) + 1,
-        timeRemaining: Math.max(0, new Date(auction.endTime).getTime() - Date.now()),
-        leadingBidder: bidder ? `${bidder.firstName} ${bidder.lastName}` : 'Anonymous'
-      };
-
-      return { 
-        success: true, 
-        bid: newBid,
-        auctionUpdate 
-      };
+      socket.user = user;
+      next();
     } catch (error) {
-      console.error('Error processing bid:', error);
-      return { success: false, error: 'Internal server error' };
+      console.error("Socket authentication error:", error);
+      next(new Error("Authentication failed"));
     }
-  }
+  }));
 
-  private async getAuctionState(auctionId: number): Promise<AuctionUpdate> {
-    const [auction] = await db
-      .select()
-      .from(auctions)
-      .where(eq(auctions.id, auctionId));
+  // Connection handling
+  io.on("connection", (socket: AuthenticatedSocket) => {
+    console.log(`User connected: ${socket.user?.name || "Anonymous"} (${socket.id})`);
 
-    if (!auction) {
-      throw new Error('Auction not found');
+    // Join user to their personal room
+    if (socket.user) {
+      socket.join(`user:${socket.user.id}`);
     }
 
-    const [currentBid] = await db
-      .select()
-      .from(bids)
-      .where(eq(bids.auctionId, auctionId))
-      .orderBy(bids.amount.desc())
-      .limit(1);
+    // Auction event handlers
+    socket.on("join-auction", asyncHandler(async (auctionId: number) => {
+      try {
+        if (!auctionId || typeof auctionId !== "number") {
+          throw new Error("Invalid auction ID");
+        }
 
-    const [bidder] = currentBid ? await db
-      .select({ firstName: users.firstName, lastName: users.lastName })
-      .from(users)
-      .where(eq(users.id, currentBid.userId))
-      : [];
+        // Verify auction exists and is active
+        const auction = await getAuctionById(auctionId);
+        if (!auction) {
+          socket.emit("error", { message: "Auction not found" });
+          return;
+        }
 
-    return {
-      auctionId,
-      currentBid: currentBid ? parseFloat(currentBid.amount) : auction.startingBid || 0,
-      bidCount: auction.bidCount || 0,
-      timeRemaining: Math.max(0, new Date(auction.endTime).getTime() - Date.now()),
-      leadingBidder: bidder ? `${bidder.firstName} ${bidder.lastName}` : undefined
-    };
-  }
+        if (auction.status !== "live") {
+          socket.emit("error", { message: "Auction is not live" });
+          return;
+        }
 
-  private async updateBidCache(auctionId: number, bid: any) {
-    await this.redis.zadd(
-      `auction:${auctionId}:bids`,
-      bid.amount,
-      JSON.stringify(bid)
-    );
-  }
+        // Join auction room
+        socket.join(`auction:${auctionId}`);
+        
+        // Send current auction state
+        socket.emit("auction-joined", {
+          auctionId,
+          currentBid: auction.currentBid,
+          bidCount: auction.bidCount,
+          timeLeft: auction.endDate,
+        });
 
-  public getIO(): SocketIOServer {
-    return this.io;
-  }
+        console.log(`User ${socket.user?.name} joined auction ${auctionId}`);
+      } catch (error) {
+        console.error("Join auction error:", error);
+        socket.emit("error", { message: "Failed to join auction" });
+      }
+    }));
+
+    socket.on("leave-auction", asyncHandler(async (auctionId: number) => {
+      try {
+        socket.leave(`auction:${auctionId}`);
+        console.log(`User ${socket.user?.name} left auction ${auctionId}`);
+      } catch (error) {
+        console.error("Leave auction error:", error);
+      }
+    }));
+
+    socket.on("place-bid", asyncHandler(async (data: { auctionId: number; amount: number }) => {
+      try {
+        const { auctionId, amount } = data;
+
+        if (!socket.user) {
+          socket.emit("error", { message: "Authentication required" });
+          return;
+        }
+
+        // Validate bid data
+        if (!auctionId || !amount || typeof amount !== "number" || amount <= 0) {
+          socket.emit("error", { message: "Invalid bid data" });
+          return;
+        }
+
+        // Process bid through API
+        const bidResult = await placeBid(auctionId, socket.user.id, amount);
+        
+        if (bidResult.success) {
+          // Broadcast bid to all auction participants
+          io.to(`auction:${auctionId}`).emit("bid-placed", {
+            id: bidResult.bid.id,
+            amount: bidResult.bid.amount,
+            userId: socket.user.id,
+            userName: socket.user.name,
+            createdAt: bidResult.bid.createdAt,
+          });
+
+          // Update auction state
+          io.to(`auction:${auctionId}`).emit("auction-updated", {
+            currentBid: bidResult.bid.amount,
+            bidCount: bidResult.auction.bidCount,
+          });
+
+          console.log(`Bid placed: ${socket.user.name} bid ${amount} on auction ${auctionId}`);
+        } else {
+          socket.emit("error", { message: bidResult.error });
+        }
+      } catch (error) {
+        console.error("Place bid error:", error);
+        socket.emit("error", { message: "Failed to place bid" });
+      }
+    }));
+
+    // Live updates for artworks
+    socket.on("watch-artwork", asyncHandler(async (artworkId: number) => {
+      try {
+        if (!artworkId || typeof artworkId !== "number") {
+          throw new Error("Invalid artwork ID");
+        }
+
+        socket.join(`artwork:${artworkId}`);
+        console.log(`User ${socket.user?.name} watching artwork ${artworkId}`);
+      } catch (error) {
+        console.error("Watch artwork error:", error);
+      }
+    }));
+
+    socket.on("unwatch-artwork", asyncHandler(async (artworkId: number) => {
+      try {
+        socket.leave(`artwork:${artworkId}`);
+        console.log(`User ${socket.user?.name} stopped watching artwork ${artworkId}`);
+      } catch (error) {
+        console.error("Unwatch artwork error:", error);
+      }
+    }));
+
+    // Notification handling
+    socket.on("join-notifications", asyncHandler(async () => {
+      try {
+        if (!socket.user) {
+          socket.emit("error", { message: "Authentication required" });
+          return;
+        }
+
+        socket.join(`notifications:${socket.user.id}`);
+        console.log(`User ${socket.user.name} joined notifications`);
+      } catch (error) {
+        console.error("Join notifications error:", error);
+      }
+    }));
+
+    // Disconnect handling
+    socket.on("disconnect", (reason) => {
+      console.log(`User disconnected: ${socket.user?.name || "Anonymous"} (${socket.id}) - ${reason}`);
+    });
+
+    // Error handling
+    socket.on("error", (error) => {
+      console.error("Socket error:", error);
+    });
+  });
+
+  // Graceful shutdown
+  process.on("SIGTERM", () => {
+    console.log("Closing Socket.IO server...");
+    io.close();
+  });
+
+  return io;
+}
+
+// Helper functions (these would be imported from your service layer)
+async function verifySocketToken(token: string): Promise<SocketUser | null> {
+  // Implement token verification logic
+  // This is a placeholder - implement based on your authentication system
+  return null;
+}
+
+async function getAuctionById(id: number) {
+  // Implement auction lookup logic
+  // This would typically query your database
+  return null;
+}
+
+async function placeBid(auctionId: number, userId: string, amount: number) {
+  // Implement bid placement logic
+  // This would typically interact with your database and validation logic
+  return { success: false, error: "Not implemented" };
+}
+
+// Export function to emit real-time updates
+export function emitToRoom(io: SocketServer, room: string, event: string, data: any) {
+  io.to(room).emit(event, data);
+}
+
+export function emitToUser(io: SocketServer, userId: string, event: string, data: any) {
+  io.to(`user:${userId}`).emit(event, data);
+}
+
+export function emitToAuction(io: SocketServer, auctionId: number, event: string, data: any) {
+  io.to(`auction:${auctionId}`).emit(event, data);
+}
+
+export function emitToArtwork(io: SocketServer, artworkId: number, event: string, data: any) {
+  io.to(`artwork:${artworkId}`).emit(event, data);
 }

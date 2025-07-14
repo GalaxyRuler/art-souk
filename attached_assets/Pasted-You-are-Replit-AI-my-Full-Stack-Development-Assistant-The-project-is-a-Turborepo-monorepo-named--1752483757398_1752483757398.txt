@@ -1,0 +1,42 @@
+You are Replit AI, my Full-Stack Development Assistant. The project is a Turborepo monorepo named **art-souk** with these roots:
+- **apps/web**: React 18 + TypeScript frontend (Tailwind CSS, Radix UI, TanStack Query, react-i18next)
+- **apps/api**: Node.js + Express backend (Socket.IO auctions, Redis + BullMQ jobs)
+- **packages/db**: Drizzle ORM schemas & migrations
+- **packages/ui**: Shared React components and design system
+- **packages/tsconfig**: Centralized TypeScript config
+
+Please implement the following improvements across the entire repo and commit each logical change with a clear Conventional Commit message:
+
+1. **Frontend (apps/web)**
+   - Refactor folder structure into domain-driven modules (e.g. `features/auctions/`, `features/profile/`).
+   - Tighten TypeScript: replace all `any` with precise interfaces and enable strict compiler options.
+   - Extract repetitive Tailwind utility combinations into custom `@apply` classes or reusable components.
+   - Lazy-load heavy routes via React.lazy/Suspense to reduce initial bundle size.
+   - Enforce ESLint “error” on unused imports/vars; auto-fix where possible.
+   - Optimize images: create or integrate a `<LazyImage>` component with `loading="lazy"`.
+   - Add Vitest unit tests for core components and bidding logic; expand Playwright E2E tests to include error and i18n toggle scenarios.
+   - Wrap all hard-coded UI strings in react-i18next translation keys; verify RTL layout flips correctly.
+   - Audit accessibility: add missing `aria-label`/`role` attributes, ensure color-contrast passes WCAG; integrate automated axe checks.
+
+2. **Backend (apps/api)**
+   - Wrap every asynchronous Socket.IO event handler in try/catch; emit standardized error events on failure.
+   - Ensure all REST and socket endpoints validate inputs using Zod schemas.
+   - Implement secure refresh-token rotation and set cookies with `Secure; HttpOnly; SameSite=Strict`.
+   - Add CSRF protection middleware on any state-changing HTTP routes.
+   - Configure BullMQ jobs with exponential back-off and retry on transient errors.
+   - Write integration tests for auction workflows over WebSockets and negative cases (invalid bids).
+   - Parallelize backend test suite in GitHub Actions to speed up CI.
+
+3. **Shared Packages**
+   - In **packages/db**, audit Drizzle schemas: align nullable vs optional fields and rename migration files to include timestamp prefixes (e.g. `20250714-add-auction-index`).
+   - In **packages/ui**, introduce a ThemeContext to manage light/dark mode and language direction, and refactor component props to consume it.
+   - Scaffold a Storybook site (or Docz) documenting every UI component with usage examples and prop tables.
+   - Verify TypeScript path aliases work in both local IDE and CI (`ts-node`, build scripts).
+
+4. **Documentation & CI**
+   - Update `CONTRIBUTING.md` with coding standards, commit conventions, and testing guidelines.
+   - Add an “Architecture Decision Record” summarizing major tech/structure choices.
+   - Integrate a bundle-analysis step in CI and fail the build if any chunk exceeds 500 KB.
+
+After implementing, push your commits and open a single pull request titled “🔧 Full-stack improvements: frontend, backend, shared packages, docs & CI.” Ensure all tests pass and CI checks are green.
+::contentReference[oaicite:0]{index=0}
