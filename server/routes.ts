@@ -4617,6 +4617,333 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   }, 6 * 60 * 60 * 1000); // 6 hours
 
+  // Additional missing endpoints for frontend compatibility
+  
+  // Admin user management endpoints
+  app.get('/api/admin/users', isAuthenticated, async (req: any, res) => {
+    try {
+      const users = await storage.getUsers();
+      res.json(users);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ message: "Failed to fetch users" });
+    }
+  });
+
+  app.patch('/api/admin/users/:userId/status', isAuthenticated, async (req: any, res) => {
+    try {
+      const { userId } = req.params;
+      const { status } = req.body;
+      const user = await storage.updateUserStatus(userId, status);
+      res.json(user);
+    } catch (error) {
+      console.error("Error updating user status:", error);
+      res.status(500).json({ message: "Failed to update user status" });
+    }
+  });
+
+  app.patch('/api/admin/users/:userId/verify', isAuthenticated, async (req: any, res) => {
+    try {
+      const { userId } = req.params;
+      const user = await storage.verifyUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error verifying user:", error);
+      res.status(500).json({ message: "Failed to verify user" });
+    }
+  });
+
+  app.get('/api/admin/artists', isAuthenticated, async (req: any, res) => {
+    try {
+      const artists = await storage.getArtists();
+      res.json(artists);
+    } catch (error) {
+      console.error("Error fetching artists:", error);
+      res.status(500).json({ message: "Failed to fetch artists" });
+    }
+  });
+
+  app.get('/api/admin/galleries', isAuthenticated, async (req: any, res) => {
+    try {
+      const galleries = await storage.getGalleries();
+      res.json(galleries);
+    } catch (error) {
+      console.error("Error fetching galleries:", error);
+      res.status(500).json({ message: "Failed to fetch galleries" });
+    }
+  });
+
+  // Analytics endpoints
+  app.get('/api/analytics/dashboard', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const analytics = await storage.getDashboardAnalytics(userId);
+      res.json(analytics);
+    } catch (error) {
+      console.error("Error fetching dashboard analytics:", error);
+      res.status(500).json({ message: "Failed to fetch dashboard analytics" });
+    }
+  });
+
+  app.get('/api/analytics/user-journey', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const userJourney = await storage.getUserJourney(userId);
+      res.json(userJourney);
+    } catch (error) {
+      console.error("Error fetching user journey:", error);
+      res.status(500).json({ message: "Failed to fetch user journey" });
+    }
+  });
+
+  app.get('/api/analytics/conversion-funnel', isAuthenticated, async (req: any, res) => {
+    try {
+      const funnel = await storage.getConversionFunnel();
+      res.json(funnel);
+    } catch (error) {
+      console.error("Error fetching conversion funnel:", error);
+      res.status(500).json({ message: "Failed to fetch conversion funnel" });
+    }
+  });
+
+  app.get('/api/analytics/content-performance', isAuthenticated, async (req: any, res) => {
+    try {
+      const performance = await storage.getContentPerformance();
+      res.json(performance);
+    } catch (error) {
+      console.error("Error fetching content performance:", error);
+      res.status(500).json({ message: "Failed to fetch content performance" });
+    }
+  });
+
+  // Notification endpoints
+  app.get('/api/notifications', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const notifications = await storage.getUserNotifications(userId);
+      res.json(notifications);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      res.status(500).json({ message: "Failed to fetch notifications" });
+    }
+  });
+
+  app.get('/api/notifications/settings', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const settings = await storage.getNotificationSettings(userId);
+      res.json(settings);
+    } catch (error) {
+      console.error("Error fetching notification settings:", error);
+      res.status(500).json({ message: "Failed to fetch notification settings" });
+    }
+  });
+
+  app.put('/api/notifications/settings', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const settings = await storage.updateNotificationSettings(userId, req.body);
+      res.json(settings);
+    } catch (error) {
+      console.error("Error updating notification settings:", error);
+      res.status(500).json({ message: "Failed to update notification settings" });
+    }
+  });
+
+  app.patch('/api/notifications/:notificationId/read', isAuthenticated, async (req: any, res) => {
+    try {
+      const { notificationId } = req.params;
+      const notification = await storage.markNotificationAsRead(notificationId);
+      res.json(notification);
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+      res.status(500).json({ message: "Failed to mark notification as read" });
+    }
+  });
+
+  app.post('/api/notifications/mark-all-read', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      await storage.markAllNotificationsAsRead(userId);
+      res.json({ message: "All notifications marked as read" });
+    } catch (error) {
+      console.error("Error marking all notifications as read:", error);
+      res.status(500).json({ message: "Failed to mark all notifications as read" });
+    }
+  });
+
+  app.delete('/api/notifications/:notificationId', isAuthenticated, async (req: any, res) => {
+    try {
+      const { notificationId } = req.params;
+      await storage.deleteNotification(notificationId);
+      res.json({ message: "Notification deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting notification:", error);
+      res.status(500).json({ message: "Failed to delete notification" });
+    }
+  });
+
+  // Social features - follow/unfollow endpoints
+  app.post('/api/artists/:id/follow', isAuthenticated, async (req: any, res) => {
+    try {
+      const artistId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      await storage.followArtist(userId, artistId);
+      res.json({ message: "Artist followed successfully" });
+    } catch (error) {
+      console.error("Error following artist:", error);
+      res.status(500).json({ message: "Failed to follow artist" });
+    }
+  });
+
+  app.post('/api/artists/:id/unfollow', isAuthenticated, async (req: any, res) => {
+    try {
+      const artistId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      await storage.unfollowArtist(userId, artistId);
+      res.json({ message: "Artist unfollowed successfully" });
+    } catch (error) {
+      console.error("Error unfollowing artist:", error);
+      res.status(500).json({ message: "Failed to unfollow artist" });
+    }
+  });
+
+  app.post('/api/galleries/:id/follow', isAuthenticated, async (req: any, res) => {
+    try {
+      const galleryId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      await storage.followGallery(userId, galleryId);
+      res.json({ message: "Gallery followed successfully" });
+    } catch (error) {
+      console.error("Error following gallery:", error);
+      res.status(500).json({ message: "Failed to follow gallery" });
+    }
+  });
+
+  app.post('/api/galleries/:id/unfollow', isAuthenticated, async (req: any, res) => {
+    try {
+      const galleryId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      await storage.unfollowGallery(userId, galleryId);
+      res.json({ message: "Gallery unfollowed successfully" });
+    } catch (error) {
+      console.error("Error unfollowing gallery:", error);
+      res.status(500).json({ message: "Failed to unfollow gallery" });
+    }
+  });
+
+  app.post('/api/articles/:id/like', isAuthenticated, async (req: any, res) => {
+    try {
+      const articleId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      await storage.likeArticle(userId, articleId);
+      res.json({ message: "Article liked successfully" });
+    } catch (error) {
+      console.error("Error liking article:", error);
+      res.status(500).json({ message: "Failed to like article" });
+    }
+  });
+
+  app.post('/api/articles/:id/unlike', isAuthenticated, async (req: any, res) => {
+    try {
+      const articleId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      await storage.unlikeArticle(userId, articleId);
+      res.json({ message: "Article unliked successfully" });
+    } catch (error) {
+      console.error("Error unliking article:", error);
+      res.status(500).json({ message: "Failed to unlike article" });
+    }
+  });
+
+  // Auction watch endpoint
+  app.post('/api/auctions/:id/watch', isAuthenticated, async (req: any, res) => {
+    try {
+      const auctionId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      await storage.watchAuction(userId, auctionId);
+      res.json({ message: "Auction watched successfully" });
+    } catch (error) {
+      console.error("Error watching auction:", error);
+      res.status(500).json({ message: "Failed to watch auction" });
+    }
+  });
+
+  // Payment method default endpoint
+  app.post('/api/seller/payment-methods/:id/set-default', isAuthenticated, async (req: any, res) => {
+    try {
+      const paymentMethodId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      await storage.setDefaultPaymentMethod(userId, paymentMethodId);
+      res.json({ message: "Default payment method set successfully" });
+    } catch (error) {
+      console.error("Error setting default payment method:", error);
+      res.status(500).json({ message: "Failed to set default payment method" });
+    }
+  });
+
+  // Discussions endpoints
+  app.get('/api/discussions', async (req, res) => {
+    try {
+      const discussions = await storage.getDiscussions();
+      res.json(discussions);
+    } catch (error) {
+      console.error("Error fetching discussions:", error);
+      res.status(500).json({ message: "Failed to fetch discussions" });
+    }
+  });
+
+  app.post('/api/discussions', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const discussion = await storage.createDiscussion({
+        userId,
+        ...req.body,
+      });
+      res.json(discussion);
+    } catch (error) {
+      console.error("Error creating discussion:", error);
+      res.status(500).json({ message: "Failed to create discussion" });
+    }
+  });
+
+  // Commission requests endpoints
+  app.get('/api/commission-requests', async (req, res) => {
+    try {
+      const requests = await storage.getCommissionRequests();
+      res.json(requests);
+    } catch (error) {
+      console.error("Error fetching commission requests:", error);
+      res.status(500).json({ message: "Failed to fetch commission requests" });
+    }
+  });
+
+  app.post('/api/commission-requests', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const request = await storage.createCommissionRequest({
+        collectorId: userId,
+        ...req.body,
+      });
+      res.json(request);
+    } catch (error) {
+      console.error("Error creating commission request:", error);
+      res.status(500).json({ message: "Failed to create commission request" });
+    }
+  });
+
+  // User endpoint - for getting current user data
+  app.get('/api/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
