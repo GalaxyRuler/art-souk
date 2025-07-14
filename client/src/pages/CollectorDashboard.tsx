@@ -354,12 +354,15 @@ export default function CollectorDashboard() {
                                           </h4>
                                         </div>
                                         <div className="flex gap-6">
-                                          <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex-shrink-0 overflow-hidden shadow-sm">
+                                          <div 
+                                            className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex-shrink-0 overflow-hidden shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+                                            onClick={() => setLocation(`/artwork/${order.artwork.id}`)}
+                                          >
                                             {order.artwork.images?.[0] ? (
                                               <img
                                                 src={order.artwork.images[0]}
                                                 alt={isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
-                                                className="w-full h-full object-cover"
+                                                className="w-full h-full object-cover hover:scale-105 transition-transform"
                                               />
                                             ) : (
                                               <div className="w-full h-full bg-gray-200 flex items-center justify-center">
@@ -368,7 +371,10 @@ export default function CollectorDashboard() {
                                             )}
                                           </div>
                                           <div className="flex-1">
-                                            <h5 className="font-bold text-lg text-gray-900 mb-2">
+                                            <h5 
+                                              className="font-bold text-lg text-gray-900 mb-2 cursor-pointer hover:text-blue-600 transition-colors"
+                                              onClick={() => setLocation(`/artwork/${order.artwork.id}`)}
+                                            >
                                               {isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
                                             </h5>
                                             <p className="text-sm text-gray-600 mb-3 flex items-center gap-1">
