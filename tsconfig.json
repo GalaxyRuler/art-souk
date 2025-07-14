@@ -1,13 +1,11 @@
 {
-  "include": ["client/src/**/*", "shared/**/*", "server/**/*"],
-  "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
   "compilerOptions": {
     "target": "ES2020",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": false,
     "noEmit": true,
     "jsx": "react-jsx",
     "isolatedModules": true,
@@ -27,5 +25,11 @@
       "@shared/*": ["./shared/*"],
       "@assets/*": ["./attached_assets/*"]
     }
-  }
+  },
+  "include": ["client/src/**/*", "shared/**/*", "server/**/*"],
+  "exclude": ["node_modules", "build", "dist", "**/*.test.ts", "**/*.spec.ts"],
+  "references": [
+    { "path": "./client/tsconfig.app.json" },
+    { "path": "./client/tsconfig.node.json" }
+  ]
 }

@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  },
+  "include": ["client/src/**/*", "shared/**/*"],
+  "exclude": ["**/*.test.*", "**/*.spec.*", "node_modules", "dist"]
+}
