@@ -398,7 +398,7 @@ export default function Dashboard() {
                         <Link to="/artworks/manage">
                           <Button className="w-full h-11 bg-pink-600 hover:bg-pink-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                             <Palette className="h-4 w-4 mr-3" />
-                            {t("artworks.management")}
+                            {t("dashboard.artworkManagement")}
                           </Button>
                         </Link>
                       </div>
