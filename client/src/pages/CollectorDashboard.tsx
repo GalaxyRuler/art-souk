@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { useLocation } from "wouter";
+import { useLocation, useNavigate } from "wouter";
 
 interface PurchaseOrder {
   id: number;
@@ -83,7 +83,7 @@ export default function CollectorDashboard() {
   const { user } = useAuth();
   const { t } = useTranslation();
   const { language, isRTL } = useLanguage();
-  const [, navigate] = useLocation();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("orders");
   const [selectedOrder, setSelectedOrder] = useState<PurchaseOrder | null>(null);
 
@@ -607,7 +607,7 @@ export default function CollectorDashboard() {
                               {t("collector.purchases.amount", "Amount")}
                             </span>
                             <p className="font-medium">
-                              {language === "ar" ? "ر.س" : order.currency} {parseFloat(order.totalAmount).toLocaleString()}
+                              {language === "ar" ? "ر.س" : "SAR"} {parseFloat(order.totalAmount).toLocaleString()}
                             </p>
                           </div>
                         </div>
