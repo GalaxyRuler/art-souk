@@ -775,7 +775,14 @@ const resources = {
           purchases: "Purchase History"
         },
         order: {
-          number: "Order #"
+          number: "Order #",
+          details: "Order Details",
+          date: "Order Date",
+          status: "Status",
+          total: "Total Amount",
+          artwork: "Artwork Details",
+          shipping: "Shipping Information",
+          payment: "Payment Information"
         },
         status: {
           pending: "Pending",
@@ -1947,7 +1954,14 @@ const resources = {
           purchases: "تاريخ الشراء"
         },
         order: {
-          number: "رقم الطلب #"
+          number: "رقم الطلب #",
+          details: "تفاصيل الطلب",
+          date: "تاريخ الطلب",
+          status: "الحالة",
+          total: "المبلغ الإجمالي",
+          artwork: "تفاصيل العمل الفني",
+          shipping: "معلومات الشحن",
+          payment: "معلومات الدفع"
         },
         status: {
           pending: "في الانتظار",

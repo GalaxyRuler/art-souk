@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { 
@@ -24,6 +25,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useLocation } from "wouter";
 
 interface PurchaseOrder {
   id: number;
@@ -81,7 +83,9 @@ export default function CollectorDashboard() {
   const { user } = useAuth();
   const { t } = useTranslation();
   const { language, isRTL } = useLanguage();
+  const [, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState("orders");
+  const [selectedOrder, setSelectedOrder] = useState<PurchaseOrder | null>(null);
 
   const { data: orders, isLoading: ordersLoading } = useQuery<PurchaseOrder[]>({
     queryKey: ["/api/collector/orders"],
@@ -283,9 +287,121 @@ export default function CollectorDashboard() {
                                     {t("collector.pendingPayment", "Awaiting payment arrangement")}
                                   </p>
                                 )}
-                                <Button variant="outline" size="sm">
-                                  {t("collector.viewDetails", "View Details")}
-                                </Button>
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button variant="outline" size="sm">
+                                      {t("collector.viewDetails", "View Details")}
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="max-w-2xl">
+                                    <DialogHeader>
+                                      <DialogTitle>
+                                        {t("collector.order.details", "Order Details")}
+                                      </DialogTitle>
+                                    </DialogHeader>
+                                    <div className="space-y-6">
+                                      {/* Order Info */}
+                                      <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                          <h4 className="font-semibold text-sm text-gray-600 mb-1">
+                                            {t("collector.order.number", "Order #")}
+                                          </h4>
+                                          <p className="font-mono text-sm">{order.orderNumber}</p>
+                                        </div>
+                                        <div>
+                                          <h4 className="font-semibold text-sm text-gray-600 mb-1">
+                                            {t("collector.order.date", "Order Date")}
+                                          </h4>
+                                          <p className="text-sm">{format(new Date(order.createdAt), "MMM dd, yyyy")}</p>
+                                        </div>
+                                        <div>
+                                          <h4 className="font-semibold text-sm text-gray-600 mb-1">
+                                            {t("collector.order.status", "Status")}
+                                          </h4>
+                                          <Badge className={cn("flex items-center gap-1 w-fit", getStatusColor(order.status))}>
+                                            {getStatusIcon(order.status)}
+                                            {t(`collector.status.${order.status}`, order.status)}
+                                          </Badge>
+                                        </div>
+                                        <div>
+                                          <h4 className="font-semibold text-sm text-gray-600 mb-1">
+                                            {t("collector.order.total", "Total Amount")}
+                                          </h4>
+                                          <p className="text-sm font-semibold">
+                                            {language === "ar" ? "ر.س" : "SAR"} {parseFloat(order.totalAmount).toLocaleString()}
+                                          </p>
+                                        </div>
+                                      </div>
+
+                                      {/* Artwork Info */}
+                                      <div className="border-t pt-4">
+                                        <h4 className="font-semibold text-sm text-gray-600 mb-3">
+                                          {t("collector.order.artwork", "Artwork Details")}
+                                        </h4>
+                                        <div className="flex gap-4">
+                                          {order.artwork.images?.[0] && (
+                                            <img
+                                              src={order.artwork.images[0]}
+                                              alt={isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
+                                              className="w-20 h-20 object-cover rounded-lg"
+                                            />
+                                          )}
+                                          <div>
+                                            <h5 className="font-semibold">
+                                              {isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
+                                            </h5>
+                                            <p className="text-sm text-gray-600">
+                                              {t("by")} {isRTL ? order.artwork.artist.nameAr || order.artwork.artist.name : order.artwork.artist.name}
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      {/* Shipping Info */}
+                                      {order.shippingTracking && (
+                                        <div className="border-t pt-4">
+                                          <h4 className="font-semibold text-sm text-gray-600 mb-3">
+                                            {t("collector.order.shipping", "Shipping Information")}
+                                          </h4>
+                                          <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                              <h5 className="font-semibold text-sm text-gray-600 mb-1">
+                                                {t("collector.tracking.number", "Tracking #")}
+                                              </h5>
+                                              <p className="font-mono text-sm">{order.shippingTracking.trackingNumber}</p>
+                                            </div>
+                                            <div>
+                                              <h5 className="font-semibold text-sm text-gray-600 mb-1">
+                                                {t("collector.tracking.carrier", "Carrier")}
+                                              </h5>
+                                              <p className="text-sm">{order.shippingTracking.carrier}</p>
+                                            </div>
+                                            {order.shippingTracking.estimatedDelivery && (
+                                              <div>
+                                                <h5 className="font-semibold text-sm text-gray-600 mb-1">
+                                                  {t("collector.tracking.estimated", "Estimated Delivery")}
+                                                </h5>
+                                                <p className="text-sm">{format(new Date(order.shippingTracking.estimatedDelivery), "MMM dd, yyyy")}</p>
+                                              </div>
+                                            )}
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {/* Payment Info */}
+                                      <div className="border-t pt-4">
+                                        <h4 className="font-semibold text-sm text-gray-600 mb-3">
+                                          {t("collector.order.payment", "Payment Information")}
+                                        </h4>
+                                        <div className="bg-blue-50 p-3 rounded-lg">
+                                          <p className="text-sm text-blue-700">
+                                            {t("collector.purchases.note", "All payments are handled directly between you and the artist/gallery")}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
                               </div>
                             </div>
                           </div>
@@ -304,7 +420,10 @@ export default function CollectorDashboard() {
                     <p className="text-gray-600 mb-4">
                       {t("collector.startCollecting", "Start building your collection")}
                     </p>
-                    <Button className="bg-brand-navy hover:bg-brand-steel">
+                    <Button 
+                      className="bg-brand-navy hover:bg-brand-steel"
+                      onClick={() => navigate("/artworks")}
+                    >
                       {t("collector.browseArtworks", "Browse Artworks")}
                     </Button>
                   </CardContent>
