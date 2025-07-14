@@ -1,12 +1,12 @@
 import sgMail from '@sendgrid/mail';
 import { db } from './db';
-import { 
-  emailNotificationQueue, 
+import {
+  emailNotificationQueue,
   emailNotificationLog,
   emailTemplates,
   newsletterSubscribers,
   type InsertEmailNotificationQueue,
-  type EmailTemplate
+  type EmailTemplate,
 } from '@shared/schema';
 import { eq, and, lte, or, isNull } from 'drizzle-orm';
 
@@ -49,12 +49,12 @@ export class EmailService {
   async queueEmail(emailData: Omit<InsertEmailNotificationQueue, 'id' | 'createdAt'>) {
     try {
       const [queued] = await db.insert(emailNotificationQueue).values(emailData).returning();
-      
+
       // Process immediately if high priority
       if (emailData.priority && emailData.priority <= 3) {
         this.processQueue();
       }
-      
+
       return queued;
     } catch (error) {
       console.error('Error queuing email:', error);
@@ -78,10 +78,9 @@ export class EmailService {
       const [template] = await db
         .select()
         .from(emailTemplates)
-        .where(and(
-          eq(emailTemplates.templateCode, templateCode),
-          eq(emailTemplates.isActive, true)
-        ));
+        .where(
+          and(eq(emailTemplates.templateCode, templateCode), eq(emailTemplates.isActive, true))
+        );
 
       if (!template) {
         throw new Error(`Email template not found: ${templateCode}`);
@@ -91,7 +90,8 @@ export class EmailService {
       const isArabic = options.language === 'ar';
       const subject = isArabic && template.subjectAr ? template.subjectAr : template.subject;
       const bodyHtml = isArabic && template.bodyHtmlAr ? template.bodyHtmlAr : template.bodyHtml;
-      const bodyText = isArabic && template.bodyTextAr ? template.bodyTextAr : template.bodyText || undefined;
+      const bodyText =
+        isArabic && template.bodyTextAr ? template.bodyTextAr : template.bodyText || undefined;
 
       // Replace variables in the template
       const processedSubject = this.replaceVariables(subject, variables);
@@ -117,12 +117,12 @@ export class EmailService {
   // Replace variables in template content
   private replaceVariables(content: string, variables: Record<string, any>): string {
     let processed = content;
-    
+
     Object.entries(variables).forEach(([key, value]) => {
       const regex = new RegExp(`{{${key}}}`, 'g');
       processed = processed.replace(regex, String(value));
     });
-    
+
     return processed;
   }
 
@@ -138,10 +138,9 @@ export class EmailService {
       const pendingEmails = await db
         .select()
         .from(emailNotificationQueue)
-        .where(and(
-          eq(emailNotificationQueue.status, 'pending'),
-          lte(emailNotificationQueue.attempts, 3)
-        ))
+        .where(
+          and(eq(emailNotificationQueue.status, 'pending'), lte(emailNotificationQueue.attempts, 3))
+        )
         .orderBy(emailNotificationQueue.priority)
         .limit(10);
 
@@ -159,9 +158,9 @@ export class EmailService {
       // Update status to sending
       await db
         .update(emailNotificationQueue)
-        .set({ 
+        .set({
           status: 'sending',
-          attempts: email.attempts + 1 
+          attempts: email.attempts + 1,
         })
         .where(eq(emailNotificationQueue.id, email.id));
 
@@ -181,9 +180,9 @@ export class EmailService {
       // Update queue status
       await db
         .update(emailNotificationQueue)
-        .set({ 
+        .set({
           status: 'sent',
-          sentAt: new Date()
+          sentAt: new Date(),
         })
         .where(eq(emailNotificationQueue.id, email.id));
 
@@ -198,17 +197,16 @@ export class EmailService {
         sendgridMessageId: messageId,
         sendgridResponse: response,
       });
-
     } catch (error: any) {
       console.error('Error sending email:', error);
 
       // Update queue with failure
       await db
         .update(emailNotificationQueue)
-        .set({ 
+        .set({
           status: email.attempts >= 3 ? 'failed' : 'pending',
           failedAt: new Date(),
-          errorMessage: error.message || 'Unknown error'
+          errorMessage: error.message || 'Unknown error',
         })
         .where(eq(emailNotificationQueue.id, email.id));
 
@@ -250,7 +248,7 @@ export class EmailService {
       const subscribers = await query;
 
       // Queue emails for each subscriber
-      const queuePromises = subscribers.map(subscriber => 
+      const queuePromises = subscribers.map((subscriber) =>
         this.queueEmail({
           recipientEmail: subscriber.email,
           recipientUserId: subscriber.userId,
@@ -305,8 +303,8 @@ export class EmailService {
           set: {
             subscriptionStatus: 'active',
             subscribedAt: new Date(),
-            ...options
-          }
+            ...options,
+          },
         })
         .returning();
 
@@ -335,9 +333,9 @@ export class EmailService {
     try {
       await db
         .update(newsletterSubscribers)
-        .set({ 
+        .set({
           subscriptionStatus: 'unsubscribed',
-          unsubscribedAt: new Date()
+          unsubscribedAt: new Date(),
         })
         .where(eq(newsletterSubscribers.email, email));
     } catch (error) {

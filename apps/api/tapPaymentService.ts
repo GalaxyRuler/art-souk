@@ -45,7 +45,7 @@ export class TapPaymentService {
     this.apiKey = process.env.TAP_MARKETPLACE_KEY || '';
     this.isProduction = process.env.NODE_ENV === 'production';
     this.baseUrl = this.isProduction ? TAP_API_BASE : TAP_SANDBOX_BASE;
-    
+
     if (!this.apiKey) {
       throw new Error('TAP_MARKETPLACE_KEY environment variable is required');
     }
@@ -53,11 +53,11 @@ export class TapPaymentService {
 
   private async makeApiCall(endpoint: string, method: string = 'GET', data?: any) {
     const url = `${this.baseUrl}${endpoint}`;
-    
+
     const options: RequestInit = {
       method,
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
       },
     };
@@ -69,11 +69,11 @@ export class TapPaymentService {
     try {
       const response = await fetch(url, options);
       const result = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(`Tap API Error: ${result.message || 'Unknown error'}`);
       }
-      
+
       return result;
     } catch (error) {
       console.error('Tap Payment API call failed:', error);
@@ -181,7 +181,7 @@ export class TapPaymentService {
   async handleWebhook(webhookData: any) {
     // Verify webhook signature (implement based on Tap documentation)
     const { id, status, amount, currency, reference } = webhookData;
-    
+
     return {
       chargeId: id,
       status,

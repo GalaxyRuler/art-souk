@@ -1,0 +1,152 @@
+~/workspace$ npx turbo lint
+turbo 2.5.4
+
+ WARNING  Unable to calculate transitive closures: Workspace 'apps/api' not found in lockfile.
+• Packages in scope: @art-souk/api, @art-souk/db, @art-souk/tsconfig, @art-souk/ui, @art-souk/web
+• Running lint in 5 packages
+• Remote caching disabled
+@art-souk/ui:lint: cache miss, executing db80f2e742831030
+@art-souk/ui:lint: 
+@art-souk/db:lint: cache hit, replaying logs 423e8fe78ae4a01e
+@art-souk/db:lint: 
+@art-souk/db:lint: > @art-souk/db@0.0.0 lint
+@art-souk/db:lint: > eslint "**/*.{ts,tsx,js,jsx}" --fix
+@art-souk/db:lint: 
+@art-souk/api:lint: cache miss, executing 642b93a663eacbb3
+@art-souk/api:lint: 
+@art-souk/ui:lint: 
+@art-souk/ui:lint: > @art-souk/ui@0.1.0 lint
+@art-souk/ui:lint: > eslint src --ext .ts,.tsx
+@art-souk/ui:lint: 
+@art-souk/api:lint: 
+@art-souk/api:lint: > @art-souk/api@0.0.0 lint
+@art-souk/api:lint: > eslint . --ext ts --report-unused-disable-directives --max-warnings 0
+@art-souk/api:lint: 
+
+@art-souk/ui:lint: /home/runner/workspace/packages/ui/src/AccessibilityProvider.tsx
+@art-souk/ui:lint:   28:30  error  'document' is not defined      no-undef
+@art-souk/ui:lint:   33:5   error  'document' is not defined      no-undef
+@art-souk/ui:lint:   40:9   error  'document' is not defined      no-undef
+@art-souk/ui:lint:   46:7   error  'document' is not defined      no-undef
+@art-souk/ui:lint:   49:5   error  'document' is not defined      no-undef
+@art-souk/ui:lint:   50:5   error  'document' is not defined      no-undef
+@art-souk/ui:lint:   53:27  error  'localStorage' is not defined  no-undef
+@art-souk/ui:lint:   57:7   error  'document' is not defined      no-undef
+@art-souk/ui:lint:   61:7   error  'document' is not defined      no-undef
+@art-souk/ui:lint:   62:7   error  'document' is not defined      no-undef
+@art-souk/ui:lint:   73:7   error  'setTimeout' is not defined    no-undef
+@art-souk/ui:lint:   80:21  error  'document' is not defined      no-undef
+@art-souk/ui:lint:   94:5   error  'document' is not defined      no-undef
+@art-souk/ui:lint:   95:5   error  'localStorage' is not defined  no-undef
+@art-souk/ui:lint: 
+@art-souk/ui:lint: /home/runner/workspace/packages/ui/src/ThemeProvider.tsx
+@art-souk/ui:lint:    46:22  error  'localStorage' is not defined  no-undef
+@art-souk/ui:lint:    51:11  error  'window' is not defined        no-undef
+@art-souk/ui:lint:    60:22  error  'localStorage' is not defined  no-undef
+@art-souk/ui:lint:    65:27  error  'navigator' is not defined     no-undef
+@art-souk/ui:lint:    76:18  error  'window' is not defined        no-undef
+@art-souk/ui:lint:    84:5   error  'localStorage' is not defined  no-undef
+@art-souk/ui:lint:    89:5   error  'localStorage' is not defined  no-undef
+@art-souk/ui:lint:   106:24  error  'window' is not defined        no-undef
+@art-souk/ui:lint:   109:27  error  'localStorage' is not defined  no-undef
+@art-souk/ui:lint:   151:24  error  'window' is not defined        no-undef
+@art-souk/ui:lint:   170:24  error  'window' is not defined        no-undef
+@art-souk/ui:lint: 
+@art-souk/ui:lint: /home/runner/workspace/packages/ui/src/index.ts
+@art-souk/ui:lint:    2:15  error  Replace `"./ThemeProvider"` with `'./ThemeProvider'`                     prettier/prettier
+@art-souk/ui:lint:    3:15  error  Replace `"./AccessibilityProvider"` with `'./AccessibilityProvider'`     prettier/prettier
+@art-souk/ui:lint:    6:20  error  Replace `"./utils"` with `'./utils'`                                     prettier/prettier
+@art-souk/ui:lint:    7:35  error  Replace `"class-variance-authority"` with `'class-variance-authority'`   prettier/prettier
+@art-souk/ui:lint:   10:39  error  Replace `"./ThemeProvider"` with `'./ThemeProvider'`                     prettier/prettier
+@art-souk/ui:lint:   11:41  error  Replace `"./AccessibilityProvider";` with `'./AccessibilityProvider';⏎`  prettier/prettier
+@art-souk/ui:lint: 
+@art-souk/ui:lint: /home/runner/workspace/packages/ui/src/types/global.d.ts
+@art-souk/ui:lint:   10:11  error  Insert `⏎`  prettier/prettier
+@art-souk/ui:lint: 
+@art-souk/ui:lint: /home/runner/workspace/packages/ui/src/utils.ts
+@art-souk/ui:lint:     1:39  error    Replace `"clsx"` with `'clsx'`                                                                                                                  prettier/prettier
+@art-souk/ui:lint:     2:25  error    Replace `"tailwind-merge"` with `'tailwind-merge'`                                                                                              prettier/prettier
+@art-souk/ui:lint:     8:67  error    Replace `"SAR",·locale:·string·=·"en"` with `'SAR',·locale:·string·=·'en'`                                                                      prettier/prettier
+@art-souk/ui:lint:     9:54  error    Replace `"ar"·?·"ar-SA"·:·"en-US"` with `'ar'·?·'ar-SA'·:·'en-US'`                                                                              prettier/prettier
+@art-souk/ui:lint:    10:12  error    Replace `"currency"` with `'currency'`                                                                                                          prettier/prettier
+@art-souk/ui:lint:    19:60  error    Replace `"en"` with `'en'`                                                                                                                      prettier/prettier
+@art-souk/ui:lint:    20:43  error    Replace `"ar"·?·"ar-SA"·:·"en-US"` with `'ar'·?·'ar-SA'·:·'en-US'`                                                                              prettier/prettier
+@art-souk/ui:lint:    23:66  error    Replace `"en"` with `'en'`                                                                                                                      prettier/prettier
+@art-souk/ui:lint:    24:35  error    Replace `"string"` with `'string'`                                                                                                              prettier/prettier
+@art-souk/ui:lint:    25:45  error    Replace `"ar"·?·"ar-SA"·:·"en-US"` with `'ar'·?·'ar-SA'·:·'en-US'`                                                                              prettier/prettier
+@art-souk/ui:lint:    26:11  error    Replace `"numeric"` with `'numeric'`                                                                                                            prettier/prettier
+@art-souk/ui:lint:    27:12  error    Replace `"long"` with `'long'`                                                                                                                  prettier/prettier
+@art-souk/ui:lint:    28:10  error    Replace `"numeric"` with `'numeric'`                                                                                                            prettier/prettier
+@art-souk/ui:lint:    32:74  error    Replace `"en"` with `'en'`                                                                                                                      prettier/prettier
+@art-souk/ui:lint:    33:35  error    Replace `"string"` with `'string'`                                                                                                              prettier/prettier
+@art-souk/ui:lint:    37:54  error    Replace `"ar"·?·"ar-SA"·:·"en-US"` with `'ar'·?·'ar-SA'·:·'en-US'`                                                                              prettier/prettier
+@art-souk/ui:lint:    38:14  error    Replace `"auto"` with `'auto'`                                                                                                                  prettier/prettier
+@art-souk/ui:lint:    42:39  error    Replace `"second"` with `'second'`                                                                                                              prettier/prettier
+@art-souk/ui:lint:    44:56  error    Replace `"minute"` with `'minute'`                                                                                                              prettier/prettier
+@art-souk/ui:lint:    46:58  error    Replace `"hour"` with `'hour'`                                                                                                                  prettier/prettier
+@art-souk/ui:lint:    48:59  error    Replace `"day"` with `'day'`                                                                                                                    prettier/prettier
+@art-souk/ui:lint:    50:61  error    Replace `"month"` with `'month'`                                                                                                                prettier/prettier
+@art-souk/ui:lint:    52:62  error    Replace `"year"` with `'year'`                                                                                                                  prettier/prettier
+@art-souk/ui:lint:    58:48  error    Replace `"..."` with `'...'`                                                                                                                    prettier/prettier
+@art-souk/ui:lint:    64:27  error    Replace `""` with `''`                                                                                                                          prettier/prettier
+@art-souk/ui:lint:    65:26  error    Replace `"-"` with `'-'`                                                                                                                        prettier/prettier
+@art-souk/ui:lint:    66:26  error    Replace `""` with `''`                                                                                                                          prettier/prettier
+@art-souk/ui:lint:    69:46  warning  Unexpected any. Specify a different type                                                                                                        @typescript-eslint/no-explicit-any
+@art-souk/ui:lint:    69:56  warning  Unexpected any. Specify a different type                                                                                                        @typescript-eslint/no-explicit-any
+@art-souk/ui:lint:    73:18  error    'NodeJS' is not defined                                                                                                                         no-undef
+@art-souk/ui:lint:    75:5   error    'clearTimeout' is not defined                                                                                                                   no-undef
+@art-souk/ui:lint:    76:17  error    'setTimeout' is not defined                                                                                                                     no-undef
+@art-souk/ui:lint:    80:46  warning  Unexpected any. Specify a different type                                                                                                        @typescript-eslint/no-explicit-any
+@art-souk/ui:lint:    80:56  warning  Unexpected any. Specify a different type                                                                                                        @typescript-eslint/no-explicit-any
+@art-souk/ui:lint:    89:7   error    'setTimeout' is not defined                                                                                                                     no-undef
+@art-souk/ui:lint:   114:21  error    'Image' is not defined                                                                                                                          no-undef
+@art-souk/ui:lint:   123:31  error    Replace `file:·File,·maxWidth:·number·=·1920,·quality:·number·=·0.8` with `⏎··file:·File,⏎··maxWidth:·number·=·1920,⏎··quality:·number·=·0.8⏎`  prettier/prettier
+@art-souk/ui:lint:   125:20  error    'document' is not defined                                                                                                                       no-undef
+@art-souk/ui:lint:   125:43  error    Replace `"canvas"` with `'canvas'`                                                                                                              prettier/prettier
+@art-souk/ui:lint:   126:35  error    Replace `"2d"` with `'2d'`                                                                                                                      prettier/prettier
+@art-souk/ui:lint:   127:21  error    'Image' is not defined                                                                                                                          no-undef
+@art-souk/ui:lint:   132:1   error    Delete `······`                                                                                                                                 prettier/prettier
+@art-souk/ui:lint:   147:30  error    Replace `"Failed·to·compress·image"` with `'Failed·to·compress·image'`                                                                          prettier/prettier
+@art-souk/ui:lint:   161:7   error    'navigator' is not defined                                                                                                                      no-undef
+@art-souk/ui:lint:   161:30  error    'window' is not defined                                                                                                                         no-undef
+@art-souk/ui:lint:   162:12  error    'navigator' is not defined                                                                                                                      no-undef
+@art-souk/ui:lint:   165:24  error    'document' is not defined                                                                                                                       no-undef
+@art-souk/ui:lint:   165:47  error    Replace `"textarea"` with `'textarea'`                                                                                                          prettier/prettier
+@art-souk/ui:lint:   167:33  error    Replace `"absolute"` with `'absolute'`                                                                                                          prettier/prettier
+@art-souk/ui:lint:   168:29  error    Replace `"-999999px"` with `'-999999px'`                                                                                                        prettier/prettier
+@art-souk/ui:lint:   169:1   error    Delete `······`                                                                                                                                 prettier/prettier
+@art-souk/ui:lint:   170:7   error    'document' is not defined                                                                                                                       no-undef
+@art-souk/ui:lint:   173:1   error    Delete `······`                                                                                                                                 prettier/prettier
+@art-souk/ui:lint:   175:9   error    'document' is not defined                                                                                                                       no-undef
+@art-souk/ui:lint:   175:30  error    Replace `"copy"` with `'copy'`                                                                                                                  prettier/prettier
+@art-souk/ui:lint:   187:16  error    'document' is not defined                                                                                                                       no-undef
+@art-souk/ui:lint:   187:39  error    Replace `"a"` with `'a'`                                                                                                                        prettier/prettier
+@art-souk/ui:lint:   190:3   error    'document' is not defined                                                                                                                       no-undef
+@art-souk/ui:lint:   192:3   error    'document' is not defined                                                                                                                       no-undef
+@art-souk/ui:lint:   196:27  error    Replace `"0·Bytes"` with `'0·Bytes'`                                                                                                            prettier/prettier
+@art-souk/ui:lint:   200:18  error    Replace `"Bytes",·"KB",·"MB",·"GB",·"TB",·"PB",·"EB",·"ZB",·"YB"` with `'Bytes',·'KB',·'MB',·'GB',·'TB',·'PB',·'EB',·'ZB',·'YB'`                prettier/prettier
+@art-souk/ui:lint:   204:61  error    Replace `"·"` with `'·'`                                                                                                                        prettier/prettier
+@art-souk/ui:lint:   222:1   error    Delete `··`                                                                                                                                     prettier/prettier
+@art-souk/ui:lint:   228:2   error    Insert `⏎`                                                                                                                                      prettier/prettier
+@art-souk/ui:lint: 
+@art-souk/ui:lint: ✖ 96 problems (92 errors, 4 warnings)
+@art-souk/ui:lint:   51 errors and 0 warnings potentially fixable with the `--fix` option.
+@art-souk/ui:lint: 
+npm error Lifecycle script `lint` failed with error:
+npm error code 1
+npm error path /home/runner/workspace/packages/ui
+npm error workspace @art-souk/ui@0.1.0
+npm error location /home/runner/workspace/packages/ui
+npm error command failed
+npm error command sh -c eslint src --ext .ts,.tsx
+
+@art-souk/ui:lint: ERROR: command finished with error: command (/home/runner/workspace/packages/ui) /nix/store/lyx73qs96hfazl77arnwllwckq9dy012-nodejs-20.18.1-wrapped/bin/npm run lint exited (1)
+
+@art-souk/ui#lint: command (/home/runner/workspace/packages/ui) /nix/store/lyx73qs96hfazl77arnwllwckq9dy012-nodejs-20.18.1-wrapped/bin/npm run lint exited (1)
+
+ Tasks:    1 successful, 3 total
+Cached:    1 cached, 3 total
+  Time:    4.892s 
+Failed:    @art-souk/ui#lint
+
+ ERROR  run failed: command  exited (1)

@@ -34,7 +34,7 @@ export const generateCSRFToken = (req: Request, res: Response, next: NextFunctio
     httpOnly: false,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
-    maxAge: 3600000 // 1 hour
+    maxAge: 3600000, // 1 hour
   });
 
   res.locals.csrfToken = token;
@@ -82,11 +82,11 @@ export const securityHeaders = helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      imgSrc: ["'self'", "data:", "https:"],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      imgSrc: ["'self'", 'data:', 'https:'],
       scriptSrc: ["'self'", "'unsafe-eval'"], // For Vite HMR in development
-      connectSrc: ["'self'", "ws:", "wss:"], // For WebSocket connections
+      connectSrc: ["'self'", 'ws:', 'wss:'], // For WebSocket connections
       objectSrc: ["'none'"],
       mediaSrc: ["'self'"],
       frameSrc: ["'none'"],
@@ -106,20 +106,20 @@ export const validateFileUpload = (req: Request, res: Response, next: NextFuncti
     'image/png',
     'image/webp',
     'image/gif',
-    'application/pdf'
+    'application/pdf',
   ];
 
   const maxFileSize = 25 * 1024 * 1024; // 25MB
 
   if (!allowedMimeTypes.includes(req.file.mimetype)) {
     return res.status(400).json({
-      error: 'Invalid file type. Only JPEG, PNG, WebP, GIF, and PDF files are allowed.'
+      error: 'Invalid file type. Only JPEG, PNG, WebP, GIF, and PDF files are allowed.',
     });
   }
 
   if (req.file.size > maxFileSize) {
     return res.status(400).json({
-      error: 'File too large. Maximum size is 25MB.'
+      error: 'File too large. Maximum size is 25MB.',
     });
   }
 
@@ -129,7 +129,7 @@ export const validateFileUpload = (req: Request, res: Response, next: NextFuncti
 // Request logging for security monitoring
 export const securityLogger = (req: Request, res: Response, next: NextFunction) => {
   const start = Date.now();
-  
+
   res.on('finish', () => {
     const duration = Date.now() - start;
     const logData = {
@@ -140,7 +140,7 @@ export const securityLogger = (req: Request, res: Response, next: NextFunction) 
       userAgent: req.get('User-Agent'),
       statusCode: res.statusCode,
       duration,
-      userId: req.user?.id || 'anonymous'
+      userId: req.user?.id || 'anonymous',
     };
 
     // Log suspicious activity

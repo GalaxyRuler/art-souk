@@ -19,7 +19,7 @@ export class EmailQueueService {
 
   constructor() {
     this.redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
-    
+
     this.emailQueue = new Queue<EmailJobData>('email-processing', {
       connection: this.redis,
       defaultJobOptions: {
@@ -48,21 +48,23 @@ export class EmailQueueService {
         const { to, from, subject, html, text, templateId, dynamicTemplateData } = job.data;
 
         try {
-          const emailData = templateId ? {
-            to,
-            from,
-            templateId,
-            dynamicTemplateData,
-          } : {
-            to,
-            from,
-            subject,
-            html,
-            text,
-          };
+          const emailData = templateId
+            ? {
+                to,
+                from,
+                templateId,
+                dynamicTemplateData,
+              }
+            : {
+                to,
+                from,
+                subject,
+                html,
+                text,
+              };
 
           await this.mailService.send(emailData);
-          
+
           console.log(`Email sent successfully to ${to}`);
           return { success: true, recipient: to };
         } catch (error) {
@@ -110,18 +112,22 @@ export class EmailQueueService {
     templateData: Record<string, any>,
     language: 'en' | 'ar' = 'en'
   ) {
-    const templateId = language === 'ar' 
-      ? process.env.SENDGRID_NEWSLETTER_TEMPLATE_AR 
-      : process.env.SENDGRID_NEWSLETTER_TEMPLATE_EN;
+    const templateId =
+      language === 'ar'
+        ? process.env.SENDGRID_NEWSLETTER_TEMPLATE_AR
+        : process.env.SENDGRID_NEWSLETTER_TEMPLATE_EN;
 
-    return this.queueEmail({
-      to: recipientEmail,
-      from: process.env.SENDGRID_FROM_EMAIL || 'no-reply@artsouk.com',
-      subject: '', // Subject will be handled by template
-      html: '', // HTML will be handled by template
-      templateId,
-      dynamicTemplateData: templateData,
-    }, 1); // Higher priority for newsletters
+    return this.queueEmail(
+      {
+        to: recipientEmail,
+        from: process.env.SENDGRID_FROM_EMAIL || 'no-reply@artsouk.com',
+        subject: '', // Subject will be handled by template
+        html: '', // HTML will be handled by template
+        templateId,
+        dynamicTemplateData: templateData,
+      },
+      1
+    ); // Higher priority for newsletters
   }
 
   async queueBidNotification(
@@ -130,19 +136,22 @@ export class EmailQueueService {
     currentBid: number,
     currency: string = 'SAR'
   ) {
-    return this.queueEmail({
-      to: recipientEmail,
-      from: process.env.SENDGRID_FROM_EMAIL || 'no-reply@artsouk.com',
-      subject: `You've been outbid on "${auctionTitle}"`,
-      html: `
+    return this.queueEmail(
+      {
+        to: recipientEmail,
+        from: process.env.SENDGRID_FROM_EMAIL || 'no-reply@artsouk.com',
+        subject: `You've been outbid on "${auctionTitle}"`,
+        html: `
         <h2>Auction Update</h2>
         <p>Someone has placed a higher bid on the auction for "${auctionTitle}".</p>
         <p><strong>Current highest bid:</strong> ${currentBid} ${currency}</p>
         <p>Visit the auction page to place a new bid.</p>
         <a href="${process.env.FRONTEND_URL}/auctions" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View Auction</a>
       `,
-      text: `You've been outbid on "${auctionTitle}". Current highest bid: ${currentBid} ${currency}. Visit ${process.env.FRONTEND_URL}/auctions to place a new bid.`,
-    }, 2); // High priority for time-sensitive bid notifications
+        text: `You've been outbid on "${auctionTitle}". Current highest bid: ${currentBid} ${currency}. Visit ${process.env.FRONTEND_URL}/auctions to place a new bid.`,
+      },
+      2
+    ); // High priority for time-sensitive bid notifications
   }
 
   async getQueueStats() {

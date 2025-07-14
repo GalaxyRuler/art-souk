@@ -1,17 +1,17 @@
-import type { Express, Request } from "express";
-import { createServer, type Server } from "http";
+import type { Express, Request } from 'express';
+import { createServer, type Server } from 'http';
 import fs from 'fs';
 import path from 'path';
-import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
-import { emailService } from "./emailService";
-import { db } from "./db";
-import { eq, desc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
-import { trackStageMiddleware, updateLifecycleMetrics } from "./middleware/trackStage";
-import { 
-  insertArtistSchema, 
-  insertGallerySchema, 
-  insertArtworkSchema, 
+import { storage } from './storage';
+import { setupAuth, isAuthenticated } from './replitAuth';
+import { emailService } from './emailService';
+import { db } from './db';
+import { eq, desc, and, or, ilike, sql, count, ne, gte, lte } from 'drizzle-orm';
+import { trackStageMiddleware, updateLifecycleMetrics } from './middleware/trackStage';
+import {
+  insertArtistSchema,
+  insertGallerySchema,
+  insertArtworkSchema,
   insertAuctionSchema,
   insertBidSchema,
   insertAuctionResultSchema,
@@ -48,9 +48,9 @@ import {
   insertCommissionRequestSchema,
   insertCommissionBidSchema,
   insertCommissionMessageSchema,
-  insertCommissionContractSchema
-} from "@shared/schema";
-import { z } from "zod";
+  insertCommissionContractSchema,
+} from '@shared/schema';
+import { z } from 'zod';
 
 // Extend Express Request interface to include user with claims
 interface AuthenticatedRequest extends Request {
@@ -64,7 +64,7 @@ interface AuthenticatedRequest extends Request {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
-  
+
   // Apply lifecycle tracking middleware
   app.use(trackStageMiddleware);
 
@@ -75,8 +75,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.getUser(userId);
       res.json(user);
     } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
+      console.error('Error fetching user:', error);
+      res.status(500).json({ message: 'Failed to fetch user' });
     }
   });
 
@@ -85,20 +85,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const { roles } = req.body;
-      
+
       console.log(`Attempting to update roles for user ${userId}:`, roles);
-      
+
       if (!Array.isArray(roles) || roles.length === 0) {
-        return res.status(400).json({ message: "Invalid roles array" });
+        return res.status(400).json({ message: 'Invalid roles array' });
       }
-      
+
       // Validate role names
       const validRoles = ['collector', 'artist', 'gallery'];
-      if (!roles.every(role => validRoles.includes(role))) {
+      if (!roles.every((role) => validRoles.includes(role))) {
         console.error(`Invalid role names provided:`, roles);
-        return res.status(400).json({ message: "Invalid role names" });
+        return res.status(400).json({ message: 'Invalid role names' });
       }
-      
+
       // Check if user exists, create if not (for new users)
       let user = await storage.getUser(userId);
       if (!user) {
@@ -112,10 +112,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           profileImageUrl: req.user.claims.profile_image_url || null,
         });
       }
-      
+
       console.log(`User found, updating roles from ${user.roles} to ${roles}`);
       await storage.updateUserRoles(userId, roles);
-      
+
       // Create artist/gallery profiles if needed
       if (roles.includes('artist')) {
         console.log(`Creating artist profile for user ${userId}`);
@@ -125,13 +125,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log(`Creating gallery profile for user ${userId}`);
         await storage.createGalleryProfileIfNotExists(userId);
       }
-      
+
       console.log(`Successfully updated roles for user ${userId}`);
-      res.json({ message: "Roles updated successfully" });
+      res.json({ message: 'Roles updated successfully' });
     } catch (error) {
-      console.error("Error updating user roles:", error);
-      console.error("Stack trace:", error instanceof Error ? error.stack : error);
-      res.status(500).json({ message: "Failed to update user roles", error: error instanceof Error ? error.message : String(error) });
+      console.error('Error updating user roles:', error);
+      console.error('Stack trace:', error instanceof Error ? error.stack : error);
+      res
+        .status(500)
+        .json({
+          message: 'Failed to update user roles',
+          error: error instanceof Error ? error.message : String(error),
+        });
     }
   });
 
@@ -139,13 +144,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      res.json({ 
-        roles: user?.roles || [], 
-        setupComplete: user?.roleSetupComplete || false 
+      res.json({
+        roles: user?.roles || [],
+        setupComplete: user?.roleSetupComplete || false,
       });
     } catch (error) {
-      console.error("Error fetching user roles:", error);
-      res.status(500).json({ message: "Failed to fetch user roles" });
+      console.error('Error fetching user roles:', error);
+      res.status(500).json({ message: 'Failed to fetch user roles' });
     }
   });
 
@@ -154,16 +159,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       // Check if user needs to complete role setup
       if (!user?.roleSetupComplete) {
         return res.redirect('/role-selection');
       }
-      
+
       // User has completed setup, redirect to home
       res.redirect('/');
     } catch (error) {
-      console.error("Error in auth success:", error);
+      console.error('Error in auth success:', error);
       res.redirect('/');
     }
   });
@@ -173,20 +178,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const allUsers = await storage.getAllUsers();
-      
+
       // Check if there are any admins already
-      const hasAdmin = allUsers.some(user => user.role === 'admin');
-      
+      const hasAdmin = allUsers.some((user) => user.role === 'admin');
+
       if (hasAdmin) {
-        return res.status(400).json({ message: "Admin already exists" });
+        return res.status(400).json({ message: 'Admin already exists' });
       }
-      
+
       // Make this user an admin
       const adminUser = await storage.updateUserRole(userId, 'admin');
-      res.json({ message: "Admin user created successfully", user: adminUser });
+      res.json({ message: 'Admin user created successfully', user: adminUser });
     } catch (error) {
-      console.error("Error creating admin:", error);
-      res.status(500).json({ message: "Failed to create admin user" });
+      console.error('Error creating admin:', error);
+      res.status(500).json({ message: 'Failed to create admin user' });
     }
   });
 
@@ -195,7 +200,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         return res.status(403).json({ message: 'Admin access required' });
       }
@@ -217,8 +222,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json(stats);
     } catch (error) {
-      console.error("Error fetching admin stats:", error);
-      res.status(500).json({ message: "Failed to fetch admin stats" });
+      console.error('Error fetching admin stats:', error);
+      res.status(500).json({ message: 'Failed to fetch admin stats' });
     }
   });
 
@@ -227,7 +232,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         return res.status(403).json({ message: 'Admin access required' });
       }
@@ -235,8 +240,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const users = await storage.getAllUsers();
       res.json(users);
     } catch (error) {
-      console.error("Error fetching users:", error);
-      res.status(500).json({ message: "Failed to fetch users" });
+      console.error('Error fetching users:', error);
+      res.status(500).json({ message: 'Failed to fetch users' });
     }
   });
 
@@ -245,7 +250,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         return res.status(403).json({ message: 'Admin access required' });
       }
@@ -253,8 +258,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const artists = await storage.getArtists(100, 0);
       res.json(artists);
     } catch (error) {
-      console.error("Error fetching artists:", error);
-      res.status(500).json({ message: "Failed to fetch artists" });
+      console.error('Error fetching artists:', error);
+      res.status(500).json({ message: 'Failed to fetch artists' });
     }
   });
 
@@ -263,7 +268,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         return res.status(403).json({ message: 'Admin access required' });
       }
@@ -271,8 +276,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const galleries = await storage.getGalleries(100, 0);
       res.json(galleries);
     } catch (error) {
-      console.error("Error fetching galleries:", error);
-      res.status(500).json({ message: "Failed to fetch galleries" });
+      console.error('Error fetching galleries:', error);
+      res.status(500).json({ message: 'Failed to fetch galleries' });
     }
   });
 
@@ -281,7 +286,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         return res.status(403).json({ message: 'Admin access required' });
       }
@@ -289,92 +294,100 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const artworks = await storage.getArtworks(100, 0);
       res.json(artworks);
     } catch (error) {
-      console.error("Error fetching artworks:", error);
-      res.status(500).json({ message: "Failed to fetch artworks" });
+      console.error('Error fetching artworks:', error);
+      res.status(500).json({ message: 'Failed to fetch artworks' });
     }
   });
 
   // Admin role update endpoint
-  app.patch('/api/admin/users/:userId/role', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
+  app.patch(
+    '/api/admin/users/:userId/role',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        if (user?.role !== 'admin') {
+          return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const { userId: targetUserId } = req.params;
+        const { role } = req.body;
+
+        if (!['user', 'artist', 'gallery', 'admin'].includes(role)) {
+          return res.status(400).json({ message: 'Invalid role' });
+        }
+
+        const updatedUser = await storage.updateUserRole(targetUserId, role);
+        res.json(updatedUser);
+      } catch (error) {
+        console.error('Error updating user role:', error);
+        res.status(500).json({ message: 'Failed to update user role' });
       }
-
-      const { userId: targetUserId } = req.params;
-      const { role } = req.body;
-
-      if (!['user', 'artist', 'gallery', 'admin'].includes(role)) {
-        return res.status(400).json({ message: 'Invalid role' });
-      }
-
-      const updatedUser = await storage.updateUserRole(targetUserId, role);
-      res.json(updatedUser);
-    } catch (error) {
-      console.error("Error updating user role:", error);
-      res.status(500).json({ message: "Failed to update user role" });
     }
-  });
+  );
 
   // Admin feature toggle endpoint
-  app.patch('/api/admin/:type/:id/feature', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
+  app.patch(
+    '/api/admin/:type/:id/feature',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        if (user?.role !== 'admin') {
+          return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const { type, id } = req.params;
+        const { featured } = req.body;
+
+        switch (type) {
+          case 'artists':
+            await storage.updateArtist(parseInt(id), { featured });
+            break;
+          case 'galleries':
+            await storage.updateGallery(parseInt(id), { featured });
+            break;
+          case 'artworks':
+            await storage.updateArtwork(parseInt(id), { featured });
+            break;
+          default:
+            return res.status(400).json({ message: 'Invalid type' });
+        }
+
+        res.json({ message: 'Feature status updated' });
+      } catch (error) {
+        console.error('Error updating feature status:', error);
+        res.status(500).json({ message: 'Failed to update feature status' });
       }
-
-      const { type, id } = req.params;
-      const { featured } = req.body;
-
-      switch (type) {
-        case 'artists':
-          await storage.updateArtist(parseInt(id), { featured });
-          break;
-        case 'galleries':
-          await storage.updateGallery(parseInt(id), { featured });
-          break;
-        case 'artworks':
-          await storage.updateArtwork(parseInt(id), { featured });
-          break;
-        default:
-          return res.status(400).json({ message: 'Invalid type' });
-      }
-
-      res.json({ message: 'Feature status updated' });
-    } catch (error) {
-      console.error("Error updating feature status:", error);
-      res.status(500).json({ message: "Failed to update feature status" });
     }
-  });
+  );
 
   // Admin-only route to manage user roles
   app.put('/api/admin/users/:userId/role', isAuthenticated, async (req: any, res) => {
     try {
       const currentUserId = req.user.claims.sub;
       const currentUser = await storage.getUser(currentUserId);
-      
+
       if (currentUser?.role !== 'admin') {
-        return res.status(403).json({ message: "Admin access required" });
+        return res.status(403).json({ message: 'Admin access required' });
       }
-      
+
       const { userId } = req.params;
       const { role } = req.body;
-      
+
       if (!['user', 'artist', 'gallery', 'admin'].includes(role)) {
-        return res.status(400).json({ message: "Invalid role" });
+        return res.status(400).json({ message: 'Invalid role' });
       }
-      
+
       const updatedUser = await storage.updateUserRole(userId, role);
-      res.json({ message: "User role updated successfully", user: updatedUser });
+      res.json({ message: 'User role updated successfully', user: updatedUser });
     } catch (error) {
-      console.error("Error updating user role:", error);
-      res.status(500).json({ message: "Failed to update user role" });
+      console.error('Error updating user role:', error);
+      res.status(500).json({ message: 'Failed to update user role' });
     }
   });
 
@@ -386,8 +399,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const artists = await storage.getArtists(limit, offset);
       res.json(artists);
     } catch (error) {
-      console.error("Error fetching artists:", error);
-      res.status(500).json({ message: "Failed to fetch artists" });
+      console.error('Error fetching artists:', error);
+      res.status(500).json({ message: 'Failed to fetch artists' });
     }
   });
 
@@ -397,8 +410,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const artists = await storage.getFeaturedArtists(limit);
       res.json(artists);
     } catch (error) {
-      console.error("Error fetching featured artists:", error);
-      res.status(500).json({ message: "Failed to fetch featured artists" });
+      console.error('Error fetching featured artists:', error);
+      res.status(500).json({ message: 'Failed to fetch featured artists' });
     }
   });
 
@@ -407,12 +420,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const artist = await storage.getArtist(id);
       if (!artist) {
-        return res.status(404).json({ message: "Artist not found" });
+        return res.status(404).json({ message: 'Artist not found' });
       }
       res.json(artist);
     } catch (error) {
-      console.error("Error fetching artist:", error);
-      res.status(500).json({ message: "Failed to fetch artist" });
+      console.error('Error fetching artist:', error);
+      res.status(500).json({ message: 'Failed to fetch artist' });
     }
   });
 
@@ -422,8 +435,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const artist = await storage.createArtist(artistData);
       res.json(artist);
     } catch (error) {
-      console.error("Error creating artist:", error);
-      res.status(500).json({ message: "Failed to create artist" });
+      console.error('Error creating artist:', error);
+      res.status(500).json({ message: 'Failed to create artist' });
     }
   });
 
@@ -435,8 +448,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const galleries = await storage.getGalleries(limit, offset);
       res.json(galleries);
     } catch (error) {
-      console.error("Error fetching galleries:", error);
-      res.status(500).json({ message: "Failed to fetch galleries" });
+      console.error('Error fetching galleries:', error);
+      res.status(500).json({ message: 'Failed to fetch galleries' });
     }
   });
 
@@ -446,8 +459,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const galleries = await storage.getFeaturedGalleries(limit);
       res.json(galleries);
     } catch (error) {
-      console.error("Error fetching featured galleries:", error);
-      res.status(500).json({ message: "Failed to fetch featured galleries" });
+      console.error('Error fetching featured galleries:', error);
+      res.status(500).json({ message: 'Failed to fetch featured galleries' });
     }
   });
 
@@ -456,12 +469,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const gallery = await storage.getGallery(id);
       if (!gallery) {
-        return res.status(404).json({ message: "Gallery not found" });
+        return res.status(404).json({ message: 'Gallery not found' });
       }
       res.json(gallery);
     } catch (error) {
-      console.error("Error fetching gallery:", error);
-      res.status(500).json({ message: "Failed to fetch gallery" });
+      console.error('Error fetching gallery:', error);
+      res.status(500).json({ message: 'Failed to fetch gallery' });
     }
   });
 
@@ -471,8 +484,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const gallery = await storage.createGallery(galleryData);
       res.json(gallery);
     } catch (error) {
-      console.error("Error creating gallery:", error);
-      res.status(500).json({ message: "Failed to create gallery" });
+      console.error('Error creating gallery:', error);
+      res.status(500).json({ message: 'Failed to create gallery' });
     }
   });
 
@@ -484,8 +497,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const artworks = await storage.getArtworks(limit, offset);
       res.json(artworks);
     } catch (error) {
-      console.error("Error fetching artworks:", error);
-      res.status(500).json({ message: "Failed to fetch artworks" });
+      console.error('Error fetching artworks:', error);
+      res.status(500).json({ message: 'Failed to fetch artworks' });
     }
   });
 
@@ -495,8 +508,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const artworks = await storage.getFeaturedArtworks(limit);
       res.json(artworks);
     } catch (error) {
-      console.error("Error fetching featured artworks:", error);
-      res.status(500).json({ message: "Failed to fetch featured artworks" });
+      console.error('Error fetching featured artworks:', error);
+      res.status(500).json({ message: 'Failed to fetch featured artworks' });
     }
   });
 
@@ -513,12 +526,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/artworks/search', async (req, res) => {
     try {
-      const query = req.query.q as string || '';
+      const query = (req.query.q as string) || '';
       const artworks = await storage.searchArtworks(query);
       res.json(artworks);
     } catch (error) {
-      console.error("Error searching artworks:", error);
-      res.status(500).json({ message: "Failed to search artworks" });
+      console.error('Error searching artworks:', error);
+      res.status(500).json({ message: 'Failed to search artworks' });
     }
   });
 
@@ -527,12 +540,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const artwork = await storage.getArtwork(id);
       if (!artwork) {
-        return res.status(404).json({ message: "Artwork not found" });
+        return res.status(404).json({ message: 'Artwork not found' });
       }
       res.json(artwork);
     } catch (error) {
-      console.error("Error fetching artwork:", error);
-      res.status(500).json({ message: "Failed to fetch artwork" });
+      console.error('Error fetching artwork:', error);
+      res.status(500).json({ message: 'Failed to fetch artwork' });
     }
   });
 
@@ -541,29 +554,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const artwork = await storage.getArtwork(id);
       if (!artwork) {
-        return res.status(404).json({ message: "Artwork not found" });
+        return res.status(404).json({ message: 'Artwork not found' });
       }
-      
+
       // Get similar artworks by same artist or similar category
-      const similarArtworks = await storage.searchArtworks("", {
+      const similarArtworks = await storage.searchArtworks('', {
         category: artwork.category,
         artistId: artwork.artistId,
         excludeId: id,
-        limit: 4
+        limit: 4,
       });
-      
+
       res.json(similarArtworks);
     } catch (error) {
-      console.error("Error fetching similar artworks:", error);
-      res.status(500).json({ message: "Failed to fetch similar artworks" });
+      console.error('Error fetching similar artworks:', error);
+      res.status(500).json({ message: 'Failed to fetch similar artworks' });
     }
   });
 
   // Enhanced search endpoint
   app.get('/api/search', async (req, res) => {
     try {
-      const query = req.query.q as string || "";
-      const type = req.query.type as string || "all";
+      const query = (req.query.q as string) || '';
+      const type = (req.query.type as string) || 'all';
       const filters = {
         category: req.query.category as string,
         medium: req.query.medium as string,
@@ -574,35 +587,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         nationality: req.query.nationality as string,
         yearMin: req.query.yearMin ? parseInt(req.query.yearMin as string) : undefined,
         yearMax: req.query.yearMax ? parseInt(req.query.yearMax as string) : undefined,
-        sortBy: req.query.sortBy as string || "relevance",
+        sortBy: (req.query.sortBy as string) || 'relevance',
         limit: parseInt(req.query.limit as string) || 20,
-        offset: parseInt(req.query.offset as string) || 0
+        offset: parseInt(req.query.offset as string) || 0,
       };
 
       let results = {
         artworks: [],
         artists: [],
         galleries: [],
-        total: 0
+        total: 0,
       };
 
-      if (type === "all" || type === "artworks") {
+      if (type === 'all' || type === 'artworks') {
         results.artworks = await storage.searchArtworks(query, filters);
       }
-      
-      if (type === "all" || type === "artists") {
+
+      if (type === 'all' || type === 'artists') {
         results.artists = await storage.searchArtists(query, filters);
       }
-      
-      if (type === "all" || type === "galleries") {
+
+      if (type === 'all' || type === 'galleries') {
         results.galleries = await storage.searchGalleries(query, filters);
       }
 
       results.total = results.artworks.length + results.artists.length + results.galleries.length;
       res.json(results);
     } catch (error) {
-      console.error("Error performing search:", error);
-      res.status(500).json({ message: "Failed to perform search" });
+      console.error('Error performing search:', error);
+      res.status(500).json({ message: 'Failed to perform search' });
     }
   });
 
@@ -613,8 +626,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const artworks = await storage.getArtworksByArtist(artistId, limit);
       res.json(artworks);
     } catch (error) {
-      console.error("Error fetching artist artworks:", error);
-      res.status(500).json({ message: "Failed to fetch artist artworks" });
+      console.error('Error fetching artist artworks:', error);
+      res.status(500).json({ message: 'Failed to fetch artist artworks' });
     }
   });
 
@@ -624,8 +637,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const artwork = await storage.createArtwork(artworkData);
       res.json(artwork);
     } catch (error) {
-      console.error("Error creating artwork:", error);
-      res.status(500).json({ message: "Failed to create artwork" });
+      console.error('Error creating artwork:', error);
+      res.status(500).json({ message: 'Failed to create artwork' });
     }
   });
 
@@ -637,8 +650,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const artwork = await storage.updateArtwork(artworkId, artworkData);
       res.json(artwork);
     } catch (error) {
-      console.error("Error updating artwork:", error);
-      res.status(500).json({ message: "Failed to update artwork" });
+      console.error('Error updating artwork:', error);
+      res.status(500).json({ message: 'Failed to update artwork' });
     }
   });
 
@@ -647,10 +660,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const artworkId = parseInt(req.params.id);
       await storage.deleteArtwork(artworkId);
-      res.json({ message: "Artwork deleted successfully" });
+      res.json({ message: 'Artwork deleted successfully' });
     } catch (error) {
-      console.error("Error deleting artwork:", error);
-      res.status(500).json({ message: "Failed to delete artwork" });
+      console.error('Error deleting artwork:', error);
+      res.status(500).json({ message: 'Failed to delete artwork' });
     }
   });
 
@@ -659,7 +672,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
@@ -671,7 +684,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       let artworks: any[] = [];
-      
+
       // Get artworks based on user type
       if (userRoles.includes('artist')) {
         const artist = await storage.getArtistByUserId(userId);
@@ -687,8 +700,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json(artworks);
     } catch (error) {
-      console.error("Error fetching user artworks:", error);
-      res.status(500).json({ message: "Failed to fetch user artworks" });
+      console.error('Error fetching user artworks:', error);
+      res.status(500).json({ message: 'Failed to fetch user artworks' });
     }
   });
 
@@ -697,15 +710,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const artist = await storage.getArtistByUserId(userId);
-      
+
       if (!artist) {
         return res.status(404).json({ message: 'Artist profile not found' });
       }
 
       res.json(artist);
     } catch (error) {
-      console.error("Error fetching artist profile:", error);
-      res.status(500).json({ message: "Failed to fetch artist profile" });
+      console.error('Error fetching artist profile:', error);
+      res.status(500).json({ message: 'Failed to fetch artist profile' });
     }
   });
 
@@ -714,15 +727,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const gallery = await storage.getGalleryByUserId(userId);
-      
+
       if (!gallery) {
         return res.status(404).json({ message: 'Gallery profile not found' });
       }
 
       res.json(gallery);
     } catch (error) {
-      console.error("Error fetching gallery profile:", error);
-      res.status(500).json({ message: "Failed to fetch gallery profile" });
+      console.error('Error fetching gallery profile:', error);
+      res.status(500).json({ message: 'Failed to fetch gallery profile' });
     }
   });
 
@@ -734,8 +747,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const auctions = await storage.getAuctions(limit, offset);
       res.json(auctions);
     } catch (error) {
-      console.error("Error fetching auctions:", error);
-      res.status(500).json({ message: "Failed to fetch auctions" });
+      console.error('Error fetching auctions:', error);
+      res.status(500).json({ message: 'Failed to fetch auctions' });
     }
   });
 
@@ -745,8 +758,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const auctions = await storage.getLiveAuctions(limit);
       res.json(auctions);
     } catch (error) {
-      console.error("Error fetching live auctions:", error);
-      res.status(500).json({ message: "Failed to fetch live auctions" });
+      console.error('Error fetching live auctions:', error);
+      res.status(500).json({ message: 'Failed to fetch live auctions' });
     }
   });
 
@@ -756,8 +769,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const auctions = await storage.getUpcomingAuctions(limit);
       res.json(auctions);
     } catch (error) {
-      console.error("Error fetching upcoming auctions:", error);
-      res.status(500).json({ message: "Failed to fetch upcoming auctions" });
+      console.error('Error fetching upcoming auctions:', error);
+      res.status(500).json({ message: 'Failed to fetch upcoming auctions' });
     }
   });
 
@@ -766,12 +779,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const auction = await storage.getAuction(id);
       if (!auction) {
-        return res.status(404).json({ message: "Auction not found" });
+        return res.status(404).json({ message: 'Auction not found' });
       }
       res.json(auction);
     } catch (error) {
-      console.error("Error fetching auction:", error);
-      res.status(500).json({ message: "Failed to fetch auction" });
+      console.error('Error fetching auction:', error);
+      res.status(500).json({ message: 'Failed to fetch auction' });
     }
   });
 
@@ -781,8 +794,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const auction = await storage.createAuction(auctionData);
       res.json(auction);
     } catch (error) {
-      console.error("Error creating auction:", error);
-      res.status(500).json({ message: "Failed to create auction" });
+      console.error('Error creating auction:', error);
+      res.status(500).json({ message: 'Failed to create auction' });
     }
   });
 
@@ -793,8 +806,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const bids = await storage.getBidsForAuction(auctionId);
       res.json(bids);
     } catch (error) {
-      console.error("Error fetching bids:", error);
-      res.status(500).json({ message: "Failed to fetch bids" });
+      console.error('Error fetching bids:', error);
+      res.status(500).json({ message: 'Failed to fetch bids' });
     }
   });
 
@@ -804,13 +817,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const bidData = insertBidSchema.parse({
         ...req.body,
         auctionId,
-        userId: req.user.claims.sub
+        userId: req.user.claims.sub,
       });
       const bid = await storage.createBid(bidData);
       res.json(bid);
     } catch (error) {
-      console.error("Error creating bid:", error);
-      res.status(500).json({ message: "Failed to create bid" });
+      console.error('Error creating bid:', error);
+      res.status(500).json({ message: 'Failed to create bid' });
     }
   });
 
@@ -822,8 +835,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const results = await storage.getAuctionResultsByArtist(artistId, limit);
       res.json(results);
     } catch (error) {
-      console.error("Error fetching artist auction results:", error);
-      res.status(500).json({ message: "Failed to fetch artist auction results" });
+      console.error('Error fetching artist auction results:', error);
+      res.status(500).json({ message: 'Failed to fetch artist auction results' });
     }
   });
 
@@ -833,8 +846,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const results = await storage.getAuctionResultsByArtwork(artworkId);
       res.json(results);
     } catch (error) {
-      console.error("Error fetching artwork auction results:", error);
-      res.status(500).json({ message: "Failed to fetch artwork auction results" });
+      console.error('Error fetching artwork auction results:', error);
+      res.status(500).json({ message: 'Failed to fetch artwork auction results' });
     }
   });
 
@@ -843,12 +856,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const auctionId = parseInt(req.params.auctionId);
       const result = await storage.getAuctionResult(auctionId);
       if (!result) {
-        return res.status(404).json({ message: "Auction result not found" });
+        return res.status(404).json({ message: 'Auction result not found' });
       }
       res.json(result);
     } catch (error) {
-      console.error("Error fetching auction result:", error);
-      res.status(500).json({ message: "Failed to fetch auction result" });
+      console.error('Error fetching auction result:', error);
+      res.status(500).json({ message: 'Failed to fetch auction result' });
     }
   });
 
@@ -863,8 +876,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const result = await storage.createAuctionResult(resultData);
       res.json(result);
     } catch (error) {
-      console.error("Error creating auction result:", error);
-      res.status(500).json({ message: "Failed to create auction result" });
+      console.error('Error creating auction result:', error);
+      res.status(500).json({ message: 'Failed to create auction result' });
     }
   });
 
@@ -880,8 +893,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const result = await storage.updateAuctionResult(id, resultData);
       res.json(result);
     } catch (error) {
-      console.error("Error updating auction result:", error);
-      res.status(500).json({ message: "Failed to update auction result" });
+      console.error('Error updating auction result:', error);
+      res.status(500).json({ message: 'Failed to update auction result' });
     }
   });
 
@@ -891,8 +904,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const stats = await storage.getArtistAuctionStats(artistId);
       res.json(stats);
     } catch (error) {
-      console.error("Error fetching artist auction stats:", error);
-      res.status(500).json({ message: "Failed to fetch artist auction stats" });
+      console.error('Error fetching artist auction stats:', error);
+      res.status(500).json({ message: 'Failed to fetch artist auction stats' });
     }
   });
 
@@ -903,8 +916,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const badges = await storage.getAchievementBadges(category);
       res.json(badges);
     } catch (error) {
-      console.error("Error fetching achievement badges:", error);
-      res.status(500).json({ message: "Failed to fetch achievement badges" });
+      console.error('Error fetching achievement badges:', error);
+      res.status(500).json({ message: 'Failed to fetch achievement badges' });
     }
   });
 
@@ -913,12 +926,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const badge = await storage.getAchievementBadge(id);
       if (!badge) {
-        return res.status(404).json({ message: "Badge not found" });
+        return res.status(404).json({ message: 'Badge not found' });
       }
       res.json(badge);
     } catch (error) {
-      console.error("Error fetching achievement badge:", error);
-      res.status(500).json({ message: "Failed to fetch achievement badge" });
+      console.error('Error fetching achievement badge:', error);
+      res.status(500).json({ message: 'Failed to fetch achievement badge' });
     }
   });
 
@@ -933,8 +946,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const badge = await storage.createAchievementBadge(badgeData);
       res.json(badge);
     } catch (error) {
-      console.error("Error creating achievement badge:", error);
-      res.status(500).json({ message: "Failed to create achievement badge" });
+      console.error('Error creating achievement badge:', error);
+      res.status(500).json({ message: 'Failed to create achievement badge' });
     }
   });
 
@@ -944,8 +957,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const achievements = await storage.getArtistAchievements(artistId);
       res.json(achievements);
     } catch (error) {
-      console.error("Error fetching artist achievements:", error);
-      res.status(500).json({ message: "Failed to fetch artist achievements" });
+      console.error('Error fetching artist achievements:', error);
+      res.status(500).json({ message: 'Failed to fetch artist achievements' });
     }
   });
 
@@ -955,8 +968,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const stats = await storage.getArtistStats(artistId);
       res.json(stats);
     } catch (error) {
-      console.error("Error fetching artist stats:", error);
-      res.status(500).json({ message: "Failed to fetch artist stats" });
+      console.error('Error fetching artist stats:', error);
+      res.status(500).json({ message: 'Failed to fetch artist stats' });
     }
   });
 
@@ -966,8 +979,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const progress = await storage.getBadgeProgress(artistId);
       res.json(progress);
     } catch (error) {
-      console.error("Error fetching badge progress:", error);
-      res.status(500).json({ message: "Failed to fetch badge progress" });
+      console.error('Error fetching badge progress:', error);
+      res.status(500).json({ message: 'Failed to fetch badge progress' });
     }
   });
 
@@ -975,10 +988,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const artistId = parseInt(req.params.id);
       await storage.calculateAchievements(artistId);
-      res.json({ message: "Achievements calculated successfully" });
+      res.json({ message: 'Achievements calculated successfully' });
     } catch (error) {
-      console.error("Error calculating achievements:", error);
-      res.status(500).json({ message: "Failed to calculate achievements" });
+      console.error('Error calculating achievements:', error);
+      res.status(500).json({ message: 'Failed to calculate achievements' });
     }
   });
 
@@ -986,12 +999,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const achievementId = parseInt(req.params.id);
       const { isDisplayed } = req.body;
-      
+
       const achievement = await storage.updateArtistAchievement(achievementId, { isDisplayed });
       res.json(achievement);
     } catch (error) {
-      console.error("Error updating achievement display:", error);
-      res.status(500).json({ message: "Failed to update achievement display" });
+      console.error('Error updating achievement display:', error);
+      res.status(500).json({ message: 'Failed to update achievement display' });
     }
   });
 
@@ -1003,8 +1016,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const collections = await storage.getCollections(limit, offset);
       res.json(collections);
     } catch (error) {
-      console.error("Error fetching collections:", error);
-      res.status(500).json({ message: "Failed to fetch collections" });
+      console.error('Error fetching collections:', error);
+      res.status(500).json({ message: 'Failed to fetch collections' });
     }
   });
 
@@ -1014,8 +1027,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const collections = await storage.getFeaturedCollections(limit);
       res.json(collections);
     } catch (error) {
-      console.error("Error fetching featured collections:", error);
-      res.status(500).json({ message: "Failed to fetch featured collections" });
+      console.error('Error fetching featured collections:', error);
+      res.status(500).json({ message: 'Failed to fetch featured collections' });
     }
   });
 
@@ -1024,12 +1037,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const collection = await storage.getCollection(id);
       if (!collection) {
-        return res.status(404).json({ message: "Collection not found" });
+        return res.status(404).json({ message: 'Collection not found' });
       }
       res.json(collection);
     } catch (error) {
-      console.error("Error fetching collection:", error);
-      res.status(500).json({ message: "Failed to fetch collection" });
+      console.error('Error fetching collection:', error);
+      res.status(500).json({ message: 'Failed to fetch collection' });
     }
   });
 
@@ -1039,8 +1052,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const artworks = await storage.getCollectionArtworks(collectionId);
       res.json(artworks);
     } catch (error) {
-      console.error("Error fetching collection artworks:", error);
-      res.status(500).json({ message: "Failed to fetch collection artworks" });
+      console.error('Error fetching collection artworks:', error);
+      res.status(500).json({ message: 'Failed to fetch collection artworks' });
     }
   });
 
@@ -1052,8 +1065,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const articles = await storage.getArticles(limit, offset);
       res.json(articles);
     } catch (error) {
-      console.error("Error fetching articles:", error);
-      res.status(500).json({ message: "Failed to fetch articles" });
+      console.error('Error fetching articles:', error);
+      res.status(500).json({ message: 'Failed to fetch articles' });
     }
   });
 
@@ -1100,11 +1113,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (!user || (user.role !== 'artist' && user.role !== 'gallery')) {
         return res.status(403).json({ message: 'Not authorized as instructor' });
       }
-      
+
       const workshops = await storage.getWorkshopsByInstructor(userId, user.role);
       res.json(workshops);
     } catch (error) {
@@ -1117,7 +1130,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const workshopData = insertWorkshopSchema.parse({
         ...req.body,
-        instructorId: req.user.claims.sub
+        instructorId: req.user.claims.sub,
       });
       const workshop = await storage.createWorkshop(workshopData);
       res.json(workshop);
@@ -1131,13 +1144,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Verify the user owns this workshop
       const workshop = await storage.getWorkshop(id);
       if (!workshop || workshop.instructorId !== userId) {
         return res.status(403).json({ message: 'Unauthorized' });
       }
-      
+
       const updates = insertWorkshopSchema.partial().parse(req.body);
       const updated = await storage.updateWorkshop(id, updates);
       res.json(updated);
@@ -1151,13 +1164,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Verify the user owns this workshop
       const workshop = await storage.getWorkshop(id);
       if (!workshop || workshop.instructorId !== userId) {
         return res.status(403).json({ message: 'Unauthorized' });
       }
-      
+
       await storage.deleteWorkshop(id);
       res.json({ message: 'Workshop deleted successfully' });
     } catch (error) {
@@ -1232,11 +1245,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (!user || (user.role !== 'artist' && user.role !== 'gallery')) {
         return res.status(403).json({ message: 'Not authorized as organizer' });
       }
-      
+
       const events = await storage.getEventsByOrganizer(userId, user.role);
       res.json(events);
     } catch (error) {
@@ -1249,7 +1262,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const eventData = insertEventSchema.parse({
         ...req.body,
-        organizerId: req.user.claims.sub
+        organizerId: req.user.claims.sub,
       });
       const event = await storage.createEvent(eventData);
       res.json(event);
@@ -1263,13 +1276,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Verify the user owns this event
       const event = await storage.getEvent(id);
       if (!event || event.organizerId !== userId) {
         return res.status(403).json({ message: 'Unauthorized' });
       }
-      
+
       const updates = insertEventSchema.partial().parse(req.body);
       const updated = await storage.updateEvent(id, updates);
       res.json(updated);
@@ -1283,13 +1296,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Verify the user owns this event
       const event = await storage.getEvent(id);
       if (!event || event.organizerId !== userId) {
         return res.status(403).json({ message: 'Unauthorized' });
       }
-      
+
       await storage.deleteEvent(id);
       res.json({ message: 'Event deleted successfully' });
     } catch (error) {
@@ -1327,7 +1340,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const reviewData = insertWorkshopEventReviewSchema.parse({
         ...req.body,
-        userId: req.user.claims.sub
+        userId: req.user.claims.sub,
       });
       const review = await storage.createWorkshopEventReview(reviewData);
       res.json(review);
@@ -1353,13 +1366,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Check if user owns the review
       const existingReview = await storage.getWorkshopEventReview(id);
       if (!existingReview || existingReview.userId !== userId) {
         return res.status(403).json({ message: 'Not authorized to update this review' });
       }
-      
+
       const updates = insertWorkshopEventReviewSchema.partial().parse(req.body);
       const review = await storage.updateWorkshopEventReview(id, updates);
       res.json(review);
@@ -1373,13 +1386,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Check if user owns the review
       const existingReview = await storage.getWorkshopEventReview(id);
       if (!existingReview || existingReview.userId !== userId) {
         return res.status(403).json({ message: 'Not authorized to delete this review' });
       }
-      
+
       await storage.deleteWorkshopEventReview(id);
       res.json({ message: 'Review deleted successfully' });
     } catch (error) {
@@ -1393,7 +1406,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const entityType = req.params.entityType as 'workshop' | 'event';
       const entityId = parseInt(req.params.entityId);
       const userId = req.user.claims.sub;
-      
+
       const hasReviewed = await storage.hasUserReviewed(userId, entityType, entityId);
       res.json({ hasReviewed });
     } catch (error) {
@@ -1401,8 +1414,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: 'Failed to check review status' });
     }
   });
-
-
 
   // Collector Dashboard Routes
   app.get('/api/collector/orders', isAuthenticated, async (req: AuthenticatedRequest, res) => {
@@ -1425,7 +1436,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             artist: {
               name: artists.name,
               nameAr: artists.nameAr,
-            }
+            },
           },
           shippingTracking: {
             trackingNumber: shippingTracking.trackingNumber,
@@ -1439,7 +1450,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             numberOfInstallments: installmentPlans.numberOfInstallments,
             nextPaymentDate: installmentPlans.nextPaymentDate,
             installmentAmount: installmentPlans.installmentAmount,
-          }
+          },
         })
         .from(purchaseOrders)
         .innerJoin(artworks, eq(purchaseOrders.artworkId, artworks.id))
@@ -1448,11 +1459,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .leftJoin(installmentPlans, eq(purchaseOrders.id, installmentPlans.orderId))
         .where(eq(purchaseOrders.userId, userId))
         .orderBy(desc(purchaseOrders.createdAt));
-      
+
       res.json(orders);
     } catch (error) {
-      console.error("Error fetching collector orders:", error);
-      res.status(500).json({ message: "Failed to fetch orders" });
+      console.error('Error fetching collector orders:', error);
+      res.status(500).json({ message: 'Failed to fetch orders' });
     }
   });
 
@@ -1475,19 +1486,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
             artist: {
               name: artists.name,
               nameAr: artists.nameAr,
-            }
-          }
+            },
+          },
         })
         .from(collectorWishlist)
         .innerJoin(artworks, eq(collectorWishlist.artworkId, artworks.id))
         .innerJoin(artists, eq(artworks.artistId, artists.id))
         .where(eq(collectorWishlist.userId, userId))
         .orderBy(desc(collectorWishlist.priority));
-      
+
       res.json(wishlistItems);
     } catch (error) {
-      console.error("Error fetching wishlist:", error);
-      res.status(500).json({ message: "Failed to fetch wishlist" });
+      console.error('Error fetching wishlist:', error);
+      res.status(500).json({ message: 'Failed to fetch wishlist' });
     }
   });
 
@@ -1495,10 +1506,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const { artworkId, priority = 0, notes, notifyOnPriceChange = true } = req.body;
-      
+
       // Get current artwork price
-      const [artwork] = await db.select({ price: artworks.price }).from(artworks).where(eq(artworks.id, artworkId));
-      
+      const [artwork] = await db
+        .select({ price: artworks.price })
+        .from(artworks)
+        .where(eq(artworks.id, artworkId));
+
       const [wishlistItem] = await db
         .insert(collectorWishlist)
         .values({
@@ -1510,71 +1524,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
           notifyOnPriceChange,
         })
         .returning();
-      
+
       res.json(wishlistItem);
     } catch (error) {
-      console.error("Error adding to wishlist:", error);
-      res.status(500).json({ message: "Failed to add to wishlist" });
+      console.error('Error adding to wishlist:', error);
+      res.status(500).json({ message: 'Failed to add to wishlist' });
     }
   });
 
-  app.delete('/api/collector/wishlist/:artworkId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const artworkId = parseInt(req.params.artworkId);
-      
-      await db
-        .delete(collectorWishlist)
-        .where(and(
-          eq(collectorWishlist.userId, userId),
-          eq(collectorWishlist.artworkId, artworkId)
-        ));
-      
-      res.json({ message: "Removed from wishlist" });
-    } catch (error) {
-      console.error("Error removing from wishlist:", error);
-      res.status(500).json({ message: "Failed to remove from wishlist" });
-    }
-  });
+  app.delete(
+    '/api/collector/wishlist/:artworkId',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const artworkId = parseInt(req.params.artworkId);
 
-  app.get('/api/collector/price-alerts', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const alerts = await db
-        .select()
-        .from(priceAlerts)
-        .where(and(
-          eq(priceAlerts.userId, userId),
-          eq(priceAlerts.isActive, true)
-        ))
-        .orderBy(desc(priceAlerts.createdAt));
-      
-      res.json(alerts);
-    } catch (error) {
-      console.error("Error fetching price alerts:", error);
-      res.status(500).json({ message: "Failed to fetch price alerts" });
-    }
-  });
+        await db
+          .delete(collectorWishlist)
+          .where(
+            and(eq(collectorWishlist.userId, userId), eq(collectorWishlist.artworkId, artworkId))
+          );
 
-  app.post('/api/collector/price-alerts', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const alertData = {
-        userId,
-        ...req.body
-      };
-      
-      const [alert] = await db
-        .insert(priceAlerts)
-        .values(alertData)
-        .returning();
-      
-      res.json(alert);
-    } catch (error) {
-      console.error("Error creating price alert:", error);
-      res.status(500).json({ message: "Failed to create price alert" });
+        res.json({ message: 'Removed from wishlist' });
+      } catch (error) {
+        console.error('Error removing from wishlist:', error);
+        res.status(500).json({ message: 'Failed to remove from wishlist' });
+      }
     }
-  });
+  );
+
+  app.get(
+    '/api/collector/price-alerts',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const alerts = await db
+          .select()
+          .from(priceAlerts)
+          .where(and(eq(priceAlerts.userId, userId), eq(priceAlerts.isActive, true)))
+          .orderBy(desc(priceAlerts.createdAt));
+
+        res.json(alerts);
+      } catch (error) {
+        console.error('Error fetching price alerts:', error);
+        res.status(500).json({ message: 'Failed to fetch price alerts' });
+      }
+    }
+  );
+
+  app.post(
+    '/api/collector/price-alerts',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const alertData = {
+          userId,
+          ...req.body,
+        };
+
+        const [alert] = await db.insert(priceAlerts).values(alertData).returning();
+
+        res.json(alert);
+      } catch (error) {
+        console.error('Error creating price alert:', error);
+        res.status(500).json({ message: 'Failed to create price alert' });
+      }
+    }
+  );
 
   app.get('/api/collector/profile', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
@@ -1583,11 +1602,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .select()
         .from(collectorProfiles)
         .where(eq(collectorProfiles.userId, userId));
-      
+
       res.json(profile || null);
     } catch (error) {
-      console.error("Error fetching collector profile:", error);
-      res.status(500).json({ message: "Failed to fetch collector profile" });
+      console.error('Error fetching collector profile:', error);
+      res.status(500).json({ message: 'Failed to fetch collector profile' });
     }
   });
 
@@ -1595,12 +1614,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const profileData = req.body;
-      
+
       const [existingProfile] = await db
         .select()
         .from(collectorProfiles)
         .where(eq(collectorProfiles.userId, userId));
-      
+
       let profile;
       if (existingProfile) {
         [profile] = await db
@@ -1614,11 +1633,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
           .values({ userId, ...profileData })
           .returning();
       }
-      
+
       res.json(profile);
     } catch (error) {
-      console.error("Error updating collector profile:", error);
-      res.status(500).json({ message: "Failed to update collector profile" });
+      console.error('Error updating collector profile:', error);
+      res.status(500).json({ message: 'Failed to update collector profile' });
     }
   });
 
@@ -1630,8 +1649,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const inquiries = await storage.getInquiries(limit, offset);
       res.json(inquiries);
     } catch (error) {
-      console.error("Error fetching inquiries:", error);
-      res.status(500).json({ message: "Failed to fetch inquiries" });
+      console.error('Error fetching inquiries:', error);
+      res.status(500).json({ message: 'Failed to fetch inquiries' });
     }
   });
 
@@ -1641,8 +1660,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const inquiries = await storage.getInquiriesForArtwork(artworkId);
       res.json(inquiries);
     } catch (error) {
-      console.error("Error fetching artwork inquiries:", error);
-      res.status(500).json({ message: "Failed to fetch artwork inquiries" });
+      console.error('Error fetching artwork inquiries:', error);
+      res.status(500).json({ message: 'Failed to fetch artwork inquiries' });
     }
   });
 
@@ -1650,13 +1669,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const inquiryData = insertInquirySchema.parse({
         ...req.body,
-        userId: req.user?.claims?.sub || null
+        userId: req.user?.claims?.sub || null,
       });
       const inquiry = await storage.createInquiry(inquiryData);
       res.json(inquiry);
     } catch (error) {
-      console.error("Error creating inquiry:", error);
-      res.status(500).json({ message: "Failed to create inquiry" });
+      console.error('Error creating inquiry:', error);
+      res.status(500).json({ message: 'Failed to create inquiry' });
     }
   });
 
@@ -1667,8 +1686,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const favorites = await storage.getUserFavorites(userId);
       res.json(favorites);
     } catch (error) {
-      console.error("Error fetching favorites:", error);
-      res.status(500).json({ message: "Failed to fetch favorites" });
+      console.error('Error fetching favorites:', error);
+      res.status(500).json({ message: 'Failed to fetch favorites' });
     }
   });
 
@@ -1676,13 +1695,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const favoriteData = insertFavoriteSchema.parse({
         ...req.body,
-        userId: req.user.claims.sub
+        userId: req.user.claims.sub,
       });
       const favorite = await storage.createFavorite(favoriteData);
       res.json(favorite);
     } catch (error) {
-      console.error("Error creating favorite:", error);
-      res.status(500).json({ message: "Failed to create favorite" });
+      console.error('Error creating favorite:', error);
+      res.status(500).json({ message: 'Failed to create favorite' });
     }
   });
 
@@ -1691,10 +1710,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const artworkId = parseInt(req.params.artworkId);
       const userId = req.user.claims.sub;
       await storage.deleteFavorite(userId, artworkId);
-      res.json({ message: "Favorite removed successfully" });
+      res.json({ message: 'Favorite removed successfully' });
     } catch (error) {
-      console.error("Error removing favorite:", error);
-      res.status(500).json({ message: "Failed to remove favorite" });
+      console.error('Error removing favorite:', error);
+      res.status(500).json({ message: 'Failed to remove favorite' });
     }
   });
 
@@ -1705,25 +1724,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const isFavorite = await storage.isFavorite(userId, artworkId);
       res.json({ isFavorite });
     } catch (error) {
-      console.error("Error checking favorite:", error);
-      res.status(500).json({ message: "Failed to check favorite" });
+      console.error('Error checking favorite:', error);
+      res.status(500).json({ message: 'Failed to check favorite' });
     }
   });
-
-
 
   // Social features - Follow routes
   app.post('/api/follows', isAuthenticated, async (req: any, res) => {
     try {
       const followData = insertFollowSchema.parse({
         ...req.body,
-        userId: req.user.claims.sub
+        userId: req.user.claims.sub,
       });
       const follow = await storage.createFollow(followData);
       res.json(follow);
     } catch (error) {
-      console.error("Error creating follow:", error);
-      res.status(500).json({ message: "Failed to create follow" });
+      console.error('Error creating follow:', error);
+      res.status(500).json({ message: 'Failed to create follow' });
     }
   });
 
@@ -1733,10 +1750,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const entityId = parseInt(req.params.entityId);
       const userId = req.user.claims.sub;
       await storage.deleteFollow(userId, entityType, entityId);
-      res.json({ message: "Follow removed successfully" });
+      res.json({ message: 'Follow removed successfully' });
     } catch (error) {
-      console.error("Error removing follow:", error);
-      res.status(500).json({ message: "Failed to remove follow" });
+      console.error('Error removing follow:', error);
+      res.status(500).json({ message: 'Failed to remove follow' });
     }
   });
 
@@ -1748,8 +1765,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const isFollowing = await storage.isFollowing(userId, entityType, entityId);
       res.json({ isFollowing });
     } catch (error) {
-      console.error("Error checking follow:", error);
-      res.status(500).json({ message: "Failed to check follow" });
+      console.error('Error checking follow:', error);
+      res.status(500).json({ message: 'Failed to check follow' });
     }
   });
 
@@ -1760,8 +1777,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const followers = await storage.getFollowers(entityType, entityId);
       res.json(followers);
     } catch (error) {
-      console.error("Error fetching followers:", error);
-      res.status(500).json({ message: "Failed to fetch followers" });
+      console.error('Error fetching followers:', error);
+      res.status(500).json({ message: 'Failed to fetch followers' });
     }
   });
 
@@ -1772,8 +1789,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const counts = await storage.getFollowCounts(entityType, entityId);
       res.json(counts);
     } catch (error) {
-      console.error("Error fetching follow counts:", error);
-      res.status(500).json({ message: "Failed to fetch follow counts" });
+      console.error('Error fetching follow counts:', error);
+      res.status(500).json({ message: 'Failed to fetch follow counts' });
     }
   });
 
@@ -1784,8 +1801,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const following = await storage.getFollowing(userId, entityType);
       res.json(following);
     } catch (error) {
-      console.error("Error fetching following:", error);
-      res.status(500).json({ message: "Failed to fetch following" });
+      console.error('Error fetching following:', error);
+      res.status(500).json({ message: 'Failed to fetch following' });
     }
   });
 
@@ -1794,13 +1811,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const commentData = insertCommentSchema.parse({
         ...req.body,
-        userId: req.user.claims.sub
+        userId: req.user.claims.sub,
       });
       const comment = await storage.createComment(commentData);
       res.json(comment);
     } catch (error) {
-      console.error("Error creating comment:", error);
-      res.status(500).json({ message: "Failed to create comment" });
+      console.error('Error creating comment:', error);
+      res.status(500).json({ message: 'Failed to create comment' });
     }
   });
 
@@ -1808,19 +1825,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Check if user owns the comment
       const existingComment = await storage.getComment(id);
       if (!existingComment || existingComment.userId !== userId) {
-        return res.status(403).json({ message: "Not authorized to update this comment" });
+        return res.status(403).json({ message: 'Not authorized to update this comment' });
       }
-      
+
       const commentData = insertCommentSchema.partial().parse(req.body);
       const comment = await storage.updateComment(id, commentData);
       res.json(comment);
     } catch (error) {
-      console.error("Error updating comment:", error);
-      res.status(500).json({ message: "Failed to update comment" });
+      console.error('Error updating comment:', error);
+      res.status(500).json({ message: 'Failed to update comment' });
     }
   });
 
@@ -1828,18 +1845,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Check if user owns the comment
       const existingComment = await storage.getComment(id);
       if (!existingComment || existingComment.userId !== userId) {
-        return res.status(403).json({ message: "Not authorized to delete this comment" });
+        return res.status(403).json({ message: 'Not authorized to delete this comment' });
       }
-      
+
       await storage.deleteComment(id);
-      res.json({ message: "Comment deleted successfully" });
+      res.json({ message: 'Comment deleted successfully' });
     } catch (error) {
-      console.error("Error deleting comment:", error);
-      res.status(500).json({ message: "Failed to delete comment" });
+      console.error('Error deleting comment:', error);
+      res.status(500).json({ message: 'Failed to delete comment' });
     }
   });
 
@@ -1850,8 +1867,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const comments = await storage.getComments(entityType, entityId);
       res.json(comments);
     } catch (error) {
-      console.error("Error fetching comments:", error);
-      res.status(500).json({ message: "Failed to fetch comments" });
+      console.error('Error fetching comments:', error);
+      res.status(500).json({ message: 'Failed to fetch comments' });
     }
   });
 
@@ -1860,13 +1877,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const likeData = insertLikeSchema.parse({
         ...req.body,
-        userId: req.user.claims.sub
+        userId: req.user.claims.sub,
       });
       const like = await storage.createLike(likeData);
       res.json(like);
     } catch (error) {
-      console.error("Error creating like:", error);
-      res.status(500).json({ message: "Failed to create like" });
+      console.error('Error creating like:', error);
+      res.status(500).json({ message: 'Failed to create like' });
     }
   });
 
@@ -1876,10 +1893,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const entityId = parseInt(req.params.entityId);
       const userId = req.user.claims.sub;
       await storage.deleteLike(userId, entityType, entityId);
-      res.json({ message: "Like removed successfully" });
+      res.json({ message: 'Like removed successfully' });
     } catch (error) {
-      console.error("Error removing like:", error);
-      res.status(500).json({ message: "Failed to remove like" });
+      console.error('Error removing like:', error);
+      res.status(500).json({ message: 'Failed to remove like' });
     }
   });
 
@@ -1891,8 +1908,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const isLiked = await storage.isLiked(userId, entityType, entityId);
       res.json({ isLiked });
     } catch (error) {
-      console.error("Error checking like:", error);
-      res.status(500).json({ message: "Failed to check like" });
+      console.error('Error checking like:', error);
+      res.status(500).json({ message: 'Failed to check like' });
     }
   });
 
@@ -1903,8 +1920,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const counts = await storage.getLikeCounts(entityType, entityId);
       res.json(counts);
     } catch (error) {
-      console.error("Error fetching like counts:", error);
-      res.status(500).json({ message: "Failed to fetch like counts" });
+      console.error('Error fetching like counts:', error);
+      res.status(500).json({ message: 'Failed to fetch like counts' });
     }
   });
 
@@ -1916,8 +1933,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const activities = await storage.getActivities(userId, limit);
       res.json(activities);
     } catch (error) {
-      console.error("Error fetching activities:", error);
-      res.status(500).json({ message: "Failed to fetch activities" });
+      console.error('Error fetching activities:', error);
+      res.status(500).json({ message: 'Failed to fetch activities' });
     }
   });
 
@@ -1928,8 +1945,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const activities = await storage.getFollowingActivities(userId, limit);
       res.json(activities);
     } catch (error) {
-      console.error("Error fetching activity feed:", error);
-      res.status(500).json({ message: "Failed to fetch activity feed" });
+      console.error('Error fetching activity feed:', error);
+      res.status(500).json({ message: 'Failed to fetch activity feed' });
     }
   });
 
@@ -1940,8 +1957,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const profile = await storage.getUserProfile(userId);
       res.json(profile);
     } catch (error) {
-      console.error("Error fetching profile:", error);
-      res.status(500).json({ message: "Failed to fetch profile" });
+      console.error('Error fetching profile:', error);
+      res.status(500).json({ message: 'Failed to fetch profile' });
     }
   });
 
@@ -1950,12 +1967,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.params.userId;
       const profile = await storage.getUserProfile(userId);
       if (!profile) {
-        return res.status(404).json({ message: "Profile not found" });
+        return res.status(404).json({ message: 'Profile not found' });
       }
       res.json(profile);
     } catch (error) {
-      console.error("Error fetching profile:", error);
-      res.status(500).json({ message: "Failed to fetch profile" });
+      console.error('Error fetching profile:', error);
+      res.status(500).json({ message: 'Failed to fetch profile' });
     }
   });
 
@@ -1963,13 +1980,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const profileData = insertUserProfileSchema.parse({
         ...req.body,
-        userId: req.user.claims.sub
+        userId: req.user.claims.sub,
       });
       const profile = await storage.createUserProfile(profileData);
       res.json(profile);
     } catch (error) {
-      console.error("Error creating profile:", error);
-      res.status(500).json({ message: "Failed to create profile" });
+      console.error('Error creating profile:', error);
+      res.status(500).json({ message: 'Failed to create profile' });
     }
   });
 
@@ -1980,8 +1997,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const profile = await storage.updateUserProfile(userId, profileData);
       res.json(profile);
     } catch (error) {
-      console.error("Error updating profile:", error);
-      res.status(500).json({ message: "Failed to update profile" });
+      console.error('Error updating profile:', error);
+      res.status(500).json({ message: 'Failed to update profile' });
     }
   });
 
@@ -1990,21 +2007,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { artworkId, duration, source } = req.body;
       const userId = req.isAuthenticated() ? req.user.claims.sub : null;
-      
+
       const view = await storage.recordArtworkView({
         artworkId,
         userId,
         duration,
         source,
       });
-      
+
       res.json(view);
     } catch (error) {
-      console.error("Error recording artwork view:", error);
-      res.status(500).json({ message: "Failed to record artwork view" });
+      console.error('Error recording artwork view:', error);
+      res.status(500).json({ message: 'Failed to record artwork view' });
     }
   });
-  
+
   app.get('/api/analytics/artwork-views/:artworkId', async (req, res) => {
     try {
       const artworkId = parseInt(req.params.artworkId);
@@ -2012,11 +2029,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const views = await storage.getArtworkViews(artworkId, days);
       res.json(views);
     } catch (error) {
-      console.error("Error fetching artwork views:", error);
-      res.status(500).json({ message: "Failed to fetch artwork views" });
+      console.error('Error fetching artwork views:', error);
+      res.status(500).json({ message: 'Failed to fetch artwork views' });
     }
   });
-  
+
   app.post('/api/analytics/artist/:artistId', isAuthenticated, async (req, res) => {
     try {
       const artistId = parseInt(req.params.artistId);
@@ -2024,11 +2041,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const analytics = await storage.updateArtistAnalytics(artistId, date);
       res.json(analytics);
     } catch (error) {
-      console.error("Error updating artist analytics:", error);
-      res.status(500).json({ message: "Failed to update artist analytics" });
+      console.error('Error updating artist analytics:', error);
+      res.status(500).json({ message: 'Failed to update artist analytics' });
     }
   });
-  
+
   app.get('/api/analytics/artist/:artistId', async (req, res) => {
     try {
       const artistId = parseInt(req.params.artistId);
@@ -2040,16 +2057,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       );
       res.json(analytics);
     } catch (error) {
-      console.error("Error fetching artist analytics:", error);
-      res.status(500).json({ message: "Failed to fetch artist analytics" });
+      console.error('Error fetching artist analytics:', error);
+      res.status(500).json({ message: 'Failed to fetch artist analytics' });
     }
   });
-  
+
   app.post('/api/analytics/search', async (req: any, res) => {
     try {
       const { query, filters, resultCount, clickedResults } = req.body;
       const userId = req.isAuthenticated() ? req.user.claims.sub : null;
-      
+
       if (userId) {
         const search = await storage.recordSearchHistory({
           userId,
@@ -2060,14 +2077,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
         res.json(search);
       } else {
-        res.json({ message: "Search recorded without user" });
+        res.json({ message: 'Search recorded without user' });
       }
     } catch (error) {
-      console.error("Error recording search:", error);
-      res.status(500).json({ message: "Failed to record search" });
+      console.error('Error recording search:', error);
+      res.status(500).json({ message: 'Failed to record search' });
     }
   });
-  
+
   app.get('/api/analytics/search-history', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
@@ -2075,22 +2092,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const history = await storage.getSearchHistory(userId, limit);
       res.json(history);
     } catch (error) {
-      console.error("Error fetching search history:", error);
-      res.status(500).json({ message: "Failed to fetch search history" });
+      console.error('Error fetching search history:', error);
+      res.status(500).json({ message: 'Failed to fetch search history' });
     }
   });
-  
+
   app.get('/api/preferences', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const preferences = await storage.getUserPreferences(userId);
       res.json(preferences || {});
     } catch (error) {
-      console.error("Error fetching preferences:", error);
-      res.status(500).json({ message: "Failed to fetch preferences" });
+      console.error('Error fetching preferences:', error);
+      res.status(500).json({ message: 'Failed to fetch preferences' });
     }
   });
-  
+
   app.put('/api/preferences', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
@@ -2100,61 +2117,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       res.json(preferences);
     } catch (error) {
-      console.error("Error updating preferences:", error);
-      res.status(500).json({ message: "Failed to update preferences" });
+      console.error('Error updating preferences:', error);
+      res.status(500).json({ message: 'Failed to update preferences' });
     }
   });
-  
+
   app.get('/api/artists/:artistId/portfolio', async (req, res) => {
     try {
       const artistId = parseInt(req.params.artistId);
       const sections = await storage.getPortfolioSections(artistId);
       res.json(sections);
     } catch (error) {
-      console.error("Error fetching portfolio sections:", error);
-      res.status(500).json({ message: "Failed to fetch portfolio sections" });
+      console.error('Error fetching portfolio sections:', error);
+      res.status(500).json({ message: 'Failed to fetch portfolio sections' });
     }
   });
-  
+
   app.post('/api/artists/:artistId/portfolio', isAuthenticated, async (req: any, res) => {
     try {
       const artistId = parseInt(req.params.artistId);
       // Verify the user owns this artist profile
       const artist = await storage.getArtist(artistId);
       if (!artist || artist.userId !== req.user.claims.sub) {
-        return res.status(403).json({ message: "Unauthorized" });
+        return res.status(403).json({ message: 'Unauthorized' });
       }
-      
+
       const section = await storage.createPortfolioSection({
         artistId,
         ...req.body,
       });
       res.json(section);
     } catch (error) {
-      console.error("Error creating portfolio section:", error);
-      res.status(500).json({ message: "Failed to create portfolio section" });
+      console.error('Error creating portfolio section:', error);
+      res.status(500).json({ message: 'Failed to create portfolio section' });
     }
   });
-  
+
   app.put('/api/portfolio/:sectionId', isAuthenticated, async (req: any, res) => {
     try {
       const sectionId = parseInt(req.params.sectionId);
       const section = await storage.updatePortfolioSection(sectionId, req.body);
       res.json(section);
     } catch (error) {
-      console.error("Error updating portfolio section:", error);
-      res.status(500).json({ message: "Failed to update portfolio section" });
+      console.error('Error updating portfolio section:', error);
+      res.status(500).json({ message: 'Failed to update portfolio section' });
     }
   });
-  
+
   app.delete('/api/portfolio/:sectionId', isAuthenticated, async (req, res) => {
     try {
       const sectionId = parseInt(req.params.sectionId);
       await storage.deletePortfolioSection(sectionId);
-      res.json({ message: "Portfolio section deleted successfully" });
+      res.json({ message: 'Portfolio section deleted successfully' });
     } catch (error) {
-      console.error("Error deleting portfolio section:", error);
-      res.status(500).json({ message: "Failed to delete portfolio section" });
+      console.error('Error deleting portfolio section:', error);
+      res.status(500).json({ message: 'Failed to delete portfolio section' });
     }
   });
 
@@ -2163,9 +2180,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: 'User not found' });
       }
 
       let sellerInfo = null;
@@ -2177,27 +2194,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({ type: user.role, info: sellerInfo });
     } catch (error) {
-      console.error("Error fetching seller info:", error);
-      res.status(500).json({ message: "Failed to fetch seller info" });
+      console.error('Error fetching seller info:', error);
+      res.status(500).json({ message: 'Failed to fetch seller info' });
     }
   });
 
-  app.get('/api/seller/payment-methods', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (!user || (user.role !== 'artist' && user.role !== 'gallery')) {
-        return res.status(403).json({ message: "Not authorized as seller" });
+  app.get(
+    '/api/seller/payment-methods',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        if (!user || (user.role !== 'artist' && user.role !== 'gallery')) {
+          return res.status(403).json({ message: 'Not authorized as seller' });
+        }
+
+        const methods = await storage.getSellerPaymentMethods(userId);
+        res.json(methods);
+      } catch (error) {
+        console.error('Error fetching payment methods:', error);
+        res.status(500).json({ message: 'Failed to fetch payment methods' });
       }
-
-      const methods = await storage.getSellerPaymentMethods(userId);
-      res.json(methods);
-    } catch (error) {
-      console.error("Error fetching payment methods:", error);
-      res.status(500).json({ message: "Failed to fetch payment methods" });
     }
-  });
+  );
 
   // Tap Payment Integration Routes - DISABLED UNTIL SUFFICIENT TRAFFIC
   // Uncomment these routes when ready to enable Tap Payment integration
@@ -2357,92 +2378,108 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   */
 
-  app.post('/api/seller/payment-methods', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (!user || (user.role !== 'artist' && user.role !== 'gallery')) {
-        return res.status(403).json({ message: "Not authorized as seller" });
+  app.post(
+    '/api/seller/payment-methods',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        if (!user || (user.role !== 'artist' && user.role !== 'gallery')) {
+          return res.status(403).json({ message: 'Not authorized as seller' });
+        }
+
+        const method = await storage.addSellerPaymentMethod(userId, req.body);
+        res.json(method);
+      } catch (error) {
+        console.error('Error adding payment method:', error);
+        res.status(500).json({ message: 'Failed to add payment method' });
       }
-
-      const method = await storage.addSellerPaymentMethod(userId, req.body);
-      res.json(method);
-    } catch (error) {
-      console.error("Error adding payment method:", error);
-      res.status(500).json({ message: "Failed to add payment method" });
     }
-  });
+  );
 
-  app.patch('/api/seller/payment-methods/:methodId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { methodId } = req.params;
-      
-      const method = await storage.updateSellerPaymentMethod(userId, methodId, req.body);
-      res.json(method);
-    } catch (error) {
-      console.error("Error updating payment method:", error);
-      res.status(500).json({ message: "Failed to update payment method" });
-    }
-  });
+  app.patch(
+    '/api/seller/payment-methods/:methodId',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { methodId } = req.params;
 
-  app.delete('/api/seller/payment-methods/:methodId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { methodId } = req.params;
-      
-      await storage.deleteSellerPaymentMethod(userId, methodId);
-      res.json({ success: true });
-    } catch (error) {
-      console.error("Error deleting payment method:", error);
-      res.status(500).json({ message: "Failed to delete payment method" });
+        const method = await storage.updateSellerPaymentMethod(userId, methodId, req.body);
+        res.json(method);
+      } catch (error) {
+        console.error('Error updating payment method:', error);
+        res.status(500).json({ message: 'Failed to update payment method' });
+      }
     }
-  });
+  );
+
+  app.delete(
+    '/api/seller/payment-methods/:methodId',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { methodId } = req.params;
+
+        await storage.deleteSellerPaymentMethod(userId, methodId);
+        res.json({ success: true });
+      } catch (error) {
+        console.error('Error deleting payment method:', error);
+        res.status(500).json({ message: 'Failed to delete payment method' });
+      }
+    }
+  );
 
   app.get('/api/seller/orders', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (!user || (user.role !== 'artist' && user.role !== 'gallery')) {
-        return res.status(403).json({ message: "Not authorized as seller" });
+        return res.status(403).json({ message: 'Not authorized as seller' });
       }
 
       const orders = await storage.getSellerOrders(userId);
       res.json(orders);
     } catch (error) {
-      console.error("Error fetching seller orders:", error);
-      res.status(500).json({ message: "Failed to fetch orders" });
+      console.error('Error fetching seller orders:', error);
+      res.status(500).json({ message: 'Failed to fetch orders' });
     }
   });
 
-  app.patch('/api/seller/orders/:orderId/status', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { orderId } = req.params;
-      const { status, sellerNotes, trackingInfo } = req.body;
-      
-      const updatedOrder = await storage.updateSellerOrder(userId, parseInt(orderId), {
-        status,
-        sellerNotes,
-        trackingInfo
-      });
-      
-      res.json(updatedOrder);
-    } catch (error) {
-      console.error("Error updating order:", error);
-      res.status(500).json({ message: "Failed to update order" });
+  app.patch(
+    '/api/seller/orders/:orderId/status',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { orderId } = req.params;
+        const { status, sellerNotes, trackingInfo } = req.body;
+
+        const updatedOrder = await storage.updateSellerOrder(userId, parseInt(orderId), {
+          status,
+          sellerNotes,
+          trackingInfo,
+        });
+
+        res.json(updatedOrder);
+      } catch (error) {
+        console.error('Error updating order:', error);
+        res.status(500).json({ message: 'Failed to update order' });
+      }
     }
-  });
+  );
 
   // Newsletter subscription routes
   app.post('/api/newsletter/subscribe', async (req, res) => {
     try {
       const { email, firstName, lastName, language, categories, frequency } = req.body;
-      
+
       if (!email) {
-        return res.status(400).json({ message: "Email is required" });
+        return res.status(400).json({ message: 'Email is required' });
       }
 
       // Check if authenticated
@@ -2457,67 +2494,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
         lastName,
         language,
         categories,
-        frequency
+        frequency,
       });
 
-      res.json({ message: "Successfully subscribed to newsletter", subscriber });
+      res.json({ message: 'Successfully subscribed to newsletter', subscriber });
     } catch (error) {
-      console.error("Error subscribing to newsletter:", error);
-      res.status(500).json({ message: "Failed to subscribe to newsletter" });
+      console.error('Error subscribing to newsletter:', error);
+      res.status(500).json({ message: 'Failed to subscribe to newsletter' });
     }
   });
 
   app.post('/api/newsletter/unsubscribe', async (req, res) => {
     try {
       const { email } = req.body;
-      
+
       if (!email) {
-        return res.status(400).json({ message: "Email is required" });
+        return res.status(400).json({ message: 'Email is required' });
       }
 
       await emailService.unsubscribeFromNewsletter(email);
-      res.json({ message: "Successfully unsubscribed from newsletter" });
+      res.json({ message: 'Successfully unsubscribed from newsletter' });
     } catch (error) {
-      console.error("Error unsubscribing from newsletter:", error);
-      res.status(500).json({ message: "Failed to unsubscribe" });
+      console.error('Error unsubscribing from newsletter:', error);
+      res.status(500).json({ message: 'Failed to unsubscribe' });
     }
   });
 
-  app.get('/api/newsletter/subscription', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const subscription = await storage.getNewsletterSubscriberByUserId(userId);
-      res.json(subscription);
-    } catch (error) {
-      console.error("Error fetching subscription:", error);
-      res.status(500).json({ message: "Failed to fetch subscription" });
+  app.get(
+    '/api/newsletter/subscription',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const subscription = await storage.getNewsletterSubscriberByUserId(userId);
+        res.json(subscription);
+      } catch (error) {
+        console.error('Error fetching subscription:', error);
+        res.status(500).json({ message: 'Failed to fetch subscription' });
+      }
     }
-  });
+  );
 
   // Admin route to get all newsletter subscribers
-  app.get('/api/admin/newsletter-subscribers', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
-      }
+  app.get(
+    '/api/admin/newsletter-subscribers',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
 
-      const subscribers = await storage.getNewsletterSubscribers();
-      res.json(subscribers);
-    } catch (error) {
-      console.error("Error fetching newsletter subscribers:", error);
-      res.status(500).json({ message: "Failed to fetch subscribers" });
+        if (user?.role !== 'admin') {
+          return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const subscribers = await storage.getNewsletterSubscribers();
+        res.json(subscribers);
+      } catch (error) {
+        console.error('Error fetching newsletter subscribers:', error);
+        res.status(500).json({ message: 'Failed to fetch subscribers' });
+      }
     }
-  });
+  );
 
   // Email template management routes (admin only)
   app.get('/api/email-templates', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         return res.status(403).json({ message: 'Admin access required' });
       }
@@ -2525,8 +2570,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const templates = await storage.getEmailTemplates();
       res.json(templates);
     } catch (error) {
-      console.error("Error fetching email templates:", error);
-      res.status(500).json({ message: "Failed to fetch templates" });
+      console.error('Error fetching email templates:', error);
+      res.status(500).json({ message: 'Failed to fetch templates' });
     }
   });
 
@@ -2534,22 +2579,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         return res.status(403).json({ message: 'Admin access required' });
       }
 
       const { code } = req.params;
       const template = await storage.getEmailTemplate(code);
-      
+
       if (!template) {
         return res.status(404).json({ message: 'Template not found' });
       }
 
       res.json(template);
     } catch (error) {
-      console.error("Error fetching email template:", error);
-      res.status(500).json({ message: "Failed to fetch template" });
+      console.error('Error fetching email template:', error);
+      res.status(500).json({ message: 'Failed to fetch template' });
     }
   });
 
@@ -2557,21 +2602,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         return res.status(403).json({ message: 'Admin access required' });
       }
 
       const validation = insertEmailTemplateSchema.safeParse(req.body);
       if (!validation.success) {
-        return res.status(400).json({ message: "Invalid template data", errors: validation.error.errors });
+        return res
+          .status(400)
+          .json({ message: 'Invalid template data', errors: validation.error.errors });
       }
 
       const template = await storage.createEmailTemplate(validation.data);
       res.json(template);
     } catch (error) {
-      console.error("Error creating email template:", error);
-      res.status(500).json({ message: "Failed to create template" });
+      console.error('Error creating email template:', error);
+      res.status(500).json({ message: 'Failed to create template' });
     }
   });
 
@@ -2579,7 +2626,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         return res.status(403).json({ message: 'Admin access required' });
       }
@@ -2588,323 +2635,403 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const template = await storage.updateEmailTemplate(parseInt(id), req.body);
       res.json(template);
     } catch (error) {
-      console.error("Error updating email template:", error);
-      res.status(500).json({ message: "Failed to update template" });
+      console.error('Error updating email template:', error);
+      res.status(500).json({ message: 'Failed to update template' });
     }
   });
 
-  app.delete('/api/email-templates/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
+  app.delete(
+    '/api/email-templates/:id',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        if (user?.role !== 'admin') {
+          return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const { id } = req.params;
+        await storage.deleteEmailTemplate(parseInt(id));
+        res.json({ success: true });
+      } catch (error) {
+        console.error('Error deleting email template:', error);
+        res.status(500).json({ message: 'Failed to delete template' });
       }
-
-      const { id } = req.params;
-      await storage.deleteEmailTemplate(parseInt(id));
-      res.json({ success: true });
-    } catch (error) {
-      console.error("Error deleting email template:", error);
-      res.status(500).json({ message: "Failed to delete template" });
     }
-  });
+  );
 
   // Email notification monitoring (admin only)
-  app.get('/api/email-notifications/queue', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
+  app.get(
+    '/api/email-notifications/queue',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        if (user?.role !== 'admin') {
+          return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const { status, limit } = req.query;
+        const queue = await storage.getEmailNotificationQueue(
+          status as string,
+          limit ? parseInt(limit as string) : undefined
+        );
+        res.json(queue);
+      } catch (error) {
+        console.error('Error fetching email queue:', error);
+        res.status(500).json({ message: 'Failed to fetch queue' });
       }
-
-      const { status, limit } = req.query;
-      const queue = await storage.getEmailNotificationQueue(
-        status as string, 
-        limit ? parseInt(limit as string) : undefined
-      );
-      res.json(queue);
-    } catch (error) {
-      console.error("Error fetching email queue:", error);
-      res.status(500).json({ message: "Failed to fetch queue" });
     }
-  });
+  );
 
-  app.get('/api/email-notifications/log', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
+  app.get(
+    '/api/email-notifications/log',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        if (user?.role !== 'admin') {
+          return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const { email, limit } = req.query;
+        const logs = await storage.getEmailNotificationLog(
+          email as string,
+          limit ? parseInt(limit as string) : undefined
+        );
+        res.json(logs);
+      } catch (error) {
+        console.error('Error fetching email logs:', error);
+        res.status(500).json({ message: 'Failed to fetch logs' });
       }
-
-      const { email, limit } = req.query;
-      const logs = await storage.getEmailNotificationLog(
-        email as string,
-        limit ? parseInt(limit as string) : undefined
-      );
-      res.json(logs);
-    } catch (error) {
-      console.error("Error fetching email logs:", error);
-      res.status(500).json({ message: "Failed to fetch logs" });
     }
-  });
+  );
 
   // Send test email (admin only)
-  app.post('/api/email-notifications/test', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
-      }
+  app.post(
+    '/api/email-notifications/test',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
 
-      const { recipientEmail, templateCode, variables, language } = req.body;
-      
-      const queued = await emailService.queueTemplatedEmail(
-        recipientEmail,
-        templateCode,
-        variables || {},
-        {
-          priority: 1,
-          language
+        if (user?.role !== 'admin') {
+          return res.status(403).json({ message: 'Admin access required' });
         }
-      );
 
-      res.json({ message: "Test email queued", queued });
-    } catch (error) {
-      console.error("Error sending test email:", error);
-      res.status(500).json({ message: "Failed to send test email" });
+        const { recipientEmail, templateCode, variables, language } = req.body;
+
+        const queued = await emailService.queueTemplatedEmail(
+          recipientEmail,
+          templateCode,
+          variables || {},
+          {
+            priority: 1,
+            language,
+          }
+        );
+
+        res.json({ message: 'Test email queued', queued });
+      } catch (error) {
+        console.error('Error sending test email:', error);
+        res.status(500).json({ message: 'Failed to send test email' });
+      }
     }
-  });
+  );
 
   // Scheduling and Participant Management Routes
-  
+
   // Get participant list for a workshop or event
-  app.get('/api/:entityType(workshops|events)/:entityId/participants', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { entityType, entityId } = req.params;
-      const { status } = req.query;
-      
-      // Check if user is the host
-      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
-      if (!isHost) {
-        return res.status(403).json({ message: 'Not authorized' });
+  app.get(
+    '/api/:entityType(workshops|events)/:entityId/participants',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { entityType, entityId } = req.params;
+        const { status } = req.query;
+
+        // Check if user is the host
+        const isHost = await storage.isEntityHost(
+          userId,
+          entityType as 'workshops' | 'events',
+          parseInt(entityId)
+        );
+        if (!isHost) {
+          return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        const participants = await storage.getParticipantList(
+          entityType as 'workshops' | 'events',
+          parseInt(entityId),
+          status as string
+        );
+
+        res.json(participants);
+      } catch (error) {
+        console.error('Error fetching participants:', error);
+        res.status(500).json({ message: 'Failed to fetch participants' });
       }
-      
-      const participants = await storage.getParticipantList(
-        entityType as 'workshops' | 'events',
-        parseInt(entityId),
-        status as string
-      );
-      
-      res.json(participants);
-    } catch (error) {
-      console.error("Error fetching participants:", error);
-      res.status(500).json({ message: "Failed to fetch participants" });
     }
-  });
+  );
 
   // Export participants as CSV
-  app.get('/api/:entityType(workshops|events)/:entityId/participants/export', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { entityType, entityId } = req.params;
-      
-      // Check if user is the host
-      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
-      if (!isHost) {
-        return res.status(403).json({ message: 'Not authorized' });
+  app.get(
+    '/api/:entityType(workshops|events)/:entityId/participants/export',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { entityType, entityId } = req.params;
+
+        // Check if user is the host
+        const isHost = await storage.isEntityHost(
+          userId,
+          entityType as 'workshops' | 'events',
+          parseInt(entityId)
+        );
+        if (!isHost) {
+          return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        const participants = await storage.getParticipantList(
+          entityType as 'workshops' | 'events',
+          parseInt(entityId)
+        );
+
+        // Convert to CSV format
+        const csv = await storage.exportParticipantsCSV(participants);
+
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader(
+          'Content-Disposition',
+          `attachment; filename="${entityType}_${entityId}_participants.csv"`
+        );
+        res.send(csv);
+      } catch (error) {
+        console.error('Error exporting participants:', error);
+        res.status(500).json({ message: 'Failed to export participants' });
       }
-      
-      const participants = await storage.getParticipantList(
-        entityType as 'workshops' | 'events',
-        parseInt(entityId)
-      );
-      
-      // Convert to CSV format
-      const csv = await storage.exportParticipantsCSV(participants);
-      
-      res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-Disposition', `attachment; filename="${entityType}_${entityId}_participants.csv"`);
-      res.send(csv);
-    } catch (error) {
-      console.error("Error exporting participants:", error);
-      res.status(500).json({ message: "Failed to export participants" });
     }
-  });
+  );
 
   // Check in participant
-  app.post('/api/:entityType(workshops|events)/:entityId/participants/:participantId/checkin', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { entityType, entityId, participantId } = req.params;
-      const { method, seatNumber } = req.body;
-      
-      // Check if user is the host
-      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
-      if (!isHost) {
-        return res.status(403).json({ message: 'Not authorized' });
+  app.post(
+    '/api/:entityType(workshops|events)/:entityId/participants/:participantId/checkin',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { entityType, entityId, participantId } = req.params;
+        const { method, seatNumber } = req.body;
+
+        // Check if user is the host
+        const isHost = await storage.isEntityHost(
+          userId,
+          entityType as 'workshops' | 'events',
+          parseInt(entityId)
+        );
+        if (!isHost) {
+          return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        const participant = await storage.checkInParticipant(
+          parseInt(participantId),
+          method || 'manual',
+          seatNumber
+        );
+
+        res.json(participant);
+      } catch (error) {
+        console.error('Error checking in participant:', error);
+        res.status(500).json({ message: 'Failed to check in participant' });
       }
-      
-      const participant = await storage.checkInParticipant(
-        parseInt(participantId),
-        method || 'manual',
-        seatNumber
-      );
-      
-      res.json(participant);
-    } catch (error) {
-      console.error("Error checking in participant:", error);
-      res.status(500).json({ message: "Failed to check in participant" });
     }
-  });
+  );
 
   // Send bulk notifications to participants
-  app.post('/api/:entityType(workshops|events)/:entityId/participants/notify', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { entityType, entityId } = req.params;
-      const { subject, message, recipientFilter } = req.body;
-      
-      // Check if user is the host
-      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
-      if (!isHost) {
-        return res.status(403).json({ message: 'Not authorized' });
-      }
-      
-      const result = await storage.sendBulkNotification(
-        entityType as 'workshops' | 'events',
-        parseInt(entityId),
-        {
-          subject,
-          message,
-          recipientFilter
+  app.post(
+    '/api/:entityType(workshops|events)/:entityId/participants/notify',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { entityType, entityId } = req.params;
+        const { subject, message, recipientFilter } = req.body;
+
+        // Check if user is the host
+        const isHost = await storage.isEntityHost(
+          userId,
+          entityType as 'workshops' | 'events',
+          parseInt(entityId)
+        );
+        if (!isHost) {
+          return res.status(403).json({ message: 'Not authorized' });
         }
-      );
-      
-      res.json(result);
-    } catch (error) {
-      console.error("Error sending bulk notification:", error);
-      res.status(500).json({ message: "Failed to send notifications" });
+
+        const result = await storage.sendBulkNotification(
+          entityType as 'workshops' | 'events',
+          parseInt(entityId),
+          {
+            subject,
+            message,
+            recipientFilter,
+          }
+        );
+
+        res.json(result);
+      } catch (error) {
+        console.error('Error sending bulk notification:', error);
+        res.status(500).json({ message: 'Failed to send notifications' });
+      }
     }
-  });
+  );
 
   // Get waitlist for a workshop or event
-  app.get('/api/:entityType(workshops|events)/:entityId/waitlist', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { entityType, entityId } = req.params;
-      
-      // Check if user is the host
-      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
-      if (!isHost) {
-        return res.status(403).json({ message: 'Not authorized' });
+  app.get(
+    '/api/:entityType(workshops|events)/:entityId/waitlist',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { entityType, entityId } = req.params;
+
+        // Check if user is the host
+        const isHost = await storage.isEntityHost(
+          userId,
+          entityType as 'workshops' | 'events',
+          parseInt(entityId)
+        );
+        if (!isHost) {
+          return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        const waitlist = await storage.getWaitlist(
+          entityType as 'workshops' | 'events',
+          parseInt(entityId)
+        );
+
+        res.json(waitlist);
+      } catch (error) {
+        console.error('Error fetching waitlist:', error);
+        res.status(500).json({ message: 'Failed to fetch waitlist' });
       }
-      
-      const waitlist = await storage.getWaitlist(
-        entityType as 'workshops' | 'events',
-        parseInt(entityId)
-      );
-      
-      res.json(waitlist);
-    } catch (error) {
-      console.error("Error fetching waitlist:", error);
-      res.status(500).json({ message: "Failed to fetch waitlist" });
     }
-  });
+  );
 
   // Move waitlist entry to registered
-  app.post('/api/:entityType(workshops|events)/:entityId/waitlist/:waitlistId/promote', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { entityType, entityId, waitlistId } = req.params;
-      
-      // Check if user is the host
-      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
-      if (!isHost) {
-        return res.status(403).json({ message: 'Not authorized' });
+  app.post(
+    '/api/:entityType(workshops|events)/:entityId/waitlist/:waitlistId/promote',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { entityType, entityId, waitlistId } = req.params;
+
+        // Check if user is the host
+        const isHost = await storage.isEntityHost(
+          userId,
+          entityType as 'workshops' | 'events',
+          parseInt(entityId)
+        );
+        if (!isHost) {
+          return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        const result = await storage.promoteFromWaitlist(parseInt(waitlistId));
+        res.json(result);
+      } catch (error) {
+        console.error('Error promoting from waitlist:', error);
+        res.status(500).json({ message: 'Failed to promote from waitlist' });
       }
-      
-      const result = await storage.promoteFromWaitlist(parseInt(waitlistId));
-      res.json(result);
-    } catch (error) {
-      console.error("Error promoting from waitlist:", error);
-      res.status(500).json({ message: "Failed to promote from waitlist" });
     }
-  });
+  );
 
   // Get scheduling conflicts
-  app.get('/api/:entityType(workshops|events)/:entityId/conflicts', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { entityType, entityId } = req.params;
-      
-      // Check if user is the host
-      const isHost = await storage.isEntityHost(userId, entityType as 'workshops' | 'events', parseInt(entityId));
-      if (!isHost) {
-        return res.status(403).json({ message: 'Not authorized' });
+  app.get(
+    '/api/:entityType(workshops|events)/:entityId/conflicts',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { entityType, entityId } = req.params;
+
+        // Check if user is the host
+        const isHost = await storage.isEntityHost(
+          userId,
+          entityType as 'workshops' | 'events',
+          parseInt(entityId)
+        );
+        if (!isHost) {
+          return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        const conflicts = await storage.getSchedulingConflicts(
+          entityType as 'workshops' | 'events',
+          parseInt(entityId)
+        );
+
+        res.json(conflicts);
+      } catch (error) {
+        console.error('Error fetching conflicts:', error);
+        res.status(500).json({ message: 'Failed to fetch conflicts' });
       }
-      
-      const conflicts = await storage.getSchedulingConflicts(
-        entityType as 'workshops' | 'events',
-        parseInt(entityId)
-      );
-      
-      res.json(conflicts);
-    } catch (error) {
-      console.error("Error fetching conflicts:", error);
-      res.status(500).json({ message: "Failed to fetch conflicts" });
     }
-  });
+  );
 
   // Resolve scheduling conflict
-  app.patch('/api/conflicts/:conflictId/resolve', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { conflictId } = req.params;
-      
-      const conflict = await storage.resolveSchedulingConflict(
-        parseInt(conflictId),
-        userId
-      );
-      
-      res.json(conflict);
-    } catch (error) {
-      console.error("Error resolving conflict:", error);
-      res.status(500).json({ message: "Failed to resolve conflict" });
+  app.patch(
+    '/api/conflicts/:conflictId/resolve',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { conflictId } = req.params;
+
+        const conflict = await storage.resolveSchedulingConflict(parseInt(conflictId), userId);
+
+        res.json(conflict);
+      } catch (error) {
+        console.error('Error resolving conflict:', error);
+        res.status(500).json({ message: 'Failed to resolve conflict' });
+      }
     }
-  });
+  );
 
   // Schedule reminder
-  app.post('/api/:entityType(workshops|events)/:entityId/reminders', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { entityType, entityId } = req.params;
-      const { reminderType, scheduledFor, deliveryMethod, customMessage } = req.body;
-      
-      const reminder = await storage.scheduleReminder({
-        entityType: entityType as 'workshops' | 'events',
-        entityId: parseInt(entityId),
-        userId,
-        reminderType,
-        scheduledFor: new Date(scheduledFor),
-        deliveryMethod,
-        customMessage
-      });
-      
-      res.json(reminder);
-    } catch (error) {
-      console.error("Error scheduling reminder:", error);
-      res.status(500).json({ message: "Failed to schedule reminder" });
+  app.post(
+    '/api/:entityType(workshops|events)/:entityId/reminders',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { entityType, entityId } = req.params;
+        const { reminderType, scheduledFor, deliveryMethod, customMessage } = req.body;
+
+        const reminder = await storage.scheduleReminder({
+          entityType: entityType as 'workshops' | 'events',
+          entityId: parseInt(entityId),
+          userId,
+          reminderType,
+          scheduledFor: new Date(scheduledFor),
+          deliveryMethod,
+          customMessage,
+        });
+
+        res.json(reminder);
+      } catch (error) {
+        console.error('Error scheduling reminder:', error);
+        res.status(500).json({ message: 'Failed to schedule reminder' });
+      }
     }
-  });
+  );
 
   // Get user's reminders
   app.get('/api/user/reminders', isAuthenticated, async (req: AuthenticatedRequest, res) => {
@@ -2913,8 +3040,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const reminders = await storage.getUserReminders(userId);
       res.json(reminders);
     } catch (error) {
-      console.error("Error fetching reminders:", error);
-      res.status(500).json({ message: "Failed to fetch reminders" });
+      console.error('Error fetching reminders:', error);
+      res.status(500).json({ message: 'Failed to fetch reminders' });
     }
   });
 
@@ -2923,20 +3050,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const { provider, accessToken, refreshToken, calendarId, settings } = req.body;
-      
+
       const integration = await storage.createCalendarIntegration({
         userId,
         provider,
         accessToken,
         refreshToken,
         calendarId,
-        settings
+        settings,
       });
-      
+
       res.json(integration);
     } catch (error) {
-      console.error("Error connecting calendar:", error);
-      res.status(500).json({ message: "Failed to connect calendar" });
+      console.error('Error connecting calendar:', error);
+      res.status(500).json({ message: 'Failed to connect calendar' });
     }
   });
 
@@ -2946,32 +3073,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const integrations = await storage.getUserCalendarIntegrations(userId);
       res.json(integrations);
     } catch (error) {
-      console.error("Error fetching calendar integrations:", error);
-      res.status(500).json({ message: "Failed to fetch integrations" });
+      console.error('Error fetching calendar integrations:', error);
+      res.status(500).json({ message: 'Failed to fetch integrations' });
     }
   });
 
-  app.delete('/api/calendar/integrations/:integrationId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { integrationId } = req.params;
-      
-      await storage.deleteCalendarIntegration(userId, parseInt(integrationId));
-      res.json({ success: true });
-    } catch (error) {
-      console.error("Error deleting calendar integration:", error);
-      res.status(500).json({ message: "Failed to delete integration" });
+  app.delete(
+    '/api/calendar/integrations/:integrationId',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { integrationId } = req.params;
+
+        await storage.deleteCalendarIntegration(userId, parseInt(integrationId));
+        res.json({ success: true });
+      } catch (error) {
+        console.error('Error deleting calendar integration:', error);
+        res.status(500).json({ message: 'Failed to delete integration' });
+      }
     }
-  });
+  );
 
   // Privacy and Trust/Safety Routes
-  
+
   // DSAR (Data Subject Access Request) Routes
   app.get('/api/privacy/dsar', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       // Only admin users can view all requests
       if (user?.role === 'admin') {
         const { status } = req.query;
@@ -2993,18 +3124,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const { id } = req.params;
       const request = await storage.getDsarRequest(parseInt(id));
-      
+
       if (!request) {
         return res.status(404).json({ message: 'DSAR request not found' });
       }
-      
+
       const user = await storage.getUser(userId);
-      
+
       // Only admin or the requester can view details
       if (user?.role !== 'admin' && request.userId !== userId) {
         return res.status(403).json({ message: 'Access denied' });
       }
-      
+
       res.json(request);
     } catch (error) {
       console.error('Error fetching DSAR request:', error);
@@ -3017,9 +3148,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const parsed = insertDsarRequestSchema.parse({
         ...req.body,
-        userId
+        userId,
       });
-      
+
       const request = await storage.createDsarRequest(parsed);
       res.status(201).json(request);
     } catch (error) {
@@ -3035,17 +3166,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         return res.status(403).json({ message: 'Admin access required' });
       }
-      
+
       const { id } = req.params;
       const update = {
         ...req.body,
-        processedBy: userId
+        processedBy: userId,
       };
-      
+
       const request = await storage.updateDsarRequest(parseInt(id), update);
       res.json(request);
     } catch (error) {
@@ -3059,13 +3190,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         // Regular users can only see their own audit logs
         const logs = await storage.getAuditLogs(userId);
         return res.json(logs);
       }
-      
+
       // Admins can filter by user and entity type
       const { userId: filterUserId, entityType, limit = 100 } = req.query;
       const logs = await storage.getAuditLogs(
@@ -3080,23 +3211,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/privacy/audit-logs/:entityType/:entityId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
+  app.get(
+    '/api/privacy/audit-logs/:entityType/:entityId',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        if (user?.role !== 'admin') {
+          return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const { entityType, entityId } = req.params;
+        const logs = await storage.getAuditLogsForEntity(entityType, entityId);
+        res.json(logs);
+      } catch (error) {
+        console.error('Error fetching entity audit logs:', error);
+        res.status(500).json({ message: 'Failed to fetch audit logs' });
       }
-      
-      const { entityType, entityId } = req.params;
-      const logs = await storage.getAuditLogsForEntity(entityType, entityId);
-      res.json(logs);
-    } catch (error) {
-      console.error('Error fetching entity audit logs:', error);
-      res.status(500).json({ message: 'Failed to fetch audit logs' });
     }
-  });
+  );
 
   // Reports Routes
   app.post('/api/privacy/reports', isAuthenticated, async (req: AuthenticatedRequest, res) => {
@@ -3104,9 +3239,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const parsed = insertReportSchema.parse({
         ...req.body,
-        reporterId: userId
+        reporterId: userId,
       });
-      
+
       const report = await storage.createReport(parsed);
       res.status(201).json(report);
     } catch (error) {
@@ -3122,13 +3257,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         // Regular users can only see their own reports
         const reports = await storage.getUserReports(userId);
         return res.json(reports);
       }
-      
+
       // Admins can filter by status and type
       const { status, type } = req.query;
       const reports = await storage.getReports(status as string, type as string);
@@ -3144,18 +3279,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const { id } = req.params;
       const report = await storage.getReport(parseInt(id));
-      
+
       if (!report) {
         return res.status(404).json({ message: 'Report not found' });
       }
-      
+
       const user = await storage.getUser(userId);
-      
+
       // Only admin or the reporter can view details
       if (user?.role !== 'admin' && report.reporterId !== userId) {
         return res.status(403).json({ message: 'Access denied' });
       }
-      
+
       res.json(report);
     } catch (error) {
       console.error('Error fetching report:', error);
@@ -3167,17 +3302,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         return res.status(403).json({ message: 'Admin access required' });
       }
-      
+
       const { id } = req.params;
       const update = {
         ...req.body,
-        reviewedBy: userId
+        reviewedBy: userId,
       };
-      
+
       const report = await storage.updateReport(parseInt(id), update);
       res.json(report);
     } catch (error) {
@@ -3186,87 +3321,103 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/privacy/reports/:entityType/:entityId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
+  app.get(
+    '/api/privacy/reports/:entityType/:entityId',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        if (user?.role !== 'admin') {
+          return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const { entityType, entityId } = req.params;
+        const reports = await storage.getReportsForEntity(entityType, parseInt(entityId));
+        res.json(reports);
+      } catch (error) {
+        console.error('Error fetching entity reports:', error);
+        res.status(500).json({ message: 'Failed to fetch reports' });
       }
-      
-      const { entityType, entityId } = req.params;
-      const reports = await storage.getReportsForEntity(entityType, parseInt(entityId));
-      res.json(reports);
-    } catch (error) {
-      console.error('Error fetching entity reports:', error);
-      res.status(500).json({ message: 'Failed to fetch reports' });
     }
-  });
+  );
 
   // Auction Update Requests Routes
-  app.post('/api/privacy/auction-updates', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const parsed = insertAuctionUpdateRequestSchema.parse({
-        ...req.body,
-        requestedBy: userId
-      });
-      
-      const request = await storage.createAuctionUpdateRequest(parsed);
-      res.status(201).json(request);
-    } catch (error) {
-      console.error('Error creating auction update request:', error);
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: 'Invalid request data', errors: error.errors });
-      }
-      res.status(500).json({ message: 'Failed to create auction update request' });
-    }
-  });
+  app.post(
+    '/api/privacy/auction-updates',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const parsed = insertAuctionUpdateRequestSchema.parse({
+          ...req.body,
+          requestedBy: userId,
+        });
 
-  app.get('/api/privacy/auction-updates', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
+        const request = await storage.createAuctionUpdateRequest(parsed);
+        res.status(201).json(request);
+      } catch (error) {
+        console.error('Error creating auction update request:', error);
+        if (error instanceof z.ZodError) {
+          return res.status(400).json({ message: 'Invalid request data', errors: error.errors });
+        }
+        res.status(500).json({ message: 'Failed to create auction update request' });
       }
-      
-      const { auctionId, status } = req.query;
-      const requests = await storage.getAuctionUpdateRequests(
-        auctionId ? parseInt(auctionId as string) : undefined,
-        status as string
-      );
-      res.json(requests);
-    } catch (error) {
-      console.error('Error fetching auction update requests:', error);
-      res.status(500).json({ message: 'Failed to fetch requests' });
     }
-  });
+  );
 
-  app.patch('/api/privacy/auction-updates/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
+  app.get(
+    '/api/privacy/auction-updates',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        if (user?.role !== 'admin') {
+          return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const { auctionId, status } = req.query;
+        const requests = await storage.getAuctionUpdateRequests(
+          auctionId ? parseInt(auctionId as string) : undefined,
+          status as string
+        );
+        res.json(requests);
+      } catch (error) {
+        console.error('Error fetching auction update requests:', error);
+        res.status(500).json({ message: 'Failed to fetch requests' });
       }
-      
-      const { id } = req.params;
-      const update = {
-        ...req.body,
-        reviewedBy: userId
-      };
-      
-      const request = await storage.updateAuctionUpdateRequest(parseInt(id), update);
-      res.json(request);
-    } catch (error) {
-      console.error('Error updating auction update request:', error);
-      res.status(500).json({ message: 'Failed to update request' });
     }
-  });
+  );
+
+  app.patch(
+    '/api/privacy/auction-updates/:id',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        if (user?.role !== 'admin') {
+          return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const { id } = req.params;
+        const update = {
+          ...req.body,
+          reviewedBy: userId,
+        };
+
+        const request = await storage.updateAuctionUpdateRequest(parseInt(id), update);
+        res.json(request);
+      } catch (error) {
+        console.error('Error updating auction update request:', error);
+        res.status(500).json({ message: 'Failed to update request' });
+      }
+    }
+  );
 
   // Seller KYC Routes
   app.post('/api/privacy/kyc', isAuthenticated, async (req: AuthenticatedRequest, res) => {
@@ -3274,9 +3425,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const parsed = insertSellerKycDocSchema.parse({
         ...req.body,
-        userId
+        userId,
       });
-      
+
       const doc = await storage.createSellerKycDoc(parsed);
       res.status(201).json(doc);
     } catch (error) {
@@ -3288,50 +3439,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/privacy/kyc/:sellerType/:sellerId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      const { sellerType, sellerId } = req.params;
-      
-      // Check if user is admin or the seller
-      if (user?.role !== 'admin') {
-        if (sellerType === 'artist') {
-          const artist = await storage.getArtist(parseInt(sellerId));
-          if (artist?.userId !== userId) {
-            return res.status(403).json({ message: 'Access denied' });
-          }
-        } else if (sellerType === 'gallery') {
-          const gallery = await storage.getGallery(parseInt(sellerId));
-          if (gallery?.userId !== userId) {
-            return res.status(403).json({ message: 'Access denied' });
+  app.get(
+    '/api/privacy/kyc/:sellerType/:sellerId',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+        const { sellerType, sellerId } = req.params;
+
+        // Check if user is admin or the seller
+        if (user?.role !== 'admin') {
+          if (sellerType === 'artist') {
+            const artist = await storage.getArtist(parseInt(sellerId));
+            if (artist?.userId !== userId) {
+              return res.status(403).json({ message: 'Access denied' });
+            }
+          } else if (sellerType === 'gallery') {
+            const gallery = await storage.getGallery(parseInt(sellerId));
+            if (gallery?.userId !== userId) {
+              return res.status(403).json({ message: 'Access denied' });
+            }
           }
         }
+
+        const docs = await storage.getSellerKycDocs(sellerType, parseInt(sellerId));
+        res.json(docs);
+      } catch (error) {
+        console.error('Error fetching KYC documents:', error);
+        res.status(500).json({ message: 'Failed to fetch KYC documents' });
       }
-      
-      const docs = await storage.getSellerKycDocs(sellerType, parseInt(sellerId));
-      res.json(docs);
-    } catch (error) {
-      console.error('Error fetching KYC documents:', error);
-      res.status(500).json({ message: 'Failed to fetch KYC documents' });
     }
-  });
+  );
 
   app.patch('/api/privacy/kyc/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
-      
+
       if (user?.role !== 'admin') {
         return res.status(403).json({ message: 'Admin access required' });
       }
-      
+
       const { id } = req.params;
       const update = {
         ...req.body,
-        reviewedBy: userId
+        reviewedBy: userId,
       };
-      
+
       const doc = await storage.updateSellerKycDoc(parseInt(id), update);
       res.json(doc);
     } catch (error) {
@@ -3341,107 +3496,131 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Shipping Address Routes
-  app.get('/api/user/shipping-addresses', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const addresses = await storage.getUserShippingAddresses(userId);
-      res.json(addresses);
-    } catch (error) {
-      console.error('Error fetching shipping addresses:', error);
-      res.status(500).json({ message: 'Failed to fetch shipping addresses' });
-    }
-  });
-
-  app.get('/api/user/shipping-addresses/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { id } = req.params;
-      const address = await storage.getShippingAddress(parseInt(id));
-      
-      if (!address) {
-        return res.status(404).json({ message: 'Address not found' });
+  app.get(
+    '/api/user/shipping-addresses',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const addresses = await storage.getUserShippingAddresses(userId);
+        res.json(addresses);
+      } catch (error) {
+        console.error('Error fetching shipping addresses:', error);
+        res.status(500).json({ message: 'Failed to fetch shipping addresses' });
       }
-      
-      if (address.userId !== userId) {
-        return res.status(403).json({ message: 'Access denied' });
-      }
-      
-      res.json(address);
-    } catch (error) {
-      console.error('Error fetching shipping address:', error);
-      res.status(500).json({ message: 'Failed to fetch shipping address' });
     }
-  });
+  );
 
-  app.post('/api/user/shipping-addresses', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const parsed = insertShippingAddressSchema.parse({
-        ...req.body,
-        userId
-      });
-      
-      const address = await storage.createShippingAddress(parsed);
-      res.status(201).json(address);
-    } catch (error) {
-      console.error('Error creating shipping address:', error);
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: 'Invalid address data', errors: error.errors });
-      }
-      res.status(500).json({ message: 'Failed to create shipping address' });
-    }
-  });
+  app.get(
+    '/api/user/shipping-addresses/:id',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { id } = req.params;
+        const address = await storage.getShippingAddress(parseInt(id));
 
-  app.patch('/api/user/shipping-addresses/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { id } = req.params;
-      
-      // Verify ownership
-      const address = await storage.getShippingAddress(parseInt(id));
-      if (!address || address.userId !== userId) {
-        return res.status(403).json({ message: 'Access denied' });
-      }
-      
-      const updated = await storage.updateShippingAddress(parseInt(id), req.body);
-      res.json(updated);
-    } catch (error) {
-      console.error('Error updating shipping address:', error);
-      res.status(500).json({ message: 'Failed to update shipping address' });
-    }
-  });
+        if (!address) {
+          return res.status(404).json({ message: 'Address not found' });
+        }
 
-  app.delete('/api/user/shipping-addresses/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { id } = req.params;
-      
-      // Verify ownership
-      const address = await storage.getShippingAddress(parseInt(id));
-      if (!address || address.userId !== userId) {
-        return res.status(403).json({ message: 'Access denied' });
-      }
-      
-      await storage.deleteShippingAddress(parseInt(id));
-      res.json({ success: true });
-    } catch (error) {
-      console.error('Error deleting shipping address:', error);
-      res.status(500).json({ message: 'Failed to delete shipping address' });
-    }
-  });
+        if (address.userId !== userId) {
+          return res.status(403).json({ message: 'Access denied' });
+        }
 
-  app.post('/api/user/shipping-addresses/:id/set-default', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { id } = req.params;
-      
-      await storage.setDefaultShippingAddress(userId, parseInt(id));
-      res.json({ success: true });
-    } catch (error) {
-      console.error('Error setting default address:', error);
-      res.status(500).json({ message: 'Failed to set default address' });
+        res.json(address);
+      } catch (error) {
+        console.error('Error fetching shipping address:', error);
+        res.status(500).json({ message: 'Failed to fetch shipping address' });
+      }
     }
-  });
+  );
+
+  app.post(
+    '/api/user/shipping-addresses',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const parsed = insertShippingAddressSchema.parse({
+          ...req.body,
+          userId,
+        });
+
+        const address = await storage.createShippingAddress(parsed);
+        res.status(201).json(address);
+      } catch (error) {
+        console.error('Error creating shipping address:', error);
+        if (error instanceof z.ZodError) {
+          return res.status(400).json({ message: 'Invalid address data', errors: error.errors });
+        }
+        res.status(500).json({ message: 'Failed to create shipping address' });
+      }
+    }
+  );
+
+  app.patch(
+    '/api/user/shipping-addresses/:id',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { id } = req.params;
+
+        // Verify ownership
+        const address = await storage.getShippingAddress(parseInt(id));
+        if (!address || address.userId !== userId) {
+          return res.status(403).json({ message: 'Access denied' });
+        }
+
+        const updated = await storage.updateShippingAddress(parseInt(id), req.body);
+        res.json(updated);
+      } catch (error) {
+        console.error('Error updating shipping address:', error);
+        res.status(500).json({ message: 'Failed to update shipping address' });
+      }
+    }
+  );
+
+  app.delete(
+    '/api/user/shipping-addresses/:id',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { id } = req.params;
+
+        // Verify ownership
+        const address = await storage.getShippingAddress(parseInt(id));
+        if (!address || address.userId !== userId) {
+          return res.status(403).json({ message: 'Access denied' });
+        }
+
+        await storage.deleteShippingAddress(parseInt(id));
+        res.json({ success: true });
+      } catch (error) {
+        console.error('Error deleting shipping address:', error);
+        res.status(500).json({ message: 'Failed to delete shipping address' });
+      }
+    }
+  );
+
+  app.post(
+    '/api/user/shipping-addresses/:id/set-default',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { id } = req.params;
+
+        await storage.setDefaultShippingAddress(userId, parseInt(id));
+        res.json({ success: true });
+      } catch (error) {
+        console.error('Error setting default address:', error);
+        res.status(500).json({ message: 'Failed to set default address' });
+      }
+    }
+  );
 
   // Commission Request Routes
   app.get('/api/commissions', async (req, res) => {
@@ -3463,11 +3642,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { id } = req.params;
       const request = await storage.getCommissionRequest(parseInt(id));
-      
+
       if (!request) {
         return res.status(404).json({ message: 'Commission request not found' });
       }
-      
+
       res.json(request);
     } catch (error) {
       console.error('Error fetching commission request:', error);
@@ -3491,9 +3670,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const parsed = insertCommissionRequestSchema.parse({
         ...req.body,
-        collectorId: userId
+        collectorId: userId,
       });
-      
+
       const request = await storage.createCommissionRequest(parsed);
       res.status(201).json(request);
     } catch (error) {
@@ -3509,13 +3688,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const { id } = req.params;
-      
+
       // Verify ownership
       const request = await storage.getCommissionRequest(parseInt(id));
       if (!request || request.collectorId !== userId) {
         return res.status(403).json({ message: 'Access denied' });
       }
-      
+
       const updated = await storage.updateCommissionRequest(parseInt(id), req.body);
       res.json(updated);
     } catch (error) {
@@ -3528,13 +3707,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const { id } = req.params;
-      
+
       // Verify ownership
       const request = await storage.getCommissionRequest(parseInt(id));
       if (!request || request.collectorId !== userId) {
         return res.status(403).json({ message: 'Access denied' });
       }
-      
+
       await storage.deleteCommissionRequest(parseInt(id));
       res.json({ success: true });
     } catch (error) {
@@ -3566,50 +3745,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/commissions/:requestId/bids', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { requestId } = req.params;
-      
-      // Get artist profile
-      const artist = await storage.getArtistByUserId(userId);
-      if (!artist) {
-        return res.status(403).json({ message: 'Only artists can bid on commissions' });
+  app.post(
+    '/api/commissions/:requestId/bids',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { requestId } = req.params;
+
+        // Get artist profile
+        const artist = await storage.getArtistByUserId(userId);
+        if (!artist) {
+          return res.status(403).json({ message: 'Only artists can bid on commissions' });
+        }
+
+        const parsed = insertCommissionBidSchema.parse({
+          ...req.body,
+          commissionRequestId: parseInt(requestId),
+          artistId: artist.id,
+        });
+
+        const bid = await storage.createCommissionBid(parsed);
+        res.status(201).json(bid);
+      } catch (error) {
+        console.error('Error creating commission bid:', error);
+        if (error instanceof z.ZodError) {
+          return res.status(400).json({ message: 'Invalid bid data', errors: error.errors });
+        }
+        res.status(500).json({ message: 'Failed to create commission bid' });
       }
-      
-      const parsed = insertCommissionBidSchema.parse({
-        ...req.body,
-        commissionRequestId: parseInt(requestId),
-        artistId: artist.id
-      });
-      
-      const bid = await storage.createCommissionBid(parsed);
-      res.status(201).json(bid);
-    } catch (error) {
-      console.error('Error creating commission bid:', error);
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: 'Invalid bid data', errors: error.errors });
-      }
-      res.status(500).json({ message: 'Failed to create commission bid' });
     }
-  });
+  );
 
   app.patch('/api/commission-bids/:id', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
       const { id } = req.params;
-      
+
       // Get bid and verify ownership
       const bid = await storage.getCommissionBid(parseInt(id));
       if (!bid) {
         return res.status(404).json({ message: 'Bid not found' });
       }
-      
+
       const artist = await storage.getArtist(bid.artistId);
       if (!artist || artist.userId !== userId) {
         return res.status(403).json({ message: 'Access denied' });
       }
-      
+
       const updated = await storage.updateCommissionBid(parseInt(id), req.body);
       res.json(updated);
     } catch (error) {
@@ -3618,284 +3801,334 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/commission-bids/:id/accept', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { id } = req.params;
-      
-      // Get bid and verify request ownership
-      const bid = await storage.getCommissionBid(parseInt(id));
-      if (!bid) {
-        return res.status(404).json({ message: 'Bid not found' });
-      }
-      
-      const request = await storage.getCommissionRequest(bid.commissionRequestId);
-      if (!request || request.collectorId !== userId) {
-        return res.status(403).json({ message: 'Only request owner can accept bids' });
-      }
-      
-      const accepted = await storage.acceptCommissionBid(parseInt(id), userId);
-      res.json(accepted);
-    } catch (error) {
-      console.error('Error accepting commission bid:', error);
-      res.status(500).json({ message: 'Failed to accept commission bid' });
-    }
-  });
+  app.post(
+    '/api/commission-bids/:id/accept',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { id } = req.params;
 
-  app.post('/api/commission-bids/:id/reject', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { id } = req.params;
-      
-      // Get bid and verify request ownership
-      const bid = await storage.getCommissionBid(parseInt(id));
-      if (!bid) {
-        return res.status(404).json({ message: 'Bid not found' });
+        // Get bid and verify request ownership
+        const bid = await storage.getCommissionBid(parseInt(id));
+        if (!bid) {
+          return res.status(404).json({ message: 'Bid not found' });
+        }
+
+        const request = await storage.getCommissionRequest(bid.commissionRequestId);
+        if (!request || request.collectorId !== userId) {
+          return res.status(403).json({ message: 'Only request owner can accept bids' });
+        }
+
+        const accepted = await storage.acceptCommissionBid(parseInt(id), userId);
+        res.json(accepted);
+      } catch (error) {
+        console.error('Error accepting commission bid:', error);
+        res.status(500).json({ message: 'Failed to accept commission bid' });
       }
-      
-      const request = await storage.getCommissionRequest(bid.commissionRequestId);
-      if (!request || request.collectorId !== userId) {
-        return res.status(403).json({ message: 'Only request owner can reject bids' });
-      }
-      
-      const rejected = await storage.rejectCommissionBid(parseInt(id));
-      res.json(rejected);
-    } catch (error) {
-      console.error('Error rejecting commission bid:', error);
-      res.status(500).json({ message: 'Failed to reject commission bid' });
     }
-  });
+  );
+
+  app.post(
+    '/api/commission-bids/:id/reject',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { id } = req.params;
+
+        // Get bid and verify request ownership
+        const bid = await storage.getCommissionBid(parseInt(id));
+        if (!bid) {
+          return res.status(404).json({ message: 'Bid not found' });
+        }
+
+        const request = await storage.getCommissionRequest(bid.commissionRequestId);
+        if (!request || request.collectorId !== userId) {
+          return res.status(403).json({ message: 'Only request owner can reject bids' });
+        }
+
+        const rejected = await storage.rejectCommissionBid(parseInt(id));
+        res.json(rejected);
+      } catch (error) {
+        console.error('Error rejecting commission bid:', error);
+        res.status(500).json({ message: 'Failed to reject commission bid' });
+      }
+    }
+  );
 
   // Commission Message Routes
-  app.get('/api/commissions/:requestId/messages', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { requestId } = req.params;
-      
-      // Verify access - either request owner or bidding artist
-      const request = await storage.getCommissionRequest(parseInt(requestId));
-      if (!request) {
-        return res.status(404).json({ message: 'Commission request not found' });
-      }
-      
-      const artist = await storage.getArtistByUserId(userId);
-      const userBids = artist ? await storage.getCommissionBidsByArtist(artist.id) : [];
-      const hasBid = userBids.some(bid => bid.commissionRequestId === parseInt(requestId));
-      
-      if (request.collectorId !== userId && !hasBid) {
-        return res.status(403).json({ message: 'Access denied' });
-      }
-      
-      const messages = await storage.getCommissionMessages(parseInt(requestId));
-      res.json(messages);
-    } catch (error) {
-      console.error('Error fetching commission messages:', error);
-      res.status(500).json({ message: 'Failed to fetch commission messages' });
-    }
-  });
+  app.get(
+    '/api/commissions/:requestId/messages',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { requestId } = req.params;
 
-  app.post('/api/commissions/:requestId/messages', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { requestId } = req.params;
-      
-      // Determine sender type
-      const request = await storage.getCommissionRequest(parseInt(requestId));
-      if (!request) {
-        return res.status(404).json({ message: 'Commission request not found' });
-      }
-      
-      let senderType = 'collector';
-      if (request.collectorId !== userId) {
+        // Verify access - either request owner or bidding artist
+        const request = await storage.getCommissionRequest(parseInt(requestId));
+        if (!request) {
+          return res.status(404).json({ message: 'Commission request not found' });
+        }
+
         const artist = await storage.getArtistByUserId(userId);
-        if (!artist) {
+        const userBids = artist ? await storage.getCommissionBidsByArtist(artist.id) : [];
+        const hasBid = userBids.some((bid) => bid.commissionRequestId === parseInt(requestId));
+
+        if (request.collectorId !== userId && !hasBid) {
           return res.status(403).json({ message: 'Access denied' });
         }
-        senderType = 'artist';
+
+        const messages = await storage.getCommissionMessages(parseInt(requestId));
+        res.json(messages);
+      } catch (error) {
+        console.error('Error fetching commission messages:', error);
+        res.status(500).json({ message: 'Failed to fetch commission messages' });
       }
-      
-      const parsed = insertCommissionMessageSchema.parse({
-        ...req.body,
-        commissionRequestId: parseInt(requestId),
-        senderId: userId,
-        senderType
-      });
-      
-      const message = await storage.createCommissionMessage(parsed);
-      res.status(201).json(message);
-    } catch (error) {
-      console.error('Error creating commission message:', error);
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: 'Invalid message data', errors: error.errors });
-      }
-      res.status(500).json({ message: 'Failed to create commission message' });
     }
-  });
+  );
+
+  app.post(
+    '/api/commissions/:requestId/messages',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { requestId } = req.params;
+
+        // Determine sender type
+        const request = await storage.getCommissionRequest(parseInt(requestId));
+        if (!request) {
+          return res.status(404).json({ message: 'Commission request not found' });
+        }
+
+        let senderType = 'collector';
+        if (request.collectorId !== userId) {
+          const artist = await storage.getArtistByUserId(userId);
+          if (!artist) {
+            return res.status(403).json({ message: 'Access denied' });
+          }
+          senderType = 'artist';
+        }
+
+        const parsed = insertCommissionMessageSchema.parse({
+          ...req.body,
+          commissionRequestId: parseInt(requestId),
+          senderId: userId,
+          senderType,
+        });
+
+        const message = await storage.createCommissionMessage(parsed);
+        res.status(201).json(message);
+      } catch (error) {
+        console.error('Error creating commission message:', error);
+        if (error instanceof z.ZodError) {
+          return res.status(400).json({ message: 'Invalid message data', errors: error.errors });
+        }
+        res.status(500).json({ message: 'Failed to create commission message' });
+      }
+    }
+  );
 
   // Commission Contract Routes
-  app.get('/api/commissions/:requestId/contract', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { requestId } = req.params;
-      
-      // Verify access
-      const request = await storage.getCommissionRequest(parseInt(requestId));
-      if (!request) {
-        return res.status(404).json({ message: 'Commission request not found' });
-      }
-      
-      const artist = await storage.getArtistByUserId(userId);
-      const isInvolved = request.collectorId === userId || 
-        (artist && request.selectedBidId && 
-         (await storage.getCommissionBid(request.selectedBidId))?.artistId === artist.id);
-      
-      if (!isInvolved) {
-        return res.status(403).json({ message: 'Access denied' });
-      }
-      
-      const contract = await storage.getCommissionContract(parseInt(requestId));
-      if (!contract) {
-        return res.status(404).json({ message: 'Contract not found' });
-      }
-      
-      res.json(contract);
-    } catch (error) {
-      console.error('Error fetching commission contract:', error);
-      res.status(500).json({ message: 'Failed to fetch commission contract' });
-    }
-  });
+  app.get(
+    '/api/commissions/:requestId/contract',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { requestId } = req.params;
 
-  app.post('/api/commissions/:requestId/contract', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { requestId } = req.params;
-      
-      // Verify ownership of commission request
-      const request = await storage.getCommissionRequest(parseInt(requestId));
-      if (!request || request.collectorId !== userId) {
-        return res.status(403).json({ message: 'Only commission owner can create contract' });
+        // Verify access
+        const request = await storage.getCommissionRequest(parseInt(requestId));
+        if (!request) {
+          return res.status(404).json({ message: 'Commission request not found' });
+        }
+
+        const artist = await storage.getArtistByUserId(userId);
+        const isInvolved =
+          request.collectorId === userId ||
+          (artist &&
+            request.selectedBidId &&
+            (await storage.getCommissionBid(request.selectedBidId))?.artistId === artist.id);
+
+        if (!isInvolved) {
+          return res.status(403).json({ message: 'Access denied' });
+        }
+
+        const contract = await storage.getCommissionContract(parseInt(requestId));
+        if (!contract) {
+          return res.status(404).json({ message: 'Contract not found' });
+        }
+
+        res.json(contract);
+      } catch (error) {
+        console.error('Error fetching commission contract:', error);
+        res.status(500).json({ message: 'Failed to fetch commission contract' });
       }
-      
-      if (!request.selectedBidId) {
-        return res.status(400).json({ message: 'No bid selected for this commission' });
-      }
-      
-      const parsed = insertCommissionContractSchema.parse({
-        ...req.body,
-        commissionRequestId: parseInt(requestId),
-        bidId: request.selectedBidId
-      });
-      
-      const contract = await storage.createCommissionContract(parsed);
-      res.status(201).json(contract);
-    } catch (error) {
-      console.error('Error creating commission contract:', error);
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: 'Invalid contract data', errors: error.errors });
-      }
-      res.status(500).json({ message: 'Failed to create commission contract' });
     }
-  });
+  );
+
+  app.post(
+    '/api/commissions/:requestId/contract',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const { requestId } = req.params;
+
+        // Verify ownership of commission request
+        const request = await storage.getCommissionRequest(parseInt(requestId));
+        if (!request || request.collectorId !== userId) {
+          return res.status(403).json({ message: 'Only commission owner can create contract' });
+        }
+
+        if (!request.selectedBidId) {
+          return res.status(400).json({ message: 'No bid selected for this commission' });
+        }
+
+        const parsed = insertCommissionContractSchema.parse({
+          ...req.body,
+          commissionRequestId: parseInt(requestId),
+          bidId: request.selectedBidId,
+        });
+
+        const contract = await storage.createCommissionContract(parsed);
+        res.status(201).json(contract);
+      } catch (error) {
+        console.error('Error creating commission contract:', error);
+        if (error instanceof z.ZodError) {
+          return res.status(400).json({ message: 'Invalid contract data', errors: error.errors });
+        }
+        res.status(500).json({ message: 'Failed to create commission contract' });
+      }
+    }
+  );
 
   // Admin CSV export endpoint
-  app.get('/api/admin/export/translations', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      // Check if user is admin
-      if (!user || user.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
+  app.get(
+    '/api/admin/export/translations',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        // Check if user is admin
+        if (!user || user.role !== 'admin') {
+          return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const csvPath = path.join(process.cwd(), 'translations.csv');
+
+        // Check if file exists
+        if (!fs.existsSync(csvPath)) {
+          return res.status(404).json({ message: 'CSV file not found' });
+        }
+
+        // Set headers for file download with proper UTF-8 encoding
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.setHeader('Content-Disposition', 'attachment; filename="art-souk-translations.csv"');
+
+        // Send file
+        res.sendFile(csvPath);
+      } catch (error) {
+        console.error('Error exporting translations:', error);
+        res.status(500).json({ message: 'Failed to export translations' });
       }
-      
-      const csvPath = path.join(process.cwd(), 'translations.csv');
-      
-      // Check if file exists
-      if (!fs.existsSync(csvPath)) {
-        return res.status(404).json({ message: 'CSV file not found' });
-      }
-      
-      // Set headers for file download with proper UTF-8 encoding
-      res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-      res.setHeader('Content-Disposition', 'attachment; filename="art-souk-translations.csv"');
-      
-      // Send file
-      res.sendFile(csvPath);
-    } catch (error) {
-      console.error('Error exporting translations:', error);
-      res.status(500).json({ message: 'Failed to export translations' });
     }
-  });
+  );
 
   // Lifecycle Funnel API endpoints
-  app.get('/api/lifecycle/funnel-metrics', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const metrics = await storage.getLifecycleFunnelMetrics();
-      res.json(metrics);
-    } catch (error) {
-      console.error("Error fetching funnel metrics:", error);
-      res.status(500).json({ message: "Failed to fetch funnel metrics" });
-    }
-  });
-
-  app.get('/api/lifecycle/user-interactions', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const limit = parseInt(req.query.limit as string) || 50;
-      const interactions = await storage.getUserInteractionsByUser(userId, limit);
-      res.json(interactions);
-    } catch (error) {
-      console.error("Error fetching user interactions:", error);
-      res.status(500).json({ message: "Failed to fetch user interactions" });
-    }
-  });
-
-  app.get('/api/lifecycle/user-transitions', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const limit = parseInt(req.query.limit as string) || 20;
-      const transitions = await storage.getLifecycleTransitionsByUser(userId, limit);
-      res.json(transitions);
-    } catch (error) {
-      console.error("Error fetching user transitions:", error);
-      res.status(500).json({ message: "Failed to fetch user transitions" });
-    }
-  });
-
-  app.get('/api/lifecycle/admin/metrics', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (!user || !user.roles.includes('admin')) {
-        return res.status(403).json({ message: 'Admin access required' });
+  app.get(
+    '/api/lifecycle/funnel-metrics',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const metrics = await storage.getLifecycleFunnelMetrics();
+        res.json(metrics);
+      } catch (error) {
+        console.error('Error fetching funnel metrics:', error);
+        res.status(500).json({ message: 'Failed to fetch funnel metrics' });
       }
-      
-      const metrics = await storage.getLifecycleFunnelMetrics();
-      res.json(metrics);
-    } catch (error) {
-      console.error("Error fetching admin metrics:", error);
-      res.status(500).json({ message: "Failed to fetch admin metrics" });
     }
-  });
+  );
 
-  app.post('/api/lifecycle/admin/update-metrics', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (!user || !user.roles.includes('admin')) {
-        return res.status(403).json({ message: 'Admin access required' });
+  app.get(
+    '/api/lifecycle/user-interactions',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const limit = parseInt(req.query.limit as string) || 50;
+        const interactions = await storage.getUserInteractionsByUser(userId, limit);
+        res.json(interactions);
+      } catch (error) {
+        console.error('Error fetching user interactions:', error);
+        res.status(500).json({ message: 'Failed to fetch user interactions' });
       }
-      
-      // Trigger manual metric updates
-      await updateLifecycleMetrics();
-      res.json({ message: 'Metrics updated successfully' });
-    } catch (error) {
-      console.error("Error updating metrics:", error);
-      res.status(500).json({ message: "Failed to update metrics" });
     }
-  });
+  );
+
+  app.get(
+    '/api/lifecycle/user-transitions',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const limit = parseInt(req.query.limit as string) || 20;
+        const transitions = await storage.getLifecycleTransitionsByUser(userId, limit);
+        res.json(transitions);
+      } catch (error) {
+        console.error('Error fetching user transitions:', error);
+        res.status(500).json({ message: 'Failed to fetch user transitions' });
+      }
+    }
+  );
+
+  app.get(
+    '/api/lifecycle/admin/metrics',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        if (!user || !user.roles.includes('admin')) {
+          return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const metrics = await storage.getLifecycleFunnelMetrics();
+        res.json(metrics);
+      } catch (error) {
+        console.error('Error fetching admin metrics:', error);
+        res.status(500).json({ message: 'Failed to fetch admin metrics' });
+      }
+    }
+  );
+
+  app.post(
+    '/api/lifecycle/admin/update-metrics',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const user = await storage.getUser(userId);
+
+        if (!user || !user.roles.includes('admin')) {
+          return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        // Trigger manual metric updates
+        await updateLifecycleMetrics();
+        res.json({ message: 'Metrics updated successfully' });
+      } catch (error) {
+        console.error('Error updating metrics:', error);
+        res.status(500).json({ message: 'Failed to update metrics' });
+      }
+    }
+  );
 
   // Universal Search API endpoints
   app.get('/api/search/universal', async (req, res) => {
@@ -3903,16 +4136,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const query = req.query.q as string;
       const entityTypes = req.query.types ? (req.query.types as string).split(',') : undefined;
       const limit = parseInt(req.query.limit as string) || 20;
-      
+
       if (!query) {
         return res.status(400).json({ message: 'Query parameter is required' });
       }
-      
+
       const results = await storage.searchUniversal(query, entityTypes, limit);
       res.json(results);
     } catch (error) {
-      console.error("Error performing universal search:", error);
-      res.status(500).json({ message: "Failed to perform search" });
+      console.error('Error performing universal search:', error);
+      res.status(500).json({ message: 'Failed to perform search' });
     }
   });
 
@@ -3921,20 +4154,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const { type, entityType, entityId, participants, title } = req.body;
-      
+
       const conversation = await storage.createConversation({
         type,
         entityType,
         entityId,
         participants: Array.isArray(participants) ? participants : [userId],
         title,
-        status: 'active'
+        status: 'active',
       });
-      
+
       res.json(conversation);
     } catch (error) {
-      console.error("Error creating conversation:", error);
-      res.status(500).json({ message: "Failed to create conversation" });
+      console.error('Error creating conversation:', error);
+      res.status(500).json({ message: 'Failed to create conversation' });
     }
   });
 
@@ -3944,64 +4177,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const conversations = await storage.getUserConversations(userId);
       res.json(conversations);
     } catch (error) {
-      console.error("Error fetching conversations:", error);
-      res.status(500).json({ message: "Failed to fetch conversations" });
+      console.error('Error fetching conversations:', error);
+      res.status(500).json({ message: 'Failed to fetch conversations' });
     }
   });
 
-  app.get('/api/conversations/:id/messages', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const conversationId = parseInt(req.params.id);
-      const messages = await storage.getConversationMessages(conversationId);
-      res.json(messages);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-      res.status(500).json({ message: "Failed to fetch messages" });
+  app.get(
+    '/api/conversations/:id/messages',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const conversationId = parseInt(req.params.id);
+        const messages = await storage.getConversationMessages(conversationId);
+        res.json(messages);
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+        res.status(500).json({ message: 'Failed to fetch messages' });
+      }
     }
-  });
+  );
 
-  app.post('/api/conversations/:id/messages', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const conversationId = parseInt(req.params.id);
-      const { body, messageType, attachments } = req.body;
-      
-      const message = await storage.createMessage({
-        conversationId,
-        senderId: userId,
-        body,
-        messageType: messageType || 'text',
-        attachments: attachments || []
-      });
-      
-      res.json(message);
-    } catch (error) {
-      console.error("Error creating message:", error);
-      res.status(500).json({ message: "Failed to create message" });
+  app.post(
+    '/api/conversations/:id/messages',
+    isAuthenticated,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const userId = req.user.claims.sub;
+        const conversationId = parseInt(req.params.id);
+        const { body, messageType, attachments } = req.body;
+
+        const message = await storage.createMessage({
+          conversationId,
+          senderId: userId,
+          body,
+          messageType: messageType || 'text',
+          attachments: attachments || [],
+        });
+
+        res.json(message);
+      } catch (error) {
+        console.error('Error creating message:', error);
+        res.status(500).json({ message: 'Failed to create message' });
+      }
     }
-  });
+  );
 
   app.post('/api/messages/:id/read', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
       const messageId = parseInt(req.params.id);
-      
+
       await storage.markMessageAsRead(messageId, userId);
       res.json({ message: 'Message marked as read' });
     } catch (error) {
-      console.error("Error marking message as read:", error);
-      res.status(500).json({ message: "Failed to mark message as read" });
+      console.error('Error marking message as read:', error);
+      res.status(500).json({ message: 'Failed to mark message as read' });
     }
   });
 
   // Start periodic metric updates (every hour)
-  setInterval(async () => {
-    try {
-      await updateLifecycleMetrics();
-    } catch (error) {
-      console.error('Error updating periodic metrics:', error);
-    }
-  }, 60 * 60 * 1000); // 1 hour
+  setInterval(
+    async () => {
+      try {
+        await updateLifecycleMetrics();
+      } catch (error) {
+        console.error('Error updating periodic metrics:', error);
+      }
+    },
+    60 * 60 * 1000
+  ); // 1 hour
 
   const httpServer = createServer(app);
   return httpServer;

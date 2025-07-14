@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
-interface AccessibilityState {
+export interface AccessibilityState {
   announceMessage: (message: string) => void;
   focusElement: (selector: string) => void;
   skipToContent: () => void;

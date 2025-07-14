@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { ZodError } from "zod";
+import { Request, Response, NextFunction } from 'express';
+import { ZodError } from 'zod';
 
 export interface ApiError extends Error {
   statusCode?: number;
@@ -15,9 +15,9 @@ export class AppError extends Error implements ApiError {
   constructor(message: string, statusCode: number = 500, code?: string, details?: unknown) {
     super(message);
     this.statusCode = statusCode;
-    this.code = code || "INTERNAL_ERROR";
+    this.code = code || 'INTERNAL_ERROR';
     this.details = details;
-    this.name = "AppError";
+    this.name = 'AppError';
 
     Error.captureStackTrace(this, this.constructor);
   }
@@ -25,43 +25,43 @@ export class AppError extends Error implements ApiError {
 
 export class ValidationError extends AppError {
   constructor(message: string, details?: unknown) {
-    super(message, 400, "VALIDATION_ERROR", details);
-    this.name = "ValidationError";
+    super(message, 400, 'VALIDATION_ERROR', details);
+    this.name = 'ValidationError';
   }
 }
 
 export class AuthenticationError extends AppError {
-  constructor(message: string = "Authentication required") {
-    super(message, 401, "AUTHENTICATION_ERROR");
-    this.name = "AuthenticationError";
+  constructor(message: string = 'Authentication required') {
+    super(message, 401, 'AUTHENTICATION_ERROR');
+    this.name = 'AuthenticationError';
   }
 }
 
 export class AuthorizationError extends AppError {
-  constructor(message: string = "Insufficient permissions") {
-    super(message, 403, "AUTHORIZATION_ERROR");
-    this.name = "AuthorizationError";
+  constructor(message: string = 'Insufficient permissions') {
+    super(message, 403, 'AUTHORIZATION_ERROR');
+    this.name = 'AuthorizationError';
   }
 }
 
 export class NotFoundError extends AppError {
-  constructor(message: string = "Resource not found") {
-    super(message, 404, "NOT_FOUND");
-    this.name = "NotFoundError";
+  constructor(message: string = 'Resource not found') {
+    super(message, 404, 'NOT_FOUND');
+    this.name = 'NotFoundError';
   }
 }
 
 export class ConflictError extends AppError {
-  constructor(message: string = "Resource conflict") {
-    super(message, 409, "CONFLICT_ERROR");
-    this.name = "ConflictError";
+  constructor(message: string = 'Resource conflict') {
+    super(message, 409, 'CONFLICT_ERROR');
+    this.name = 'ConflictError';
   }
 }
 
 export class RateLimitError extends AppError {
-  constructor(message: string = "Rate limit exceeded") {
-    super(message, 429, "RATE_LIMIT_ERROR");
-    this.name = "RateLimitError";
+  constructor(message: string = 'Rate limit exceeded') {
+    super(message, 429, 'RATE_LIMIT_ERROR');
+    this.name = 'RateLimitError';
   }
 }
 
@@ -74,8 +74,8 @@ export function errorHandler(
 ) {
   // Default error properties
   let statusCode = 500;
-  let code = "INTERNAL_ERROR";
-  let message = "Internal server error";
+  let code = 'INTERNAL_ERROR';
+  let message = 'Internal server error';
   let details: unknown = undefined;
 
   // Handle different error types
@@ -86,34 +86,34 @@ export function errorHandler(
     details = err.details;
   } else if (err instanceof ZodError) {
     statusCode = 400;
-    code = "VALIDATION_ERROR";
-    message = "Invalid request data";
-    details = err.errors.map(e => ({
-      field: e.path.join("."),
+    code = 'VALIDATION_ERROR';
+    message = 'Invalid request data';
+    details = err.errors.map((e) => ({
+      field: e.path.join('.'),
       message: e.message,
       code: e.code,
     }));
-  } else if (err.name === "CastError") {
+  } else if (err.name === 'CastError') {
     statusCode = 400;
-    code = "INVALID_ID";
-    message = "Invalid resource ID";
-  } else if (err.name === "ValidationError") {
+    code = 'INVALID_ID';
+    message = 'Invalid resource ID';
+  } else if (err.name === 'ValidationError') {
     statusCode = 400;
-    code = "VALIDATION_ERROR";
+    code = 'VALIDATION_ERROR';
     message = err.message;
-  } else if (err.name === "MulterError") {
+  } else if (err.name === 'MulterError') {
     statusCode = 400;
-    code = "FILE_UPLOAD_ERROR";
-    message = "File upload error";
+    code = 'FILE_UPLOAD_ERROR';
+    message = 'File upload error';
     details = { type: (err as any).code };
-  } else if ((err as any).code === "ECONNREFUSED") {
+  } else if ((err as any).code === 'ECONNREFUSED') {
     statusCode = 503;
-    code = "SERVICE_UNAVAILABLE";
-    message = "Database connection failed";
-  } else if ((err as any).code === "ENOTFOUND") {
+    code = 'SERVICE_UNAVAILABLE';
+    message = 'Database connection failed';
+  } else if ((err as any).code === 'ENOTFOUND') {
     statusCode = 503;
-    code = "SERVICE_UNAVAILABLE";
-    message = "External service unavailable";
+    code = 'SERVICE_UNAVAILABLE';
+    message = 'External service unavailable';
   }
 
   // Log error details
@@ -127,27 +127,27 @@ export function errorHandler(
     stack: err.stack,
     userId: (req as any).user?.id,
     ip: req.ip,
-    userAgent: req.get("User-Agent"),
+    userAgent: req.get('User-Agent'),
   };
 
   // Log errors with different levels
   if (statusCode >= 500) {
-    console.error("Server Error:", errorLog);
+    console.error('Server Error:', errorLog);
   } else if (statusCode >= 400) {
-    console.warn("Client Error:", errorLog);
+    console.warn('Client Error:', errorLog);
   }
 
   // Send error response
   const response = {
-    status: "error",
+    status: 'error',
     error: {
       code,
       message,
-      ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
+      ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
       ...(details && { details }),
     },
     timestamp: new Date().toISOString(),
-    requestId: req.get("X-Request-ID") || undefined,
+    requestId: req.get('X-Request-ID') || undefined,
   };
 
   res.status(statusCode).json(response);
@@ -164,9 +164,9 @@ export function asyncHandler(fn: Function) {
 export function notFoundHandler(req: Request, res: Response) {
   const message = `Route ${req.method} ${req.url} not found`;
   res.status(404).json({
-    status: "error",
+    status: 'error',
     error: {
-      code: "NOT_FOUND",
+      code: 'NOT_FOUND',
       message,
     },
     timestamp: new Date().toISOString(),
@@ -177,15 +177,15 @@ export function notFoundHandler(req: Request, res: Response) {
 export function gracefulShutdown(server: any) {
   return (signal: string) => {
     console.log(`Received ${signal}. Shutting down gracefully...`);
-    
+
     server.close(() => {
-      console.log("Process terminated");
+      console.log('Process terminated');
       process.exit(0);
     });
 
     // Force shutdown after 30 seconds
     setTimeout(() => {
-      console.log("Forced shutdown");
+      console.log('Forced shutdown');
       process.exit(1);
     }, 30000);
   };

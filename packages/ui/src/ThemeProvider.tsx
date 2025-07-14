@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-type Theme = 'light' | 'dark';
-type Direction = 'ltr' | 'rtl';
+export type Theme = 'light' | 'dark';
+export type Direction = 'ltr' | 'rtl';
 
 interface ThemeProviderState {
   theme: Theme;

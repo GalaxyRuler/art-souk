@@ -72,7 +72,7 @@ The Art Souk Team`,
 
 مع أطيب التحيات،
 فريق سوق آرت`,
-    variables: ['firstName']
+    variables: ['firstName'],
   },
   {
     templateCode: 'order_confirmation',
@@ -112,7 +112,7 @@ The Art Souk Team`,
         <p>شكراً لاختيارك سوق آرت!</p>
       </div>
     `,
-    variables: ['buyerName', 'orderNumber', 'artworkTitle', 'artistName', 'price']
+    variables: ['buyerName', 'orderNumber', 'artworkTitle', 'artistName', 'price'],
   },
   {
     templateCode: 'newsletter',
@@ -144,20 +144,18 @@ The Art Souk Team`,
         </p>
       </div>
     `,
-    variables: ['month', 'content', 'unsubscribeUrl']
-  }
+    variables: ['month', 'content', 'unsubscribeUrl'],
+  },
 ];
 
 export async function seedEmailTemplates() {
   try {
     console.log('Seeding email templates...');
-    
+
     for (const template of defaultTemplates) {
-      await db.insert(emailTemplates)
-        .values(template)
-        .onConflictDoNothing();
+      await db.insert(emailTemplates).values(template).onConflictDoNothing();
     }
-    
+
     console.log('Email templates seeded successfully!');
   } catch (error) {
     console.error('Error seeding email templates:', error);
@@ -165,10 +163,12 @@ export async function seedEmailTemplates() {
 }
 
 // Run the seeding function
-seedEmailTemplates().then(() => {
-  console.log('Done seeding email templates');
-  process.exit(0);
-}).catch(error => {
-  console.error('Error:', error);
-  process.exit(1);
-});
+seedEmailTemplates()
+  .then(() => {
+    console.log('Done seeding email templates');
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    process.exit(1);
+  });
