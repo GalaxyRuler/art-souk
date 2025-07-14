@@ -144,7 +144,8 @@ const resources = {
         submit: "Submit",
         confirm: "Confirm",
         yes: "Yes",
-        no: "No"
+        no: "No",
+        by: "by"
       },
       site: {
         name: "Art Souk",
@@ -1363,6 +1364,7 @@ const resources = {
         confirm: "تأكيد",
         yes: "نعم",
         no: "لا",
+        by: "بواسطة",
         upcoming: "قادم",
         completed: "مكتمل"
       },

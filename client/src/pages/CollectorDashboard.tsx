@@ -351,7 +351,7 @@ export default function CollectorDashboard() {
                                               {isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
                                             </h5>
                                             <p className="text-sm text-gray-600">
-                                              {t("by")} {isRTL ? order.artwork.artist.nameAr || order.artwork.artist.name : order.artwork.artist.name}
+                                              {t("common.by")} {isRTL ? order.artwork.artist.nameAr || order.artwork.artist.name : order.artwork.artist.name}
                                             </p>
                                           </div>
                                         </div>
