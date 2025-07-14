@@ -85,6 +85,12 @@ export default function Analytics() {
     enabled: !!userArtist?.id,
   });
 
+  // Fetch artist stats data
+  const { data: artistStats } = useQuery({
+    queryKey: [`/api/artists/${userArtist?.id}/stats`],
+    enabled: !!userArtist?.id,
+  });
+
   const { data: searchHistory } = useQuery({
     queryKey: ["/api/analytics/search-history"],
     enabled: !!user,
@@ -117,6 +123,16 @@ export default function Analytics() {
     .sort(([, a]: any, [, b]: any) => b - a)
     .slice(0, 5);
 
+  // Calculate totals from analytics data
+  const totalViews = artistStats?.totalViews || 0;
+  const totalFollowers = artistStats?.totalFollowers || 0;
+  const totalSales = artistStats?.totalSales || 0;
+  const totalRevenue = artistStats?.totalRevenue || 0;
+  
+  // Calculate recent data (last 7 days)
+  const recentAnalytics = analytics?.slice(0, 7) || [];
+  const recentInquiries = recentAnalytics.reduce((sum: number, day: any) => sum + day.inquiries, 0);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <Navbar />
@@ -143,7 +159,7 @@ export default function Analytics() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-brand-navy">
-                {analytics?.reduce((sum: number, day: any) => sum + day.artworkViews, 0) || 0}
+                {totalViews.toLocaleString()}
               </div>
               <p className="text-xs text-gray-500 mt-1">
                 <span className="text-green-600">+12%</span> {getText("analytics.fromLastMonth", "from last month")}
@@ -160,7 +176,7 @@ export default function Analytics() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-brand-navy">
-                {analytics?.[0]?.followers || 0}
+                {totalFollowers.toLocaleString()}
               </div>
               <p className="text-xs text-gray-500 mt-1">
                 <span className="text-green-600">+5</span> {getText("analytics.thisWeek", "this week")}
@@ -177,7 +193,7 @@ export default function Analytics() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-brand-navy">
-                {analytics?.reduce((sum: number, day: any) => sum + day.inquiries, 0) || 0}
+                {recentInquiries.toLocaleString()}
               </div>
               <p className="text-xs text-gray-500 mt-1">
                 <span className="text-green-600">+3</span> {getText("analytics.new", "new")}
@@ -194,7 +210,7 @@ export default function Analytics() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-brand-navy">
-                {analytics?.reduce((sum: number, day: any) => sum + (day.sales || 0), 0) || 0}
+                {totalRevenue.toLocaleString()} {language === 'ar' ? 'ر.س' : 'SAR'}
               </div>
               <p className="text-xs text-gray-500 mt-1">
                 {getText("analytics.thisMonth", "This month")}
