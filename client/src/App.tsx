@@ -113,11 +113,13 @@ function Router() {
         {/* Dashboard route - accessible to authenticated users */}
         <Route path="/dashboard" component={Dashboard} />
         
+        {/* Testing: Make analytics accessible for debugging */}
+        <Route path="/analytics" component={Analytics} />
+        <Route path="/analytics/dashboard" component={AnalyticsDashboard} />
+        
         {/* Authenticated-only routes */}
         {isAuthenticated && (
           <>
-            <Route path="/analytics" component={Analytics} />
-            <Route path="/analytics/dashboard" component={AnalyticsDashboard} />
             <Route path="/preferences" component={UserPreferences} />
             <Route path="/collector" component={CollectorDashboard} />
             <Route path="/seller" component={SellerDashboard} />
