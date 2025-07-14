@@ -2201,6 +2201,9 @@ console.log('i18n initialized with inline resources');
 console.log('Sample translation nav.home:', i18n.t('nav.home'));
 console.log('Sample translation auth.login:', i18n.t('auth.login'));
 console.log('Sample translation hero.title:', i18n.t('hero.title'));
+console.log('Sample translation collector.dashboard.title:', i18n.t('collector.dashboard.title'));
+console.log('Sample translation collector.stats.totalOrders:', i18n.t('collector.stats.totalOrders'));
+console.log('Sample translation collector.tabs.orders:', i18n.t('collector.tabs.orders'));
 
 // Save language changes to localStorage
 i18n.on('languageChanged', (lng) => {
