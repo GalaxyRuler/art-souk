@@ -194,7 +194,7 @@ export default function Analytics() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-brand-navy">
-                {analytics?.reduce((sum: number, day: any) => sum + (day.sales || 0), 0) || 0}
+                {language === "ar" ? "ر.س" : "SAR"} {analytics?.[0]?.totalSales || "0"}
               </div>
               <p className="text-xs text-gray-500 mt-1">
                 {getText("analytics.thisMonth", "This month")}
@@ -203,16 +203,16 @@ export default function Analytics() {
           </Card>
         </div>
 
-        {/* Tabs */}
-        <Tabs defaultValue="views" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="views">
+        {/* Charts */}
+        <Tabs defaultValue="views" className="space-y-4">
+          <TabsList className="bg-white/70 backdrop-blur-sm border border-gray-200/50">
+            <TabsTrigger value="views" className="data-[state=active]:bg-brand-navy data-[state=active]:text-white">
               {getText("analytics.views", "Views")}
             </TabsTrigger>
-            <TabsTrigger value="engagement">
+            <TabsTrigger value="engagement" className="data-[state=active]:bg-brand-navy data-[state=active]:text-white">
               {getText("analytics.engagement", "Engagement")}
             </TabsTrigger>
-            <TabsTrigger value="search">
+            <TabsTrigger value="search" className="data-[state=active]:bg-brand-navy data-[state=active]:text-white">
               {getText("analytics.search", "Search Insights")}
             </TabsTrigger>
           </TabsList>
