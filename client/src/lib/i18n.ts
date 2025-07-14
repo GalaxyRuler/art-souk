@@ -144,10 +144,7 @@ const resources = {
         submit: "Submit",
         confirm: "Confirm",
         yes: "Yes",
-        no: "No",
-        allCategories: "All Categories",
-        allStatus: "All Status",
-        published: "Published"
+        no: "No"
       },
       site: {
         name: "Art Souk",
@@ -258,8 +255,7 @@ const resources = {
           description: "There are no auctions available"
         },
         minimumBid: "Minimum Bid",
-        biddingIncrements: "Bidding Increments",
-        timeRemaining: "Time Remaining"
+        biddingIncrements: "Bidding Increments"
       },
       artist: {
         featured: "Featured",
@@ -1479,8 +1475,7 @@ const resources = {
           description: "لا توجد مزادات متاحة"
         },
         minimumBid: "الحد الأدنى للمزايدة",
-        biddingIncrements: "زيادات المزايدة",
-        timeRemaining: "الوقت المتبقي"
+        biddingIncrements: "زيادات المزايدة"
       },
       artist: {
         featured: "مميز",
