@@ -896,6 +896,8 @@ const resources = {
         stageTransitions: "Stage Transitions"
       },
       lifecycle: {
+        title: "Lifecycle Analytics",
+        subtitle: "Track user journey through awareness, engagement, and advocacy stages",
         stages: {
           aware: "Aware",
           join: "Join",
@@ -2059,6 +2061,8 @@ const resources = {
         stageTransitions: "انتقالات المراحل"
       },
       lifecycle: {
+        title: "تحليلات دورة الحياة",
+        subtitle: "تتبع رحلة المستخدم من خلال مراحل الوعي والتفاعل والدعم",
         stages: {
           aware: "يدرك",
           join: "ينضم",
