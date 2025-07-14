@@ -35,7 +35,7 @@ export default function Analytics() {
     }
   };
 
-  const getArabicText = (key: string) => {
+  const getArabicText = (translationKey: string) => {
     const arabicTexts: Record<string, string> = {
       'analytics.title': 'التحليلات والرؤى',
       'analytics.subtitle': 'تتبع أداءك وافهم جمهورك',
@@ -68,7 +68,7 @@ export default function Analytics() {
       'analytics.topCategories': 'الفئات الأكثر شيوعاً',
       'analytics.topStyles': 'الأساليب الأكثر شيوعاً'
     };
-    return arabicTexts[key] || key;
+    return arabicTexts[translationKey] || translationKey;
   };
 
   // Get artist profile if user is an artist
