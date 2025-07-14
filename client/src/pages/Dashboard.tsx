@@ -349,7 +349,7 @@ export default function Dashboard() {
                   {/* Analytics Links for Artists/Galleries */}
                   {(user?.roles?.includes('artist') || user?.roles?.includes('gallery')) && (
                     <Link to="/analytics">
-                      <Button className="w-full h-11 bg-brand-navy hover:bg-brand-steel transition-all duration-200 shadow-sm hover:shadow-md">
+                      <Button className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                         <BarChart3 className="h-4 w-4 mr-3" />
                         {t("dashboard.viewAnalytics")}
                       </Button>
@@ -358,7 +358,7 @@ export default function Dashboard() {
                   
                   {/* Lifecycle Analytics Dashboard Link */}
                   <Link to="/analytics/dashboard">
-                    <Button className="w-full h-11 bg-brand-gradient hover:bg-brand-navy transition-all duration-200 shadow-sm hover:shadow-md">
+                    <Button className="w-full h-11 bg-purple-600 hover:bg-purple-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                       <BarChart3 className="h-4 w-4 mr-3" />
                       {t("dashboard.lifecycleAnalytics")}
                     </Button>
@@ -366,7 +366,7 @@ export default function Dashboard() {
                   
                   {/* Collector Dashboard Link */}
                   <Link to="/collector">
-                    <Button className="w-full h-11 bg-brand-navy hover:bg-brand-steel transition-all duration-200 shadow-sm hover:shadow-md">
+                    <Button className="w-full h-11 bg-teal-600 hover:bg-teal-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                       <Package className="h-4 w-4 mr-3" />
                       {t("dashboard.collectorDashboard")}
                     </Button>
@@ -380,14 +380,14 @@ export default function Dashboard() {
                       </div>
                       
                       <Link to="/seller">
-                        <Button className="w-full h-11 bg-brand-navy hover:bg-brand-steel transition-all duration-200 shadow-sm hover:shadow-md">
+                        <Button className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                           <Package className="h-4 w-4 mr-3" />
                           {t("dashboard.sellerDashboard")}
                         </Button>
                       </Link>
                       
                       <Link to="/artworks/manage">
-                        <Button className="w-full h-11 bg-brand-navy hover:bg-brand-steel transition-all duration-200 shadow-sm hover:shadow-md">
+                        <Button className="w-full h-11 bg-rose-600 hover:bg-rose-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                           <Palette className="h-4 w-4 mr-3" />
                           {t("artworks.management")}
                         </Button>
