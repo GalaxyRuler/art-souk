@@ -128,6 +128,14 @@ export default function Analytics() {
     .sort(([, a]: any, [, b]: any) => b - a)
     .slice(0, 5);
 
+  // Debug logging
+  console.log('Analytics Debug Data:', {
+    userArtist,
+    artistStats,
+    analytics,
+    userArtistId: userArtist?.id
+  });
+
   // Calculate totals from analytics data
   const totalViews = artistStats?.totalViews || 0;
   const totalFollowers = artistStats?.totalFollowers || 0;
