@@ -158,6 +158,13 @@ import {
   commissionContracts,
   type CommissionContract,
   type InsertCommissionContract,
+  // KYC tables
+  kycVerificationRequirements,
+  type KycVerificationRequirement,
+  type InsertKycVerificationRequirement,
+  kycVerificationSessions,
+  type KycVerificationSession,
+  type InsertKycVerificationSession,
   // Lifecycle funnel tables
   metrics,
   userInteractions,
@@ -3479,9 +3486,10 @@ export class DatabaseStorage implements IStorage {
     // Calculate status
     const completedDocs = submittedDocs.filter((doc) => doc.verificationStatus === 'approved');
     const rejectedDocs = submittedDocs.filter((doc) => doc.verificationStatus === 'rejected');
-    const pendingDocs = submittedDocs.filter(
-      (doc) => doc.verificationStatus === 'pending' || doc.verificationStatus === 'under_review'
-    );
+    // Note: pending docs count could be used for future status calculations
+    // const pendingDocs = submittedDocs.filter(
+    //   (doc) => doc.verificationStatus === 'pending' || doc.verificationStatus === 'under_review'
+    // );
 
     const submittedDocTypes = submittedDocs.map((doc) => doc.documentType);
     const missingDocTypes = requiredDocs

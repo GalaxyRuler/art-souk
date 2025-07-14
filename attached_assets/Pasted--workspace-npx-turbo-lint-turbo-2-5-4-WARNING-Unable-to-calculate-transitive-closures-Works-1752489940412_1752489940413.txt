@@ -1,0 +1,273 @@
+~/workspace$ npx turbo lint
+turbo 2.5.4
+
+ WARNING  Unable to calculate transitive closures: Workspace 'apps/api' not found in lockfile.
+• Packages in scope: @art-souk/api, @art-souk/db, @art-souk/tsconfig, @art-souk/ui, @art-souk/web
+• Running lint in 5 packages
+• Remote caching disabled
+@art-souk/db:lint: cache hit, replaying logs 423e8fe78ae4a01e
+@art-souk/db:lint: 
+@art-souk/db:lint: > @art-souk/db@0.0.0 lint
+@art-souk/db:lint: > eslint "**/*.{ts,tsx,js,jsx}" --fix
+@art-souk/db:lint: 
+@art-souk/ui:lint: cache hit, replaying logs 25a8fa4650eae634
+@art-souk/ui:lint: 
+@art-souk/ui:lint: > @art-souk/ui@0.1.0 lint
+@art-souk/ui:lint: > tsc --noEmit
+@art-souk/ui:lint: 
+@art-souk/api:lint: cache miss, executing c4eee59e0b961983
+@art-souk/api:lint: 
+@art-souk/web:lint: cache miss, executing f1e3acef571132c9
+@art-souk/web:lint: 
+@art-souk/api:lint: 
+@art-souk/api:lint: > @art-souk/api@0.0.0 lint
+@art-souk/api:lint: > eslint . --ext ts --report-unused-disable-directives --max-warnings 0
+@art-souk/api:lint: 
+@art-souk/web:lint: 
+@art-souk/web:lint: > @art-souk/web@0.0.0 lint
+@art-souk/web:lint: > eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0
+@art-souk/web:lint: 
+
+@art-souk/api:lint: /home/runner/workspace/apps/api/emailService.ts
+@art-souk/api:lint:    19:49  error    'setInterval' is not defined              no-undef
+@art-souk/api:lint:    35:31  error    'setInterval' is not defined              no-undef
+@art-souk/api:lint:    42:7   error    'clearInterval' is not defined            no-undef
+@art-souk/api:lint:    68:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   117:71  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   199:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/index.ts
+@art-souk/api:lint:   13:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   57:17  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/middleware/trackStage.ts
+@art-souk/api:lint:   64:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   64:47  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/replitAuth.ts
+@art-souk/api:lint:    17:39  error    'URL' is not defined                      no-undef
+@art-souk/api:lint:    17:71  warning  Forbidden non-null assertion              @typescript-eslint/no-non-null-assertion
+@art-souk/api:lint:    32:13  warning  Forbidden non-null assertion              @typescript-eslint/no-non-null-assertion
+@art-souk/api:lint:    45:9   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    54:35  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    83:24  warning  Forbidden non-null assertion              @typescript-eslint/no-non-null-assertion
+@art-souk/api:lint:   119:22  warning  Forbidden non-null assertion              @typescript-eslint/no-non-null-assertion
+@art-souk/api:lint:   128:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   150:12  error    'error' is defined but never used         @typescript-eslint/no-unused-vars
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/routes.ts
+@art-souk/api:lint:      9:25  error    'or' is defined but never used                                @typescript-eslint/no-unused-vars
+@art-souk/api:lint:      9:29  error    'ilike' is defined but never used                             @typescript-eslint/no-unused-vars
+@art-souk/api:lint:      9:36  error    'sql' is defined but never used                               @typescript-eslint/no-unused-vars
+@art-souk/api:lint:      9:41  error    'count' is defined but never used                             @typescript-eslint/no-unused-vars
+@art-souk/api:lint:      9:48  error    'ne' is defined but never used                                @typescript-eslint/no-unused-vars
+@art-souk/api:lint:      9:52  error    'gte' is defined but never used                               @typescript-eslint/no-unused-vars
+@art-souk/api:lint:      9:57  error    'lte' is defined but never used                               @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     18:3   error    'insertCollectionSchema' is defined but never used            @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     20:3   error    'insertWorkshopRegistrationSchema' is defined but never used  @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     22:3   error    'insertEventRsvpSchema' is defined but never used             @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     24:3   error    'insertDiscussionSchema' is defined but never used            @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     25:3   error    'insertDiscussionReplySchema' is defined but never used       @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     32:3   error    'insertNewsletterSubscriberSchema' is defined but never used  @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     72:58  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:     84:59  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    134:10  error    Replace `⏎········.status(500)⏎········` with `.status(500)`  prettier/prettier
+@art-souk/api:lint:    137:1   error    Delete `··`                                                   prettier/prettier
+@art-souk/api:lint:    138:1   error    Delete `··`                                                   prettier/prettier
+@art-souk/api:lint:    139:1   error    Delete `··`                                                   prettier/prettier
+@art-souk/api:lint:    143:59  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    158:57  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    177:61  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    370:73  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    432:57  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    634:58  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    646:61  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    659:64  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    686:21  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    814:67  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    868:65  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    884:68  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    938:69  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    987:84  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    998:75  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1112:69  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1129:59  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1143:62  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1163:65  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1182:72  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1194:63  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1244:65  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1261:56  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1275:59  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1295:62  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1314:65  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1327:60  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1339:57  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1365:60  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1385:63  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1404:84  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1645:58  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1668:42  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1683:58  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1694:59  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1708:72  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1720:75  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1733:57  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1747:81  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1760:84  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1797:58  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1810:58  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1824:61  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1844:64  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1876:55  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1890:79  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1903:82  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1929:59  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1941:64  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1954:56  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1979:57  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   1993:56  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2006:56  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2065:49  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2088:73  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2100:60  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2111:60  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2136:77  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2156:69  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2487:19  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2487:51  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2488:26  warning  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   4239:3   error    'setInterval' is not defined                                  no-undef
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/seed.ts
+@art-souk/api:lint:     17:3   error  'commissionBids' is defined but never used                                      @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   1076:56  error  'userIndex' is defined but never used. Allowed unused args must match /^_/u     @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   1077:50  error  'artworkIndex' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/src/middleware/errorHandler.ts
+@art-souk/api:lint:   108:31  warning  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   109:22  warning  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   113:22  warning  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   128:21  warning  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   157:30  error    Replace `fn:·(req:·Request,·res:·Response,·next:·NextFunction)·=>·Promise<void>` with `⏎··fn:·(req:·Request,·res:·Response,·next:·NextFunction)·=>·Promise<void>⏎`  prettier/prettier
+@art-souk/api:lint:   177:42  warning  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   187:5   error    'setTimeout' is not defined                                                                                                                                         no-undef
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/src/middleware/validation.ts
+@art-souk/api:lint:    95:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    95:38  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   107:24  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/src/queues/emailQueue.ts
+@art-souk/api:lint:    12:40  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   112:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/src/socket.ts
+@art-souk/api:lint:   265:81  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   269:83  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   273:89  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   277:89  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/storage.ts
+@art-souk/api:lint:     74:8   error    'InsertArtistAnalytics' is defined but never used                            @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     86:3   error    'collectorProfiles' is defined but never used                                @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     87:3   error    'priceAlerts' is defined but never used                                      @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     88:3   error    'artworkCertificates' is defined but never used                              @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     89:3   error    'collectorWishlist' is defined but never used                                @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     90:3   error    'installmentPlans' is defined but never used                                 @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     91:3   error    'collectorReviews' is defined but never used                                 @typescript-eslint/no-unused-vars
+@art-souk/api:lint:     94:8   error    'InsertNewsletterSubscriber' is defined but never used                       @typescript-eslint/no-unused-vars
+@art-souk/api:lint:    100:8   error    'InsertEmailNotificationQueue' is defined but never used                     @typescript-eslint/no-unused-vars
+@art-souk/api:lint:    103:8   error    'InsertEmailNotificationLog' is defined but never used                       @typescript-eslint/no-unused-vars
+@art-souk/api:lint:    217:43  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    218:42  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    219:44  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    404:52  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    405:50  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    405:64  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    406:71  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    406:85  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    408:44  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    409:62  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    409:76  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    821:49  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    859:48  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    882:50  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    925:3   error    Duplicate name 'getArtworksByGallery'                                        no-dupe-class-members
+@art-souk/api:lint:   1001:30  warning  Forbidden non-null assertion                                                 @typescript-eslint/no-non-null-assertion
+@art-souk/api:lint:   1261:3   error    Duplicate name 'deleteArtwork'                                               no-dupe-class-members
+@art-souk/api:lint:   2008:58  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2015:42  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2015:62  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2023:43  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2023:63  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2033:56  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2033:70  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2041:49  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2054:50  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2068:77  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2068:91  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2072:18  error    'id' is assigned a value but never used                                      @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   2079:49  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2094:50  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2114:18  error    'id' is assigned a value but never used                                      @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   2121:49  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2134:50  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2146:50  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2203:68  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2203:82  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   2595:5   error    'startDate' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   2596:5   error    'endDate' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   3035:16  error    'error' is defined but never used                                            @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   3092:23  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   3136:61  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   3241:62  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   3242:74  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   3316:76  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   3396:57  error    'KycVerificationRequirement' is not defined                                  no-undef
+@art-souk/api:lint:   3399:13  error    'kycVerificationRequirements' is not defined                                 no-undef
+@art-souk/api:lint:   3400:17  error    'kycVerificationRequirements' is not defined                                 no-undef
+@art-souk/api:lint:   3401:16  error    'kycVerificationRequirements' is not defined                                 no-undef
+@art-souk/api:lint:   3405:18  error    'InsertKycVerificationRequirement' is not defined                            no-undef
+@art-souk/api:lint:   3406:14  error    'KycVerificationRequirement' is not defined                                  no-undef
+@art-souk/api:lint:   3408:15  error    'kycVerificationRequirements' is not defined                                 no-undef
+@art-souk/api:lint:   3417:14  error    'InsertKycVerificationSession' is not defined                                no-undef
+@art-souk/api:lint:   3418:14  error    'KycVerificationSession' is not defined                                      no-undef
+@art-souk/api:lint:   3419:42  error    'kycVerificationSessions' is not defined                                     no-undef
+@art-souk/api:lint:   3432:63  error    'KycVerificationSession' is not defined                                      no-undef
+@art-souk/api:lint:   3435:13  error    'kycVerificationSessions' is not defined                                     no-undef
+@art-souk/api:lint:   3436:17  error    'kycVerificationSessions' is not defined                                     no-undef
+@art-souk/api:lint:   3443:21  error    'InsertKycVerificationSession' is not defined                                no-undef
+@art-souk/api:lint:   3444:14  error    'KycVerificationSession' is not defined                                      no-undef
+@art-souk/api:lint:   3446:15  error    'kycVerificationSessions' is not defined                                     no-undef
+@art-souk/api:lint:   3448:17  error    'kycVerificationSessions' is not defined                                     no-undef
+@art-souk/api:lint:   3482:11  error    'pendingDocs' is assigned a value but never used                             @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   3635:67  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/tapPaymentService.ts
+@art-souk/api:lint:    54:78  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    57:20  error    'RequestInit' is not defined              no-undef
+@art-souk/api:lint:    70:30  error    'fetch' is not defined                    no-undef
+@art-souk/api:lint:   181:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint: 
+@art-souk/api:lint: ✖ 198 problems (65 errors, 133 warnings)
+@art-souk/api:lint:   5 errors and 0 warnings potentially fixable with the `--fix` option.
+@art-souk/api:lint: 
+npm error Lifecycle script `lint` failed with error:
+npm error code 1
+npm error path /home/runner/workspace/apps/api
+npm error workspace @art-souk/api@0.0.0
+npm error location /home/runner/workspace/apps/api
+npm error command failed
+npm error command sh -c eslint . --ext ts --report-unused-disable-directives --max-warnings 0
+
+@art-souk/api:lint: ERROR: command finished with error: command (/home/runner/workspace/apps/api) /nix/store/lyx73qs96hfazl77arnwllwckq9dy012-nodejs-20.18.1-wrapped/bin/npm run lint exited (1)
+
+@art-souk/api#lint: command (/home/runner/workspace/apps/api) /nix/store/lyx73qs96hfazl77arnwllwckq9dy012-nodejs-20.18.1-wrapped/bin/npm run lint exited (1)
+
+ Tasks:    2 successful, 4 total
+Cached:    2 cached, 4 total
+  Time:    9.76s 
+Failed:    @art-souk/api#lint
+
+ ERROR  run failed: command  exited (1)

@@ -6,7 +6,7 @@ import { storage } from './storage';
 import { setupAuth, isAuthenticated } from './replitAuth';
 import { emailService } from './emailService';
 import { db } from './db';
-import { eq, desc, and, or, ilike, sql, count, ne, gte, lte } from 'drizzle-orm';
+import { eq, desc, and } from 'drizzle-orm';
 import { trackStageMiddleware, updateLifecycleMetrics } from './middleware/trackStage';
 import {
   insertArtistSchema,
@@ -15,21 +15,15 @@ import {
   insertAuctionSchema,
   insertBidSchema,
   insertAuctionResultSchema,
-  insertCollectionSchema,
   insertWorkshopSchema,
-  insertWorkshopRegistrationSchema,
   insertEventSchema,
-  insertEventRsvpSchema,
   insertWorkshopEventReviewSchema,
-  insertDiscussionSchema,
-  insertDiscussionReplySchema,
   insertInquirySchema,
   insertFavoriteSchema,
   insertFollowSchema,
   insertCommentSchema,
   insertLikeSchema,
   insertUserProfileSchema,
-  insertNewsletterSubscriberSchema,
   insertEmailTemplateSchema,
   insertAchievementBadgeSchema,
   purchaseOrders,
@@ -69,7 +63,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(trackStageMiddleware);
 
   // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  app.get('/api/auth/user', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
@@ -81,7 +75,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // User role management endpoints
-  app.put('/api/user/roles', isAuthenticated, async (req: any, res) => {
+  app.put('/api/user/roles', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
       const { roles } = req.body;
@@ -131,16 +125,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error updating user roles:', error);
       console.error('Stack trace:', error instanceof Error ? error.stack : error);
-      res
-        .status(500)
-        .json({
-          message: 'Failed to update user roles',
-          error: error instanceof Error ? error.message : String(error),
-        });
+      res.status(500).json({
+        message: 'Failed to update user roles',
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   });
 
-  app.get('/api/user/roles', isAuthenticated, async (req: any, res) => {
+  app.get('/api/user/roles', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
@@ -155,7 +147,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Auth success redirect handler
-  app.get('/auth/success', isAuthenticated, async (req: any, res) => {
+  app.get('/auth/success', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);

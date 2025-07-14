@@ -54,7 +54,7 @@ export class TapPaymentService {
   private async makeApiCall(endpoint: string, method: string = 'GET', data?: any) {
     const url = `${this.baseUrl}${endpoint}`;
 
-    const options: RequestInit = {
+    const options: globalThis.RequestInit = {
       method,
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
@@ -67,7 +67,7 @@ export class TapPaymentService {
     }
 
     try {
-      const response = await fetch(url, options);
+      const response = await globalThis.fetch(url, options);
       const result = await response.json();
 
       if (!response.ok) {

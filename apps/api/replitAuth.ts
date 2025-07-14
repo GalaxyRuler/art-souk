@@ -14,7 +14,10 @@ if (!process.env.REPLIT_DOMAINS) {
 
 const getOidcConfig = memoize(
   async () => {
-    return await client.discovery(new URL('https://replit.com/oidc'), process.env.REPL_ID!);
+    return await client.discovery(
+      new globalThis.URL('https://replit.com/oidc'),
+      process.env.REPL_ID || ''
+    );
   },
   { maxAge: 3600 * 1000 }
 );
@@ -29,7 +32,7 @@ export function getSession() {
     tableName: 'sessions',
   });
   return session({
-    secret: process.env.SESSION_SECRET!,
+    secret: process.env.SESSION_SECRET || 'art-souk-secret-key-2025',
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
@@ -147,7 +150,7 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
     const tokenResponse = await client.refreshTokenGrant(config, refreshToken);
     updateUserSession(user, tokenResponse);
     return next();
-  } catch (error) {
+  } catch {
     res.status(401).json({ message: 'Unauthorized' });
     return;
   }

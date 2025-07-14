@@ -16,7 +16,7 @@ if (process.env.SENDGRID_API_KEY) {
 
 export class EmailService {
   private static instance: EmailService;
-  private processingInterval: ReturnType<typeof setInterval> | null = null;
+  private processingInterval: ReturnType<typeof globalThis.setInterval> | null = null;
 
   private constructor() {
     // Start processing emails every minute
@@ -32,14 +32,14 @@ export class EmailService {
 
   private startProcessing() {
     // Process emails every minute
-    this.processingInterval = setInterval(() => {
+    this.processingInterval = globalThis.setInterval(() => {
       this.processQueue();
     }, 60000); // 1 minute
   }
 
   stopProcessing() {
     if (this.processingInterval) {
-      clearInterval(this.processingInterval);
+      globalThis.clearInterval(this.processingInterval);
       this.processingInterval = null;
     }
   }
