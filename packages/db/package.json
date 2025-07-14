@@ -8,7 +8,8 @@
   "scripts": {
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "lint": "eslint \"**/*.{ts,tsx,js,jsx}\" --fix"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.0",
