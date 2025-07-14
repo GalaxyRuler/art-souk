@@ -613,6 +613,40 @@ export default function CollectorDashboard() {
                         <Button 
                           variant="outline" 
                           className="flex-1 bg-white/50 border-teal-200 hover:bg-teal-50 hover:border-teal-300 transition-colors"
+                          onClick={() => {
+                            if (order.shippingTracking?.trackingNumber && order.shippingTracking?.carrier) {
+                              // Generate tracking URL based on carrier
+                              const trackingNumber = order.shippingTracking.trackingNumber;
+                              let trackingUrl = '';
+                              
+                              switch (order.shippingTracking.carrier.toLowerCase()) {
+                                case 'dhl':
+                                  trackingUrl = `https://www.dhl.com/en/express/tracking.html?AWB=${trackingNumber}`;
+                                  break;
+                                case 'fedex':
+                                  trackingUrl = `https://www.fedex.com/fedextrack/?trknbr=${trackingNumber}`;
+                                  break;
+                                case 'ups':
+                                  trackingUrl = `https://www.ups.com/track?track=yes&trackNums=${trackingNumber}`;
+                                  break;
+                                case 'saudi post':
+                                case 'saudipost':
+                                  trackingUrl = `https://www.sp.com.sa/en/track?number=${trackingNumber}`;
+                                  break;
+                                case 'aramex':
+                                  trackingUrl = `https://www.aramex.com/track/results?mode=0&ShipmentNumber=${trackingNumber}`;
+                                  break;
+                                default:
+                                  // Generic tracking search
+                                  trackingUrl = `https://www.google.com/search?q=${encodeURIComponent(order.shippingTracking.carrier + ' tracking ' + trackingNumber)}`;
+                              }
+                              
+                              window.open(trackingUrl, '_blank');
+                            } else {
+                              // Show notification if no tracking info available
+                              console.log('No tracking information available');
+                            }
+                          }}
                         >
                           <ExternalLink className="h-4 w-4 mr-2" />
                           {t("collector.tracking.viewFull", "View Full Tracking")}
