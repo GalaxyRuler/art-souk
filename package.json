@@ -99,6 +99,8 @@
     "turbo-ignore": "^2.5.4",
     "tw-animate-css": "^1.2.5",
     "vaul": "^1.1.2",
+    "vite-plugin-checker": "^0.10.0",
+    "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4",
     "wouter": "^3.3.5",
     "ws": "^8.18.0",
