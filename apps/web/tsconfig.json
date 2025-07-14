@@ -1,5 +1,5 @@
 {
-  "extends": "@art-souk/tsconfig/react.json",
+  "extends": "../../packages/tsconfig/react.json",
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
