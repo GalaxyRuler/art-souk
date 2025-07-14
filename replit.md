@@ -190,7 +190,20 @@ Art Souk is a bilingual art marketplace web application focused on the Saudi Ara
 
 Preferred communication style: Simple, everyday language.
 
+## GitHub Repository
+
+**Repository URL**: https://github.com/GalaxyRuler/art-souk  
+**Owner**: GalaxyRuler  
+**Description**: Bilingual Art Marketplace Platform for Saudi Arabia & GCC
+
 ## Recent Changes
+
+- January 17, 2025: GitHub Repository Connection Established (COMPLETED)
+  ✓ **Repository Setup**: Connected Art Souk project to GitHub under GalaxyRuler/art-souk
+  ✓ **Documentation Updated**: Added GitHub repository information to project documentation
+  ✓ **Repository URL**: https://github.com/GalaxyRuler/art-souk configured for version control
+  ✓ **Version Control**: Project ready for collaborative development and deployment
+  ✓ **Project Description**: "Bilingual Art Marketplace Platform for Saudi Arabia & GCC" 
 
 - January 17, 2025: Advanced Shipping Management and ZATCA-Compliant Invoice System Implementation (COMPLETED)
   ✓ **Comprehensive ZATCA API Implementation**: Added complete shipping and invoicing API endpoints in routes.ts with full Saudi Arabia ZATCA compliance
