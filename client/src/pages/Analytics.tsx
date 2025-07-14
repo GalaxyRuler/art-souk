@@ -24,26 +24,53 @@ import { format } from "date-fns";
 export default function Analytics() {
   const { user } = useAuth();
   const { language, isRTL } = useLanguage();
-  const { t, ready } = useTranslation();
   const [dateRange, setDateRange] = useState({ start: 30, end: 0 }); // days ago
 
-  // Debug logging
-  console.log('Translation ready:', ready);
-  console.log('Translation function:', typeof t);
-  
-  // If translation is not ready, show loading
-  if (!ready) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-        <div className="flex items-center justify-center h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-brand-navy"></div>
-            <p className="mt-4 text-gray-600">Loading analytics...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Translation function helper - temporary solution
+  const getText = (key: string, fallback: string) => {
+    try {
+      // Try to get translation, fallback to English text
+      return language === 'ar' ? getArabicText(key) : fallback;
+    } catch (error) {
+      return fallback;
+    }
+  };
+
+  const getArabicText = (key: string) => {
+    const arabicTexts: Record<string, string> = {
+      'analytics.title': 'التحليلات والرؤى',
+      'analytics.subtitle': 'تتبع أداءك وافهم جمهورك',
+      'analytics.totalViews': 'إجمالي المشاهدات',
+      'analytics.fromLastMonth': 'من الشهر الماضي',
+      'analytics.followers': 'المتابعون',
+      'analytics.inquiries': 'الاستفسارات',
+      'analytics.profileViews': 'مشاهدات الملف الشخصي',
+      'analytics.engagement': 'التفاعل',
+      'analytics.topSearchTerms': 'أهم مصطلحات البحث',
+      'analytics.viewsOverTime': 'المشاهدات عبر الوقت',
+      'analytics.engagementOverTime': 'التفاعل عبر الوقت',
+      'analytics.noData': 'لا توجد بيانات متاحة',
+      'analytics.thisWeek': 'هذا الأسبوع',
+      'analytics.new': 'جديد',
+      'analytics.sales': 'إجمالي المبيعات',
+      'analytics.thisMonth': 'هذا الشهر',
+      'analytics.views': 'المشاهدات',
+      'analytics.search': 'رؤى البحث',
+      'analytics.viewsDescription': 'تتبع عدد الأشخاص الذين يشاهدون أعمالك وملفك الشخصي',
+      'analytics.artworkViews': 'مشاهدات الأعمال الفنية',
+      'analytics.engagementMetrics': 'مقاييس التفاعل',
+      'analytics.engagementDescription': 'مراقبة الاستفسارات ونمو المتابعين',
+      'analytics.newFollowers': 'متابعون جدد',
+      'analytics.searchInsights': 'رؤى البحث',
+      'analytics.searchDescription': 'مصطلحات البحث الشائعة التي تؤدي إلى ملفك الشخصي',
+      'analytics.noSearchData': 'لا توجد بيانات بحث متاحة حتى الآن',
+      'analytics.audiencePreferences': 'تفضيلات الجمهور',
+      'analytics.preferencesDescription': 'ما يهتم به جمهورك',
+      'analytics.topCategories': 'الفئات الأكثر شيوعاً',
+      'analytics.topStyles': 'الأساليب الأكثر شيوعاً'
+    };
+    return arabicTexts[key] || key;
+  };
 
   // Get artist profile if user is an artist
   const { data: artists } = useQuery({
@@ -99,10 +126,10 @@ export default function Analytics() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-brand-navy to-brand-steel bg-clip-text text-transparent">
-            {t("analytics.title", "Analytics & Insights")}
+            {getText("analytics.title", "Analytics & Insights")}
           </h1>
           <p className="text-gray-600">
-            {t("analytics.subtitle", "Track your performance and understand your audience")}
+            {getText("analytics.subtitle", "Track your performance and understand your audience")}
           </p>
         </div>
 
@@ -111,7 +138,7 @@ export default function Analytics() {
           <Card className="bg-white/70 backdrop-blur-sm border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">
-                {t("analytics.totalViews", "Total Views")}
+                {getText("analytics.totalViews", "Total Views")}
               </CardTitle>
               <Eye className="h-4 w-4 text-brand-navy" />
             </CardHeader>
@@ -120,7 +147,7 @@ export default function Analytics() {
                 {analytics?.reduce((sum: number, day: any) => sum + day.artworkViews, 0) || 0}
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                <span className="text-green-600">+12%</span> {t("analytics.fromLastMonth", "from last month")}
+                <span className="text-green-600">+12%</span> {getText("analytics.fromLastMonth", "from last month")}
               </p>
             </CardContent>
           </Card>
@@ -128,7 +155,7 @@ export default function Analytics() {
           <Card className="bg-white/70 backdrop-blur-sm border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">
-                {t("analytics.followers", "Followers")}
+                {getText("analytics.followers", "Followers")}
               </CardTitle>
               <Users className="h-4 w-4 text-brand-navy" />
             </CardHeader>
@@ -137,7 +164,7 @@ export default function Analytics() {
                 {analytics?.[0]?.followers || 0}
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                <span className="text-green-600">+5</span> {t("analytics.thisWeek", "this week")}
+                <span className="text-green-600">+5</span> {getText("analytics.thisWeek", "this week")}
               </p>
             </CardContent>
           </Card>
@@ -145,7 +172,7 @@ export default function Analytics() {
           <Card className="bg-white/70 backdrop-blur-sm border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">
-                {t("analytics.inquiries", "Inquiries")}
+                {getText("analytics.inquiries", "Inquiries")}
               </CardTitle>
               <MessageSquare className="h-4 w-4 text-brand-navy" />
             </CardHeader>
@@ -154,7 +181,7 @@ export default function Analytics() {
                 {analytics?.reduce((sum: number, day: any) => sum + day.inquiries, 0) || 0}
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                <span className="text-green-600">+3</span> {t("analytics.new", "new")}
+                <span className="text-green-600">+3</span> {getText("analytics.new", "new")}
               </p>
             </CardContent>
           </Card>
@@ -162,7 +189,7 @@ export default function Analytics() {
           <Card className="bg-white/70 backdrop-blur-sm border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">
-                {t("analytics.sales", "Total Sales")}
+                {getText("analytics.sales", "Total Sales")}
               </CardTitle>
               <DollarSign className="h-4 w-4 text-brand-navy" />
             </CardHeader>
@@ -171,7 +198,7 @@ export default function Analytics() {
                 {language === "ar" ? "ر.س" : "SAR"} {analytics?.[0]?.totalSales || "0"}
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                {t("analytics.thisMonth", "This month")}
+                {getText("analytics.thisMonth", "This month")}
               </p>
             </CardContent>
           </Card>
@@ -181,22 +208,22 @@ export default function Analytics() {
         <Tabs defaultValue="views" className="space-y-4">
           <TabsList className="bg-white/70 backdrop-blur-sm border border-gray-200/50">
             <TabsTrigger value="views" className="data-[state=active]:bg-brand-navy data-[state=active]:text-white">
-              {t("analytics.views", "Views")}
+              {getText("analytics.views", "Views")}
             </TabsTrigger>
             <TabsTrigger value="engagement" className="data-[state=active]:bg-brand-navy data-[state=active]:text-white">
-              {t("analytics.engagement", "Engagement")}
+              {getText("analytics.engagement", "Engagement")}
             </TabsTrigger>
             <TabsTrigger value="search" className="data-[state=active]:bg-brand-navy data-[state=active]:text-white">
-              {t("analytics.search", "Search Insights")}
+              {getText("analytics.search", "Search Insights")}
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="views" className="space-y-4">
             <Card className="bg-white/70 backdrop-blur-sm border-gray-200/50">
               <CardHeader>
-                <CardTitle>{t("analytics.viewsOverTime", "Views Over Time")}</CardTitle>
+                <CardTitle>{getText("analytics.viewsOverTime", "Views Over Time")}</CardTitle>
                 <CardDescription>
-                  {t("analytics.viewsDescription", "Track how many people are viewing your artworks and profile")}
+                  {getText("analytics.viewsDescription", "Track how many people are viewing your artworks and profile")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -212,14 +239,14 @@ export default function Analytics() {
                         dataKey="views" 
                         stroke="#1e40af" 
                         strokeWidth={2}
-                        name={t("analytics.artworkViews", "Artwork Views")}
+                        name={getText("analytics.artworkViews", "Artwork Views")}
                       />
                       <Line 
                         type="monotone" 
                         dataKey="profileViews" 
                         stroke="#60a5fa" 
                         strokeWidth={2}
-                        name={t("analytics.profileViews", "Profile Views")}
+                        name={getText("analytics.profileViews", "Profile Views")}
                       />
                     </LineChart>
                   </ResponsiveContainer>
@@ -231,9 +258,9 @@ export default function Analytics() {
           <TabsContent value="engagement" className="space-y-4">
             <Card className="bg-white/70 backdrop-blur-sm border-gray-200/50">
               <CardHeader>
-                <CardTitle>{t("analytics.engagementMetrics", "Engagement Metrics")}</CardTitle>
+                <CardTitle>{getText("analytics.engagementMetrics", "Engagement Metrics")}</CardTitle>
                 <CardDescription>
-                  {t("analytics.engagementDescription", "Monitor inquiries and follower growth")}
+                  {getText("analytics.engagementDescription", "Monitor inquiries and follower growth")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -247,12 +274,12 @@ export default function Analytics() {
                       <Bar 
                         dataKey="inquiries" 
                         fill="#1e40af"
-                        name={t("analytics.inquiries", "Inquiries")}
+                        name={getText("analytics.inquiries", "Inquiries")}
                       />
                       <Bar 
                         dataKey="followers" 
                         fill="#60a5fa"
-                        name={t("analytics.newFollowers", "New Followers")}
+                        name={getText("analytics.newFollowers", "New Followers")}
                       />
                     </BarChart>
                   </ResponsiveContainer>
@@ -264,9 +291,9 @@ export default function Analytics() {
           <TabsContent value="search" className="space-y-4">
             <Card className="bg-white/70 backdrop-blur-sm border-gray-200/50">
               <CardHeader>
-                <CardTitle>{t("analytics.searchInsights", "Search Insights")}</CardTitle>
+                <CardTitle>{getText("analytics.searchInsights", "Search Insights")}</CardTitle>
                 <CardDescription>
-                  {t("analytics.searchDescription", "Popular search terms leading to your profile")}
+                  {getText("analytics.searchDescription", "Popular search terms leading to your profile")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -282,7 +309,7 @@ export default function Analytics() {
                   ))}
                   {sortedSearchTerms.length === 0 && (
                     <p className="text-center text-gray-500 py-8">
-                      {t("analytics.noSearchData", "No search data available yet")}
+                      {getText("analytics.noSearchData", "No search data available yet")}
                     </p>
                   )}
                 </div>
@@ -291,15 +318,15 @@ export default function Analytics() {
 
             <Card className="bg-white/70 backdrop-blur-sm border-gray-200/50">
               <CardHeader>
-                <CardTitle>{t("analytics.audiencePreferences", "Audience Preferences")}</CardTitle>
+                <CardTitle>{getText("analytics.audiencePreferences", "Audience Preferences")}</CardTitle>
                 <CardDescription>
-                  {t("analytics.preferencesDescription", "What your audience is interested in")}
+                  {getText("analytics.preferencesDescription", "What your audience is interested in")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-medium mb-2">{t("analytics.topCategories", "Top Categories")}</h4>
+                    <h4 className="font-medium mb-2">{getText("analytics.topCategories", "Top Categories")}</h4>
                     <div className="space-y-2">
                       {preferences?.preferredCategories?.slice(0, 5).map((cat: string) => (
                         <div key={cat} className="flex items-center justify-between">
@@ -309,12 +336,12 @@ export default function Analytics() {
                           </div>
                         </div>
                       )) || (
-                        <p className="text-sm text-gray-500">{t("analytics.noData", "No data available")}</p>
+                        <p className="text-sm text-gray-500">{getText("analytics.noData", "No data available")}</p>
                       )}
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-medium mb-2">{t("analytics.topStyles", "Top Styles")}</h4>
+                    <h4 className="font-medium mb-2">{getText("analytics.topStyles", "Top Styles")}</h4>
                     <div className="space-y-2">
                       {preferences?.preferredStyles?.slice(0, 5).map((style: string) => (
                         <div key={style} className="flex items-center justify-between">
@@ -324,7 +351,7 @@ export default function Analytics() {
                           </div>
                         </div>
                       )) || (
-                        <p className="text-sm text-gray-500">{t("analytics.noData", "No data available")}</p>
+                        <p className="text-sm text-gray-500">{getText("analytics.noData", "No data available")}</p>
                       )}
                     </div>
                   </div>
