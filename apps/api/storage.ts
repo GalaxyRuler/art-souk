@@ -1265,10 +1265,6 @@ export class DatabaseStorage implements IStorage {
     await db.delete(galleries).where(eq(galleries.id, id));
   }
 
-  async deleteArtwork(id: number): Promise<void> {
-    await db.delete(artworks).where(eq(artworks.id, id));
-  }
-
   // Social features - Follow operations
   async createFollow(follow: InsertFollow): Promise<Follow> {
     const [newFollow] = await db.insert(follows).values(follow).returning();
@@ -2076,7 +2072,7 @@ export class DatabaseStorage implements IStorage {
     const user = await this.getUser(userId);
     if (!user) throw new Error('User not found');
 
-    const [type, id, index] = methodId.split('-');
+    const [type, _id, index] = methodId.split('-');
     const methodIndex = parseInt(index);
 
     if (type === 'artist' && user.role === 'artist') {
@@ -2118,7 +2114,7 @@ export class DatabaseStorage implements IStorage {
     const user = await this.getUser(userId);
     if (!user) throw new Error('User not found');
 
-    const [type, id, index] = methodId.split('-');
+    const [type, _id, index] = methodId.split('-');
     const methodIndex = parseInt(index);
 
     if (type === 'artist' && user.role === 'artist') {
@@ -2599,8 +2595,8 @@ export class DatabaseStorage implements IStorage {
   async checkSchedulingConflicts(
     entityType: string,
     entityId: number,
-    startDate: Date,
-    endDate: Date
+    _startDate: Date,
+    _endDate: Date
   ): Promise<SchedulingConflict[]> {
     return await db
       .select()
@@ -3039,7 +3035,7 @@ export class DatabaseStorage implements IStorage {
           });
           sent++;
         }
-      } catch (error) {
+      } catch {
         failed++;
       }
     }
