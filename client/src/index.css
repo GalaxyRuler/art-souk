@@ -73,6 +73,22 @@
     @apply font-sans antialiased bg-background text-foreground;
     font-feature-settings: "cv05", "cv11";
   }
+
+  /* Force modal to appear above everything */
+  .modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 10000 !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .modal-content {
+    position: relative !important;
+    z-index: 10001 !important;
+  }
   
   /* Typography improvements */
   h1, h2, h3, h4, h5, h6 {

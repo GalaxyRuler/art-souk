@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, forwardRef } from "react";
+import { createContext, useContext, useState, forwardRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -54,11 +55,32 @@ const DialogContent = forwardRef<
 >(({ className, children, ...props }, ref) => {
   const { open, onOpenChange } = useContext(DialogContext);
   
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [open]);
+  
   if (!open) return null;
   
-  return (
+  return createPortal(
     <div 
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black bg-opacity-50"
+      className="modal-overlay flex items-center justify-center p-4"
+      style={{ 
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 999999,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+      }}
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           onOpenChange(false);
@@ -68,9 +90,10 @@ const DialogContent = forwardRef<
       <div
         ref={ref}
         className={cn(
-          "relative bg-white rounded-lg shadow-lg max-w-lg w-full max-h-[90vh] overflow-y-auto",
+          "modal-content bg-white rounded-lg shadow-lg max-w-lg w-full max-h-[90vh] overflow-y-auto",
           className
         )}
+        style={{ zIndex: 1000000 }}
         {...props}
       >
         <button
@@ -82,7 +105,8 @@ const DialogContent = forwardRef<
         </button>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 });
 DialogContent.displayName = "DialogContent";
