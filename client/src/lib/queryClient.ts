@@ -39,7 +39,7 @@ export const apiRequest = async (url: string, options: RequestInit = {}) => {
   };
 
   // Properly serialize body to JSON if it exists
-  if (options.body && typeof options.body === 'object') {
+  if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
     requestOptions.body = JSON.stringify(options.body);
   } else if (options.body) {
     requestOptions.body = options.body;
@@ -52,6 +52,14 @@ export const apiRequest = async (url: string, options: RequestInit = {}) => {
   }
 
   return response.json();
+};
+
+// Enhanced mutation function for better type safety
+export const mutationFn = async (url: string, data: any, method: string = 'POST') => {
+  return apiRequest(url, {
+    method,
+    body: data,
+  });
 };
 
 export const queryClient = new QueryClient({

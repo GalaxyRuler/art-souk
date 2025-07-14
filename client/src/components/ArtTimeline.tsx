@@ -367,7 +367,7 @@ export function ArtTimeline({ events, artistId, onEventClick }: ArtTimelineProps
             <div className="space-y-4">
               {years.map(year => {
                 const yearEvents = eventsByYear[year] || [];
-                const maxEvents = Math.max(...Object.values(eventsByYear).map(e => e.length));
+                const maxEvents = Math.max(...Object.values(eventsByYear).map((e: TimelineEvent[]) => e.length));
                 
                 return (
                   <div key={year} className="flex items-center gap-4">
@@ -384,7 +384,7 @@ export function ArtTimeline({ events, artistId, onEventClick }: ArtTimelineProps
                     </div>
                     <div className="flex gap-1">
                       {Object.keys(eventTypeConfig).map(type => {
-                        const count = yearEvents.filter(e => e.type === type).length;
+                        const count = yearEvents.filter((e: TimelineEvent) => e.type === type).length;
                         if (count === 0) return null;
                         const config = eventTypeConfig[type as keyof typeof eventTypeConfig];
                         

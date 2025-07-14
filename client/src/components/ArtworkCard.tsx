@@ -60,7 +60,7 @@ export function ArtworkCard({
   const category = isRTL && artwork.categoryAr ? artwork.categoryAr : artwork.category;
 
   // Check if artwork is favorited
-  const { data: isFavorite } = useQuery({
+  const { data: isFavorite } = useQuery<{ isFavorite: boolean }>({
     queryKey: [`/api/favorites/${artwork.id}/check`],
     enabled: isAuthenticated,
   });

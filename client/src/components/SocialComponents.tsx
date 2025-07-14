@@ -31,6 +31,7 @@ import {
   Link as LinkIcon
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { Comment, User, Profile } from "@/types";
 
 // Follow Button Component
 interface FollowButtonProps {
@@ -46,7 +47,7 @@ export function FollowButton({ entityType, entityId, initialFollowing = false, c
   const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
 
-  const { data: followStatus } = useQuery({
+  const { data: followStatus } = useQuery<{ isFollowing: boolean }>({
     queryKey: [`/api/follows/${entityType}/${entityId}/check`],
     enabled: isAuthenticated,
   });
@@ -122,12 +123,12 @@ export function LikeButton({ entityType, entityId, showCount = true, className }
   const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
 
-  const { data: likeStatus } = useQuery({
+  const { data: likeStatus } = useQuery<{ isLiked: boolean }>({
     queryKey: [`/api/likes/${entityType}/${entityId}/check`],
     enabled: isAuthenticated,
   });
 
-  const { data: likeCounts } = useQuery({
+  const { data: likeCounts } = useQuery<{ likes: number }>({
     queryKey: [`/api/likes/${entityType}/${entityId}/counts`],
     enabled: showCount,
   });
@@ -207,7 +208,7 @@ export function CommentsSection({ entityType, entityId, className }: CommentsSec
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editContent, setEditContent] = useState("");
 
-  const { data: comments = [] } = useQuery({
+  const { data: comments = [] } = useQuery<Comment[]>({
     queryKey: [`/api/comments/${entityType}/${entityId}`],
   });
 
@@ -352,7 +353,7 @@ export function CommentsSection({ entityType, entityId, className }: CommentsSec
 
         {/* Comments List */}
         <div className="space-y-4">
-          {comments.map((comment: any) => (
+          {comments.map((comment: Comment) => (
             <div key={comment.id} className="flex gap-3">
               <Avatar className="h-8 w-8">
                 <AvatarImage src={comment.user?.profileImageUrl} />
@@ -467,11 +468,11 @@ export function UserProfile({ userId, className }: UserProfileProps) {
   const { user: currentUser, isAuthenticated } = useAuth();
   const { isRTL } = useLanguage();
 
-  const { data: profile } = useQuery({
+  const { data: profile } = useQuery<Profile>({
     queryKey: [`/api/profile/${userId}`],
   });
 
-  const { data: user } = useQuery({
+  const { data: user } = useQuery<User>({
     queryKey: [`/api/users/${userId}`],
   });
 

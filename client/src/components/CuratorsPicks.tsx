@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { ArtworkCard } from "@/components/ArtworkCard";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
+import { Artwork } from "@/types";
 
 export function CuratorsPicks() {
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
 
-  const { data: artworks = [], isLoading } = useQuery({
+  const { data: artworks = [], isLoading } = useQuery<Artwork[]>({
     queryKey: ["/api/artworks/curators-picks"],
   });
 
@@ -134,7 +135,7 @@ export function CuratorsPicks() {
     }
   ];
 
-  const displayArtworks = artworks.length > 0 ? artworks : mockArtworks;
+  const displayArtworks = artworks.length > 0 ? artworks : mockArtworks as Artwork[];
 
   return (
     <section className="py-16 bg-gray-50">
@@ -155,7 +156,7 @@ export function CuratorsPicks() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {displayArtworks.map((artwork) => (
+          {displayArtworks.map((artwork: Artwork) => (
             <ArtworkCard key={artwork.id} artwork={artwork} />
           ))}
         </div>
