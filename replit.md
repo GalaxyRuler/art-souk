@@ -198,6 +198,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- January 17, 2025: Collector Dashboard Currency Display and Translation System Fix (COMPLETED)
+  ✓ **Currency Display Resolution**: Fixed "$ SAR" display issue to show clean "SAR" currency format
+  ✓ **Translation System Verification**: Confirmed all collector-specific translation keys working properly
+  ✓ **Browser Cache Resolution**: Resolved caching issues preventing fixes from taking effect
+  ✓ **Debug Code Cleanup**: Removed temporary debugging components and cleaned up imports
+  ✓ **User Confirmation**: Collector dashboard now displaying proper currency formatting and complete bilingual support
+
 - January 17, 2025: Complete Lifecycle Analytics Translation System Fix (COMPLETED)
   ✓ **Translation Keys Added**: Added comprehensive analytics and lifecycle translation keys to i18n.ts
   ✓ **Distinct Page Titles**: Changed lifecycle analytics page title to "Lifecycle Analytics" (vs "Analytics & Insights")

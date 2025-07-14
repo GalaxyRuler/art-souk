@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useTranslation } from "react-i18next";
-import { i18n } from "@/lib/i18n";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -139,17 +138,6 @@ export default function CollectorDashboard() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-7xl mx-auto">
-          {/* Debug Info */}
-          {process.env.NODE_ENV === 'development' && (
-            <div className="mb-4 p-4 bg-yellow-100 border border-yellow-300 rounded-lg">
-              <p><strong>Debug Info:</strong></p>
-              <p>Title Translation: "{t("collector.dashboard.title", "Collector Dashboard")}"</p>
-              <p>Subtitle Translation: "{t("collector.dashboard.subtitle", "Manage your art collection and orders")}"</p>
-              <p>Total Orders Translation: "{t("collector.stats.totalOrders", "Total Orders")}"</p>
-              <p>Current Language: {i18n.language}</p>
-            </div>
-          )}
-
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-brand-navy to-brand-steel bg-clip-text text-transparent">
