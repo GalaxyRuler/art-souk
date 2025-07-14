@@ -1,4 +1,4 @@
-import { Server as SocketServer } from 'socket.io';
+import { Server as SocketServer, Socket } from 'socket.io';
 import { Server } from 'http';
 import { createAdapter } from '@socket.io/redis-adapter';
 import { createClient } from 'redis';
@@ -243,19 +243,19 @@ export function setupSocketIO(server: Server) {
 }
 
 // Helper functions (these would be imported from your service layer)
-async function verifySocketToken(token: string): Promise<SocketUser | null> {
+async function verifySocketToken(_token: string): Promise<SocketUser | null> {
   // Implement token verification logic
   // This is a placeholder - implement based on your authentication system
   return null;
 }
 
-async function getAuctionById(id: number) {
+async function getAuctionById(_id: number) {
   // Implement auction lookup logic
   // This would typically query your database
   return null;
 }
 
-async function placeBid(auctionId: number, userId: string, amount: number) {
+async function placeBid(_auctionId: number, _userId: string, _amount: number) {
   // Implement bid placement logic
   // This would typically interact with your database and validation logic
   return { success: false, error: 'Not implemented' };

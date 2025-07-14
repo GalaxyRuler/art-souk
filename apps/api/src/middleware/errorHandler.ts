@@ -70,7 +70,7 @@ export function errorHandler(
   err: Error | ApiError,
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) {
   // Default error properties
   let statusCode = 500;
@@ -154,7 +154,7 @@ export function errorHandler(
 }
 
 // Async error wrapper
-export function asyncHandler(fn: Function) {
+export function asyncHandler(fn: (req: Request, res: Response, next: NextFunction) => Promise<void>) {
   return (req: Request, res: Response, next: NextFunction) => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };

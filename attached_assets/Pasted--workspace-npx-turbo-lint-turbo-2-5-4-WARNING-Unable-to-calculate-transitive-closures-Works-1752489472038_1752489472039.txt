@@ -1,0 +1,135 @@
+~/workspace$ npx turbo lint
+turbo 2.5.4
+
+ WARNING  Unable to calculate transitive closures: Workspace 'packages/db' not found in lockfile.
+• Packages in scope: @art-souk/api, @art-souk/db, @art-souk/tsconfig, @art-souk/ui, @art-souk/web
+• Running lint in 5 packages
+• Remote caching disabled
+@art-souk/db:lint: cache hit, replaying logs 423e8fe78ae4a01e
+@art-souk/db:lint: 
+@art-souk/db:lint: > @art-souk/db@0.0.0 lint
+@art-souk/db:lint: > eslint "**/*.{ts,tsx,js,jsx}" --fix
+@art-souk/db:lint: 
+@art-souk/ui:lint: cache hit, replaying logs 25a8fa4650eae634
+@art-souk/ui:lint: 
+@art-souk/ui:lint: > @art-souk/ui@0.1.0 lint
+@art-souk/ui:lint: > tsc --noEmit
+@art-souk/ui:lint: 
+@art-souk/api:lint: cache miss, executing cc9bb87d501f1e6e
+@art-souk/api:lint: 
+@art-souk/web:lint: cache miss, executing f1e3acef571132c9
+@art-souk/web:lint: 
+@art-souk/web:lint: 
+@art-souk/web:lint: > @art-souk/web@0.0.0 lint
+@art-souk/web:lint: > eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0
+@art-souk/web:lint: 
+@art-souk/api:lint: 
+@art-souk/api:lint: > @art-souk/api@0.0.0 lint
+@art-souk/api:lint: > eslint . --ext ts --report-unused-disable-directives --max-warnings 0
+@art-souk/api:lint: 
+
+@art-souk/api:lint: /home/runner/workspace/apps/api/db.ts
+@art-souk/api:lint:   0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+@art-souk/api:lint: The file was not found in any of the provided project(s): db.ts
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/emailService.ts
+@art-souk/api:lint:   0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+@art-souk/api:lint: The file was not found in any of the provided project(s): emailService.ts
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/index.ts
+@art-souk/api:lint:   0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+@art-souk/api:lint: The file was not found in any of the provided project(s): index.ts
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/middleware/trackStage.ts
+@art-souk/api:lint:   0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+@art-souk/api:lint: The file was not found in any of the provided project(s): middleware/trackStage.ts
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/production.ts
+@art-souk/api:lint:   0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+@art-souk/api:lint: The file was not found in any of the provided project(s): production.ts
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/replitAuth.ts
+@art-souk/api:lint:   0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+@art-souk/api:lint: The file was not found in any of the provided project(s): replitAuth.ts
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/routes.ts
+@art-souk/api:lint:   0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+@art-souk/api:lint: The file was not found in any of the provided project(s): routes.ts
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/runSeed.ts
+@art-souk/api:lint:   0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+@art-souk/api:lint: The file was not found in any of the provided project(s): runSeed.ts
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/seed.ts
+@art-souk/api:lint:   0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+@art-souk/api:lint: The file was not found in any of the provided project(s): seed.ts
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/seedEmailTemplates.ts
+@art-souk/api:lint:   0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+@art-souk/api:lint: The file was not found in any of the provided project(s): seedEmailTemplates.ts
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/src/middleware/errorHandler.ts
+@art-souk/api:lint:    73:3   error    'next' is defined but never used. Allowed unused args must match /^_/u                                                   @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   108:31  warning  Unexpected any. Specify a different type                                                                                 @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   109:22  warning  Unexpected any. Specify a different type                                                                                 @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   113:22  warning  Unexpected any. Specify a different type                                                                                 @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   128:21  warning  Unexpected any. Specify a different type                                                                                 @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   157:34  error    The `Function` type accepts any function-like value.
+@art-souk/api:lint: Prefer explicitly defining any function parameters and return type  @typescript-eslint/no-unsafe-function-type
+@art-souk/api:lint:   177:42  warning  Unexpected any. Specify a different type                                                                                 @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   187:5   error    'setTimeout' is not defined                                                                                              no-undef
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/src/middleware/validation.ts
+@art-souk/api:lint:    95:32  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+@art-souk/api:lint:    95:38  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   107:24  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   109:17  error    Do not access Object.prototype method 'hasOwnProperty' from target object  no-prototype-builtins
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/src/queues/emailQueue.ts
+@art-souk/api:lint:    12:40  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   112:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/src/socket.ts
+@art-souk/api:lint:    13:39  error    'Socket' is not defined                                                      no-undef
+@art-souk/api:lint:   246:34  error    'token' is defined but never used. Allowed unused args must match /^_/u      @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   252:31  error    'id' is defined but never used. Allowed unused args must match /^_/u         @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   258:25  error    'auctionId' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   258:44  error    'userId' is defined but never used. Allowed unused args must match /^_/u     @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   258:60  error    'amount' is defined but never used. Allowed unused args must match /^_/u     @typescript-eslint/no-unused-vars
+@art-souk/api:lint:   265:81  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   269:83  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   273:89  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint:   277:89  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/storage.ts
+@art-souk/api:lint:   0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+@art-souk/api:lint: The file was not found in any of the provided project(s): storage.ts
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/tapPaymentService.ts
+@art-souk/api:lint:   0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+@art-souk/api:lint: The file was not found in any of the provided project(s): tapPaymentService.ts
+@art-souk/api:lint: 
+@art-souk/api:lint: /home/runner/workspace/apps/api/vite.ts
+@art-souk/api:lint:   0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+@art-souk/api:lint: The file was not found in any of the provided project(s): vite.ts
+@art-souk/api:lint: 
+@art-souk/api:lint: ✖ 37 problems (23 errors, 14 warnings)
+@art-souk/api:lint: 
+npm error Lifecycle script `lint` failed with error:
+npm error code 1
+npm error path /home/runner/workspace/apps/api
+npm error workspace @art-souk/api@0.0.0
+npm error location /home/runner/workspace/apps/api
+npm error command failed
+npm error command sh -c eslint . --ext ts --report-unused-disable-directives --max-warnings 0
+
+@art-souk/api:lint: ERROR: command finished with error: command (/home/runner/workspace/apps/api) /nix/store/lyx73qs96hfazl77arnwllwckq9dy012-nodejs-20.18.1-wrapped/bin/npm run lint exited (1)
+
+@art-souk/api#lint: command (/home/runner/workspace/apps/api) /nix/store/lyx73qs96hfazl77arnwllwckq9dy012-nodejs-20.18.1-wrapped/bin/npm run lint exited (1)
+
+ Tasks:    2 successful, 4 total
+Cached:    2 cached, 4 total
+  Time:    4.805s 
+Failed:    @art-souk/api#lint
+
+ ERROR  run failed: command  exited (1)

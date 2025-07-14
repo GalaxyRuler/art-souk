@@ -6,9 +6,8 @@ import {
   emailTemplates,
   newsletterSubscribers,
   type InsertEmailNotificationQueue,
-  type EmailTemplate,
 } from '@shared/schema';
-import { eq, and, lte, or, isNull } from 'drizzle-orm';
+import { eq, and, lte } from 'drizzle-orm';
 
 // Initialize SendGrid with API key when available
 if (process.env.SENDGRID_API_KEY) {
@@ -17,7 +16,7 @@ if (process.env.SENDGRID_API_KEY) {
 
 export class EmailService {
   private static instance: EmailService;
-  private processingInterval: NodeJS.Timeout | null = null;
+  private processingInterval: ReturnType<typeof setInterval> | null = null;
 
   private constructor() {
     // Start processing emails every minute
