@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 interface AccessibilityState {
   announceMessage: (message: string) => void;
@@ -25,32 +25,32 @@ export function AccessibilityProvider({ children }: AccessibilityProviderProps) 
 
   useEffect(() => {
     // Create screen reader announcer
-    const announcerElement = document.createElement("div");
-    announcerElement.setAttribute("aria-live", "polite");
-    announcerElement.setAttribute("aria-atomic", "true");
-    announcerElement.className = "sr-only";
-    announcerElement.id = "accessibility-announcer";
+    const announcerElement = document.createElement('div');
+    announcerElement.setAttribute('aria-live', 'polite');
+    announcerElement.setAttribute('aria-atomic', 'true');
+    announcerElement.className = 'sr-only';
+    announcerElement.id = 'accessibility-announcer';
     document.body.appendChild(announcerElement);
     setAnnouncer(announcerElement);
 
     // Detect keyboard navigation
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Tab") {
+      if (e.key === 'Tab') {
         setIsKeyboardNavigation(true);
-        document.body.setAttribute("data-keyboard-nav", "true");
+        document.body.setAttribute('data-keyboard-nav', 'true');
       }
     };
 
     const handleMouseDown = () => {
       setIsKeyboardNavigation(false);
-      document.body.removeAttribute("data-keyboard-nav");
+      document.body.removeAttribute('data-keyboard-nav');
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('mousedown', handleMouseDown);
 
     // Load saved font size
-    const savedFontSize = localStorage.getItem("art-souk-font-size");
+    const savedFontSize = localStorage.getItem('art-souk-font-size');
     if (savedFontSize) {
       const size = parseInt(savedFontSize, 10);
       setFontSize(size);
@@ -58,8 +58,8 @@ export function AccessibilityProvider({ children }: AccessibilityProviderProps) 
     }
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handleMouseDown);
       if (announcerElement.parentNode) {
         announcerElement.parentNode.removeChild(announcerElement);
       }
@@ -71,7 +71,7 @@ export function AccessibilityProvider({ children }: AccessibilityProviderProps) 
       announcer.textContent = message;
       // Clear after a short delay to allow multiple announcements
       setTimeout(() => {
-        announcer.textContent = "";
+        announcer.textContent = '';
       }, 1000);
     }
   };
@@ -80,19 +80,19 @@ export function AccessibilityProvider({ children }: AccessibilityProviderProps) 
     const element = document.querySelector(selector) as HTMLElement;
     if (element) {
       element.focus();
-      announceMessage(`Focused on ${element.getAttribute("aria-label") || element.tagName}`);
+      announceMessage(`Focused on ${element.getAttribute('aria-label') || element.tagName}`);
     }
   };
 
   const skipToContent = () => {
-    focusElement("#main-content");
+    focusElement('#main-content');
   };
 
   const updateFontSize = (size: number) => {
     const clampedSize = Math.max(12, Math.min(24, size));
     setFontSize(clampedSize);
     document.documentElement.style.fontSize = `${clampedSize}px`;
-    localStorage.setItem("art-souk-font-size", clampedSize.toString());
+    localStorage.setItem('art-souk-font-size', clampedSize.toString());
     announceMessage(`Font size set to ${clampedSize} pixels`);
   };
 
@@ -120,17 +120,13 @@ export function AccessibilityProvider({ children }: AccessibilityProviderProps) 
     resetFontSize,
   };
 
-  return (
-    <AccessibilityContext.Provider value={value}>
-      {children}
-    </AccessibilityContext.Provider>
-  );
+  return <AccessibilityContext.Provider value={value}>{children}</AccessibilityContext.Provider>;
 }
 
 export const useAccessibility = () => {
   const context = useContext(AccessibilityContext);
   if (!context) {
-    throw new Error("useAccessibility must be used within an AccessibilityProvider");
+    throw new Error('useAccessibility must be used within an AccessibilityProvider');
   }
   return context;
 };

@@ -12,7 +12,7 @@ import {
 import { relations } from 'drizzle-orm';
 import { createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
-import { users, artists } from '../schema';
+import { artists } from '../schema';
 
 // Enum for commission request status
 export const commissionStatusEnum = pgEnum('commission_status', [

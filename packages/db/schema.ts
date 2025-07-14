@@ -9,14 +9,12 @@ import {
   integer,
   decimal,
   boolean,
-  uuid,
   date,
   unique,
   pgEnum,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { createInsertSchema } from 'drizzle-zod';
-import { z } from 'zod';
 
 // Lifecycle Stage Enum - User Journey Funnel
 export const lifecycleStage = pgEnum('lifecycle_stage', [
@@ -1001,7 +999,7 @@ export const collectionArtworksRelations = relations(collectionArtworks, ({ one 
   artwork: one(artworks, { fields: [collectionArtworks.artworkId], references: [artworks.id] }),
 }));
 
-export const workshopsRelations = relations(workshops, ({ one, many }) => ({
+export const workshopsRelations = relations(workshops, ({ many }) => ({
   registrations: many(workshopRegistrations),
 }));
 
@@ -1013,7 +1011,7 @@ export const workshopRegistrationsRelations = relations(workshopRegistrations, (
   user: one(users, { fields: [workshopRegistrations.userId], references: [users.id] }),
 }));
 
-export const eventsRelations = relations(events, ({ one, many }) => ({
+export const eventsRelations = relations(events, ({ many }) => ({
   rsvps: many(eventRsvps),
 }));
 
@@ -1101,7 +1099,7 @@ export const portfolioSectionsRelations = relations(portfolioSections, ({ one })
 }));
 
 // Collector table relations
-export const purchaseOrdersRelations = relations(purchaseOrders, ({ one, many }) => ({
+export const purchaseOrdersRelations = relations(purchaseOrders, ({ one }) => ({
   user: one(users, { fields: [purchaseOrders.userId], references: [users.id] }),
   artwork: one(artworks, { fields: [purchaseOrders.artworkId], references: [artworks.id] }),
   shippingTracking: one(shippingTracking, {
@@ -1273,8 +1271,9 @@ export type AuctionResult = typeof auctionResults.$inferSelect;
 export type InsertCollection = typeof collections.$inferInsert;
 export type Collection = typeof collections.$inferSelect;
 
-export type InsertArticle = typeof articles.$inferInsert;
-export type Article = typeof articles.$inferSelect;
+// Articles table was removed - types commented out for reference
+// export type InsertArticle = typeof articles.$inferInsert;
+// export type Article = typeof articles.$inferSelect;
 
 export type InsertInquiry = typeof inquiries.$inferInsert;
 export type Inquiry = typeof inquiries.$inferSelect;
