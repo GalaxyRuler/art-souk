@@ -730,15 +730,26 @@ const resources = {
         favorites: {
           title: "My Favorites",
           empty: "No favorites yet",
-          emptyDesc: "Save artworks you love to see them here"
+          emptyDesc: "Save artworks you love to see them here",
+          emptyDescription: "Save artworks you love to see them here",
+          browseArtworks: "Browse Artworks"
         },
         inquiries: {
           title: "My Inquiries", 
           empty: "No inquiries yet",
-          emptyDesc: "Your artwork inquiries will appear here"
+          emptyDesc: "Your artwork inquiries will appear here",
+          emptyDescription: "Contact artists or galleries about artworks you're interested in",
+          browseArtworks: "Browse Artworks",
+          count: "inquiries",
+          response: "Response",
+          status: {
+            pending: "Pending",
+            responded: "Responded", 
+            closed: "Closed"
+          }
         },
         settings: {
-          title: "Settings",
+          title: "Account Settings",
           preferences: "Preferences", 
           notifications: "Notifications",
           privacy: "Privacy",
@@ -1794,15 +1805,26 @@ const resources = {
         favorites: {
           title: "مفضلاتي",
           empty: "لا توجد مفضلات بعد",
-          emptyDesc: "احفظ الأعمال الفنية التي تحبها لرؤيتها هنا"
+          emptyDesc: "احفظ الأعمال الفنية التي تحبها لرؤيتها هنا",
+          emptyDescription: "احفظ الأعمال الفنية التي تحبها لرؤيتها هنا",
+          browseArtworks: "تصفح الأعمال الفنية"
         },
         inquiries: {
           title: "استفساراتي", 
           empty: "لا توجد استفسارات بعد",
-          emptyDesc: "ستظهر استفساراتك حول الأعمال الفنية هنا"
+          emptyDesc: "ستظهر استفساراتك حول الأعمال الفنية هنا",
+          emptyDescription: "تواصل مع الفنانين أو المعارض حول الأعمال الفنية التي تهتم بها",
+          browseArtworks: "تصفح الأعمال الفنية",
+          count: "استفسارات",
+          response: "الرد",
+          status: {
+            pending: "في الانتظار",
+            responded: "تم الرد", 
+            closed: "مغلق"
+          }
         },
         settings: {
-          title: "الإعدادات",
+          title: "إعدادات الحساب",
           preferences: "التفضيلات", 
           notifications: "الإشعارات",
           privacy: "الخصوصية",

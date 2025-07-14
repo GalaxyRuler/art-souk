@@ -434,15 +434,15 @@ export default function Dashboard() {
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="favorites" className="flex items-center gap-2">
                   <Heart className="h-4 w-4" />
-                  Favorites
+                  {t("dashboard.favorites.title")}
                 </TabsTrigger>
                 <TabsTrigger value="inquiries" className="flex items-center gap-2">
                   <MessageSquare className="h-4 w-4" />
-                  Inquiries
+                  {t("dashboard.inquiries.title")}
                 </TabsTrigger>
                 <TabsTrigger value="settings" className="flex items-center gap-2">
                   <Settings className="h-4 w-4" />
-                  Settings
+                  {t("dashboard.settings.title")}
                 </TabsTrigger>
               </TabsList>
 
@@ -561,11 +561,11 @@ export default function Dashboard() {
                                           : "outline"
                                       }
                                     >
-                                      {inquiry.status}
+                                      {t(`dashboard.inquiries.status.${inquiry.status}`)}
                                     </Badge>
                                   </div>
                                   <p className="text-sm text-muted-foreground">
-                                    by {artistName}
+                                    {t("common.by")} {artistName}
                                   </p>
                                   <p className="text-sm text-muted-foreground line-clamp-2">
                                     {inquiry.message}
@@ -573,7 +573,7 @@ export default function Dashboard() {
                                   {inquiry.response && (
                                     <div className="mt-3 p-3 bg-brand-light-gold rounded-lg">
                                       <p className="text-sm font-medium text-brand-charcoal mb-1">
-                                        Response:
+                                        {t("dashboard.inquiries.response")}:
                                       </p>
                                       <p className="text-sm text-muted-foreground">
                                         {inquiry.response}
@@ -597,13 +597,13 @@ export default function Dashboard() {
                     <CardContent className="p-12 text-center">
                       <MessageSquare className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                       <h3 className="text-xl font-semibold text-brand-charcoal mb-2">
-                        No inquiries yet
+                        {t("dashboard.inquiries.empty")}
                       </h3>
                       <p className="text-muted-foreground mb-4">
-                        Contact artists or galleries about artworks you're interested in
+                        {t("dashboard.inquiries.emptyDescription")}
                       </p>
                       <Button className="bg-brand-gradient">
-                        Browse Artworks
+                        {t("dashboard.inquiries.browseArtworks")}
                       </Button>
                     </CardContent>
                   </Card>
@@ -613,12 +613,12 @@ export default function Dashboard() {
               {/* Settings Tab */}
               <TabsContent value="settings" className="space-y-6">
                 <h2 className="text-2xl font-semibold text-brand-charcoal">
-                  Account Settings
+                  {t("dashboard.settings.title")}
                 </h2>
                 
                 <Card className="card-elevated">
                   <CardHeader>
-                    <CardTitle>Preferences</CardTitle>
+                    <CardTitle>{t("dashboard.settings.preferences")}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
