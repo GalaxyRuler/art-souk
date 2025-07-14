@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { useLocation, useNavigate } from "wouter";
+import { useLocation } from "wouter";
 
 interface PurchaseOrder {
   id: number;
@@ -83,7 +83,7 @@ export default function CollectorDashboard() {
   const { user } = useAuth();
   const { t } = useTranslation();
   const { language, isRTL } = useLanguage();
-  const navigate = useNavigate();
+  const [location, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("orders");
   const [selectedOrder, setSelectedOrder] = useState<PurchaseOrder | null>(null);
 
@@ -422,7 +422,7 @@ export default function CollectorDashboard() {
                     </p>
                     <Button 
                       className="bg-brand-navy hover:bg-brand-steel"
-                      onClick={() => navigate("/artworks")}
+                      onClick={() => setLocation("/artworks")}
                     >
                       {t("collector.browseArtworks", "Browse Artworks")}
                     </Button>
