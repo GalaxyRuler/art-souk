@@ -297,17 +297,17 @@ export default function CollectorDashboard() {
                                       {t("collector.viewDetails", "View Details")}
                                     </Button>
                                   </DialogTrigger>
-                                  <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-                                    <DialogHeader className="pb-4 border-b border-gray-100">
-                                      <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                                        <Package className="h-5 w-5 text-brand-navy" />
+                                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-blue-50 to-purple-50">
+                                    <DialogHeader className="pb-6 border-b-2 border-blue-200 bg-white rounded-t-lg -m-6 mb-4 p-6">
+                                      <DialogTitle className="text-2xl font-bold text-blue-900 flex items-center gap-3">
+                                        <Package className="h-6 w-6 text-blue-600" />
                                         {t("collector.order.details", "Order Details")}
                                       </DialogTitle>
                                     </DialogHeader>
                                     
                                     <div className="space-y-6 py-4">
                                       {/* Order Summary Card */}
-                                      <div className="bg-gradient-to-r from-brand-navy/5 to-brand-gold/5 p-4 rounded-xl border border-brand-navy/10">
+                                      <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-6 rounded-xl border-2 border-blue-300 shadow-lg">
                                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                           <div className="text-center">
                                             <div className="text-2xl font-bold text-brand-navy mb-1">
@@ -346,10 +346,10 @@ export default function CollectorDashboard() {
                                       </div>
 
                                       {/* Artwork Details Card */}
-                                      <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                                      <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl border-2 border-green-200 shadow-lg">
                                         <div className="flex items-center gap-2 mb-4">
-                                          <Image className="h-5 w-5 text-brand-navy" />
-                                          <h4 className="font-semibold text-lg text-gray-900">
+                                          <Image className="h-6 w-6 text-green-600" />
+                                          <h4 className="font-bold text-xl text-green-800">
                                             {t("collector.order.artwork", "Artwork Details")}
                                           </h4>
                                         </div>
@@ -391,10 +391,10 @@ export default function CollectorDashboard() {
 
                                       {/* Shipping Information Card */}
                                       {order.shippingTracking && (
-                                        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                                        <div className="bg-gradient-to-r from-orange-50 to-red-50 p-6 rounded-xl border-2 border-orange-200 shadow-lg">
                                           <div className="flex items-center gap-2 mb-4">
-                                            <Truck className="h-5 w-5 text-brand-navy" />
-                                            <h4 className="font-semibold text-lg text-gray-900">
+                                            <Truck className="h-6 w-6 text-orange-600" />
+                                            <h4 className="font-bold text-xl text-orange-800">
                                               {t("collector.order.shipping", "Shipping Information")}
                                             </h4>
                                           </div>
@@ -427,10 +427,10 @@ export default function CollectorDashboard() {
                                       )}
 
                                       {/* Payment Information Card */}
-                                      <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl border-2 border-purple-200 shadow-lg">
                                         <div className="flex items-center gap-2 mb-4">
-                                          <CreditCard className="h-5 w-5 text-brand-navy" />
-                                          <h4 className="font-semibold text-lg text-gray-900">
+                                          <CreditCard className="h-6 w-6 text-purple-600" />
+                                          <h4 className="font-bold text-xl text-purple-800">
                                             {t("collector.order.payment", "Payment Information")}
                                           </h4>
                                         </div>
