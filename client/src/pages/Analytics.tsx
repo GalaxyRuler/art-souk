@@ -24,8 +24,26 @@ import { format } from "date-fns";
 export default function Analytics() {
   const { user } = useAuth();
   const { language, isRTL } = useLanguage();
-  const { t } = useTranslation();
+  const { t, ready } = useTranslation();
   const [dateRange, setDateRange] = useState({ start: 30, end: 0 }); // days ago
+
+  // Debug logging
+  console.log('Translation ready:', ready);
+  console.log('Translation function:', typeof t);
+  
+  // If translation is not ready, show loading
+  if (!ready) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-brand-navy"></div>
+            <p className="mt-4 text-gray-600">Loading analytics...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Get artist profile if user is an artist
   const { data: artists } = useQuery({
