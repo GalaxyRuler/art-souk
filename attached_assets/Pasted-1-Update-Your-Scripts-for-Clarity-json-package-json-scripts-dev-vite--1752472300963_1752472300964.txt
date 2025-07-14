@@ -1,0 +1,99 @@
+1. Update Your Scripts for Clarity
+json// package.json
+{
+  "scripts": {
+    "dev": "vite",                    // ✅ Works perfectly
+    "build": "vite build",            // ✅ Works perfectly
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit --skipLibCheck", // For CI/CD type checking
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives"
+  }
+}
+2. Add These Helpful Type Utilities
+typescript// client/src/types/global.d.ts
+// Global type definitions for your app
+
+// Image imports
+declare module '*.svg' {
+  const content: string;
+  export default content;
+}
+
+declare module '*.png' {
+  const content: string;
+  export default content;
+}
+
+declare module '*.jpg' {
+  const content: string;
+  export default content;
+}
+
+// CSS modules
+declare module '*.module.css' {
+  const classes: { [key: string]: string };
+  export default classes;
+}
+
+// Environment variables
+interface ImportMetaEnv {
+  readonly VITE_API_URL: string;
+  readonly VITE_REPL_ID: string;
+  // Add other env vars as needed
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+3. Leverage the New Path Aliases
+Now you can use cleaner imports:
+typescript// Before
+import { Button } from '../../../components/ui/button';
+import { useAuth } from '../../../hooks/useAuth';
+
+// After (with vite-tsconfig-paths)
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
+4. Take Advantage of vite-plugin-checker
+The plugin now provides:
+
+Real-time TypeScript errors in your browser
+ESLint errors in the overlay
+Better DX with immediate feedback
+
+5. Optional: Configure the Checker Plugin
+typescript// vite.config.ts
+import checker from 'vite-plugin-checker';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    tsconfigPaths(),
+    checker({
+      typescript: true,
+      eslint: {
+        lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
+      },
+      overlay: {
+        initialIsOpen: false, // Don't show overlay by default
+      },
+    }),
+  ],
+});
+🚀 Performance Benefits
+Your new setup provides:
+
+Faster builds: esbuild is 10-100x faster than standard TSC
+Better DX: Instant feedback on type errors
+Cleaner imports: Path aliases reduce ../.. confusion
+Modern React: New JSX transform = smaller bundles
+
+📋 For Your CI/CD Pipeline
+When setting up deployment:
+bash# For type checking in CI (won't fail on JSX)
+npm run type-check
+
+# For building (already working perfectly)
+npm run build
+
+# The build output in dist/ is production-ready
