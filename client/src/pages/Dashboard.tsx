@@ -352,7 +352,7 @@ export default function Dashboard() {
                       <Link to="/analytics">
                         <Button className="w-full h-11 bg-slate-700 hover:bg-slate-800 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                           <BarChart3 className="h-4 w-4 mr-3" />
-                          View Analytics - {user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
+                          View Analytics - {user?.roles?.includes('artist') && user?.roles?.includes('gallery') ? 'Artist & Gallery' : user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
                         </Button>
                       </Link>
                     </div>
@@ -389,7 +389,7 @@ export default function Dashboard() {
                         <Link to="/seller">
                           <Button className="w-full h-11 bg-orange-600 hover:bg-orange-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                             <Package className="h-4 w-4 mr-3" />
-                            Seller Dashboard - {user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
+                            Seller Dashboard - {user?.roles?.includes('artist') && user?.roles?.includes('gallery') ? 'Artist & Gallery' : user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
                           </Button>
                         </Link>
                       </div>
@@ -398,7 +398,7 @@ export default function Dashboard() {
                         <Link to="/artworks/manage">
                           <Button className="w-full h-11 bg-pink-600 hover:bg-pink-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                             <Palette className="h-4 w-4 mr-3" />
-                            Artwork Management - {user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
+                            Artwork Management - {user?.roles?.includes('artist') && user?.roles?.includes('gallery') ? 'Artist & Gallery' : user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
                           </Button>
                         </Link>
                       </div>
@@ -407,7 +407,7 @@ export default function Dashboard() {
                         <Link to="/shipping-management">
                           <Button className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                             <Package className="h-4 w-4 mr-3" />
-                            Shipping Management - {user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
+                            Shipping Management - {user?.roles?.includes('artist') && user?.roles?.includes('gallery') ? 'Artist & Gallery' : user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
                           </Button>
                         </Link>
                       </div>
@@ -416,7 +416,7 @@ export default function Dashboard() {
                         <Link to="/invoice-management">
                           <Button className="w-full h-11 bg-amber-600 hover:bg-amber-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                             <Settings className="h-4 w-4 mr-3" />
-                            Invoice Management - {user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
+                            Invoice Management - {user?.roles?.includes('artist') && user?.roles?.includes('gallery') ? 'Artist & Gallery' : user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
                           </Button>
                         </Link>
                       </div>
