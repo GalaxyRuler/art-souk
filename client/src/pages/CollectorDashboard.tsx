@@ -487,56 +487,167 @@ export default function CollectorDashboard() {
             </TabsContent>
 
             {/* Tracking Tab */}
-            <TabsContent value="tracking" className="space-y-4">
-              {orders?.filter(o => o.status === "shipped" || o.status === "delivered").map((order) => (
-                <Card key={order.id} className="bg-white/70 backdrop-blur-sm border-gray-200/50">
-                  <CardHeader>
-                    <CardTitle className="text-lg">
-                      {isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
-                    </CardTitle>
-                    <CardDescription>
-                      {order.shippingTracking?.trackingNumber && (
-                        <span className="font-mono">
-                          {t("collector.tracking.number", "Tracking #")}{order.shippingTracking.trackingNumber}
-                        </span>
-                      )}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">
-                          {t("collector.tracking.carrier", "Carrier")}
-                        </span>
-                        <span className="font-medium">
-                          {order.shippingTracking?.carrier || "N/A"}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">
-                          {t("collector.tracking.status", "Status")}
-                        </span>
-                        <Badge className={getStatusColor(order.shippingTracking?.status || order.status)}>
+            <TabsContent value="tracking" className="space-y-6">
+              {orders?.filter(o => o.status === "shipped" || o.status === "delivered").length > 0 ? (
+                orders?.filter(o => o.status === "shipped" || o.status === "delivered").map((order) => (
+                  <Card key={order.id} className="bg-gradient-to-r from-teal-50 to-blue-50 border-2 border-teal-200 shadow-lg hover:shadow-xl transition-shadow">
+                    <CardHeader className="pb-4">
+                      <div className="flex items-start gap-4">
+                        {/* Artwork Image */}
+                        <div 
+                          className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex-shrink-0 overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-shadow"
+                          onClick={() => setLocation(`/artwork/${order.artwork.id}`)}
+                        >
+                          {order.artwork.images?.[0] ? (
+                            <img
+                              src={order.artwork.images[0]}
+                              alt={isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
+                              className="w-full h-full object-cover hover:scale-105 transition-transform"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                              <Image className="h-6 w-6 text-gray-400" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* Artwork Details */}
+                        <div className="flex-1">
+                          <CardTitle 
+                            className="text-lg text-teal-800 cursor-pointer hover:text-teal-600 transition-colors"
+                            onClick={() => setLocation(`/artwork/${order.artwork.id}`)}
+                          >
+                            {isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
+                          </CardTitle>
+                          <CardDescription className="text-teal-600 mt-1">
+                            {order.shippingTracking?.trackingNumber && (
+                              <span className="font-mono bg-teal-100 px-2 py-1 rounded text-sm">
+                                <Truck className="inline h-3 w-3 mr-1" />
+                                {t("collector.tracking.number", "Tracking #")}{order.shippingTracking.trackingNumber}
+                              </span>
+                            )}
+                          </CardDescription>
+                        </div>
+                        
+                        {/* Status Badge */}
+                        <Badge className={cn(
+                          "px-3 py-1 text-sm font-semibold",
+                          order.shippingTracking?.status === "delivered" ? "bg-green-100 text-green-800 border-green-300" :
+                          order.shippingTracking?.status === "shipped" ? "bg-blue-100 text-blue-800 border-blue-300" :
+                          "bg-gray-100 text-gray-800 border-gray-300"
+                        )}>
                           {t(`collector.status.${order.shippingTracking?.status || order.status}`, order.shippingTracking?.status || order.status)}
                         </Badge>
                       </div>
-                      {order.shippingTracking?.estimatedDelivery && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600">
-                            {t("collector.tracking.estimated", "Estimated Delivery")}
-                          </span>
-                          <span className="font-medium">
-                            {format(new Date(order.shippingTracking.estimatedDelivery), "MMM dd, yyyy")}
-                          </span>
+                    </CardHeader>
+                    
+                    <CardContent className="space-y-4">
+                      {/* Shipping Progress */}
+                      <div className="bg-white/50 backdrop-blur-sm p-4 rounded-xl border border-teal-100">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Package className="h-5 w-5 text-teal-600" />
+                          <h4 className="font-bold text-teal-800">
+                            {t("collector.tracking.progress", "Shipping Progress")}
+                          </h4>
                         </div>
-                      )}
-                      <Button variant="outline" className="w-full">
-                        {t("collector.tracking.viewFull", "View Full Tracking")}
-                      </Button>
+                        
+                        {/* Progress Bar */}
+                        <div className="relative">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-xs text-gray-500">
+                              {t("collector.tracking.ordered", "Ordered")}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              {t("collector.tracking.shipped", "Shipped")}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              {t("collector.tracking.delivered", "Delivered")}
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div 
+                              className={cn(
+                                "h-2 rounded-full transition-all duration-300",
+                                order.shippingTracking?.status === "delivered" ? "bg-green-500 w-full" :
+                                order.shippingTracking?.status === "shipped" ? "bg-blue-500 w-2/3" :
+                                "bg-gray-400 w-1/3"
+                              )}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Tracking Details Grid */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-100">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Truck className="h-4 w-4 text-blue-600" />
+                            <span className="text-sm font-semibold text-blue-800">
+                              {t("collector.tracking.carrier", "Carrier")}
+                            </span>
+                          </div>
+                          <p className="text-lg font-bold text-blue-900">
+                            {order.shippingTracking?.carrier || "N/A"}
+                          </p>
+                        </div>
+                        
+                        {order.shippingTracking?.estimatedDelivery && (
+                          <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-100">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Calendar className="h-4 w-4 text-green-600" />
+                              <span className="text-sm font-semibold text-green-800">
+                                {t("collector.tracking.estimated", "Estimated Delivery")}
+                              </span>
+                            </div>
+                            <p className="text-lg font-bold text-green-900">
+                              {format(new Date(order.shippingTracking.estimatedDelivery), "MMM dd, yyyy")}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Action Buttons */}
+                      <div className="flex gap-3 pt-2">
+                        <Button 
+                          variant="outline" 
+                          className="flex-1 bg-white/50 border-teal-200 hover:bg-teal-50 hover:border-teal-300 transition-colors"
+                        >
+                          <ExternalLink className="h-4 w-4 mr-2" />
+                          {t("collector.tracking.viewFull", "View Full Tracking")}
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          className="bg-white/50 border-teal-200 hover:bg-teal-50 hover:border-teal-300 transition-colors"
+                          onClick={() => setLocation(`/artwork/${order.artwork.id}`)}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <Card className="bg-gradient-to-r from-teal-50 to-blue-50 border-2 border-teal-200 shadow-lg">
+                  <CardContent className="text-center py-16">
+                    <div className="bg-white/50 backdrop-blur-sm rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                      <Truck className="h-12 w-12 text-teal-400" />
                     </div>
+                    <h3 className="text-2xl font-bold text-teal-800 mb-3">
+                      {t("collector.noTracking", "No shipments to track")}
+                    </h3>
+                    <p className="text-teal-600 mb-6 max-w-md mx-auto">
+                      {t("collector.trackingDescription", "Your shipped orders will appear here with real-time tracking information")}
+                    </p>
+                    <Button 
+                      className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-xl font-semibold transition-colors"
+                      onClick={() => setLocation("/artworks")}
+                    >
+                      <Package className="h-5 w-5 mr-2" />
+                      {t("collector.browseArtworks", "Browse Artworks")}
+                    </Button>
                   </CardContent>
                 </Card>
-              ))}
+              )}
             </TabsContent>
 
             {/* Wishlist Tab */}
