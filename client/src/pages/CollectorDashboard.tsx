@@ -696,57 +696,130 @@ export default function CollectorDashboard() {
             </TabsContent>
 
             {/* Wishlist Tab */}
-            <TabsContent value="wishlist" className="space-y-4">
+            <TabsContent value="wishlist" className="space-y-6">
               {wishlistLoading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[...Array(4)].map((_, i) => (
-                    <Card key={i} className="animate-pulse">
-                      <CardContent className="h-48"></CardContent>
+                    <Card key={i} className="animate-pulse bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 shadow-lg">
+                      <CardContent className="h-64 p-6">
+                        <div className="flex items-start gap-4">
+                          <div className="w-24 h-24 bg-purple-200 rounded-xl"></div>
+                          <div className="flex-1 space-y-3">
+                            <div className="h-4 bg-purple-200 rounded w-3/4"></div>
+                            <div className="h-3 bg-purple-200 rounded w-1/2"></div>
+                            <div className="h-3 bg-purple-200 rounded w-1/4"></div>
+                          </div>
+                        </div>
+                      </CardContent>
                     </Card>
                   ))}
                 </div>
               ) : wishlist && wishlist.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {wishlist.map((item) => (
-                    <Card key={item.id} className="bg-white/70 backdrop-blur-sm border-gray-200/50 hover:shadow-lg transition-shadow">
-                      <CardContent className="p-4">
+                    <Card key={item.id} className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group">
+                      <CardContent className="p-6">
                         <div className="flex items-start gap-4">
-                          {item.artwork.images?.[0] && (
-                            <img
-                              src={item.artwork.images[0]}
-                              alt={isRTL ? item.artwork.titleAr || item.artwork.title : item.artwork.title}
-                              className="w-20 h-20 object-cover rounded-lg"
-                            />
-                          )}
-                          <div className="flex-1">
-                            <h4 className="font-semibold">
-                              {isRTL ? item.artwork.titleAr || item.artwork.title : item.artwork.title}
-                            </h4>
-                            <p className="text-sm text-gray-600">
-                              {isRTL ? item.artwork.artist.nameAr || item.artwork.artist.name : item.artwork.artist.name}
-                            </p>
-                            <div className="flex items-center justify-between mt-2">
-                              <span className="text-sm font-medium">
-                                {language === "ar" ? "ر.س" : "SAR"} {parseFloat(item.artwork.price).toLocaleString()}
-                              </span>
-                              <div className="flex items-center gap-1">
-                                {[...Array(5)].map((_, i) => (
-                                  <Star
-                                    key={i}
-                                    className={cn(
-                                      "h-3 w-3",
-                                      i < item.priority ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                                    )}
-                                  />
-                                ))}
-                              </div>
-                            </div>
-                            {item.notifyOnPriceChange && (
-                              <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
-                                <Bell className="h-3 w-3" />
-                                {t("collector.wishlist.priceAlerts", "Price alerts enabled")}
+                          {/* Artwork Image */}
+                          <div 
+                            className="w-24 h-24 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl flex-shrink-0 overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-shadow group-hover:ring-2 group-hover:ring-purple-300"
+                            onClick={() => setLocation(`/artwork/${item.artwork.id}`)}
+                          >
+                            {item.artwork.images?.[0] ? (
+                              <img
+                                src={item.artwork.images[0]}
+                                alt={isRTL ? item.artwork.titleAr || item.artwork.title : item.artwork.title}
+                                className="w-full h-full object-cover hover:scale-105 transition-transform"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-purple-200 flex items-center justify-center">
+                                <Image className="h-8 w-8 text-purple-400" />
                               </div>
                             )}
+                          </div>
+                          
+                          {/* Artwork Details */}
+                          <div className="flex-1 min-w-0">
+                            <h4 
+                              className="font-bold text-lg text-purple-800 cursor-pointer hover:text-purple-600 transition-colors line-clamp-2"
+                              onClick={() => setLocation(`/artwork/${item.artwork.id}`)}
+                            >
+                              {isRTL ? item.artwork.titleAr || item.artwork.title : item.artwork.title}
+                            </h4>
+                            <p className="text-sm text-purple-600 mt-1 font-medium">
+                              {isRTL ? item.artwork.artist.nameAr || item.artwork.artist.name : item.artwork.artist.name}
+                            </p>
+                            
+                            {/* Price and Priority */}
+                            <div className="mt-4 space-y-3">
+                              <div className="bg-white/70 backdrop-blur-sm p-3 rounded-lg border border-purple-100">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm font-semibold text-purple-700">
+                                    {t("collector.wishlist.currentPrice", "Current Price")}
+                                  </span>
+                                  <span className="text-lg font-bold text-purple-900">
+                                    {language === "ar" ? "ر.س" : "SAR"} {parseFloat(item.artwork.price).toLocaleString()}
+                                  </span>
+                                </div>
+                              </div>
+                              
+                              {/* Priority Stars */}
+                              <div className="bg-white/70 backdrop-blur-sm p-3 rounded-lg border border-purple-100">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm font-semibold text-purple-700">
+                                    {t("collector.wishlist.priority", "Priority")}
+                                  </span>
+                                  <div className="flex items-center gap-1">
+                                    {[...Array(5)].map((_, i) => (
+                                      <Star
+                                        key={i}
+                                        className={cn(
+                                          "h-4 w-4 transition-colors",
+                                          i < item.priority ? "fill-yellow-400 text-yellow-400" : "text-gray-300 hover:text-yellow-300"
+                                        )}
+                                      />
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              {/* Price Alert */}
+                              {item.notifyOnPriceChange && (
+                                <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-3 rounded-lg border border-green-100">
+                                  <div className="flex items-center gap-2">
+                                    <div className="bg-green-100 p-1 rounded-full">
+                                      <Bell className="h-3 w-3 text-green-600" />
+                                    </div>
+                                    <span className="text-sm font-semibold text-green-700">
+                                      {t("collector.wishlist.priceAlerts", "Price alerts enabled")}
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                            
+                            {/* Action Buttons */}
+                            <div className="flex gap-2 mt-4">
+                              <Button 
+                                size="sm"
+                                className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                                onClick={() => setLocation(`/artwork/${item.artwork.id}`)}
+                              >
+                                <Eye className="h-4 w-4 mr-2" />
+                                {t("collector.wishlist.view", "View")}
+                              </Button>
+                              <Button 
+                                size="sm"
+                                variant="outline"
+                                className="bg-white/50 border-purple-200 hover:bg-purple-50 hover:border-purple-300 transition-colors"
+                                onClick={() => {
+                                  // Remove from wishlist functionality would go here
+                                  console.log('Remove from wishlist:', item.id);
+                                }}
+                              >
+                                <Heart className="h-4 w-4 text-purple-600" />
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </CardContent>
@@ -754,16 +827,22 @@ export default function CollectorDashboard() {
                   ))}
                 </div>
               ) : (
-                <Card className="bg-white/70 backdrop-blur-sm border-gray-200/50">
-                  <CardContent className="text-center py-12">
-                    <Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">
+                <Card className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 shadow-lg">
+                  <CardContent className="text-center py-16">
+                    <div className="bg-white/50 backdrop-blur-sm rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                      <Heart className="h-12 w-12 text-purple-400" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-purple-800 mb-3">
                       {t("collector.noWishlist", "No items in wishlist")}
                     </h3>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-purple-600 mb-6 max-w-md mx-auto">
                       {t("collector.saveForLater", "Save artworks you love for later")}
                     </p>
-                    <Button className="bg-brand-navy hover:bg-brand-steel">
+                    <Button 
+                      className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                      onClick={() => setLocation("/artworks")}
+                    >
+                      <Heart className="h-5 w-5 mr-2" />
                       {t("collector.browseArtworks", "Browse Artworks")}
                     </Button>
                   </CardContent>
