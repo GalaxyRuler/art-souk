@@ -722,9 +722,11 @@ const resources = {
           views: "Profile Views"
         },
         viewAnalytics: "View Analytics",
+        lifecycleAnalytics: "Lifecycle Analytics",
         collectorDashboard: "Collector Dashboard",
         sellerDashboard: "Seller Dashboard",
         artworkManagement: "Artwork Management",
+        managementTools: "Management Tools",
         favorites: {
           title: "My Favorites",
           empty: "No favorites yet",
@@ -1784,9 +1786,11 @@ const resources = {
           views: "مشاهدات الملف الشخصي"
         },
         viewAnalytics: "عرض التحليلات",
+        lifecycleAnalytics: "تحليلات دورة الحياة",
         collectorDashboard: "لوحة المجمع",
         sellerDashboard: "لوحة البائع",
         artworkManagement: "إدارة الأعمال الفنية",
+        managementTools: "أدوات الإدارة",
         favorites: {
           title: "مفضلاتي",
           empty: "لا توجد مفضلات بعد",

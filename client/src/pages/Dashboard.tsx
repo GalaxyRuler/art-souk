@@ -29,6 +29,7 @@ interface UserProfile {
   phone?: string;
   location?: string;
   bio?: string;
+  profileViews?: number;
   preferences?: {
     newsletter: boolean;
     notifications: boolean;
@@ -313,26 +314,32 @@ export default function Dashboard() {
               <CardContent className="p-6">
                 <h3 className="font-semibold text-brand-charcoal mb-4">{t("dashboard.quickStats.title")}</h3>
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between p-2 rounded-lg hover:bg-brand-light-gold/50 cursor-pointer transition-colors">
                     <div className="flex items-center gap-2">
                       <Heart className="h-4 w-4 text-brand-purple" />
                       <span className="text-sm">{t("dashboard.quickStats.favorites")}</span>
                     </div>
-                    <Badge variant="secondary">{favorites?.length || 0}</Badge>
+                    <Badge variant="secondary" className="bg-brand-purple/10 text-brand-purple">
+                      {favorites?.length || 0}
+                    </Badge>
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between p-2 rounded-lg hover:bg-brand-light-gold/50 cursor-pointer transition-colors">
                     <div className="flex items-center gap-2">
                       <MessageSquare className="h-4 w-4 text-brand-purple" />
                       <span className="text-sm">{t("dashboard.quickStats.inquiries")}</span>
                     </div>
-                    <Badge variant="secondary">{inquiries?.length || 0}</Badge>
+                    <Badge variant="secondary" className="bg-brand-purple/10 text-brand-purple">
+                      {inquiries?.length || 0}
+                    </Badge>
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between p-2 rounded-lg hover:bg-brand-light-gold/50 cursor-pointer transition-colors">
                     <div className="flex items-center gap-2">
                       <Eye className="h-4 w-4 text-brand-purple" />
                       <span className="text-sm">{t("dashboard.quickStats.views")}</span>
                     </div>
-                    <Badge variant="secondary">---</Badge>
+                    <Badge variant="secondary" className="bg-brand-purple/10 text-brand-purple">
+                      {userProfile?.profileViews || 0}
+                    </Badge>
                   </div>
                 </div>
                 
@@ -348,66 +355,54 @@ export default function Dashboard() {
                 
                 {/* Lifecycle Analytics Dashboard Link */}
                 <Link to="/analytics/dashboard">
-                  <Button className="w-full mt-4 bg-brand-gradient hover:bg-brand-navy">
+                  <Button className="w-full mt-3 bg-brand-gradient hover:bg-brand-navy">
                     <BarChart3 className="h-4 w-4 mr-2" />
-                    Lifecycle Analytics
+                    {t("dashboard.lifecycleAnalytics")}
                   </Button>
                 </Link>
                 
                 {/* Collector Dashboard Link */}
                 <Link to="/collector">
-                  <Button className="w-full mt-4 bg-brand-navy hover:bg-brand-steel">
+                  <Button className="w-full mt-3 bg-brand-navy hover:bg-brand-steel">
                     <Package className="h-4 w-4 mr-2" />
                     {t("dashboard.collectorDashboard")}
                   </Button>
                 </Link>
                 
-                {/* Artwork Management Link - Always Available */}
-                <Link to="/artworks/manage">
-                  <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white">
-                    <Palette className="h-4 w-4 mr-2" />
-                    🎨 Artwork Management
-                  </Button>
-                </Link>
-                
-                {/* Seller Dashboard Link for Artists/Galleries */}
+                {/* Artist/Gallery Management Section */}
                 {(user?.roles?.includes('artist') || user?.roles?.includes('gallery')) && (
-                  <Link to="/seller">
-                    <Button className="w-full mt-2 bg-brand-navy hover:bg-brand-steel">
-                      <Package className="h-4 w-4 mr-2" />
-                      {t("dashboard.sellerDashboard")}
-                    </Button>
-                  </Link>
-                )}
-                
-                {/* Artwork Management Link for Artists/Galleries */}
-                {(user?.roles?.includes('artist') || user?.roles?.includes('gallery')) && (
-                  <Link to="/artworks/manage">
-                    <Button className="w-full mt-2 bg-brand-navy hover:bg-brand-steel">
-                      <Palette className="h-4 w-4 mr-2" />
-                      {t("artworks.management")}
-                    </Button>
-                  </Link>
-                )}
-                
-                {/* Shipping Management Link for Artists/Galleries */}
-                {(user?.roles?.includes('artist') || user?.roles?.includes('gallery')) && (
-                  <Link to="/shipping-management">
-                    <Button className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white">
-                      <Package className="h-4 w-4 mr-2" />
-                      {t("shipping.title")}
-                    </Button>
-                  </Link>
-                )}
-                
-                {/* Invoice Management Link for Artists/Galleries */}
-                {(user?.roles?.includes('artist') || user?.roles?.includes('gallery')) && (
-                  <Link to="/invoice-management">
-                    <Button className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white">
-                      <Settings className="h-4 w-4 mr-2" />
-                      {t("invoice.title")}
-                    </Button>
-                  </Link>
+                  <div className="mt-4 pt-4 border-t border-brand-light-gold">
+                    <h4 className="text-sm font-medium text-brand-charcoal mb-3">{t("dashboard.managementTools")}</h4>
+                    <div className="space-y-2">
+                      <Link to="/seller">
+                        <Button className="w-full bg-brand-navy hover:bg-brand-steel">
+                          <Package className="h-4 w-4 mr-2" />
+                          {t("dashboard.sellerDashboard")}
+                        </Button>
+                      </Link>
+                      
+                      <Link to="/artworks/manage">
+                        <Button className="w-full bg-brand-navy hover:bg-brand-steel">
+                          <Palette className="h-4 w-4 mr-2" />
+                          {t("artworks.management")}
+                        </Button>
+                      </Link>
+                      
+                      <Link to="/shipping-management">
+                        <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
+                          <Package className="h-4 w-4 mr-2" />
+                          {t("shipping.title")}
+                        </Button>
+                      </Link>
+                      
+                      <Link to="/invoice-management">
+                        <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white">
+                          <Settings className="h-4 w-4 mr-2" />
+                          {t("invoice.title")}
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
                 )}
 
               </CardContent>
