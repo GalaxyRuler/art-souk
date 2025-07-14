@@ -20,8 +20,7 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
-  Calendar,
-  DollarSign
+  Calendar
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
