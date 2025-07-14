@@ -34,8 +34,8 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     console.error('Error caught by boundary:', error, errorInfo);
     
     // Send to monitoring service if available
-    if (typeof window !== 'undefined' && window.Sentry) {
-      window.Sentry.captureException(error, {
+    if (typeof window !== 'undefined' && (window as any).Sentry) {
+      (window as any).Sentry.captureException(error, {
         contexts: {
           react: {
             componentStack: errorInfo.componentStack,

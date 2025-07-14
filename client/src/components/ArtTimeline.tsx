@@ -71,7 +71,7 @@ export function ArtTimeline({ events, artistId, onEventClick }: ArtTimelineProps
   );
 
   // Get unique years
-  const years = [...new Set(events.map(e => e.year))].sort();
+  const years = Array.from(new Set(events.map(e => e.year))).sort();
 
   // Filter events
   const filteredEvents = sortedEvents.filter(event => {
@@ -81,7 +81,7 @@ export function ArtTimeline({ events, artistId, onEventClick }: ArtTimelineProps
   });
 
   // Group events by year for chart view
-  const eventsByYear = years.reduce((acc, year) => {
+  const eventsByYear: Record<number, TimelineEvent[]> = years.reduce((acc, year) => {
     acc[year] = events.filter(e => e.year === year);
     return acc;
   }, {} as Record<number, TimelineEvent[]>);
@@ -367,7 +367,7 @@ export function ArtTimeline({ events, artistId, onEventClick }: ArtTimelineProps
             <div className="space-y-4">
               {years.map(year => {
                 const yearEvents = eventsByYear[year] || [];
-                const maxEvents = Math.max(...Object.values(eventsByYear).map((e: TimelineEvent[]) => e.length));
+                const maxEvents = Math.max(...Object.values(eventsByYear).map((eventArray: TimelineEvent[]) => eventArray.length));
                 
                 return (
                   <div key={year} className="flex items-center gap-4">
@@ -384,7 +384,7 @@ export function ArtTimeline({ events, artistId, onEventClick }: ArtTimelineProps
                     </div>
                     <div className="flex gap-1">
                       {Object.keys(eventTypeConfig).map(type => {
-                        const count = yearEvents.filter((e: TimelineEvent) => e.type === type).length;
+                        const count = yearEvents.filter((event: TimelineEvent) => event.type === type).length;
                         if (count === 0) return null;
                         const config = eventTypeConfig[type as keyof typeof eventTypeConfig];
                         

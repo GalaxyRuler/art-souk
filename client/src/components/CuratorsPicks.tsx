@@ -135,7 +135,7 @@ export function CuratorsPicks() {
     }
   ];
 
-  const displayArtworks = artworks.length > 0 ? artworks : mockArtworks as Artwork[];
+  const displayArtworks = (artworks && artworks.length > 0) ? artworks : mockArtworks as Artwork[];
 
   return (
     <section className="py-16 bg-gray-50">
