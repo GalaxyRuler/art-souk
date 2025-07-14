@@ -876,7 +876,34 @@ const resources = {
         engagementOverTime: "Engagement Over Time",
         noData: "No data available",
         loading: "Loading analytics...",
-        error: "Failed to load analytics data"
+        error: "Failed to load analytics data",
+        totalUsers: "Total Users",
+        allStages: "All Stages",
+        activeUsers: "Active Users",
+        exploring: "Exploring",
+        transacting: "Transacting",
+        makingPurchases: "Making Purchases",
+        advocates: "Advocates",
+        promoting: "Promoting",
+        funnel: "Funnel",
+        conversions: "Conversions",
+        interactions: "Interactions",
+        transitions: "Transitions",
+        lifecycleFunnel: "Lifecycle Funnel",
+        stageBreakdown: "Stage Breakdown",
+        conversionRates: "Conversion Rates",
+        recentInteractions: "Recent Interactions",
+        stageTransitions: "Stage Transitions"
+      },
+      lifecycle: {
+        stages: {
+          aware: "Aware",
+          join: "Join",
+          explore: "Explore",
+          transact: "Transact",
+          retain: "Retain",
+          advocate: "Advocate"
+        }
       },
       auth: {
         welcome: "Welcome to",
@@ -2012,7 +2039,34 @@ const resources = {
         engagementOverTime: "التفاعل عبر الوقت",
         noData: "لا توجد بيانات متاحة",
         loading: "جاري تحميل التحليلات...",
-        error: "فشل في تحميل بيانات التحليلات"
+        error: "فشل في تحميل بيانات التحليلات",
+        totalUsers: "إجمالي المستخدمين",
+        allStages: "جميع المراحل",
+        activeUsers: "المستخدمون النشطون",
+        exploring: "يستكشف",
+        transacting: "يتداول",
+        makingPurchases: "يقوم بالشراء",
+        advocates: "المدافعون",
+        promoting: "يروج",
+        funnel: "القمع",
+        conversions: "التحويلات",
+        interactions: "التفاعلات",
+        transitions: "الانتقالات",
+        lifecycleFunnel: "قمع دورة الحياة",
+        stageBreakdown: "تفصيل المراحل",
+        conversionRates: "معدلات التحويل",
+        recentInteractions: "التفاعلات الأخيرة",
+        stageTransitions: "انتقالات المراحل"
+      },
+      lifecycle: {
+        stages: {
+          aware: "يدرك",
+          join: "ينضم",
+          explore: "يستكشف",
+          transact: "يتداول",
+          retain: "يحتفظ",
+          advocate: "يدافع"
+        }
       }
     }
   }
