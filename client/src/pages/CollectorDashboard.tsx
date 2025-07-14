@@ -27,7 +27,11 @@ import {
   Image,
   Info,
   Eye,
-  ExternalLink
+  ExternalLink,
+  Hash,
+  DollarSign,
+  Download,
+  ShoppingBag
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -851,75 +855,182 @@ export default function CollectorDashboard() {
             </TabsContent>
 
             {/* Purchase History Tab */}
-            <TabsContent value="purchases" className="space-y-4">
-              <div className="mb-4">
-                <p className="text-sm text-gray-600">
-                  {t("collector.purchases.note", "All payments are handled directly between you and the artist/gallery")}
-                </p>
+            <TabsContent value="purchases" className="space-y-6">
+              <div className="bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-200 rounded-xl p-4 shadow-lg">
+                <div className="flex items-center gap-3">
+                  <div className="bg-emerald-100 p-2 rounded-full">
+                    <CreditCard className="h-5 w-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-emerald-800">{t("collector.purchases.paymentInfo", "Payment Information")}</h4>
+                    <p className="text-sm text-emerald-600">
+                      {t("collector.purchases.note", "All payments are handled directly between you and the artist/gallery")}
+                    </p>
+                  </div>
+                </div>
               </div>
+              
               {ordersLoading ? (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {[...Array(3)].map((_, i) => (
-                    <Card key={i} className="animate-pulse">
-                      <CardContent className="h-32"></CardContent>
+                    <Card key={i} className="animate-pulse bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-200 shadow-lg">
+                      <CardContent className="h-48 p-6">
+                        <div className="flex items-start gap-4">
+                          <div className="w-24 h-24 bg-emerald-200 rounded-xl"></div>
+                          <div className="flex-1 space-y-4">
+                            <div className="h-5 bg-emerald-200 rounded w-3/4"></div>
+                            <div className="h-4 bg-emerald-200 rounded w-1/2"></div>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="h-12 bg-emerald-200 rounded"></div>
+                              <div className="h-12 bg-emerald-200 rounded"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
                     </Card>
                   ))}
                 </div>
               ) : orders && orders.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {orders.filter(o => o.status === 'delivered' || o.paymentStatus === 'completed').map((order) => (
-                    <Card key={order.id} className="bg-white/70 backdrop-blur-sm border-gray-200/50">
-                      <CardHeader>
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <CardTitle className="text-lg">
-                              {isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
-                            </CardTitle>
-                            <CardDescription>
-                              {t("collector.purchases.purchased", "Purchased on")} {format(new Date(order.createdAt), "MMM dd, yyyy")}
-                            </CardDescription>
+                    <Card key={order.id} className="bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.01] group">
+                      <CardHeader className="pb-4">
+                        <div className="flex items-start gap-4">
+                          {/* Artwork Image */}
+                          <div 
+                            className="w-24 h-24 bg-gradient-to-br from-emerald-100 to-green-100 rounded-xl flex-shrink-0 overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-shadow group-hover:ring-2 group-hover:ring-emerald-300"
+                            onClick={() => setLocation(`/artwork/${order.artwork.id}`)}
+                          >
+                            {order.artwork.images?.[0] ? (
+                              <img
+                                src={order.artwork.images[0]}
+                                alt={isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
+                                className="w-full h-full object-cover hover:scale-105 transition-transform"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-emerald-200 flex items-center justify-center">
+                                <Image className="h-8 w-8 text-emerald-400" />
+                              </div>
+                            )}
                           </div>
-                          <Badge className="bg-green-100 text-green-800">
-                            {t("collector.purchases.completed", "Completed")}
-                          </Badge>
+                          
+                          <div className="flex-1">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <CardTitle 
+                                  className="text-xl font-bold text-emerald-800 cursor-pointer hover:text-emerald-600 transition-colors"
+                                  onClick={() => setLocation(`/artwork/${order.artwork.id}`)}
+                                >
+                                  {isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
+                                </CardTitle>
+                                <CardDescription className="text-emerald-600 mt-1 font-medium">
+                                  {t("collector.purchases.purchased", "Purchased on")} {format(new Date(order.createdAt), "MMM dd, yyyy")}
+                                </CardDescription>
+                              </div>
+                              <Badge className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-green-300 px-3 py-1 shadow-sm">
+                                <CheckCircle className="h-3 w-3 mr-1" />
+                                {t("collector.purchases.completed", "Completed")}
+                              </Badge>
+                            </div>
+                          </div>
                         </div>
                       </CardHeader>
-                      <CardContent>
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                          <div>
-                            <span className="text-gray-600">
-                              {t("collector.purchases.orderNumber", "Order Number")}
-                            </span>
-                            <p className="font-medium font-mono">{order.orderNumber}</p>
+                      
+                      <CardContent className="space-y-4">
+                        {/* Purchase Details */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="bg-white/70 backdrop-blur-sm p-4 rounded-lg border border-emerald-100">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Hash className="h-4 w-4 text-emerald-600" />
+                              <span className="text-sm font-semibold text-emerald-700">
+                                {t("collector.purchases.orderNumber", "Order Number")}
+                              </span>
+                            </div>
+                            <p className="font-mono text-lg font-bold text-emerald-900">{order.orderNumber}</p>
                           </div>
-                          <div>
-                            <span className="text-gray-600">
-                              {t("collector.purchases.amount", "Amount")}
-                            </span>
-                            <p className="font-medium">
+                          
+                          <div className="bg-white/70 backdrop-blur-sm p-4 rounded-lg border border-emerald-100">
+                            <div className="flex items-center gap-2 mb-2">
+                              <DollarSign className="h-4 w-4 text-emerald-600" />
+                              <span className="text-sm font-semibold text-emerald-700">
+                                {t("collector.purchases.amount", "Amount")}
+                              </span>
+                            </div>
+                            <p className="text-lg font-bold text-emerald-900">
                               {language === "ar" ? "ر.س" : "SAR"} {parseFloat(order.totalAmount).toLocaleString()}
                             </p>
                           </div>
                         </div>
-                        <div className="mt-4 pt-4 border-t">
-                          <p className="text-sm text-gray-600">
+                        
+                        {/* Artist Information */}
+                        <div className="bg-white/70 backdrop-blur-sm p-4 rounded-lg border border-emerald-100">
+                          <div className="flex items-center gap-2 mb-2">
+                            <User className="h-4 w-4 text-emerald-600" />
+                            <span className="text-sm font-semibold text-emerald-700">
+                              {t("collector.purchases.artist", "Artist")}
+                            </span>
+                          </div>
+                          <p className="text-lg font-bold text-emerald-900">
+                            {isRTL ? order.artwork.artist.nameAr || order.artwork.artist.name : order.artwork.artist.name}
+                          </p>
+                        </div>
+                        
+                        {/* Payment Note */}
+                        <div className="bg-gradient-to-r from-yellow-50 to-amber-50 p-4 rounded-lg border border-yellow-100">
+                          <div className="flex items-center gap-2 mb-2">
+                            <AlertCircle className="h-4 w-4 text-yellow-600" />
+                            <span className="text-sm font-semibold text-yellow-700">
+                              {t("collector.purchases.paymentMethod", "Payment Method")}
+                            </span>
+                          </div>
+                          <p className="text-sm text-yellow-700">
                             {t("collector.purchases.paymentNote", "Payment was arranged directly with the seller")}
                           </p>
+                        </div>
+                        
+                        {/* Action Buttons */}
+                        <div className="flex gap-3 pt-2">
+                          <Button 
+                            className="flex-1 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                            onClick={() => setLocation(`/artwork/${order.artwork.id}`)}
+                          >
+                            <Eye className="h-4 w-4 mr-2" />
+                            {t("collector.purchases.viewArtwork", "View Artwork")}
+                          </Button>
+                          <Button 
+                            variant="outline"
+                            className="bg-white/50 border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300 transition-colors"
+                            onClick={() => {
+                              // Download receipt functionality would go here
+                              console.log('Download receipt for order:', order.orderNumber);
+                            }}
+                          >
+                            <Download className="h-4 w-4" />
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>
                   ))}
                 </div>
               ) : (
-                <Card className="bg-white/70 backdrop-blur-sm border-gray-200/50">
-                  <CardContent className="text-center py-12">
-                    <CreditCard className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">
+                <Card className="bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-200 shadow-lg">
+                  <CardContent className="text-center py-16">
+                    <div className="bg-white/50 backdrop-blur-sm rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                      <ShoppingBag className="h-12 w-12 text-emerald-400" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-emerald-800 mb-3">
                       {t("collector.purchases.noPurchases", "No completed purchases yet")}
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-emerald-600 mb-6 max-w-md mx-auto">
                       {t("collector.purchases.startBuying", "Your completed purchases will appear here")}
                     </p>
+                    <Button 
+                      className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                      onClick={() => setLocation("/artworks")}
+                    >
+                      <ShoppingBag className="h-5 w-5 mr-2" />
+                      {t("collector.browseArtworks", "Browse Artworks")}
+                    </Button>
                   </CardContent>
                 </Card>
               )}
