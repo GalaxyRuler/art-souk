@@ -287,7 +287,7 @@ export default function CollectorDashboard() {
                                     {t("collector.pendingPayment", "Awaiting payment arrangement")}
                                   </p>
                                 )}
-                                <Dialog>
+                                <Dialog modal={true}>
                                   <DialogTrigger asChild>
                                     <Button variant="outline" size="sm">
                                       {t("collector.viewDetails", "View Details")}
