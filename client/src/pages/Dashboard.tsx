@@ -371,33 +371,33 @@ export default function Dashboard() {
                 
                 {/* Artist/Gallery Management Section */}
                 {(user?.roles?.includes('artist') || user?.roles?.includes('gallery')) && (
-                  <div className="mt-4 pt-4 border-t border-brand-light-gold">
-                    <h4 className="text-sm font-medium text-brand-charcoal mb-3">{t("dashboard.managementTools")}</h4>
-                    <div className="space-y-2">
+                  <div className="mt-6 pt-6 border-t border-brand-light-gold/30">
+                    <h4 className="text-sm font-semibold text-brand-charcoal mb-4 px-1">{t("dashboard.managementTools")}</h4>
+                    <div className="space-y-3">
                       <Link to="/seller">
-                        <Button className="w-full bg-brand-navy hover:bg-brand-steel">
-                          <Package className="h-4 w-4 mr-2" />
+                        <Button className="w-full h-11 bg-brand-navy hover:bg-brand-steel transition-all duration-200 shadow-sm hover:shadow-md">
+                          <Package className="h-4 w-4 mr-3" />
                           {t("dashboard.sellerDashboard")}
                         </Button>
                       </Link>
                       
                       <Link to="/artworks/manage">
-                        <Button className="w-full bg-brand-navy hover:bg-brand-steel">
-                          <Palette className="h-4 w-4 mr-2" />
+                        <Button className="w-full h-11 bg-brand-navy hover:bg-brand-steel transition-all duration-200 shadow-sm hover:shadow-md">
+                          <Palette className="h-4 w-4 mr-3" />
                           {t("artworks.management")}
                         </Button>
                       </Link>
                       
                       <Link to="/shipping-management">
-                        <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
-                          <Package className="h-4 w-4 mr-2" />
+                        <Button className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
+                          <Package className="h-4 w-4 mr-3" />
                           {t("shipping.title")}
                         </Button>
                       </Link>
                       
                       <Link to="/invoice-management">
-                        <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white">
-                          <Settings className="h-4 w-4 mr-2" />
+                        <Button className="w-full h-11 bg-amber-600 hover:bg-amber-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
+                          <Settings className="h-4 w-4 mr-3" />
                           {t("invoice.title")}
                         </Button>
                       </Link>
