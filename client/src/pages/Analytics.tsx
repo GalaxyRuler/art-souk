@@ -74,10 +74,15 @@ export default function Analytics() {
   // Get artist profile if user is an artist
   const { data: artists } = useQuery({
     queryKey: ["/api/artists"],
-    enabled: !!user && user.role === "artist",
+    enabled: !!user && user?.roles?.includes('artist'),
   });
 
-  const userArtist = artists?.find((artist: any) => artist.userId === user?.id);
+  const userArtist = artists?.find((artist: any) => 
+    artist.userId === user?.id || 
+    artist.userId === user?.claims?.sub ||
+    artist.userId === String(user?.id) ||
+    artist.userId === String(user?.claims?.sub)
+  );
 
   // Fetch analytics data
   const { data: analytics } = useQuery({
