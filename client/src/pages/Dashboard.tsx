@@ -343,37 +343,42 @@ export default function Dashboard() {
                   </div>
                 </div>
                 
-                {/* Analytics Link for Artists/Galleries */}
-                {(user?.roles?.includes('artist') || user?.roles?.includes('gallery')) && (
-                  <Link to="/analytics">
-                    <Button className="w-full mt-4 bg-brand-navy hover:bg-brand-steel">
-                      <BarChart3 className="h-4 w-4 mr-2" />
-                      {t("dashboard.viewAnalytics")}
+                {/* Dashboard Navigation */}
+                <div className="mt-6 space-y-3">
+                  
+                  {/* Analytics Links for Artists/Galleries */}
+                  {(user?.roles?.includes('artist') || user?.roles?.includes('gallery')) && (
+                    <Link to="/analytics">
+                      <Button className="w-full h-11 bg-brand-navy hover:bg-brand-steel transition-all duration-200 shadow-sm hover:shadow-md">
+                        <BarChart3 className="h-4 w-4 mr-3" />
+                        {t("dashboard.viewAnalytics")}
+                      </Button>
+                    </Link>
+                  )}
+                  
+                  {/* Lifecycle Analytics Dashboard Link */}
+                  <Link to="/analytics/dashboard">
+                    <Button className="w-full h-11 bg-brand-gradient hover:bg-brand-navy transition-all duration-200 shadow-sm hover:shadow-md">
+                      <BarChart3 className="h-4 w-4 mr-3" />
+                      {t("dashboard.lifecycleAnalytics")}
                     </Button>
                   </Link>
-                )}
-                
-                {/* Lifecycle Analytics Dashboard Link */}
-                <Link to="/analytics/dashboard">
-                  <Button className="w-full mt-3 bg-brand-gradient hover:bg-brand-navy">
-                    <BarChart3 className="h-4 w-4 mr-2" />
-                    {t("dashboard.lifecycleAnalytics")}
-                  </Button>
-                </Link>
-                
-                {/* Collector Dashboard Link */}
-                <Link to="/collector">
-                  <Button className="w-full mt-3 bg-brand-navy hover:bg-brand-steel">
-                    <Package className="h-4 w-4 mr-2" />
-                    {t("dashboard.collectorDashboard")}
-                  </Button>
-                </Link>
-                
-                {/* Artist/Gallery Management Section */}
-                {(user?.roles?.includes('artist') || user?.roles?.includes('gallery')) && (
-                  <div className="mt-6 pt-6 border-t border-brand-light-gold/30">
-                    <h4 className="text-sm font-semibold text-brand-charcoal mb-4 px-1">{t("dashboard.managementTools")}</h4>
-                    <div className="space-y-3">
+                  
+                  {/* Collector Dashboard Link */}
+                  <Link to="/collector">
+                    <Button className="w-full h-11 bg-brand-navy hover:bg-brand-steel transition-all duration-200 shadow-sm hover:shadow-md">
+                      <Package className="h-4 w-4 mr-3" />
+                      {t("dashboard.collectorDashboard")}
+                    </Button>
+                  </Link>
+                  
+                  {/* Artist/Gallery Management Section */}
+                  {(user?.roles?.includes('artist') || user?.roles?.includes('gallery')) && (
+                    <>
+                      <div className="pt-4 border-t border-brand-light-gold/30">
+                        <h4 className="text-sm font-semibold text-brand-charcoal mb-3 px-1">{t("dashboard.managementTools")}</h4>
+                      </div>
+                      
                       <Link to="/seller">
                         <Button className="w-full h-11 bg-brand-navy hover:bg-brand-steel transition-all duration-200 shadow-sm hover:shadow-md">
                           <Package className="h-4 w-4 mr-3" />
@@ -401,9 +406,9 @@ export default function Dashboard() {
                           {t("invoice.title")}
                         </Button>
                       </Link>
-                    </div>
-                  </div>
-                )}
+                    </>
+                  )}
+                </div>
 
               </CardContent>
             </Card>
