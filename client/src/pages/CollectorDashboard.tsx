@@ -21,7 +21,11 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
-  Calendar
+  Calendar,
+  User,
+  Tag,
+  Image,
+  Info
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -293,110 +297,155 @@ export default function CollectorDashboard() {
                                       {t("collector.viewDetails", "View Details")}
                                     </Button>
                                   </DialogTrigger>
-                                  <DialogContent className="max-w-2xl">
-                                    <DialogHeader>
-                                      <DialogTitle>
+                                  <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                                    <DialogHeader className="pb-4 border-b border-gray-100">
+                                      <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                        <Package className="h-5 w-5 text-brand-navy" />
                                         {t("collector.order.details", "Order Details")}
                                       </DialogTitle>
                                     </DialogHeader>
-                                    <div className="space-y-6">
-                                      {/* Order Info */}
-                                      <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                          <h4 className="font-semibold text-sm text-gray-600 mb-1">
-                                            {t("collector.order.number", "Order #")}
-                                          </h4>
-                                          <p className="font-mono text-sm">{order.orderNumber}</p>
-                                        </div>
-                                        <div>
-                                          <h4 className="font-semibold text-sm text-gray-600 mb-1">
-                                            {t("collector.order.date", "Order Date")}
-                                          </h4>
-                                          <p className="text-sm">{format(new Date(order.createdAt), "MMM dd, yyyy")}</p>
-                                        </div>
-                                        <div>
-                                          <h4 className="font-semibold text-sm text-gray-600 mb-1">
-                                            {t("collector.order.status", "Status")}
-                                          </h4>
-                                          <Badge className={cn("flex items-center gap-1 w-fit", getStatusColor(order.status))}>
-                                            {getStatusIcon(order.status)}
-                                            {t(`collector.status.${order.status}`, order.status)}
-                                          </Badge>
-                                        </div>
-                                        <div>
-                                          <h4 className="font-semibold text-sm text-gray-600 mb-1">
-                                            {t("collector.order.total", "Total Amount")}
-                                          </h4>
-                                          <p className="text-sm font-semibold">
-                                            {language === "ar" ? "ر.س" : "SAR"} {parseFloat(order.totalAmount).toLocaleString()}
-                                          </p>
-                                        </div>
-                                      </div>
-
-                                      {/* Artwork Info */}
-                                      <div className="border-t pt-4">
-                                        <h4 className="font-semibold text-sm text-gray-600 mb-3">
-                                          {t("collector.order.artwork", "Artwork Details")}
-                                        </h4>
-                                        <div className="flex gap-4">
-                                          {order.artwork.images?.[0] && (
-                                            <img
-                                              src={order.artwork.images[0]}
-                                              alt={isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
-                                              className="w-20 h-20 object-cover rounded-lg"
-                                            />
-                                          )}
-                                          <div>
-                                            <h5 className="font-semibold">
-                                              {isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
-                                            </h5>
-                                            <p className="text-sm text-gray-600">
-                                              {t("common.by")} {isRTL ? order.artwork.artist.nameAr || order.artwork.artist.name : order.artwork.artist.name}
-                                            </p>
+                                    
+                                    <div className="space-y-6 py-4">
+                                      {/* Order Summary Card */}
+                                      <div className="bg-gradient-to-r from-brand-navy/5 to-brand-gold/5 p-4 rounded-xl border border-brand-navy/10">
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                          <div className="text-center">
+                                            <div className="text-2xl font-bold text-brand-navy mb-1">
+                                              #{order.orderNumber.replace('ORD-', '')}
+                                            </div>
+                                            <div className="text-xs text-gray-500 uppercase tracking-wide">
+                                              {t("collector.order.number", "Order #")}
+                                            </div>
+                                          </div>
+                                          <div className="text-center">
+                                            <div className="text-2xl font-bold text-brand-navy mb-1">
+                                              {format(new Date(order.createdAt), "MMM dd")}
+                                            </div>
+                                            <div className="text-xs text-gray-500 uppercase tracking-wide">
+                                              {t("collector.order.date", "Order Date")}
+                                            </div>
+                                          </div>
+                                          <div className="text-center">
+                                            <Badge className={cn("flex items-center gap-1 w-fit mx-auto text-xs px-3 py-1", getStatusColor(order.status))}>
+                                              {getStatusIcon(order.status)}
+                                              {t(`collector.status.${order.status}`, order.status)}
+                                            </Badge>
+                                            <div className="text-xs text-gray-500 uppercase tracking-wide mt-1">
+                                              {t("collector.order.status", "Status")}
+                                            </div>
+                                          </div>
+                                          <div className="text-center">
+                                            <div className="text-2xl font-bold text-brand-gold mb-1">
+                                              {language === "ar" ? "ر.س" : "SAR"} {parseFloat(order.totalAmount).toLocaleString()}
+                                            </div>
+                                            <div className="text-xs text-gray-500 uppercase tracking-wide">
+                                              {t("collector.order.total", "Total Amount")}
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
 
-                                      {/* Shipping Info */}
-                                      {order.shippingTracking && (
-                                        <div className="border-t pt-4">
-                                          <h4 className="font-semibold text-sm text-gray-600 mb-3">
-                                            {t("collector.order.shipping", "Shipping Information")}
+                                      {/* Artwork Details Card */}
+                                      <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                                        <div className="flex items-center gap-2 mb-4">
+                                          <Image className="h-5 w-5 text-brand-navy" />
+                                          <h4 className="font-semibold text-lg text-gray-900">
+                                            {t("collector.order.artwork", "Artwork Details")}
                                           </h4>
-                                          <div className="grid grid-cols-2 gap-4">
-                                            <div>
-                                              <h5 className="font-semibold text-sm text-gray-600 mb-1">
-                                                {t("collector.tracking.number", "Tracking #")}
-                                              </h5>
-                                              <p className="font-mono text-sm">{order.shippingTracking.trackingNumber}</p>
-                                            </div>
-                                            <div>
-                                              <h5 className="font-semibold text-sm text-gray-600 mb-1">
-                                                {t("collector.tracking.carrier", "Carrier")}
-                                              </h5>
-                                              <p className="text-sm">{order.shippingTracking.carrier}</p>
-                                            </div>
-                                            {order.shippingTracking.estimatedDelivery && (
-                                              <div>
-                                                <h5 className="font-semibold text-sm text-gray-600 mb-1">
-                                                  {t("collector.tracking.estimated", "Estimated Delivery")}
-                                                </h5>
-                                                <p className="text-sm">{format(new Date(order.shippingTracking.estimatedDelivery), "MMM dd, yyyy")}</p>
+                                        </div>
+                                        <div className="flex gap-6">
+                                          <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex-shrink-0 overflow-hidden shadow-sm">
+                                            {order.artwork.images?.[0] ? (
+                                              <img
+                                                src={order.artwork.images[0]}
+                                                alt={isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
+                                                className="w-full h-full object-cover"
+                                              />
+                                            ) : (
+                                              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                                <Image className="h-8 w-8 text-gray-400" />
                                               </div>
                                             )}
+                                          </div>
+                                          <div className="flex-1">
+                                            <h5 className="font-bold text-lg text-gray-900 mb-2">
+                                              {isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
+                                            </h5>
+                                            <p className="text-sm text-gray-600 mb-3 flex items-center gap-1">
+                                              <User className="h-4 w-4" />
+                                              {t("common.by")} {isRTL ? order.artwork.artist.nameAr || order.artwork.artist.name : order.artwork.artist.name}
+                                            </p>
+                                            <div className="flex items-center gap-4 text-sm text-gray-500">
+                                              <span className="flex items-center gap-1">
+                                                <Tag className="h-4 w-4" />
+                                                Original Artwork
+                                              </span>
+                                              <span className="flex items-center gap-1">
+                                                <Calendar className="h-4 w-4" />
+                                                {format(new Date(order.createdAt), "yyyy")}
+                                              </span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      {/* Shipping Information Card */}
+                                      {order.shippingTracking && (
+                                        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                                          <div className="flex items-center gap-2 mb-4">
+                                            <Truck className="h-5 w-5 text-brand-navy" />
+                                            <h4 className="font-semibold text-lg text-gray-900">
+                                              {t("collector.order.shipping", "Shipping Information")}
+                                            </h4>
+                                          </div>
+                                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            <div className="bg-gray-50 p-3 rounded-lg">
+                                              <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                                                {t("collector.tracking.number", "Tracking #")}
+                                              </div>
+                                              <p className="text-sm font-mono font-semibold text-gray-900">{order.shippingTracking.trackingNumber}</p>
+                                            </div>
+                                            <div className="bg-gray-50 p-3 rounded-lg">
+                                              <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                                                {t("collector.tracking.carrier", "Carrier")}
+                                              </div>
+                                              <p className="text-sm font-semibold text-gray-900">{order.shippingTracking.carrier}</p>
+                                            </div>
+                                            <div className="bg-gray-50 p-3 rounded-lg">
+                                              <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                                                {t("collector.tracking.estimated", "Estimated Delivery")}
+                                              </div>
+                                              <p className="text-sm font-semibold text-gray-900">
+                                                {order.shippingTracking.estimatedDelivery 
+                                                  ? format(new Date(order.shippingTracking.estimatedDelivery), "MMM dd, yyyy")
+                                                  : t("collector.order.tbd", "TBD")
+                                                }
+                                              </p>
+                                            </div>
                                           </div>
                                         </div>
                                       )}
 
-                                      {/* Payment Info */}
-                                      <div className="border-t pt-4">
-                                        <h4 className="font-semibold text-sm text-gray-600 mb-3">
-                                          {t("collector.order.payment", "Payment Information")}
-                                        </h4>
-                                        <div className="bg-blue-50 p-3 rounded-lg">
-                                          <p className="text-sm text-blue-700">
-                                            {t("collector.purchases.note", "All payments are handled directly between you and the artist/gallery")}
-                                          </p>
+                                      {/* Payment Information Card */}
+                                      <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                                        <div className="flex items-center gap-2 mb-4">
+                                          <CreditCard className="h-5 w-5 text-brand-navy" />
+                                          <h4 className="font-semibold text-lg text-gray-900">
+                                            {t("collector.order.payment", "Payment Information")}
+                                          </h4>
+                                        </div>
+                                        <div className="bg-gradient-to-r from-blue-50 to-brand-gold/10 p-4 rounded-lg border border-blue-100">
+                                          <div className="flex items-start gap-3">
+                                            <Info className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                                            <div>
+                                              <p className="text-sm font-medium text-blue-900 mb-1">
+                                                Direct Payment Model
+                                              </p>
+                                              <p className="text-sm text-blue-700">
+                                                {t("collector.purchases.note", "All payments are handled directly between you and the artist/gallery")}
+                                              </p>
+                                            </div>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
