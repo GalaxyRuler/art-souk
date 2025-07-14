@@ -1,10 +1,24 @@
-import { pgTable, serial, text, timestamp, pgEnum, integer, jsonb, boolean } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  pgEnum,
+  integer,
+  jsonb,
+  boolean,
+} from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 // DSAR (Data Subject Access Request) types
 export const dsarTypeEnum = pgEnum('dsar_type', ['access', 'delete', 'correct', 'portability']);
-export const dsarStatusEnum = pgEnum('dsar_status', ['pending', 'in_progress', 'completed', 'rejected']);
+export const dsarStatusEnum = pgEnum('dsar_status', [
+  'pending',
+  'in_progress',
+  'completed',
+  'rejected',
+]);
 
 // DSAR requests table
 export const dsarRequests = pgTable('dsar_requests', {
@@ -17,7 +31,7 @@ export const dsarRequests = pgTable('dsar_requests', {
   createdAt: timestamp('created_at').defaultNow(),
   resolvedAt: timestamp('resolved_at'),
   resolvedBy: text('resolved_by'),
-  notes: text('notes')
+  notes: text('notes'),
 });
 
 // Audit logs table for immutable logging
@@ -31,12 +45,23 @@ export const auditLogs = pgTable('audit_logs', {
   newData: jsonb('new_data'),
   ipAddress: text('ip_address'),
   userAgent: text('user_agent'),
-  createdAt: timestamp('created_at').defaultNow().notNull()
+  createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
 // Reports table for content moderation
-export const reportStatusEnum = pgEnum('report_status', ['pending', 'reviewing', 'resolved', 'dismissed']);
-export const reportTypeEnum = pgEnum('report_type', ['spam', 'inappropriate', 'fake', 'copyright', 'other']);
+export const reportStatusEnum = pgEnum('report_status', [
+  'pending',
+  'reviewing',
+  'resolved',
+  'dismissed',
+]);
+export const reportTypeEnum = pgEnum('report_type', [
+  'spam',
+  'inappropriate',
+  'fake',
+  'copyright',
+  'other',
+]);
 
 export const reports = pgTable('reports', {
   id: serial('id').primaryKey(),
@@ -49,7 +74,7 @@ export const reports = pgTable('reports', {
   reviewedBy: text('reviewed_by'),
   reviewedAt: timestamp('reviewed_at'),
   resolution: text('resolution'),
-  createdAt: timestamp('created_at').defaultNow()
+  createdAt: timestamp('created_at').defaultNow(),
 });
 
 // Auction update requests for maker-checker pattern
@@ -64,13 +89,13 @@ export const auctionUpdateRequests = pgTable('auction_update_requests', {
   rejectedBy: text('rejected_by'),
   rejectedAt: timestamp('rejected_at'),
   rejectionReason: text('rejection_reason'),
-  createdAt: timestamp('created_at').defaultNow()
+  createdAt: timestamp('created_at').defaultNow(),
 });
 
 // KYC document types based on Salla and Saudi regulations
 export const kycDocumentTypeEnum = pgEnum('kyc_document_type', [
   'national_id',
-  'commercial_registration', 
+  'commercial_registration',
   'business_license',
   'articles_of_association',
   'address_proof',
@@ -78,7 +103,7 @@ export const kycDocumentTypeEnum = pgEnum('kyc_document_type', [
   'authorized_personnel_list',
   'beneficial_owners_list',
   'tax_certificate',
-  'other'
+  'other',
 ]);
 
 export const kycStatusEnum = pgEnum('kyc_status', [
@@ -87,7 +112,7 @@ export const kycStatusEnum = pgEnum('kyc_status', [
   'approved',
   'rejected',
   'expired',
-  'requires_update'
+  'requires_update',
 ]);
 
 // Enhanced Seller KYC documents with retention policy
@@ -111,7 +136,7 @@ export const sellerKycDocs = pgTable('seller_kyc_docs', {
   reviewedAt: timestamp('reviewed_at'),
   uploadedAt: timestamp('uploaded_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
-  expiresAt: timestamp('expires_at').notNull() // 10-year retention policy
+  expiresAt: timestamp('expires_at').notNull(), // 10-year retention policy
 });
 
 // Shipping addresses with retention policy
@@ -128,38 +153,38 @@ export const shippingAddresses = pgTable('shipping_addresses', {
   phoneNumber: text('phone_number'),
   deliveredAt: timestamp('delivered_at'),
   createdAt: timestamp('created_at').defaultNow(),
-  expiresAt: timestamp('expires_at').notNull() // For retention policy
+  expiresAt: timestamp('expires_at').notNull(), // For retention policy
 });
 
 // Insert schemas
-export const insertDsarRequestSchema = createInsertSchema(dsarRequests).omit({ 
-  id: true, 
+export const insertDsarRequestSchema = createInsertSchema(dsarRequests).omit({
+  id: true,
   createdAt: true,
   resolvedAt: true,
-  resolvedBy: true 
+  resolvedBy: true,
 });
 
-export const insertAuditLogSchema = createInsertSchema(auditLogs).omit({ 
-  id: true, 
-  createdAt: true 
+export const insertAuditLogSchema = createInsertSchema(auditLogs).omit({
+  id: true,
+  createdAt: true,
 });
 
-export const insertReportSchema = createInsertSchema(reports).omit({ 
-  id: true, 
+export const insertReportSchema = createInsertSchema(reports).omit({
+  id: true,
   createdAt: true,
   reviewedAt: true,
   reviewedBy: true,
-  resolution: true 
+  resolution: true,
 });
 
-export const insertAuctionUpdateRequestSchema = createInsertSchema(auctionUpdateRequests).omit({ 
-  id: true, 
+export const insertAuctionUpdateRequestSchema = createInsertSchema(auctionUpdateRequests).omit({
+  id: true,
   createdAt: true,
   approvedAt: true,
   approvedBy: true,
   rejectedAt: true,
   rejectedBy: true,
-  rejectionReason: true
+  rejectionReason: true,
 });
 
 // KYC verification requirements based on Saudi regulations
@@ -173,7 +198,7 @@ export const kycVerificationRequirements = pgTable('kyc_verification_requirement
   validityPeriod: integer('validity_period'), // months
   sortOrder: integer('sort_order').default(0),
   createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').defaultNow()
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
 // Enhanced KYC verification tracking
@@ -193,31 +218,33 @@ export const kycVerificationSessions = pgTable('kyc_verification_sessions', {
   rejectionReasons: jsonb('rejection_reasons'),
   startedAt: timestamp('started_at').defaultNow(),
   completedAt: timestamp('completed_at'),
-  expiresAt: timestamp('expires_at')
+  expiresAt: timestamp('expires_at'),
 });
 
-export const insertSellerKycDocSchema = createInsertSchema(sellerKycDocs).omit({ 
-  id: true, 
+export const insertSellerKycDocSchema = createInsertSchema(sellerKycDocs).omit({
+  id: true,
   uploadedAt: true,
   updatedAt: true,
-  reviewedAt: true
+  reviewedAt: true,
 });
 
-export const insertKycVerificationRequirementSchema = createInsertSchema(kycVerificationRequirements).omit({ 
-  id: true, 
+export const insertKycVerificationRequirementSchema = createInsertSchema(
+  kycVerificationRequirements
+).omit({
+  id: true,
   createdAt: true,
-  updatedAt: true
+  updatedAt: true,
 });
 
-export const insertKycVerificationSessionSchema = createInsertSchema(kycVerificationSessions).omit({ 
-  id: true, 
+export const insertKycVerificationSessionSchema = createInsertSchema(kycVerificationSessions).omit({
+  id: true,
   startedAt: true,
-  completedAt: true
+  completedAt: true,
 });
 
-export const insertShippingAddressSchema = createInsertSchema(shippingAddresses).omit({ 
-  id: true, 
-  createdAt: true 
+export const insertShippingAddressSchema = createInsertSchema(shippingAddresses).omit({
+  id: true,
+  createdAt: true,
 });
 
 // Types
@@ -237,7 +264,9 @@ export type SellerKycDoc = typeof sellerKycDocs.$inferSelect;
 export type InsertSellerKycDoc = z.infer<typeof insertSellerKycDocSchema>;
 
 export type KycVerificationRequirement = typeof kycVerificationRequirements.$inferSelect;
-export type InsertKycVerificationRequirement = z.infer<typeof insertKycVerificationRequirementSchema>;
+export type InsertKycVerificationRequirement = z.infer<
+  typeof insertKycVerificationRequirementSchema
+>;
 
 export type KycVerificationSession = typeof kycVerificationSessions.$inferSelect;
 export type InsertKycVerificationSession = z.infer<typeof insertKycVerificationSessionSchema>;
