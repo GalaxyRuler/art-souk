@@ -490,9 +490,9 @@ export default function CollectorDashboard() {
 
             {/* Tracking Tab */}
             <TabsContent value="tracking" className="space-y-6">
-              {orders?.filter(o => o.status === "shipped" || o.status === "delivered").length > 0 ? (
-                orders?.filter(o => o.status === "shipped" || o.status === "delivered").map((order) => (
-                  <Card key={order.id} className="bg-gradient-to-r from-teal-50 to-blue-50 border-2 border-teal-200 shadow-lg hover:shadow-xl transition-shadow">
+              {orders?.filter(o => o.status === "shipped" || o.status === "delivered" || o.shippingTracking?.status).length > 0 ? (
+                orders?.filter(o => o.status === "shipped" || o.status === "delivered" || o.shippingTracking?.status).map((order) => (
+                  <Card key={order.id} className="bg-gradient-to-r from-cyan-100 to-blue-100 border-4 border-cyan-300 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
                     <CardHeader className="pb-4">
                       <div className="flex items-start gap-4">
                         {/* Artwork Image */}
@@ -612,12 +612,19 @@ export default function CollectorDashboard() {
                       <div className="flex gap-3 pt-2">
                         <Button 
                           variant="outline" 
-                          className="flex-1 bg-white/50 border-teal-200 hover:bg-teal-50 hover:border-teal-300 transition-colors"
+                          className="flex-1 bg-gradient-to-r from-cyan-200 to-blue-200 border-2 border-cyan-400 hover:from-cyan-300 hover:to-blue-300 hover:border-cyan-500 transition-all duration-300 font-bold text-cyan-800 shadow-lg hover:shadow-xl"
                           onClick={() => {
+                            console.log('🔍 Tracking button clicked!');
+                            console.log('Order:', order);
+                            console.log('Shipping tracking:', order.shippingTracking);
+                            
                             if (order.shippingTracking?.trackingNumber && order.shippingTracking?.carrier) {
                               // Generate tracking URL based on carrier
                               const trackingNumber = order.shippingTracking.trackingNumber;
                               let trackingUrl = '';
+                              
+                              console.log('📦 Carrier:', order.shippingTracking.carrier);
+                              console.log('🏷️ Tracking Number:', trackingNumber);
                               
                               switch (order.shippingTracking.carrier.toLowerCase()) {
                                 case 'dhl':
@@ -641,14 +648,16 @@ export default function CollectorDashboard() {
                                   trackingUrl = `https://www.google.com/search?q=${encodeURIComponent(order.shippingTracking.carrier + ' tracking ' + trackingNumber)}`;
                               }
                               
+                              console.log('🌐 Opening URL:', trackingUrl);
                               window.open(trackingUrl, '_blank');
                             } else {
                               // Show notification if no tracking info available
-                              console.log('No tracking information available');
+                              console.log('❌ No tracking information available');
+                              alert('No tracking information available for this order');
                             }
                           }}
                         >
-                          <ExternalLink className="h-4 w-4 mr-2" />
+                          <ExternalLink className="h-5 w-5 mr-2" />
                           {t("collector.tracking.viewFull", "View Full Tracking")}
                         </Button>
                         <Button 
