@@ -861,6 +861,23 @@ const resources = {
         appealRequests: "Appeal Requests",
         featured: "Featured"
       },
+      analytics: {
+        title: "Analytics & Insights",
+        subtitle: "Track your performance and understand your audience",
+        totalViews: "Total Views",
+        fromLastMonth: "from last month",
+        followers: "Followers",
+        inquiries: "Inquiries",
+        profileViews: "Profile Views",
+        engagement: "Engagement",
+        searches: "Searches",
+        topSearchTerms: "Top Search Terms",
+        viewsOverTime: "Views Over Time",
+        engagementOverTime: "Engagement Over Time",
+        noData: "No data available",
+        loading: "Loading analytics...",
+        error: "Failed to load analytics data"
+      },
       auth: {
         welcome: "Welcome to",
         artSouk: "Art Souk",
@@ -1979,6 +1996,23 @@ const resources = {
         autoDetected: "تم اكتشافه تلقائياً",
         appealRequests: "طلبات الاستئناف",
         featured: "مميز"
+      },
+      analytics: {
+        title: "التحليلات والرؤى",
+        subtitle: "تتبع أداءك وافهم جمهورك",
+        totalViews: "إجمالي المشاهدات",
+        fromLastMonth: "من الشهر الماضي",
+        followers: "المتابعون",
+        inquiries: "الاستفسارات",
+        profileViews: "مشاهدات الملف الشخصي",
+        engagement: "التفاعل",
+        searches: "عمليات البحث",
+        topSearchTerms: "أهم مصطلحات البحث",
+        viewsOverTime: "المشاهدات عبر الوقت",
+        engagementOverTime: "التفاعل عبر الوقت",
+        noData: "لا توجد بيانات متاحة",
+        loading: "جاري تحميل التحليلات...",
+        error: "فشل في تحميل بيانات التحليلات"
       }
     }
   }

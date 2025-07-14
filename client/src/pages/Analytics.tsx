@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -22,7 +23,8 @@ import { format } from "date-fns";
 
 export default function Analytics() {
   const { user } = useAuth();
-  const { t, language } = useLanguage();
+  const { language, isRTL } = useLanguage();
+  const { t } = useTranslation();
   const [dateRange, setDateRange] = useState({ start: 30, end: 0 }); // days ago
 
   // Get artist profile if user is an artist
