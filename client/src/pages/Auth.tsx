@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,9 +19,50 @@ import {
 import { Link } from "wouter";
 
 export default function Auth() {
-  const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
-  const { isRTL } = useLanguage();
+  const { language, isRTL } = useLanguage();
+
+  // Translation function helper - temporary solution
+  const getText = (key: string, fallback: string) => {
+    try {
+      return language === 'ar' ? getArabicText(key) : fallback;
+    } catch (error) {
+      return fallback;
+    }
+  };
+
+  const getArabicText = (key: string) => {
+    const arabicTexts: Record<string, string> = {
+      'common.siteName': 'آرت سوك',
+      'common.siteNameAr': 'Art Souk',
+      'auth.backToHome': 'العودة للرئيسية',
+      'auth.badge': 'منصة جديدة',
+      'auth.welcome': 'مرحباً بك في',
+      'auth.artSouk': 'آرت سوك',
+      'auth.subtitle': 'اكتشف واقتني أفضل الأعمال الفنية من فنانين موهوبين في المملكة العربية السعودية ودول الخليج',
+      'auth.features.discover': 'اكتشف الأعمال الفنية',
+      'auth.features.discoverDesc': 'تصفح مجموعة واسعة من الأعمال الفنية الأصلية',
+      'auth.features.galleries': 'معارض فنية',
+      'auth.features.galleriesDesc': 'زر أفضل المعارض الفنية في المنطقة',
+      'auth.features.community': 'مجتمع فني',
+      'auth.features.communityDesc': 'تواصل مع الفنانين وهواة الفن',
+      'auth.features.collections': 'مجموعات مميزة',
+      'auth.features.collectionsDesc': 'اكتشف مجموعات فنية منسقة بعناية',
+      'auth.benefits.favorites': 'احفظ أعمالك الفنية المفضلة',
+      'auth.benefits.inquiries': 'تواصل مباشر مع الفنانين',
+      'auth.benefits.auctions': 'شارك في المزادات المباشرة',
+      'auth.benefits.personalized': 'توصيات مخصصة لك',
+      'auth.joinBenefits': 'مميزات الانضمام',
+      'auth.getStarted': 'ابدأ رحلتك الفنية',
+      'auth.joinCommunity': 'انضم إلى مجتمع الفن في الخليج',
+      'auth.signUpFree': 'سجل مجاناً',
+      'auth.alreadyMember': 'عضو بالفعل؟',
+      'auth.signIn': 'تسجيل الدخول',
+      'auth.trustedBy': 'موثوق من قبل الفنانين في دول الخليج',
+      'auth.secureLogin': 'مصادقة آمنة مدعومة بواسطة'
+    };
+    return arabicTexts[key] || key;
+  };
 
   if (isAuthenticated) {
     window.location.href = "/";
@@ -32,31 +72,31 @@ export default function Auth() {
   const features = [
     {
       icon: Palette,
-      title: t("auth.features.discover"),
-      description: t("auth.features.discoverDesc"),
+      title: getText("auth.features.discover", "Discover Art"),
+      description: getText("auth.features.discoverDesc", "Browse a wide collection of original artworks"),
     },
     {
       icon: Building,
-      title: t("auth.features.galleries"),
-      description: t("auth.features.galleriesDesc"),
+      title: getText("auth.features.galleries", "Art Galleries"),
+      description: getText("auth.features.galleriesDesc", "Visit the best art galleries in the region"),
     },
     {
       icon: Users,
-      title: t("auth.features.community"),
-      description: t("auth.features.communityDesc"),
+      title: getText("auth.features.community", "Art Community"),
+      description: getText("auth.features.communityDesc", "Connect with artists and art enthusiasts"),
     },
     {
       icon: Crown,
-      title: t("auth.features.collections"),
-      description: t("auth.features.collectionsDesc"),
+      title: getText("auth.features.collections", "Featured Collections"),
+      description: getText("auth.features.collectionsDesc", "Discover carefully curated art collections"),
     },
   ];
 
   const benefits = [
-    t("auth.benefits.favorites"),
-    t("auth.benefits.inquiries"),
-    t("auth.benefits.auctions"),
-    t("auth.benefits.personalized"),
+    getText("auth.benefits.favorites", "Save your favorite artworks"),
+    getText("auth.benefits.inquiries", "Direct communication with artists"),
+    getText("auth.benefits.auctions", "Participate in live auctions"),
+    getText("auth.benefits.personalized", "Personalized recommendations"),
   ];
 
   return (
@@ -76,15 +116,15 @@ export default function Auth() {
               </div>
               <div className={cn("ml-3", isRTL && "ml-0 mr-3")}>
                 <h1 className="text-xl font-bold bg-brand-gradient bg-clip-text text-transparent">
-                  {t("common.siteName")}
+                  {getText("common.siteName", "Art Souk")}
                 </h1>
-                <p className="text-xs text-muted-foreground">{t("common.siteNameAr")}</p>
+                <p className="text-xs text-muted-foreground">{getText("common.siteNameAr", "آرت سوك")}</p>
               </div>
             </Link>
             
             <Link href="/">
               <Button variant="ghost" size="sm">
-                {t("auth.backToHome")}
+                {getText("auth.backToHome", "Back to Home")}
               </Button>
             </Link>
           </div>
@@ -99,18 +139,18 @@ export default function Auth() {
               <div className="space-y-4">
                 <Badge variant="secondary" className="bg-purple-100 text-purple-700 hover:bg-purple-200">
                   <Sparkles className="h-3 w-3 mr-1" />
-                  {t("auth.badge")}
+                  {getText("auth.badge", "New Platform")}
                 </Badge>
                 
                 <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
-                  {t("auth.welcome")}
+                  {getText("auth.welcome", "Welcome to")}
                   <span className="block bg-brand-gradient bg-clip-text text-transparent">
-                    {t("auth.artSouk")}
+                    {getText("auth.artSouk", "Art Souk")}
                   </span>
                 </h1>
                 
                 <p className="text-xl text-muted-foreground leading-relaxed">
-                  {t("auth.subtitle")}
+                  {getText("auth.subtitle", "Discover and collect the finest artworks from talented artists in Saudi Arabia and the GCC countries")}
                 </p>
               </div>
 
@@ -138,7 +178,7 @@ export default function Auth() {
               <div className="space-y-3">
                 <h3 className="font-semibold text-foreground flex items-center">
                   <Heart className="h-4 w-4 mr-2 text-red-500" />
-                  {t("auth.joinBenefits")}
+                  {getText("auth.joinBenefits", "Join Benefits")}
                 </h3>
                 <div className="space-y-2">
                   {benefits.map((benefit, index) => (
@@ -160,10 +200,10 @@ export default function Auth() {
                       <Palette className="h-8 w-8 text-white" />
                     </div>
                     <h2 className="text-2xl font-bold text-foreground">
-                      {t("auth.getStarted")}
+                      {getText("auth.getStarted", "Get Started")}
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                      {t("auth.joinCommunity")}
+                      {getText("auth.joinCommunity", "Join our art community")}
                     </p>
                   </div>
 
@@ -174,7 +214,7 @@ export default function Auth() {
                       onClick={() => window.location.href = "/api/login"}
                     >
                       <Globe className="h-5 w-5 mr-2" />
-                      {t("auth.signUpFree")}
+                      {getText("auth.signUpFree", "Sign Up Free")}
                       <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>
 
@@ -185,7 +225,7 @@ export default function Auth() {
                       </div>
                       <div className="relative flex justify-center text-xs uppercase">
                         <span className="bg-white px-2 text-muted-foreground">
-                          {t("auth.alreadyMember")}
+                          {getText("auth.alreadyMember", "Already a member?")}
                         </span>
                       </div>
                     </div>
@@ -196,7 +236,7 @@ export default function Auth() {
                       className="w-full py-6 text-base border-2 hover:bg-purple-50 hover:border-purple-200 transition-all duration-300"
                       onClick={() => window.location.href = "/api/login"}
                     >
-                      {t("auth.signIn")}
+                      {getText("auth.signIn", "Sign In")}
                     </Button>
                   </div>
 
@@ -208,7 +248,7 @@ export default function Auth() {
                       ))}
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      {t("auth.trustedBy")}
+                      {getText("auth.trustedBy", "Trusted by artists across the GCC")}
                     </p>
                   </div>
                 </CardContent>
@@ -220,7 +260,7 @@ export default function Auth() {
         {/* Bottom Section */}
         <div className="max-w-4xl mx-auto px-4 py-8 text-center">
           <p className="text-sm text-muted-foreground">
-            {t("auth.secureLogin")} {" "}
+            {getText("auth.secureLogin", "Secure authentication powered by")} {" "}
             <span className="font-medium text-purple-600">Replit Auth</span>
           </p>
         </div>
