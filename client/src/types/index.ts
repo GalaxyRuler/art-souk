@@ -57,18 +57,28 @@ export interface Artwork {
   mediumAr?: string;
   dimensions?: string;
   year?: number;
-  price?: number;
+  price?: number | string;
   currency: string;
   availability: string;
   category: string;
+  categoryAr?: string;
   style?: string;
   imageUrl?: string;
   imageUrls?: string[];
+  images?: string[];
   featured: boolean;
   viewCount: number;
   likeCount: number;
   createdAt: string;
   updatedAt: string;
+  artist?: {
+    name: string;
+    nameAr?: string;
+  };
+  gallery?: {
+    name: string;
+    nameAr?: string;
+  };
 }
 
 export interface Comment {
@@ -89,6 +99,7 @@ export interface Profile {
   locationAr?: string;
   website?: string;
   instagram?: string;
+  twitter?: string;
 }
 
 // API Response Types
