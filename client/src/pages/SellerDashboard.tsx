@@ -101,7 +101,13 @@ export default function SellerDashboard() {
     enabled: selectedTab === 'orders',
   });
 
-  const orders = Array.isArray(ordersData?.orders) ? ordersData.orders : [];
+  // Debug logging
+  console.log('Orders Data:', ordersData);
+  console.log('Orders Data Type:', typeof ordersData);
+  console.log('Orders Data Structure:', ordersData);
+  
+  const orders = Array.isArray(ordersData?.orders) ? ordersData.orders : 
+                 Array.isArray(ordersData) ? ordersData : [];
 
   // Fetch payment methods
   const { data: paymentMethodsData, isLoading: paymentMethodsLoading } = useQuery({
@@ -450,7 +456,7 @@ export default function SellerDashboard() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {orders && orders.length > 0 ? (
+                        {Array.isArray(orders) && orders.length > 0 ? (
                           orders.map((order: Order) => (
                             <TableRow key={order.id}>
                               <TableCell className="font-medium">{order.artwork?.title || 'Unknown Artwork'}</TableCell>
