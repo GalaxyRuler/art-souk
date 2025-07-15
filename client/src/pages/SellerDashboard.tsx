@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+// Removed Select imports - using native HTML selects
 import { Textarea } from '@/components/ui/textarea';
 import { CreditCard, ShoppingCart, Truck, Settings, Plus, Edit, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -663,20 +663,19 @@ export default function SellerDashboard() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t('seller.paymentType')}</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={t('seller.selectPaymentType')} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="saudi_bank">{t('seller.bankTransfer')}</SelectItem>
-                          <SelectItem value="paypal">{t('seller.paypal')}</SelectItem>
-                          <SelectItem value="stc_pay">{t('seller.stcPay')}</SelectItem>
-                          <SelectItem value="wise">{t('seller.wise')}</SelectItem>
-                          <SelectItem value="cash_on_delivery">{t('seller.cashOnDelivery')}</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <FormControl>
+                        <select
+                          {...field}
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          <option value="">{t('seller.selectPaymentType')}</option>
+                          <option value="saudi_bank">{t('seller.bankTransfer')}</option>
+                          <option value="paypal">{t('seller.paypal')}</option>
+                          <option value="stc_pay">{t('seller.stcPay')}</option>
+                          <option value="wise">{t('seller.wise')}</option>
+                          <option value="cash_on_delivery">{t('seller.cashOnDelivery')}</option>
+                        </select>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -782,19 +781,18 @@ export default function SellerDashboard() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>{t('seller.preferredCurrency')}</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder={t('seller.selectCurrency')} />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="SAR">SAR</SelectItem>
-                              <SelectItem value="USD">USD</SelectItem>
-                              <SelectItem value="EUR">EUR</SelectItem>
-                              <SelectItem value="GBP">GBP</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <FormControl>
+                            <select
+                              {...field}
+                              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                              <option value="">{t('seller.selectCurrency')}</option>
+                              <option value="SAR">SAR</option>
+                              <option value="USD">USD</option>
+                              <option value="EUR">EUR</option>
+                              <option value="GBP">GBP</option>
+                            </select>
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -863,21 +861,20 @@ export default function SellerDashboard() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t('seller.orderStatus')}</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={t('seller.selectOrderStatus')} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="pending">{t('seller.pending')}</SelectItem>
-                          <SelectItem value="confirmed">{t('seller.confirmed')}</SelectItem>
-                          <SelectItem value="processing">{t('seller.processing')}</SelectItem>
-                          <SelectItem value="shipped">{t('seller.shipped')}</SelectItem>
-                          <SelectItem value="delivered">{t('seller.delivered')}</SelectItem>
-                          <SelectItem value="cancelled">{t('seller.cancelled')}</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <FormControl>
+                        <select
+                          {...field}
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          <option value="">{t('seller.selectOrderStatus')}</option>
+                          <option value="pending">{t('seller.pending')}</option>
+                          <option value="confirmed">{t('seller.confirmed')}</option>
+                          <option value="processing">{t('seller.processing')}</option>
+                          <option value="shipped">{t('seller.shipped')}</option>
+                          <option value="delivered">{t('seller.delivered')}</option>
+                          <option value="cancelled">{t('seller.cancelled')}</option>
+                        </select>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
