@@ -4630,24 +4630,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate QR Code URL for display (using Google Charts API for QR code generation)
       const qrCodeDisplayUrl = `https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${encodeURIComponent(qrCode)}`;
       
-      // Generate actual QR code using Node.js qrcode library
+      // Generate actual QR code using Google Charts API
       let qrCodeBase64 = '';
       try {
-        const QRCode = require('qrcode');
+        // Use Google Charts API to generate QR code image
+        const qrCodeUrl = `https://chart.googleapis.com/chart?chs=120x120&cht=qr&chl=${encodeURIComponent(qrCode)}`;
         
-        // Generate QR code as data URL
-        const qrCodeDataUrl = await QRCode.toDataURL(qrCode, {
-          width: 120,
-          margin: 1,
-          color: {
-            dark: '#000000',
-            light: '#FFFFFF'
-          }
-        });
-        
-        // Extract base64 from data URL
-        qrCodeBase64 = qrCodeDataUrl.split(',')[1];
-        console.log('✅ QR code generated successfully');
+        // Fetch the QR code image
+        const response = await fetch(qrCodeUrl);
+        if (response.ok) {
+          const buffer = await response.arrayBuffer();
+          qrCodeBase64 = Buffer.from(buffer).toString('base64');
+          console.log('✅ QR code generated successfully using Google Charts API');
+        } else {
+          throw new Error('Failed to fetch QR code from Google Charts API');
+        }
         
       } catch (error) {
         console.error('QR code generation failed:', error);
