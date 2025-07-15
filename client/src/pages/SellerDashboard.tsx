@@ -103,10 +103,26 @@ export default function SellerDashboard() {
 
   // Ensure orders is always an array - API returns { orders: [...] }
   const orders = React.useMemo(() => {
-    if (!ordersData) return [];
-    if (Array.isArray(ordersData.orders)) return ordersData.orders;
-    if (Array.isArray(ordersData)) return ordersData;
-    return [];
+    try {
+      console.log('Processing orders data:', ordersData);
+      if (!ordersData) {
+        console.log('No ordersData, returning empty array');
+        return [];
+      }
+      if (ordersData && typeof ordersData === 'object' && Array.isArray(ordersData.orders)) {
+        console.log('Using ordersData.orders:', ordersData.orders);
+        return ordersData.orders;
+      }
+      if (Array.isArray(ordersData)) {
+        console.log('Using ordersData directly:', ordersData);
+        return ordersData;
+      }
+      console.log('Fallback to empty array');
+      return [];
+    } catch (error) {
+      console.error('Error processing orders data:', error);
+      return [];
+    }
   }, [ordersData]);
 
   // Fetch payment methods
@@ -457,7 +473,9 @@ export default function SellerDashboard() {
                       </TableHeader>
                       <TableBody>
                         {orders && Array.isArray(orders) && orders.length > 0 ? (
-                          orders.map((order: Order) => (
+                          (() => {
+                            console.log('About to map orders:', orders, 'isArray:', Array.isArray(orders));
+                            return orders.map((order: Order, index: number) => (
                             <TableRow key={order.id}>
                               <TableCell className="font-medium">{order.artwork?.title || 'Unknown Artwork'}</TableCell>
                               <TableCell>{order.buyerEmail}</TableCell>
@@ -478,7 +496,8 @@ export default function SellerDashboard() {
                                 </Button>
                               </TableCell>
                             </TableRow>
-                          ))
+                          ));
+                          })()
                         ) : (
                           <TableRow>
                             <TableCell colSpan={6} className="text-center py-8 text-gray-500">
