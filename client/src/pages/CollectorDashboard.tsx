@@ -1115,7 +1115,10 @@ export default function CollectorDashboard() {
                         <div className="flex gap-2 pt-2">
                           <Button 
                             className="flex-1 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-                            onClick={() => setLocation(`/artwork/${order.artwork.id}`)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setLocation(`/artwork/${order.artwork.id}`);
+                            }}
                           >
                             <Eye className="h-4 w-4 mr-2" />
                             {t("collector.purchases.viewArtwork", "View Artwork")}
@@ -1123,7 +1126,8 @@ export default function CollectorDashboard() {
                           <Button 
                             variant="outline"
                             className="bg-white/50 border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300 transition-colors"
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.stopPropagation();
                               console.log('ZATCA Invoice download button clicked!');
                               generateZATCAInvoice(order, language);
                             }}

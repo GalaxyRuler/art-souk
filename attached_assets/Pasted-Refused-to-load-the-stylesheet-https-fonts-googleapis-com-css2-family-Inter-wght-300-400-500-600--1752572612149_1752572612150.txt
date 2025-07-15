@@ -1,0 +1,272 @@
+Refused to load the stylesheet 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap' because it violates the following Content Security Policy directive: "style-src 'self' 'unsafe-inline'". Note that 'style-src-elem' was not explicitly set, so 'style-src' is used as a fallback.
+Understand this error
+collector:1 Refused to load the script 'https://replit.com/public/js/replit-dev-banner.js' because it violates the following Content Security Policy directive: "script-src 'self' 'unsafe-inline' 'unsafe-eval'". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.
+Understand this error
+client:495 [vite] connecting...
+client:618 [vite] connected.
+chunk-RPCDYKBN.js?v=3aa5341c:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+i18n.ts:2192 i18next: languageChanged en
+i18n.ts:2192 i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+i18n.ts:2211 i18n initialized with inline resources
+i18n.ts:2212 Sample translation nav.home: Home
+i18n.ts:2213 Sample translation auth.login: Sign In
+i18n.ts:2214 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2215 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2216 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2217 Sample translation collector.tabs.orders: Orders
+i18n.ts:2192 i18next: languageChanged en
+i18n.ts:2192 i18next: init: i18next is already initialized. You should call init just once!
+output @ i18next.js?v=3aa5341c:208
+warn @ i18next.js?v=3aa5341c:201
+forward @ i18next.js?v=3aa5341c:236
+warn @ i18next.js?v=3aa5341c:225
+finish @ i18next.js?v=3aa5341c:1815
+done @ i18next.js?v=3aa5341c:1948
+(anonymous) @ i18next.js?v=3aa5341c:1963
+loadResources @ i18next.js?v=3aa5341c:1861
+setLng @ i18next.js?v=3aa5341c:1962
+changeLanguage @ i18next.js?v=3aa5341c:1975
+load @ i18next.js?v=3aa5341c:1823
+init @ i18next.js?v=3aa5341c:1826
+(anonymous) @ i18n.ts:2192Understand this warning
+i18n.ts:2192 i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+i18n.ts:2211 i18n initialized with inline resources
+i18n.ts:2212 Sample translation nav.home: Home
+i18n.ts:2213 Sample translation auth.login: Sign In
+i18n.ts:2214 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2215 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2216 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2217 Sample translation collector.tabs.orders: Orders
+content.bundle.js:31149 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+injected.js:1 Script was injected!
+content.js:202 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+CollectorDashboard.tsx:902 i18next::translator: missingKey en translation collector.noTracking No shipments to track
+CollectorDashboard.tsx:905 i18next::translator: missingKey en translation collector.trackingDescription Your shipped orders will appear here with real-time tracking information
+CollectorDashboard.tsx:1082 i18next::translator: missingKey en translation collector.purchases.paymentInfo Payment Information
+CollectorDashboard.tsx:902 i18next::translator: missingKey en translation collector.noTracking No shipments to track
+CollectorDashboard.tsx:905 i18next::translator: missingKey en translation collector.trackingDescription Your shipped orders will appear here with real-time tracking information
+CollectorDashboard.tsx:1082 i18next::translator: missingKey en translation collector.purchases.paymentInfo Payment Information
+CollectorDashboard.tsx:902 i18next::translator: missingKey en translation collector.noTracking No shipments to track
+CollectorDashboard.tsx:905 i18next::translator: missingKey en translation collector.trackingDescription Your shipped orders will appear here with real-time tracking information
+CollectorDashboard.tsx:1082 i18next::translator: missingKey en translation collector.purchases.paymentInfo Payment Information
+3CollectorDashboard.tsx:488 i18next::translator: missingKey en translation by by
+CollectorDashboard.tsx:773 i18next::translator: missingKey en translation collector.tracking.progress Shipping Progress
+CollectorDashboard.tsx:781 i18next::translator: missingKey en translation collector.tracking.ordered Ordered
+CollectorDashboard.tsx:784 i18next::translator: missingKey en translation collector.tracking.shipped Shipped
+CollectorDashboard.tsx:787 i18next::translator: missingKey en translation collector.tracking.delivered Delivered
+CollectorDashboard.tsx:762 i18next::translator: missingKey en translation collector.status.in_transit in_transit
+CollectorDashboard.tsx:773 i18next::translator: missingKey en translation collector.tracking.progress Shipping Progress
+CollectorDashboard.tsx:781 i18next::translator: missingKey en translation collector.tracking.ordered Ordered
+CollectorDashboard.tsx:784 i18next::translator: missingKey en translation collector.tracking.shipped Shipped
+CollectorDashboard.tsx:787 i18next::translator: missingKey en translation collector.tracking.delivered Delivered
+CollectorDashboard.tsx:773 i18next::translator: missingKey en translation collector.tracking.progress Shipping Progress
+CollectorDashboard.tsx:781 i18next::translator: missingKey en translation collector.tracking.ordered Ordered
+CollectorDashboard.tsx:784 i18next::translator: missingKey en translation collector.tracking.shipped Shipped
+CollectorDashboard.tsx:787 i18next::translator: missingKey en translation collector.tracking.delivered Delivered
+CollectorDashboard.tsx:979 i18next::translator: missingKey en translation collector.wishlist.currentPrice Current Price
+CollectorDashboard.tsx:991 i18next::translator: missingKey en translation collector.wishlist.priority Priority
+CollectorDashboard.tsx:1030 i18next::translator: missingKey en translation collector.wishlist.view View
+CollectorDashboard.tsx:979 i18next::translator: missingKey en translation collector.wishlist.currentPrice Current Price
+CollectorDashboard.tsx:991 i18next::translator: missingKey en translation collector.wishlist.priority Priority
+CollectorDashboard.tsx:1030 i18next::translator: missingKey en translation collector.wishlist.view View
+CollectorDashboard.tsx:979 i18next::translator: missingKey en translation collector.wishlist.currentPrice Current Price
+CollectorDashboard.tsx:991 i18next::translator: missingKey en translation collector.wishlist.priority Priority
+CollectorDashboard.tsx:1030 i18next::translator: missingKey en translation collector.wishlist.view View
+CollectorDashboard.tsx:979 i18next::translator: missingKey en translation collector.wishlist.currentPrice Current Price
+CollectorDashboard.tsx:991 i18next::translator: missingKey en translation collector.wishlist.priority Priority
+CollectorDashboard.tsx:1030 i18next::translator: missingKey en translation collector.wishlist.view View
+CollectorDashboard.tsx:1082 i18next::translator: missingKey en translation collector.purchases.paymentInfo Payment Information
+CollectorDashboard.tsx:1163 i18next::translator: missingKey en translation collector.purchases.orderNumber Order Number
+CollectorDashboard.tsx:1173 i18next::translator: missingKey en translation collector.purchases.amount Amount
+CollectorDashboard.tsx:1187 i18next::translator: missingKey en translation collector.purchases.artist Artist
+CollectorDashboard.tsx:1200 i18next::translator: missingKey en translation collector.purchases.paymentMethod Payment Method
+CollectorDashboard.tsx:1204 i18next::translator: missingKey en translation collector.purchases.paymentNote Payment was arranged directly with the seller
+CollectorDashboard.tsx:1215 i18next::translator: missingKey en translation collector.purchases.viewArtwork View Artwork
+CollectorDashboard.tsx:1224 i18next::translator: missingKey en translation collector.purchases.downloadReceipt Download Receipt
+chunk-RPCDYKBN.js?v=3aa5341c:521 Warning: validateDOMNesting(...): <button> cannot appear as a descendant of <button>.
+    at button
+    at _c (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ui/button.tsx:47:11)
+    at button
+    at https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ui/dialog.tsx:45:6
+    at Dialog (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ui/dialog.tsx:28:3)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at _c9 (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ui/card.tsx:114:12)
+    at div
+    at _c (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ui/card.tsx:20:11)
+    at div
+    at div
+    at https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ui/tabs.tsx:115:6
+    at div
+    at _c (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ui/tabs.tsx:26:11)
+    at div
+    at main
+    at div
+    at CollectorDashboard (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/pages/CollectorDashboard.tsx:249:20)
+    at Route (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=3aa5341c:323:16)
+    at Switch (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=3aa5341c:379:17)
+    at Suspense
+    at Router (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/App.tsx?v=aqGv6VPw8Vx-TE01DIn1I:118:42)
+    at Provider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-UBQ2LXDH.js?v=3aa5341c:22:15)
+    at TooltipProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=3aa5341c:60:5)
+    at I18nextProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/react-i18next.js?v=3aa5341c:793:3)
+    at QueryClientProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=3aa5341c:2805:3)
+    at ErrorBoundary (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ErrorBoundary.tsx:10:5)
+    at App
+printWarning @ chunk-RPCDYKBN.js?v=3aa5341c:521
+error @ chunk-RPCDYKBN.js?v=3aa5341c:505
+validateDOMNesting @ chunk-RPCDYKBN.js?v=3aa5341c:8256
+createInstance @ chunk-RPCDYKBN.js?v=3aa5341c:8328
+completeWork @ chunk-RPCDYKBN.js?v=3aa5341c:16290
+completeUnitOfWork @ chunk-RPCDYKBN.js?v=3aa5341c:19224
+performUnitOfWork @ chunk-RPCDYKBN.js?v=3aa5341c:19206
+workLoopSync @ chunk-RPCDYKBN.js?v=3aa5341c:19137
+renderRootSync @ chunk-RPCDYKBN.js?v=3aa5341c:19116
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=3aa5341c:18874
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=3aa5341c:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=3aa5341c:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=3aa5341c:555
+flush @ @tanstack_react-query.js?v=3aa5341c:569
+batch @ @tanstack_react-query.js?v=3aa5341c:587
+dispatch_fn @ @tanstack_react-query.js?v=3aa5341c:996
+setData @ @tanstack_react-query.js?v=3aa5341c:696
+onSuccess @ @tanstack_react-query.js?v=3aa5341c:897
+resolve @ @tanstack_react-query.js?v=3aa5341c:456
+Promise.then
+run @ @tanstack_react-query.js?v=3aa5341c:498
+start @ @tanstack_react-query.js?v=3aa5341c:536
+fetch @ @tanstack_react-query.js?v=3aa5341c:926
+executeFetch_fn @ @tanstack_react-query.js?v=3aa5341c:2211
+onSubscribe @ @tanstack_react-query.js?v=3aa5341c:1898
+subscribe @ @tanstack_react-query.js?v=3aa5341c:24
+(anonymous) @ @tanstack_react-query.js?v=3aa5341c:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=3aa5341c:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=3aa5341c:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=3aa5341c:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=3aa5341c:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=3aa5341c:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=3aa5341c:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=3aa5341c:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=3aa5341c:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=3aa5341c:19328
+workLoop @ chunk-RPCDYKBN.js?v=3aa5341c:197
+flushWork @ chunk-RPCDYKBN.js?v=3aa5341c:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=3aa5341c:384Understand this error
+chunk-RPCDYKBN.js?v=3aa5341c:521 Warning: React does not recognize the `asChild` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `aschild` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+    at button
+    at https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ui/dialog.tsx:45:6
+    at Dialog (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ui/dialog.tsx:28:3)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at _c9 (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ui/card.tsx:114:12)
+    at div
+    at _c (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ui/card.tsx:20:11)
+    at div
+    at div
+    at https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ui/tabs.tsx:115:6
+    at div
+    at _c (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ui/tabs.tsx:26:11)
+    at div
+    at main
+    at div
+    at CollectorDashboard (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/pages/CollectorDashboard.tsx:249:20)
+    at Route (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=3aa5341c:323:16)
+    at Switch (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=3aa5341c:379:17)
+    at Suspense
+    at Router (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/App.tsx?v=aqGv6VPw8Vx-TE01DIn1I:118:42)
+    at Provider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-UBQ2LXDH.js?v=3aa5341c:22:15)
+    at TooltipProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=3aa5341c:60:5)
+    at I18nextProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/react-i18next.js?v=3aa5341c:793:3)
+    at QueryClientProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=3aa5341c:2805:3)
+    at ErrorBoundary (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ErrorBoundary.tsx:10:5)
+    at App
+printWarning @ chunk-RPCDYKBN.js?v=3aa5341c:521
+error @ chunk-RPCDYKBN.js?v=3aa5341c:505
+validateProperty$1 @ chunk-RPCDYKBN.js?v=3aa5341c:3427
+warnUnknownProperties @ chunk-RPCDYKBN.js?v=3aa5341c:3459
+validateProperties$2 @ chunk-RPCDYKBN.js?v=3aa5341c:3478
+validatePropertiesInDevelopment @ chunk-RPCDYKBN.js?v=3aa5341c:7346
+setInitialProperties @ chunk-RPCDYKBN.js?v=3aa5341c:7535
+finalizeInitialChildren @ chunk-RPCDYKBN.js?v=3aa5341c:8345
+completeWork @ chunk-RPCDYKBN.js?v=3aa5341c:16293
+completeUnitOfWork @ chunk-RPCDYKBN.js?v=3aa5341c:19224
+performUnitOfWork @ chunk-RPCDYKBN.js?v=3aa5341c:19206
+workLoopSync @ chunk-RPCDYKBN.js?v=3aa5341c:19137
+renderRootSync @ chunk-RPCDYKBN.js?v=3aa5341c:19116
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=3aa5341c:18874
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=3aa5341c:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=3aa5341c:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=3aa5341c:555
+flush @ @tanstack_react-query.js?v=3aa5341c:569
+batch @ @tanstack_react-query.js?v=3aa5341c:587
+dispatch_fn @ @tanstack_react-query.js?v=3aa5341c:996
+setData @ @tanstack_react-query.js?v=3aa5341c:696
+onSuccess @ @tanstack_react-query.js?v=3aa5341c:897
+resolve @ @tanstack_react-query.js?v=3aa5341c:456
+Promise.then
+run @ @tanstack_react-query.js?v=3aa5341c:498
+start @ @tanstack_react-query.js?v=3aa5341c:536
+fetch @ @tanstack_react-query.js?v=3aa5341c:926
+executeFetch_fn @ @tanstack_react-query.js?v=3aa5341c:2211
+onSubscribe @ @tanstack_react-query.js?v=3aa5341c:1898
+subscribe @ @tanstack_react-query.js?v=3aa5341c:24
+(anonymous) @ @tanstack_react-query.js?v=3aa5341c:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=3aa5341c:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=3aa5341c:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=3aa5341c:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=3aa5341c:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=3aa5341c:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=3aa5341c:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=3aa5341c:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=3aa5341c:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=3aa5341c:19328
+workLoop @ chunk-RPCDYKBN.js?v=3aa5341c:197
+flushWork @ chunk-RPCDYKBN.js?v=3aa5341c:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=3aa5341c:384Understand this error
+3CollectorDashboard.tsx:488 i18next::translator: missingKey en translation by by
+CollectorDashboard.tsx:773 i18next::translator: missingKey en translation collector.tracking.progress Shipping Progress
+CollectorDashboard.tsx:781 i18next::translator: missingKey en translation collector.tracking.ordered Ordered
+CollectorDashboard.tsx:784 i18next::translator: missingKey en translation collector.tracking.shipped Shipped
+CollectorDashboard.tsx:787 i18next::translator: missingKey en translation collector.tracking.delivered Delivered
+CollectorDashboard.tsx:762 i18next::translator: missingKey en translation collector.status.in_transit in_transit
+CollectorDashboard.tsx:773 i18next::translator: missingKey en translation collector.tracking.progress Shipping Progress
+CollectorDashboard.tsx:781 i18next::translator: missingKey en translation collector.tracking.ordered Ordered
+CollectorDashboard.tsx:784 i18next::translator: missingKey en translation collector.tracking.shipped Shipped
+CollectorDashboard.tsx:787 i18next::translator: missingKey en translation collector.tracking.delivered Delivered
+CollectorDashboard.tsx:773 i18next::translator: missingKey en translation collector.tracking.progress Shipping Progress
+CollectorDashboard.tsx:781 i18next::translator: missingKey en translation collector.tracking.ordered Ordered
+CollectorDashboard.tsx:784 i18next::translator: missingKey en translation collector.tracking.shipped Shipped
+CollectorDashboard.tsx:787 i18next::translator: missingKey en translation collector.tracking.delivered Delivered
+CollectorDashboard.tsx:979 i18next::translator: missingKey en translation collector.wishlist.currentPrice Current Price
+CollectorDashboard.tsx:991 i18next::translator: missingKey en translation collector.wishlist.priority Priority
+CollectorDashboard.tsx:1030 i18next::translator: missingKey en translation collector.wishlist.view View
+CollectorDashboard.tsx:979 i18next::translator: missingKey en translation collector.wishlist.currentPrice Current Price
+CollectorDashboard.tsx:991 i18next::translator: missingKey en translation collector.wishlist.priority Priority
+CollectorDashboard.tsx:1030 i18next::translator: missingKey en translation collector.wishlist.view View
+CollectorDashboard.tsx:979 i18next::translator: missingKey en translation collector.wishlist.currentPrice Current Price
+CollectorDashboard.tsx:991 i18next::translator: missingKey en translation collector.wishlist.priority Priority
+CollectorDashboard.tsx:1030 i18next::translator: missingKey en translation collector.wishlist.view View
+CollectorDashboard.tsx:979 i18next::translator: missingKey en translation collector.wishlist.currentPrice Current Price
+CollectorDashboard.tsx:991 i18next::translator: missingKey en translation collector.wishlist.priority Priority
+CollectorDashboard.tsx:1030 i18next::translator: missingKey en translation collector.wishlist.view View
+CollectorDashboard.tsx:1082 i18next::translator: missingKey en translation collector.purchases.paymentInfo Payment Information
+CollectorDashboard.tsx:1163 i18next::translator: missingKey en translation collector.purchases.orderNumber Order Number
+CollectorDashboard.tsx:1173 i18next::translator: missingKey en translation collector.purchases.amount Amount
+CollectorDashboard.tsx:1187 i18next::translator: missingKey en translation collector.purchases.artist Artist
+CollectorDashboard.tsx:1200 i18next::translator: missingKey en translation collector.purchases.paymentMethod Payment Method
+CollectorDashboard.tsx:1204 i18next::translator: missingKey en translation collector.purchases.paymentNote Payment was arranged directly with the seller
+CollectorDashboard.tsx:1215 i18next::translator: missingKey en translation collector.purchases.viewArtwork View Artwork
+CollectorDashboard.tsx:1224 i18next::translator: missingKey en translation collector.purchases.downloadReceipt Download Receipt
+CollectorDashboard.tsx:1221 Download button clicked!
+CollectorDashboard.tsx:43 Generating receipt for order: ORD-2025-001
+CollectorDashboard.tsx:193 Receipt HTML generated, creating blob...
+CollectorDashboard.tsx:207 About to trigger download...
+CollectorDashboard.tsx:214 Download completed and cleaned up
