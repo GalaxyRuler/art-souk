@@ -284,8 +284,13 @@ export default function SellerDashboard() {
 
   const openOrderDialog = (order: Order) => {
     setSelectedOrder(order);
+    // Ensure the status value is properly typed and valid
+    const validStatus = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'].includes(order.status) 
+      ? order.status 
+      : 'pending';
+    
     orderStatusForm.reset({
-      status: order.status as any,
+      status: validStatus as 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled',
       sellerNotes: order.sellerNotes || '',
       trackingNumber: order.trackingNumber || '',
       carrier: order.carrier || '',
@@ -831,27 +836,37 @@ export default function SellerDashboard() {
                 <FormField
                   control={orderStatusForm.control}
                   name="status"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('seller.orderStatus')}</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={t('seller.selectOrderStatus')} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="pending">{t('seller.pending')}</SelectItem>
-                          <SelectItem value="confirmed">{t('seller.confirmed')}</SelectItem>
-                          <SelectItem value="processing">{t('seller.processing')}</SelectItem>
-                          <SelectItem value="shipped">{t('seller.shipped')}</SelectItem>
-                          <SelectItem value="delivered">{t('seller.delivered')}</SelectItem>
-                          <SelectItem value="cancelled">{t('seller.cancelled')}</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    console.log('Form field value:', field.value);
+                    console.log('Form watch status:', orderStatusForm.watch('status'));
+                    return (
+                      <FormItem>
+                        <FormLabel>{t('seller.orderStatus')}</FormLabel>
+                        <Select 
+                          onValueChange={(value) => {
+                            console.log('Select value changed to:', value);
+                            field.onChange(value);
+                          }} 
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={t('seller.selectOrderStatus')} />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="pending">{t('seller.pending')}</SelectItem>
+                            <SelectItem value="confirmed">{t('seller.confirmed')}</SelectItem>
+                            <SelectItem value="processing">{t('seller.processing')}</SelectItem>
+                            <SelectItem value="shipped">{t('seller.shipped')}</SelectItem>
+                            <SelectItem value="delivered">{t('seller.delivered')}</SelectItem>
+                            <SelectItem value="cancelled">{t('seller.cancelled')}</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
 
                 <FormField
