@@ -61,6 +61,7 @@ const generateZATCAInvoice = async (order: PurchaseOrder, language: string) => {
     const isRTL = language === "ar";
     
     // Call the backend ZATCA invoice generation endpoint
+    console.log('Calling endpoint:', `/api/invoices/generate-pdf/${order.id}`);
     const response = await fetch(`/api/invoices/generate-pdf/${order.id}`, {
       method: 'GET',
       credentials: 'include',
@@ -70,12 +71,20 @@ const generateZATCAInvoice = async (order: PurchaseOrder, language: string) => {
       },
     });
     
+    console.log('Response status:', response.status);
+    console.log('Response headers:', response.headers);
+    console.log('Response content-type:', response.headers.get('content-type'));
+    
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorText = await response.text();
+      console.error('Error response:', errorText);
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
     }
     
     // Get the PDF blob
     const blob = await response.blob();
+    console.log('Blob type:', blob.type);
+    console.log('Blob size:', blob.size);
     
     // Create download link
     const url = URL.createObjectURL(blob);

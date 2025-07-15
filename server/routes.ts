@@ -4556,6 +4556,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Generate ZATCA-compliant PDF invoice from order
   app.get('/api/invoices/generate-pdf/:orderId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
+      console.log('🔍 ZATCA PDF Generation Request:', {
+        orderId: req.params.orderId,
+        userId: req.user.claims.sub,
+        method: req.method,
+        path: req.path
+      });
+      
       const orderId = parseInt(req.params.orderId);
       const userId = req.user.claims.sub;
       
@@ -4577,8 +4584,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ));
       
       if (!order) {
+        console.log('❌ Order not found for ID:', orderId);
         return res.status(404).json({ message: "Order not found" });
       }
+      
+      console.log('✅ Order found:', {
+        orderId: order.order.id,
+        orderNumber: order.order.orderNumber,
+        artworkTitle: order.artwork.title,
+        artistName: order.artist.name,
+        buyerName: `${order.buyer.firstName} ${order.buyer.lastName}`
+      });
       
       // Calculate VAT (15% standard rate in Saudi Arabia)
       const subtotal = parseFloat(order.order.totalAmount);
@@ -4783,12 +4799,19 @@ startxref
 3800
 %%EOF`;
       
+      console.log('📄 Generating PDF with content length:', pdfContent.length);
+      console.log('📄 Setting PDF headers...');
+      
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `attachment; filename="zatca-invoice-${order.order.orderNumber}.pdf"`);
+      
+      console.log('📄 Sending PDF buffer...');
       res.send(Buffer.from(pdfContent));
       
+      console.log('✅ PDF sent successfully');
+      
     } catch (error) {
-      console.error("Error generating ZATCA PDF:", error);
+      console.error("❌ Error generating ZATCA PDF:", error);
       res.status(500).json({ message: "Failed to generate ZATCA invoice PDF" });
     }
   });
