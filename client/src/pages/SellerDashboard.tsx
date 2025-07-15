@@ -562,6 +562,9 @@ export default function SellerDashboard() {
                 <CardTitle>{t('seller.paymentMethodsManagement')}</CardTitle>
                 <Button onClick={() => {
                   console.log('Add Payment Method button clicked');
+                  console.log('Current dialog state before:', paymentDialogOpen);
+                  setPaymentDialogOpen(true);
+                  console.log('Dialog state after direct set:', paymentDialogOpen);
                   openPaymentDialog();
                   console.log('Dialog should now be open:', paymentDialogOpen);
                 }}>
@@ -658,6 +661,9 @@ export default function SellerDashboard() {
                 {editingPaymentMethod ? t('seller.editPaymentMethod') : t('seller.addPaymentMethod')}
               </DialogTitle>
             </DialogHeader>
+            <div className="text-xs text-gray-500 mb-4">
+              Debug: Dialog open = {paymentDialogOpen.toString()}, Form type = {paymentMethodForm.watch('type')}
+            </div>
             <Form {...paymentMethodForm}>
               <form onSubmit={paymentMethodForm.handleSubmit(onPaymentMethodSubmit)} className="space-y-4">
                 <div className="space-y-2">
