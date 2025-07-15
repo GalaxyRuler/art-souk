@@ -1,0 +1,154 @@
+Fix 1: Update the Dialog/Form Structure
+typescript// In SellerDashboard.tsx, update the form structure:
+
+<Dialog open={orderDialogOpen} onOpenChange={setOrderDialogOpen}>
+  <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+    <DialogHeader>
+      <DialogTitle>{t("seller.orderDetails")}</DialogTitle>
+    </DialogHeader>
+    
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      {/* Status Field */}
+      <div>
+        <Label>{t("seller.status")}</Label>
+        <Controller
+          name="status"
+          control={form.control}
+          render={({ field }) => (
+            <Select
+              value={field.value}
+              onValueChange={(value) => {
+                console.log("Status changed to:", value);
+                field.onChange(value);
+              }}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={t("seller.selectStatus")} />
+              </SelectTrigger>
+              <SelectContent 
+                className="z-[200]" // Ensure it's above the dialog
+                position="popper" // Use popper positioning
+                sideOffset={5}
+              >
+                <SelectItem value="pending">{t("seller.pending")}</SelectItem>
+                <SelectItem value="confirmed">{t("seller.confirmed")}</SelectItem>
+                <SelectItem value="processing">{t("seller.processing")}</SelectItem>
+                <SelectItem value="shipped">{t("seller.shipped")}</SelectItem>
+                <SelectItem value="delivered">{t("seller.delivered")}</SelectItem>
+                <SelectItem value="cancelled">{t("seller.cancelled")}</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        />
+      </div>
+
+      {/* Rest of the form fields... */}
+    </form>
+  </DialogContent>
+</Dialog>
+Fix 2: Add Portal to Select Component
+If the above doesn't work, wrap the SelectContent in a Portal:
+typescriptimport { Portal } from '@radix-ui/react-portal';
+
+// In your form:
+<Select
+  value={field.value}
+  onValueChange={field.onChange}
+>
+  <SelectTrigger className="w-full">
+    <SelectValue placeholder={t("seller.selectStatus")} />
+  </SelectTrigger>
+  <Portal>
+    <SelectContent>
+      <SelectItem value="pending">{t("seller.pending")}</SelectItem>
+      <SelectItem value="confirmed">{t("seller.confirmed")}</SelectItem>
+      <SelectItem value="processing">{t("seller.processing")}</SelectItem>
+      <SelectItem value="shipped">{t("seller.shipped")}</SelectItem>
+      <SelectItem value="delivered">{t("seller.delivered")}</SelectItem>
+      <SelectItem value="cancelled">{t("seller.cancelled")}</SelectItem>
+    </SelectContent>
+  </Portal>
+</Select>
+Fix 3: Update Your Select Component (if using shadcn/ui)
+Check your components/ui/select.tsx file and ensure it has:
+typescript// components/ui/select.tsx
+const SelectContent = React.forwardRef
+  React.ElementRef<typeof SelectPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
+>(({ className, children, position = "popper", ...props }, ref) => (
+  <SelectPrimitive.Portal>
+    <SelectPrimitive.Content
+      ref={ref}
+      className={cn(
+        "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        position === "popper" &&
+          "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
+        className
+      )}
+      position={position}
+      {...props}
+    >
+      <SelectPrimitive.Viewport
+        className={cn(
+          "p-1",
+          position === "popper" &&
+            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"
+        )}
+      >
+        {children}
+      </SelectPrimitive.Viewport>
+    </SelectPrimitive.Content>
+  </SelectPrimitive.Portal>
+));
+Fix 4: Debug with Event Stoppers
+Add these debug handlers to understand what's happening:
+typescript<Select
+  value={field.value}
+  onValueChange={(value) => {
+    console.log("Value changing to:", value);
+    field.onChange(value);
+  }}
+  onOpenChange={(open) => {
+    console.log("Select open state:", open);
+  }}
+>
+  <SelectTrigger 
+    className="w-full"
+    onClick={(e) => {
+      e.stopPropagation();
+      console.log("Trigger clicked");
+    }}
+  >
+    <SelectValue placeholder={t("seller.selectStatus")} />
+  </SelectTrigger>
+  {/* ... */}
+</Select>
+Fix 5: Alternative - Use Native Select (Temporary)
+If the Radix Select continues to have issues, temporarily use a native select:
+typescript<select
+  {...field}
+  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+>
+  <option value="pending">{t("seller.pending")}</option>
+  <option value="confirmed">{t("seller.confirmed")}</option>
+  <option value="processing">{t("seller.processing")}</option>
+  <option value="shipped">{t("seller.shipped")}</option>
+  <option value="delivered">{t("seller.delivered")}</option>
+  <option value="cancelled">{t("seller.cancelled")}</option>
+</select>
+Fix 6: Check CSS Conflicts
+Add this CSS to ensure dropdowns work properly:
+css/* In your global CSS or component */
+[data-radix-popper-content-wrapper] {
+  z-index: 9999 !important;
+}
+
+/* Ensure dialog doesn't trap focus */
+[role="dialog"] {
+  pointer-events: auto;
+}
+
+[role="dialog"] [data-radix-select-viewport] {
+  pointer-events: auto !important;
+}
+The most likely issue is that the Select dropdown is being rendered behind the dialog or outside the viewport. Try Fix 1 first with the position="popper" and higher z-index. Let me know which solution works!
