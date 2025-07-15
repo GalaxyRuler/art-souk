@@ -4639,7 +4639,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const issueTime = currentDate.toLocaleTimeString();
       const generatedOn = new Date().toLocaleString();
       
-      // Create enhanced ZATCA-compliant PDF content
+      // Create ZATCA-compliant PDF content (English only for proper display)
       const pdfContent = `%PDF-1.4
 1 0 obj
 <<
@@ -4684,107 +4684,107 @@ BT
 50 750 Td
 (ART SOUK - ZATCA COMPLIANT TAX INVOICE) Tj
 0 -15 Td
-(فاتورة ضريبية متوافقة مع الزكاة والضريبة والجمارك) Tj
+(Saudi Arabia Tax Invoice - ZATCA Phase 1 Compliant) Tj
 
 0 -30 Td
 /F1 12 Tf
-(Invoice Number / رقم الفاتورة: ${invoiceNumber}) Tj
+(Invoice Number: ${invoiceNumber}) Tj
 0 -15 Td
-(Invoice UUID / معرف الفاتورة: ${invoiceUUID}) Tj
+(Invoice UUID: ${invoiceUUID}) Tj
 0 -15 Td
-(Issue Date / تاريخ الإصدار: ${issueDate}) Tj
+(Issue Date: ${issueDate}) Tj
 0 -15 Td
-(Issue Time / وقت الإصدار: ${issueTime}) Tj
+(Issue Time: ${issueTime}) Tj
 0 -15 Td
-(Supply Date / تاريخ التوريد: ${issueDate}) Tj
+(Supply Date: ${issueDate}) Tj
 0 -15 Td
-(Invoice Type / نوع الفاتورة: 01 - Standard Tax Invoice) Tj
-
-0 -30 Td
-/F1 14 Tf
-(SELLER INFORMATION / معلومات البائع:) Tj
-0 -15 Td
-/F1 12 Tf
-(Business Name / اسم الشركة: Art Souk Platform) Tj
-0 -15 Td
-(VAT Number / الرقم الضريبي: 300000000000003) Tj
-0 -15 Td
-(CR Number / رقم السجل التجاري: [REQUIRED]) Tj
-0 -15 Td
-(Address / العنوان: Saudi Arabia [COMPLETE ADDRESS REQUIRED]) Tj
+(Invoice Type: 01 - Standard Tax Invoice) Tj
 
 0 -30 Td
 /F1 14 Tf
-(BUYER INFORMATION / معلومات المشتري:) Tj
+(SELLER INFORMATION:) Tj
 0 -15 Td
 /F1 12 Tf
-(Name / الاسم: ${order.buyer.firstName} ${order.buyer.lastName}) Tj
+(Business Name: Art Souk Platform) Tj
 0 -15 Td
-(Email / البريد الإلكتروني: ${order.buyer.email}) Tj
+(VAT Number: 300000000000003) Tj
 0 -15 Td
-(Address / العنوان: [REQUIRED FOR B2B]) Tj
+(CR Number: [REQUIRED]) Tj
 0 -15 Td
-(VAT Number / الرقم الضريبي: [IF APPLICABLE]) Tj
+(Address: Saudi Arabia [COMPLETE ADDRESS REQUIRED]) Tj
 
 0 -30 Td
 /F1 14 Tf
-(LINE ITEMS / تفاصيل المواد:) Tj
+(BUYER INFORMATION:) Tj
 0 -15 Td
 /F1 12 Tf
-(Description / الوصف: ${order.artwork.title}) Tj
+(Name: ${order.buyer.firstName} ${order.buyer.lastName}) Tj
 0 -15 Td
-(Artist / الفنان: ${order.artist.name}) Tj
+(Email: ${order.buyer.email}) Tj
 0 -15 Td
-(Order Number / رقم الطلب: ${order.order.orderNumber}) Tj
+(Address: [REQUIRED FOR B2B]) Tj
 0 -15 Td
-(Quantity / الكمية: 1) Tj
-0 -15 Td
-(Unit Price / سعر الوحدة: ${subtotal.toFixed(2)} SAR) Tj
-0 -15 Td
-(VAT Rate / معدل الضريبة: 15%) Tj
+(VAT Number: [IF APPLICABLE]) Tj
 
 0 -30 Td
 /F1 14 Tf
-(FINANCIAL SUMMARY / الملخص المالي:) Tj
+(LINE ITEMS:) Tj
 0 -15 Td
 /F1 12 Tf
-(Subtotal (Excluding VAT) / المجموع الفرعي: ${subtotal.toFixed(2)} SAR) Tj
+(Description: ${order.artwork.title}) Tj
 0 -15 Td
-(VAT Amount (15%) / مبلغ الضريبة: ${vatAmount.toFixed(2)} SAR) Tj
+(Artist: ${order.artist.name}) Tj
 0 -15 Td
-(Total Amount (Including VAT) / المبلغ الإجمالي: ${totalAmount.toFixed(2)} SAR) Tj
+(Order Number: ${order.order.orderNumber}) Tj
+0 -15 Td
+(Quantity: 1) Tj
+0 -15 Td
+(Unit Price: ${subtotal.toFixed(2)} SAR) Tj
+0 -15 Td
+(VAT Rate: 15%) Tj
 
 0 -30 Td
 /F1 14 Tf
-(ZATCA COMPLIANCE / متطلبات الزكاة والضريبة:) Tj
+(FINANCIAL SUMMARY:) Tj
 0 -15 Td
 /F1 12 Tf
-(QR Code Data / بيانات رمز الاستجابة: ${qrCode.substring(0, 40)}...) Tj
+(Subtotal (Excluding VAT): ${subtotal.toFixed(2)} SAR) Tj
 0 -15 Td
-(Invoice Hash / تجزئة الفاتورة: ${invoiceHash.substring(0, 40)}...) Tj
+(VAT Amount (15%): ${vatAmount.toFixed(2)} SAR) Tj
 0 -15 Td
-(Digital Signature / التوقيع الرقمي: [REQUIRED]) Tj
-0 -15 Td
-(ZATCA Phase / مرحلة الزكاة والضريبة: Phase 1 - Generation) Tj
+(Total Amount (Including VAT): ${totalAmount.toFixed(2)} SAR) Tj
 
 0 -30 Td
 /F1 14 Tf
-(PAYMENT TERMS / شروط الدفع:) Tj
+(ZATCA COMPLIANCE:) Tj
 0 -15 Td
 /F1 12 Tf
-(Payment Method / طريقة الدفع: Direct Seller Payment) Tj
+(QR Code Data: ${qrCode.substring(0, 40)}...) Tj
 0 -15 Td
-(Due Date / تاريخ الاستحقاق: Immediate) Tj
+(Invoice Hash: ${invoiceHash.substring(0, 40)}...) Tj
 0 -15 Td
-(Note / ملاحظة: Payment arranged directly between buyer and seller) Tj
+(Digital Signature: [REQUIRED]) Tj
+0 -15 Td
+(ZATCA Phase: Phase 1 - Generation) Tj
+
+0 -30 Td
+/F1 14 Tf
+(PAYMENT TERMS:) Tj
+0 -15 Td
+/F1 12 Tf
+(Payment Method: Direct Seller Payment) Tj
+0 -15 Td
+(Due Date: Immediate) Tj
+0 -15 Td
+(Note: Payment arranged directly between buyer and seller) Tj
 
 0 -30 Td
 /F1 10 Tf
 (This invoice complies with ZATCA Phase 1 requirements) Tj
 0 -12 Td
-(هذه الفاتورة متوافقة مع متطلبات المرحلة الأولى من الزكاة والضريبة) Tj
+(Generated on: ${generatedOn}) Tj
 0 -12 Td
-(Generated on / تم إنشاؤها في: ${generatedOn}) Tj
+(Document valid for Saudi Arabian tax purposes) Tj
 ET
 endstream
 endobj
