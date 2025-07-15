@@ -90,7 +90,7 @@ export default function SellerDashboard() {
   const [editingPaymentMethod, setEditingPaymentMethod] = useState<PaymentMethod | null>(null);
 
   // Fetch seller info
-  const { data: sellerInfo } = useQuery({
+  const { data: sellerInfo, isLoading: sellerInfoLoading, error: sellerInfoError } = useQuery({
     queryKey: ['/api/seller/info'],
     enabled: true,
   });
@@ -101,13 +101,15 @@ export default function SellerDashboard() {
     enabled: selectedTab === 'orders',
   });
 
-  const orders = ordersData?.orders || [];
+  const orders = Array.isArray(ordersData?.orders) ? ordersData.orders : [];
 
   // Fetch payment methods
-  const { data: paymentMethods, isLoading: paymentMethodsLoading } = useQuery({
+  const { data: paymentMethodsData, isLoading: paymentMethodsLoading } = useQuery({
     queryKey: ['/api/seller/payment-methods'],
     enabled: selectedTab === 'payment-methods',
   });
+
+  const paymentMethods = Array.isArray(paymentMethodsData) ? paymentMethodsData : [];
 
   // Payment method form
   const paymentMethodForm = useForm({
@@ -282,6 +284,36 @@ export default function SellerDashboard() {
       currency: currency,
     }).format(price);
   };
+
+  // Show loading state
+  if (sellerInfoLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
+            <p className="mt-2 text-gray-600">{t('common.loading')}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (sellerInfoError || !sellerInfo) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <p className="text-red-600">{t('seller.errorLoadingSellerInfo')}</p>
+            <p className="text-gray-600 mt-2">{t('seller.checkSellerSetup')}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const getStatusColor = (status: string) => {
     const colors = {
