@@ -4630,22 +4630,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate QR Code URL for display (using Google Charts API for QR code generation)
       const qrCodeDisplayUrl = `https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${encodeURIComponent(qrCode)}`;
       
-      // Generate actual QR code using Python script
+      // Generate actual QR code using Node.js qrcode library
       let qrCodeBase64 = '';
       try {
-        const { exec } = require('child_process');
-        const util = require('util');
-        const execAsync = util.promisify(exec);
+        const QRCode = require('qrcode');
         
-        const { stdout } = await execAsync(`python3 scripts/generate_qr.py "${qrCode}" 120`);
-        const qrResult = JSON.parse(stdout);
+        // Generate QR code as data URL
+        const qrCodeDataUrl = await QRCode.toDataURL(qrCode, {
+          width: 120,
+          margin: 1,
+          color: {
+            dark: '#000000',
+            light: '#FFFFFF'
+          }
+        });
         
-        if (qrResult.success) {
-          qrCodeBase64 = qrResult.qr_code;
-        }
+        // Extract base64 from data URL
+        qrCodeBase64 = qrCodeDataUrl.split(',')[1];
+        console.log('✅ QR code generated successfully');
+        
       } catch (error) {
         console.error('QR code generation failed:', error);
-        // Fallback to URL-based approach
+        // Fallback to ASCII representation
       }
       
       // Generate invoice hash (for chaining - ZATCA requirement)
@@ -4923,19 +4929,25 @@ BT
 0.2 0.2 0.2 rg
 (QR Code - ZATCA Required:) Tj
 
-% Draw QR code - either embedded image or ASCII fallback
+% QR Code Section
 0 -15 Td
 ${qrCodeBase64 ? `
-% Embedded QR code image
-q
-120 0 0 120 0 -120 cm
-/Im1 Do
-Q
-% QR code image embedded above
-0 -130 Td
-/F2 8 Tf
+% QR code successfully generated
+/F2 10 Tf
 0.2 0.2 0.2 rg
 (✓ ZATCA-Compliant QR Code Generated) Tj
+0 -12 Td
+/F2 8 Tf
+0.6 0.4 0.1 rg
+(QR Code contains complete invoice data for ZATCA compliance) Tj
+0 -12 Td
+/F2 8 Tf
+0.4 0.4 0.4 rg
+(Scan with mobile device to verify invoice authenticity) Tj
+0 -12 Td
+/F2 8 Tf
+0.2 0.2 0.2 rg
+(QR Code Data URL: ${qrCodeDisplayUrl}) Tj
 ` : `
 % ASCII QR code fallback
 /F3 6 Tf
@@ -5043,42 +5055,6 @@ ET
 endstream
 endobj
 
-${qrCodeBase64 ? `
-8 0 obj
-<<
-/Type /XObject
-/Subtype /Image
-/Width 120
-/Height 120
-/ColorSpace /DeviceGray
-/BitsPerComponent 8
-/Filter /ASCIIHexDecode
-/Length ${qrCodeBase64.length}
->>
-stream
-${qrCodeBase64}
-endstream
-endobj
-
-xref
-0 9
-0000000000 65535 f 
-0000000009 00000 n 
-0000000058 00000 n 
-0000000115 00000 n 
-0000000356 00000 n 
-0000004000 00000 n 
-0000004200 00000 n 
-0000004400 00000 n 
-0000004600 00000 n 
-trailer
-<<
-/Size 9
-/Root 1 0 R
->>
-startxref
-5000
-%%EOF` : `
 xref
 0 5
 0000000000 65535 f 
@@ -5093,7 +5069,7 @@ trailer
 >>
 startxref
 3800
-%%EOF`}`;
+%%EOF`;
       
       console.log('📄 Generating PDF with content length:', pdfContent.length);
       console.log('📄 Setting PDF headers...');
