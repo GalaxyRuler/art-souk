@@ -101,8 +101,8 @@ export default function SellerDashboard() {
     enabled: selectedTab === 'orders',
   });
 
-  // Ensure orders is always an array - API returns { orders: [...] }
-  const orders = React.useMemo(() => {
+  // Ensure sellerOrders is always an array - API returns { orders: [...] }
+  const sellerOrders = React.useMemo(() => {
     try {
       console.log('Processing orders data:', ordersData);
       if (!ordersData) {
@@ -472,10 +472,10 @@ export default function SellerDashboard() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {orders && Array.isArray(orders) && orders.length > 0 ? (
+                        {sellerOrders && Array.isArray(sellerOrders) && sellerOrders.length > 0 ? (
                           (() => {
-                            console.log('About to map orders:', orders, 'isArray:', Array.isArray(orders));
-                            return orders.map((order: Order, index: number) => (
+                            console.log('About to map sellerOrders:', sellerOrders, 'isArray:', Array.isArray(sellerOrders));
+                            return sellerOrders.map((order: Order, index: number) => (
                             <TableRow key={order.id}>
                               <TableCell className="font-medium">{order.artwork?.title || 'Unknown Artwork'}</TableCell>
                               <TableCell>{order.buyerEmail}</TableCell>
