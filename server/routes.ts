@@ -4349,6 +4349,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // QR code test endpoint
+  app.get('/api/test/qr', async (req, res) => {
+    try {
+      // Use dynamic import for ES modules
+      const qrModule = await import('./qrGenerator.js');
+      const { generateQRCode } = qrModule;
+      const testData = 'Test QR Code for Art Souk - ZATCA Compliant';
+      const qrCodeBase64 = await generateQRCode(testData);
+      
+      res.json({
+        success: true,
+        qrCodeBase64,
+        testData,
+        message: 'QR code generated successfully'
+      });
+    } catch (error) {
+      res.status(500).json({ 
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      });
+    }
+  });
+
+  // Development tools endpoint
+  app.get('/api/dev/report', async (req, res) => {
+    try {
+      const devTools = require('./devTools');
+      const report = await devTools.generateDevReport();
+      res.json(report);
+    } catch (error) {
+      res.status(500).json({ 
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      });
+    }
+  });
+
+  // Development tools benchmark endpoint
+  app.get('/api/dev/benchmark/:endpoint', async (req, res) => {
+    try {
+      const devTools = require('./devTools');
+      const endpoint = req.params.endpoint;
+      const iterations = parseInt(req.query.iterations as string) || 5;
+      
+      const benchmarkUrl = `http://localhost:3000/${endpoint}`;
+      const results = await devTools.benchmarkEndpoint(benchmarkUrl, iterations);
+      
+      res.json(results);
+    } catch (error) {
+      res.status(500).json({ 
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      });
+    }
+  });
+
   // Start periodic metric updates (every hour)
   setInterval(async () => {
     try {
@@ -4630,25 +4684,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate QR Code URL for display (using Google Charts API for QR code generation)
       const qrCodeDisplayUrl = `https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${encodeURIComponent(qrCode)}`;
       
-      // Generate actual QR code using Google Charts API
+      // Generate actual QR code using our QR generator module
       let qrCodeBase64 = '';
       try {
-        // Use Google Charts API to generate QR code image
-        const qrCodeUrl = `https://chart.googleapis.com/chart?chs=120x120&cht=qr&chl=${encodeURIComponent(qrCode)}`;
+        // Import the QR generator module using dynamic import
+        const qrModule = await import('./qrGenerator.js');
+        const { generateZATCAQRCode } = qrModule;
         
-        // Fetch the QR code image
-        const response = await fetch(qrCodeUrl);
-        if (response.ok) {
-          const buffer = await response.arrayBuffer();
-          qrCodeBase64 = Buffer.from(buffer).toString('base64');
-          console.log('✅ QR code generated successfully using Google Charts API');
-        } else {
-          throw new Error('Failed to fetch QR code from Google Charts API');
-        }
+        // Generate ZATCA-compliant QR code
+        qrCodeBase64 = await generateZATCAQRCode({
+          sellerName: 'Art Souk',
+          vatNumber: '300000000000003',
+          timestamp: invoiceDate,
+          totalAmount: totalAmount.toFixed(2),
+          vatAmount: vatAmount.toFixed(2),
+          invoiceHash: invoiceHash
+        });
+        
+        console.log('✅ QR code generated successfully using ZATCA-compliant generator');
         
       } catch (error) {
         console.error('QR code generation failed:', error);
-        // Fallback to ASCII representation
+        // Create a simple fallback QR code with basic invoice info
+        try {
+          const qrModule = await import('./qrGenerator.js');
+          const { generateQRCode } = qrModule;
+          const fallbackData = `Invoice: ${invoiceNumber}\nTotal: ${totalAmount} ${currency}\nDate: ${invoiceDate}`;
+          qrCodeBase64 = await generateQRCode(fallbackData);
+          console.log('✅ QR code generated using fallback method');
+        } catch (fallbackError) {
+          console.error('All QR code generation methods failed:', fallbackError);
+        }
       }
       
       // Generate invoice hash (for chaining - ZATCA requirement)
