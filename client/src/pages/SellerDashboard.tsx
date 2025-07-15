@@ -259,6 +259,7 @@ export default function SellerDashboard() {
   });
 
   const openPaymentDialog = (method?: PaymentMethod) => {
+    console.log('openPaymentDialog called with method:', method);
     if (method) {
       setEditingPaymentMethod(method);
       paymentMethodForm.reset({
@@ -279,7 +280,9 @@ export default function SellerDashboard() {
       setEditingPaymentMethod(null);
       paymentMethodForm.reset();
     }
+    console.log('Setting payment dialog open to true');
     setPaymentDialogOpen(true);
+    console.log('Payment dialog state after setting:', paymentDialogOpen);
   };
 
   const openOrderDialog = (order: Order) => {
@@ -543,7 +546,11 @@ export default function SellerDashboard() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>{t('seller.paymentMethodsManagement')}</CardTitle>
-                <Button onClick={() => openPaymentDialog()}>
+                <Button onClick={() => {
+                  console.log('Add Payment Method button clicked');
+                  openPaymentDialog();
+                  console.log('Dialog should now be open:', paymentDialogOpen);
+                }}>
                   <Plus className="w-4 h-4 mr-2" />
                   {t('seller.addPaymentMethod')}
                 </Button>
