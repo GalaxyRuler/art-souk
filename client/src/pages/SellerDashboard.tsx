@@ -654,9 +654,7 @@ export default function SellerDashboard() {
                 {editingPaymentMethod ? t('seller.editPaymentMethod') : t('seller.addPaymentMethod')}
               </DialogTitle>
             </DialogHeader>
-            <div className="text-xs text-gray-500 mb-4">
-              Debug: Dialog open = {paymentDialogOpen.toString()}, Form type = {paymentMethodForm.watch('type')}
-            </div>
+
             <div 
               onClick={(e) => {
                 e.stopPropagation();
@@ -669,57 +667,41 @@ export default function SellerDashboard() {
             >
               <Form {...paymentMethodForm}>
                 <form onSubmit={paymentMethodForm.handleSubmit(onPaymentMethodSubmit)} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="payment-type-select">{t('seller.paymentType')}</Label>
-                    <select
-                      id="payment-type-select"
-                      name="paymentType"
-                      value={paymentMethodForm.watch('type') || 'saudi_bank'}
-                      onChange={(e) => {
-                        e.stopPropagation();
-                        console.log('=== DROPDOWN CHANGE ===');
-                        console.log('Selected value:', e.target.value);
-                        console.log('Event target:', e.target);
-                        console.log('Form before change:', paymentMethodForm.getValues());
-                        
-                        paymentMethodForm.setValue('type', e.target.value as any, { 
-                          shouldValidate: true,
-                          shouldDirty: true 
-                        });
-                        
-                        console.log('Form after change:', paymentMethodForm.getValues());
-                      }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        console.log('=== DROPDOWN CLICKED ===');
-                        console.log('Click event:', e);
-                      }}
-                      onMouseDown={(e) => {
-                        e.stopPropagation();
-                        console.log('=== DROPDOWN MOUSEDOWN ===');
-                      }}
-                      onFocus={(e) => {
-                        e.stopPropagation();
-                        console.log('=== DROPDOWN FOCUSED ===');
-                        console.log('Focus event:', e);
-                      }}
-                      style={{
-                        position: 'relative',
-                        zIndex: 10000,
-                        pointerEvents: 'auto',
-                        cursor: 'pointer',
-                        userSelect: 'none'
-                      }}
-                      className="w-full h-10 px-3 py-2 text-sm bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
-                    >
-                      <option value="saudi_bank">{t('seller.bankTransfer')}</option>
-                      <option value="paypal">{t('seller.paypal')}</option>
-                      <option value="stc_pay">{t('seller.stcPay')}</option>
-                      <option value="wise">{t('seller.wise')}</option>
-                      <option value="cash_on_delivery">{t('seller.cashOnDelivery')}</option>
-                    </select>
-                  </div>
+                  <FormField
+                    control={paymentMethodForm.control}
+                    name="type"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('seller.paymentType')}</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <select
+                              {...field}
+                              className="w-full h-10 px-3 py-2 text-sm bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none cursor-pointer"
+                              style={{
+                                backgroundImage: "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e\")",
+                                backgroundPosition: "right 0.5rem center",
+                                backgroundRepeat: "no-repeat",
+                                backgroundSize: "1.5em 1.5em",
+                                paddingRight: "2.5rem"
+                              }}
+                              onChange={(e) => {
+                                console.log('Payment type changed to:', e.target.value);
+                                field.onChange(e.target.value);
+                              }}
+                            >
+                              <option value="saudi_bank">{t('seller.bankTransfer')}</option>
+                              <option value="paypal">{t('seller.paypal')}</option>
+                              <option value="stc_pay">{t('seller.stcPay')}</option>
+                              <option value="wise">{t('seller.wise')}</option>
+                              <option value="cash_on_delivery">{t('seller.cashOnDelivery')}</option>
+                            </select>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                 {paymentMethodForm.watch('type') === 'saudi_bank' && (
                   <>
