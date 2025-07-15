@@ -114,10 +114,12 @@ export default function SellerDashboard() {
   });
 
   // Fetch seller orders
-  const { data: orders, isLoading: ordersLoading } = useQuery({
+  const { data: ordersData, isLoading: ordersLoading } = useQuery({
     queryKey: [`/api/seller/orders`],
     enabled: !!user,
   });
+
+  const orders = Array.isArray(ordersData?.orders) ? ordersData.orders : [];
 
   // Add/Update payment method mutation
   const savePaymentMethod = useMutation({
