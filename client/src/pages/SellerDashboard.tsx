@@ -278,11 +278,25 @@ export default function SellerDashboard() {
       });
     } else {
       setEditingPaymentMethod(null);
-      paymentMethodForm.reset();
+      paymentMethodForm.reset({
+        type: 'saudi_bank' as const,
+        details: {
+          bank_name: '',
+          iban: '',
+          phone_number: '',
+          paypal_email: '',
+          wise_email: '',
+          preferred_currency: 'SAR',
+          account_holder_name: ''
+        },
+        customInstructions: '',
+        isDefault: false
+      });
     }
     console.log('Setting payment dialog open to true');
     setPaymentDialogOpen(true);
     console.log('Payment dialog state after setting:', paymentDialogOpen);
+    console.log('Form values after reset:', paymentMethodForm.getValues());
   };
 
   const openOrderDialog = (order: Order) => {
@@ -651,13 +665,14 @@ export default function SellerDashboard() {
                   <select 
                     id="payment-type"
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    value={paymentMethodForm.watch('type') || ''}
+                    value={paymentMethodForm.watch('type') || 'saudi_bank'}
                     onChange={(e) => {
                       console.log('Payment type changed to:', e.target.value);
+                      console.log('Before setValue - form type:', paymentMethodForm.getValues('type'));
                       paymentMethodForm.setValue('type', e.target.value as any);
+                      console.log('After setValue - form type:', paymentMethodForm.getValues('type'));
                     }}
                   >
-                    <option value="">{t('seller.selectPaymentType')}</option>
                     <option value="saudi_bank">{t('seller.bankTransfer')}</option>
                     <option value="paypal">{t('seller.paypal')}</option>
                     <option value="stc_pay">{t('seller.stcPay')}</option>
