@@ -847,17 +847,35 @@ export default function SellerDashboard() {
                       orderStatusForm.setValue('status', value as any);
                     }} 
                     value={orderStatusForm.watch('status')}
+                    onOpenChange={(open) => {
+                      console.log('Select dropdown opened:', open);
+                    }}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger 
+                      className="w-full"
+                      onClick={() => console.log('SelectTrigger clicked')}
+                    >
                       <SelectValue placeholder={t('seller.selectOrderStatus')} />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="pending">{t('seller.pending')}</SelectItem>
-                      <SelectItem value="confirmed">{t('seller.confirmed')}</SelectItem>
-                      <SelectItem value="processing">{t('seller.processing')}</SelectItem>
-                      <SelectItem value="shipped">{t('seller.shipped')}</SelectItem>
-                      <SelectItem value="delivered">{t('seller.delivered')}</SelectItem>
-                      <SelectItem value="cancelled">{t('seller.cancelled')}</SelectItem>
+                    <SelectContent className="z-[60]">
+                      <SelectItem value="pending" onClick={() => console.log('Pending clicked')}>
+                        {t('seller.pending')}
+                      </SelectItem>
+                      <SelectItem value="confirmed" onClick={() => console.log('Confirmed clicked')}>
+                        {t('seller.confirmed')}
+                      </SelectItem>
+                      <SelectItem value="processing" onClick={() => console.log('Processing clicked')}>
+                        {t('seller.processing')}
+                      </SelectItem>
+                      <SelectItem value="shipped" onClick={() => console.log('Shipped clicked')}>
+                        {t('seller.shipped')}
+                      </SelectItem>
+                      <SelectItem value="delivered" onClick={() => console.log('Delivered clicked')}>
+                        {t('seller.delivered')}
+                      </SelectItem>
+                      <SelectItem value="cancelled" onClick={() => console.log('Cancelled clicked')}>
+                        {t('seller.cancelled')}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
