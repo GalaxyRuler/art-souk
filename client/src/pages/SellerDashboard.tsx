@@ -32,10 +32,9 @@ interface PaymentMethod {
 interface Order {
   id: string;
   artworkId: string;
-  artworkTitle: string;
-  buyerName: string;
   buyerEmail: string;
-  amount: number;
+  quantity: number;
+  totalPrice: number;
   currency: string;
   status: string;
   paymentStatus: string;
@@ -43,6 +42,13 @@ interface Order {
   sellerNotes?: string;
   trackingNumber?: string;
   carrier?: string;
+  artwork?: {
+    id: string;
+    title: string;
+    titleAr: string;
+    images: string[];
+    price: number;
+  };
 }
 
 interface SellerInfo {
@@ -90,10 +96,12 @@ export default function SellerDashboard() {
   });
 
   // Fetch orders
-  const { data: orders, isLoading: ordersLoading } = useQuery({
+  const { data: ordersData, isLoading: ordersLoading } = useQuery({
     queryKey: ['/api/seller/orders'],
     enabled: selectedTab === 'orders',
   });
+
+  const orders = ordersData?.orders || [];
 
   // Fetch payment methods
   const { data: paymentMethods, isLoading: paymentMethodsLoading } = useQuery({
@@ -410,28 +418,36 @@ export default function SellerDashboard() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {orders?.map((order: Order) => (
-                          <TableRow key={order.id}>
-                            <TableCell className="font-medium">{order.artworkTitle}</TableCell>
-                            <TableCell>{order.buyerName}</TableCell>
-                            <TableCell>{formatPrice(order.amount, order.currency)}</TableCell>
-                            <TableCell>
-                              <Badge className={getStatusColor(order.status)}>
-                                {order.status}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>{formatDate(order.createdAt)}</TableCell>
-                            <TableCell>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => openOrderDialog(order)}
-                              >
-                                {t('seller.updateStatus')}
-                              </Button>
+                        {orders && orders.length > 0 ? (
+                          orders.map((order: Order) => (
+                            <TableRow key={order.id}>
+                              <TableCell className="font-medium">{order.artwork?.title || 'Unknown Artwork'}</TableCell>
+                              <TableCell>{order.buyerEmail}</TableCell>
+                              <TableCell>{formatPrice(order.totalPrice, order.currency)}</TableCell>
+                              <TableCell>
+                                <Badge className={getStatusColor(order.status)}>
+                                  {order.status}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>{formatDate(order.createdAt)}</TableCell>
+                              <TableCell>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => openOrderDialog(order)}
+                                >
+                                  {t('seller.updateStatus')}
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        ) : (
+                          <TableRow>
+                            <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                              {t('seller.noOrdersYet')}
                             </TableCell>
                           </TableRow>
-                        ))}
+                        )}
                       </TableBody>
                     </Table>
                   </div>
@@ -465,49 +481,56 @@ export default function SellerDashboard() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {paymentMethods?.map((method: PaymentMethod) => (
-                      <Card key={method.id} className="p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center space-x-2">
-                            {getPaymentMethodIcon(method.type)}
-                            <div>
-                              <p className="font-medium">{method.name}</p>
-                              <p className="text-sm text-gray-500 capitalize">{method.type}</p>
+                    {paymentMethods && paymentMethods.length > 0 ? (
+                      paymentMethods.map((method: PaymentMethod) => (
+                        <Card key={method.id} className="p-4">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center space-x-2">
+                              {getPaymentMethodIcon(method.type)}
+                              <div>
+                                <p className="font-medium">{method.name}</p>
+                                <p className="text-sm text-gray-500 capitalize">{method.type}</p>
+                              </div>
+                            </div>
+                            <div className="flex space-x-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => openPaymentDialog(method)}
+                              >
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => deletePaymentMethod.mutate(method.id)}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
                             </div>
                           </div>
-                          <div className="flex space-x-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => openPaymentDialog(method)}
-                            >
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => deletePaymentMethod.mutate(method.id)}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
+                          <div className="text-sm text-gray-600">
+                            {method.details.accountNumber && (
+                              <p>Account: {method.details.accountNumber}</p>
+                            )}
+                            {method.details.iban && (
+                              <p>IBAN: {method.details.iban}</p>
+                            )}
+                            {method.details.paypalEmail && (
+                              <p>PayPal: {method.details.paypalEmail}</p>
+                            )}
+                            {method.details.phoneNumber && (
+                              <p>Phone: {method.details.phoneNumber}</p>
+                            )}
                           </div>
-                        </div>
-                        <div className="text-sm text-gray-600">
-                          {method.details.accountNumber && (
-                            <p>Account: {method.details.accountNumber}</p>
-                          )}
-                          {method.details.iban && (
-                            <p>IBAN: {method.details.iban}</p>
-                          )}
-                          {method.details.paypalEmail && (
-                            <p>PayPal: {method.details.paypalEmail}</p>
-                          )}
-                          {method.details.phoneNumber && (
-                            <p>Phone: {method.details.phoneNumber}</p>
-                          )}
-                        </div>
-                      </Card>
-                    ))}
+                        </Card>
+                      ))
+                    ) : (
+                      <div className="col-span-2 text-center py-8 text-gray-500">
+                        <p>{t('seller.noPaymentMethodsYet')}</p>
+                        <p className="text-sm mt-2">{t('seller.addFirstPaymentMethod')}</p>
+                      </div>
+                    )}
                   </div>
                 )}
               </CardContent>

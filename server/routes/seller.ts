@@ -44,26 +44,52 @@ sellerRouter.get('/info', async (req: any, res) => {
     const [gallery] = await db.select().from(galleries).where(eq(galleries.userId, userId));
     
     if (artist) {
+      // Get order statistics for artist
+      const artistArtworks = await db.select().from(artworks).where(eq(artworks.artistId, artist.id));
+      const artworkIds = artistArtworks.map(a => a.id);
+      
+      let totalOrders = 0;
+      let totalRevenue = 0;
+      let pendingOrders = 0;
+      
+      if (artworkIds.length > 0) {
+        const orders = await db.select().from(purchaseOrders).where(inArray(purchaseOrders.artworkId, artworkIds));
+        totalOrders = orders.length;
+        totalRevenue = orders.reduce((sum, order) => sum + order.totalPrice, 0);
+        pendingOrders = orders.filter(order => order.status === 'pending').length;
+      }
+
       res.json({
-        sellerType: 'artist',
-        sellerId: artist.id,
-        sellerInfo: {
-          name: artist.name,
-          nameAr: artist.nameAr,
-          bio: artist.bio,
-          paymentMethods: artist.paymentMethods || []
-        }
+        type: 'artist',
+        name: artist.name,
+        email: req.user.email,
+        totalOrders,
+        totalRevenue,
+        pendingOrders
       });
     } else if (gallery) {
+      // Get order statistics for gallery
+      const galleryArtworks = await db.select().from(artworks).where(eq(artworks.galleryId, gallery.id));
+      const artworkIds = galleryArtworks.map(a => a.id);
+      
+      let totalOrders = 0;
+      let totalRevenue = 0;
+      let pendingOrders = 0;
+      
+      if (artworkIds.length > 0) {
+        const orders = await db.select().from(purchaseOrders).where(inArray(purchaseOrders.artworkId, artworkIds));
+        totalOrders = orders.length;
+        totalRevenue = orders.reduce((sum, order) => sum + order.totalPrice, 0);
+        pendingOrders = orders.filter(order => order.status === 'pending').length;
+      }
+
       res.json({
-        sellerType: 'gallery',
-        sellerId: gallery.id,
-        sellerInfo: {
-          name: gallery.name,
-          nameAr: gallery.nameAr,
-          description: gallery.description,
-          paymentMethods: gallery.paymentMethods || []
-        }
+        type: 'gallery',
+        name: gallery.name,
+        email: req.user.email,
+        totalOrders,
+        totalRevenue,
+        pendingOrders
       });
     } else {
       res.status(404).json({ error: 'Seller profile not found' });
@@ -88,9 +114,7 @@ sellerRouter.get('/payment-methods', async (req: any, res) => {
       return res.status(404).json({ error: 'Seller profile not found' });
     }
 
-    res.json({
-      paymentMethods: seller.paymentMethods || []
-    });
+    res.json(seller.paymentMethods || []);
   } catch (error) {
     console.error('Get payment methods error:', error);
     res.status(500).json({ error: 'Failed to get payment methods' });
