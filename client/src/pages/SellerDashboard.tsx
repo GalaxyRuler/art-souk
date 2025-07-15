@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -102,7 +102,12 @@ export default function SellerDashboard() {
   });
 
   // Ensure orders is always an array - API returns { orders: [...] }
-  const orders = Array.isArray(ordersData?.orders) ? ordersData.orders : [];
+  const orders = React.useMemo(() => {
+    if (!ordersData) return [];
+    if (Array.isArray(ordersData.orders)) return ordersData.orders;
+    if (Array.isArray(ordersData)) return ordersData;
+    return [];
+  }, [ordersData]);
 
   // Fetch payment methods
   const { data: paymentMethodsData, isLoading: paymentMethodsLoading } = useQuery({
@@ -451,7 +456,7 @@ export default function SellerDashboard() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {Array.isArray(orders) && orders.length > 0 ? (
+                        {orders && Array.isArray(orders) && orders.length > 0 ? (
                           orders.map((order: Order) => (
                             <TableRow key={order.id}>
                               <TableCell className="font-medium">{order.artwork?.title || 'Unknown Artwork'}</TableCell>
