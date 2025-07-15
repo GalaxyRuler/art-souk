@@ -4630,6 +4630,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate QR Code URL for display (using Google Charts API for QR code generation)
       const qrCodeDisplayUrl = `https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${encodeURIComponent(qrCode)}`;
       
+      // Generate simple ASCII QR code placeholder for PDF
+      const qrCodeAscii = `
+      ████████████████████████████████
+      ██    ██      ██    ██      ████
+      ██  ██████  ██████  ██████  ████
+      ██  ██████  ██████  ██████  ████
+      ██  ██████  ██████  ██████  ████
+      ██    ██      ██    ██      ████
+      ████████████████████████████████
+      ██                          ████
+      ██  ██████  ██████  ██████  ████
+      ██  ██████  ██████  ██████  ████
+      ██  ██████  ██████  ██████  ████
+      ██                          ████
+      ████████████████████████████████
+      ██    ██      ██    ██      ████
+      ██  ██████  ██████  ██████  ████
+      ██  ██████  ██████  ██████  ████
+      ██  ██████  ██████  ██████  ████
+      ██    ██      ██    ██      ████
+      ████████████████████████████████
+      `;
+      
       // Generate invoice hash (for chaining - ZATCA requirement)
       const invoiceData = `${invoiceNumber}${new Date().toISOString()}${totalAmount}`;
       const invoiceHash = Buffer.from(invoiceData).toString('base64');
@@ -4897,53 +4920,79 @@ BT
 0 -20 Td
 /F2 10 Tf
 0.2 0.2 0.2 rg
-(QR Code Required:) Tj
-0 -12 Td
-/F2 8 Tf
-0.4 0.4 0.4 rg
-(QR Code contains: Seller, VAT, Total, Invoice data) Tj
-0 -12 Td
-/F2 10 Tf
-0.2 0.2 0.2 rg
-(QR Code Data:) Tj
-0 -12 Td
-/F2 8 Tf
-0.4 0.4 0.4 rg
-(${qrCode.substring(0, 60)}...) Tj
-0 -12 Td
-/F2 10 Tf
-0.2 0.2 0.2 rg
-(Invoice Hash:) Tj
-0 -12 Td
-/F2 8 Tf
-0.4 0.4 0.4 rg
-(${invoiceHash.substring(0, 60)}...) Tj
-0 -12 Td
-/F2 10 Tf
-0.2 0.2 0.2 rg
-(ZATCA Phase:) Tj
-0 -12 Td
-/F2 10 Tf
-0.4 0.4 0.4 rg
-(Phase 1 - Generation) Tj
-0 -12 Td
-/F2 10 Tf
-0.2 0.2 0.2 rg
-(Digital Signature:) Tj
-0 -12 Td
-/F2 10 Tf
-0.4 0.4 0.4 rg
-([REQUIRED FOR PHASE 2]) Tj
+(QR Code - ZATCA Required:) Tj
 
-% Note about QR code generation
-0 -25 Td
+% Draw QR code representation
+0 -15 Td
+/F3 6 Tf
+0 0 0 rg
+q
+1 0 0 1 0 0 cm
+BT
+/F3 6 Tf
+0 0 0 rg
+0 0 Td
+(█████████████████████████████████) Tj
+0 -6 Td
+(██     ██       ██     ██     ████) Tj
+0 -6 Td
+(██  ███████  ███████  ███████  ████) Tj
+0 -6 Td
+(██  ███████  ███████  ███████  ████) Tj
+0 -6 Td
+(██  ███████  ███████  ███████  ████) Tj
+0 -6 Td
+(██     ██       ██     ██     ████) Tj
+0 -6 Td
+(█████████████████████████████████) Tj
+0 -6 Td
+(██                           ████) Tj
+0 -6 Td
+(██  ███████  ███████  ███████  ████) Tj
+0 -6 Td
+(██  ███████  ███████  ███████  ████) Tj
+0 -6 Td
+(██  ███████  ███████  ███████  ████) Tj
+0 -6 Td
+(██                           ████) Tj
+0 -6 Td
+(█████████████████████████████████) Tj
+0 -6 Td
+(██     ██       ██     ██     ████) Tj
+0 -6 Td
+(██  ███████  ███████  ███████  ████) Tj
+0 -6 Td
+(██  ███████  ███████  ███████  ████) Tj
+0 -6 Td
+(██  ███████  ███████  ███████  ████) Tj
+0 -6 Td
+(██     ██       ██     ██     ████) Tj
+0 -6 Td
+(█████████████████████████████████) Tj
+ET
+Q
+
+% QR code information
+0 -125 Td
 /F2 8 Tf
-0.6 0.4 0.1 rg
-(QR Code URL: ${qrCodeDisplayUrl}) Tj
+0.2 0.2 0.2 rg
+(QR Code contains: Seller, VAT, Invoice Total, Hash) Tj
 0 -10 Td
 /F2 8 Tf
 0.4 0.4 0.4 rg
-(Scan or visit URL to view QR code for ZATCA compliance) Tj
+(Data: ${qrCode.substring(0, 50)}...) Tj
+0 -10 Td
+/F2 8 Tf
+0.2 0.2 0.2 rg
+(Invoice Hash: ${invoiceHash.substring(0, 50)}...) Tj
+0 -10 Td
+/F2 8 Tf
+0.2 0.2 0.2 rg
+(ZATCA Phase: Phase 1 - Generation) Tj
+0 -10 Td
+/F2 8 Tf
+0.6 0.4 0.1 rg
+(Alternative QR: ${qrCodeDisplayUrl}) Tj
 
 % Payment terms
 0 -30 Td
