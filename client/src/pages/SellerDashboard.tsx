@@ -834,10 +834,10 @@ export default function SellerDashboard() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t('seller.orderStatus')}</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue />
+                            <SelectValue placeholder={t('seller.selectOrderStatus')} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
