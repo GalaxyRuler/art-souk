@@ -101,13 +101,8 @@ export default function SellerDashboard() {
     enabled: selectedTab === 'orders',
   });
 
-  // Debug logging
-  console.log('Orders Data:', ordersData);
-  console.log('Orders Data Type:', typeof ordersData);
-  console.log('Orders Data Structure:', ordersData);
-  
-  const orders = Array.isArray(ordersData?.orders) ? ordersData.orders : 
-                 Array.isArray(ordersData) ? ordersData : [];
+  // Ensure orders is always an array - API returns { orders: [...] }
+  const orders = Array.isArray(ordersData?.orders) ? ordersData.orders : [];
 
   // Fetch payment methods
   const { data: paymentMethodsData, isLoading: paymentMethodsLoading } = useQuery({
