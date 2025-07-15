@@ -839,39 +839,28 @@ export default function SellerDashboard() {
             </DialogHeader>
             <Form {...orderStatusForm}>
               <form onSubmit={orderStatusForm.handleSubmit(updateOrderStatus.mutate)} className="space-y-4">
-                <FormField
-                  control={orderStatusForm.control}
-                  name="status"
-                  render={({ field }) => {
-                    console.log('Form field value:', field.value);
-                    console.log('Form watch status:', orderStatusForm.watch('status'));
-                    return (
-                      <FormItem>
-                        <FormLabel>{t('seller.orderStatus')}</FormLabel>
-                        <Select 
-                          onValueChange={(value) => {
-                            console.log('Select value changed to:', value);
-                            field.onChange(value);
-                          }} 
-                          value={field.value}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder={t('seller.selectOrderStatus')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="pending">{t('seller.pending')}</SelectItem>
-                            <SelectItem value="confirmed">{t('seller.confirmed')}</SelectItem>
-                            <SelectItem value="processing">{t('seller.processing')}</SelectItem>
-                            <SelectItem value="shipped">{t('seller.shipped')}</SelectItem>
-                            <SelectItem value="delivered">{t('seller.delivered')}</SelectItem>
-                            <SelectItem value="cancelled">{t('seller.cancelled')}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
+                <div className="space-y-2">
+                  <Label htmlFor="status">{t('seller.orderStatus')}</Label>
+                  <Select 
+                    onValueChange={(value) => {
+                      console.log('Select value changed to:', value);
+                      orderStatusForm.setValue('status', value as any);
+                    }} 
+                    value={orderStatusForm.watch('status')}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('seller.selectOrderStatus')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pending">{t('seller.pending')}</SelectItem>
+                      <SelectItem value="confirmed">{t('seller.confirmed')}</SelectItem>
+                      <SelectItem value="processing">{t('seller.processing')}</SelectItem>
+                      <SelectItem value="shipped">{t('seller.shipped')}</SelectItem>
+                      <SelectItem value="delivered">{t('seller.delivered')}</SelectItem>
+                      <SelectItem value="cancelled">{t('seller.cancelled')}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 <FormField
                   control={orderStatusForm.control}
