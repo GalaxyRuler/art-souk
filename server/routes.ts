@@ -4639,7 +4639,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const issueTime = currentDate.toLocaleTimeString();
       const generatedOn = new Date().toLocaleString();
       
-      // Create ZATCA-compliant PDF content (English only for proper display)
+      // Create modern ZATCA-compliant PDF with Art Souk branding
       const pdfContent = `%PDF-1.4
 1 0 obj
 <<
@@ -4667,6 +4667,11 @@ endobj
 /F1 <<
 /Type /Font
 /Subtype /Type1
+/BaseFont /Helvetica-Bold
+>>
+/F2 <<
+/Type /Font
+/Subtype /Type1
 /BaseFont /Helvetica
 >>
 >>
@@ -4676,115 +4681,266 @@ endobj
 
 4 0 obj
 <<
-/Length 3500
+/Length 4500
 >>
 stream
 BT
-/F1 16 Tf
+
+% Header with branding
+/F1 24 Tf
+0.2 0.3 0.6 rg
 50 750 Td
-(ART SOUK - ZATCA COMPLIANT TAX INVOICE) Tj
-0 -15 Td
-(Saudi Arabia Tax Invoice - ZATCA Phase 1 Compliant) Tj
+(ART SOUK) Tj
+0 -18 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+(Premium Art Marketplace for Saudi Arabia & GCC) Tj
 
+% Invoice title
 0 -30 Td
+/F1 16 Tf
+0.2 0.3 0.6 rg
+(ZATCA COMPLIANT TAX INVOICE) Tj
+0 -12 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+(Saudi Arabia Phase 1 Compliant) Tj
+
+% Invoice details box
+0 -40 Td
 /F1 12 Tf
-(Invoice Number: ${invoiceNumber}) Tj
-0 -15 Td
-(Invoice UUID: ${invoiceUUID}) Tj
-0 -15 Td
-(Issue Date: ${issueDate}) Tj
-0 -15 Td
-(Issue Time: ${issueTime}) Tj
-0 -15 Td
-(Supply Date: ${issueDate}) Tj
-0 -15 Td
-(Invoice Type: 01 - Standard Tax Invoice) Tj
+0.2 0.3 0.6 rg
+(INVOICE DETAILS) Tj
+0 -20 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Invoice Number:) Tj
+120 0 Td
+/F1 10 Tf
+0.6 0.4 0.1 rg
+(${invoiceNumber}) Tj
+-120 -15 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Invoice UUID:) Tj
+120 0 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+(${invoiceUUID}) Tj
+-120 -15 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Issue Date:) Tj
+120 0 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+(${issueDate}) Tj
+-120 -15 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Issue Time:) Tj
+120 0 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+(${issueTime}) Tj
+-120 -15 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Invoice Type:) Tj
+120 0 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+(01 - Standard Tax Invoice) Tj
 
-0 -30 Td
+% Two-column layout for seller and buyer info
+0 -40 Td
+/F1 12 Tf
+0.2 0.3 0.6 rg
+(SELLER INFORMATION) Tj
+280 0 Td
+(BUYER INFORMATION) Tj
+-280 -20 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Business Name:) Tj
+0 -12 Td
+/F1 10 Tf
+0.6 0.4 0.1 rg
+(Art Souk Platform) Tj
+0 -12 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(VAT Number:) Tj
+0 -12 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+(300000000000003) Tj
+0 -12 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(CR Number:) Tj
+0 -12 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+([REQUIRED]) Tj
+0 -12 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Address:) Tj
+0 -12 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+(Saudi Arabia) Tj
+
+% Buyer info (right column)
+280 84 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Name:) Tj
+0 -12 Td
+/F1 10 Tf
+0.6 0.4 0.1 rg
+(${order.buyer.firstName} ${order.buyer.lastName}) Tj
+0 -12 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Email:) Tj
+0 -12 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+(${order.buyer.email}) Tj
+0 -12 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Address:) Tj
+0 -12 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+([REQUIRED FOR B2B]) Tj
+
+% Artwork details section
+-280 -40 Td
+/F1 12 Tf
+0.2 0.3 0.6 rg
+(ARTWORK DETAILS) Tj
+0 -20 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Title:) Tj
+80 0 Td
+/F1 11 Tf
+0.6 0.4 0.1 rg
+(${order.artwork.title}) Tj
+-80 -15 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Artist:) Tj
+80 0 Td
+/F1 11 Tf
+0.6 0.4 0.1 rg
+(${order.artist.name}) Tj
+-80 -15 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Order Number:) Tj
+80 0 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+(${order.order.orderNumber}) Tj
+-80 -15 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Quantity:) Tj
+80 0 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+(1) Tj
+
+% Financial summary with gold accent
+0 -40 Td
+/F1 12 Tf
+0.2 0.3 0.6 rg
+(FINANCIAL SUMMARY) Tj
+0 -20 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Subtotal (Excluding VAT):) Tj
+200 0 Td
+/F1 11 Tf
+0.6 0.4 0.1 rg
+(${subtotal.toFixed(2)} SAR) Tj
+-200 -15 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(VAT Amount (15%):) Tj
+200 0 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+(${vatAmount.toFixed(2)} SAR) Tj
+-200 -15 Td
+/F1 11 Tf
+0.2 0.3 0.6 rg
+(Total Amount (Including VAT):) Tj
+200 0 Td
 /F1 14 Tf
-(SELLER INFORMATION:) Tj
-0 -15 Td
-/F1 12 Tf
-(Business Name: Art Souk Platform) Tj
-0 -15 Td
-(VAT Number: 300000000000003) Tj
-0 -15 Td
-(CR Number: [REQUIRED]) Tj
-0 -15 Td
-(Address: Saudi Arabia [COMPLETE ADDRESS REQUIRED]) Tj
+0.6 0.4 0.1 rg
+(${totalAmount.toFixed(2)} SAR) Tj
 
-0 -30 Td
-/F1 14 Tf
-(BUYER INFORMATION:) Tj
-0 -15 Td
+% ZATCA compliance section
+-200 -40 Td
 /F1 12 Tf
-(Name: ${order.buyer.firstName} ${order.buyer.lastName}) Tj
-0 -15 Td
-(Email: ${order.buyer.email}) Tj
-0 -15 Td
-(Address: [REQUIRED FOR B2B]) Tj
-0 -15 Td
-(VAT Number: [IF APPLICABLE]) Tj
+0.2 0.3 0.6 rg
+(ZATCA COMPLIANCE) Tj
+0 -20 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(QR Code Data:) Tj
+0 -12 Td
+/F2 8 Tf
+0.4 0.4 0.4 rg
+(${qrCode.substring(0, 60)}...) Tj
+0 -12 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Invoice Hash:) Tj
+0 -12 Td
+/F2 8 Tf
+0.4 0.4 0.4 rg
+(${invoiceHash.substring(0, 60)}...) Tj
+0 -12 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(ZATCA Phase:) Tj
+0 -12 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+(Phase 1 - Generation) Tj
 
+% Payment terms
 0 -30 Td
-/F1 14 Tf
-(LINE ITEMS:) Tj
-0 -15 Td
 /F1 12 Tf
-(Description: ${order.artwork.title}) Tj
+0.2 0.3 0.6 rg
+(PAYMENT TERMS) Tj
 0 -15 Td
-(Artist: ${order.artist.name}) Tj
-0 -15 Td
-(Order Number: ${order.order.orderNumber}) Tj
-0 -15 Td
-(Quantity: 1) Tj
-0 -15 Td
-(Unit Price: ${subtotal.toFixed(2)} SAR) Tj
-0 -15 Td
-(VAT Rate: 15%) Tj
-
-0 -30 Td
-/F1 14 Tf
-(FINANCIAL SUMMARY:) Tj
-0 -15 Td
-/F1 12 Tf
-(Subtotal (Excluding VAT): ${subtotal.toFixed(2)} SAR) Tj
-0 -15 Td
-(VAT Amount (15%): ${vatAmount.toFixed(2)} SAR) Tj
-0 -15 Td
-(Total Amount (Including VAT): ${totalAmount.toFixed(2)} SAR) Tj
-
-0 -30 Td
-/F1 14 Tf
-(ZATCA COMPLIANCE:) Tj
-0 -15 Td
-/F1 12 Tf
-(QR Code Data: ${qrCode.substring(0, 40)}...) Tj
-0 -15 Td
-(Invoice Hash: ${invoiceHash.substring(0, 40)}...) Tj
-0 -15 Td
-(Digital Signature: [REQUIRED]) Tj
-0 -15 Td
-(ZATCA Phase: Phase 1 - Generation) Tj
-
-0 -30 Td
-/F1 14 Tf
-(PAYMENT TERMS:) Tj
-0 -15 Td
-/F1 12 Tf
+/F2 10 Tf
+0.2 0.2 0.2 rg
 (Payment Method: Direct Seller Payment) Tj
-0 -15 Td
+0 -12 Td
 (Due Date: Immediate) Tj
-0 -15 Td
+0 -12 Td
 (Note: Payment arranged directly between buyer and seller) Tj
 
-0 -30 Td
-/F1 10 Tf
+% Footer
+0 -40 Td
+/F2 8 Tf
+0.4 0.4 0.4 rg
 (This invoice complies with ZATCA Phase 1 requirements) Tj
-0 -12 Td
+0 -10 Td
 (Generated on: ${generatedOn}) Tj
-0 -12 Td
+0 -10 Td
 (Document valid for Saudi Arabian tax purposes) Tj
+0 -10 Td
+(Art Souk Platform - Premium Art Marketplace) Tj
 ET
 endstream
 endobj
