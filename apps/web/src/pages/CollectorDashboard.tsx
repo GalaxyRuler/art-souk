@@ -21,7 +21,8 @@ import {
   CheckCircle,
   AlertCircle,
   Calendar,
-  DollarSign
+  DollarSign,
+  Download
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -131,6 +132,39 @@ export default function CollectorDashboard() {
       default:
         return "bg-gray-100 text-gray-800";
     }
+  };
+
+  const handleDownloadReceipt = (order: PurchaseOrder) => {
+    // Create a simple receipt content
+    const receiptContent = `
+      ART SOUK - PURCHASE RECEIPT
+      ===========================
+      
+      Order Number: ${order.orderNumber}
+      Date: ${format(new Date(order.createdAt), "MMM dd, yyyy")}
+      
+      ARTWORK DETAILS:
+      Title: ${isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}
+      Artist: ${isRTL ? order.artwork.artist.nameAr || order.artwork.artist.name : order.artwork.artist.name}
+      
+      PAYMENT DETAILS:
+      Amount: ${language === "ar" ? "ر.س" : order.currency} ${parseFloat(order.totalAmount).toLocaleString()}
+      Status: ${order.paymentStatus}
+      
+      Thank you for your purchase!
+      Art Souk - Connecting Artists with Collectors
+    `;
+
+    // Create and download the receipt as a text file
+    const blob = new Blob([receiptContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `art-souk-receipt-${order.orderNumber}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   };
 
   return (
@@ -492,10 +526,19 @@ export default function CollectorDashboard() {
                             </p>
                           </div>
                         </div>
-                        <div className="mt-4 pt-4 border-t">
+                        <div className="mt-4 pt-4 border-t flex items-center justify-between">
                           <p className="text-sm text-gray-600">
                             {t("collector.purchases.paymentNote", "Payment was arranged directly with the seller")}
                           </p>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDownloadReceipt(order)}
+                            className="flex items-center gap-2"
+                          >
+                            <Download className="h-4 w-4" />
+                            {t("collector.purchases.downloadReceipt", "Download Receipt")}
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>
