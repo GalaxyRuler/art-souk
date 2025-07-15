@@ -37,6 +37,154 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useLocation } from "wouter";
 
+// Function to generate and download receipt
+const generateReceipt = (order: PurchaseOrder, language: string) => {
+  const isRTL = language === "ar";
+  
+  // Create receipt content
+  const receiptContent = `
+    <!DOCTYPE html>
+    <html dir="${isRTL ? 'rtl' : 'ltr'}" lang="${language}">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Receipt - ${order.orderNumber}</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 20px;
+          line-height: 1.6;
+          color: #333;
+        }
+        .header {
+          text-align: center;
+          border-bottom: 2px solid #047857;
+          padding-bottom: 20px;
+          margin-bottom: 30px;
+        }
+        .logo {
+          font-size: 2rem;
+          font-weight: bold;
+          color: #047857;
+          margin-bottom: 10px;
+        }
+        .receipt-info {
+          background: #f0fdf4;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 20px;
+        }
+        .artwork-details {
+          background: #ecfdf5;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 20px;
+        }
+        .payment-note {
+          background: #fef3c7;
+          padding: 15px;
+          border-radius: 8px;
+          border-left: 4px solid #f59e0b;
+          margin-top: 20px;
+        }
+        .footer {
+          text-align: center;
+          margin-top: 30px;
+          padding-top: 20px;
+          border-top: 1px solid #e5e7eb;
+          color: #6b7280;
+        }
+        .grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+        }
+        .field {
+          margin-bottom: 15px;
+        }
+        .label {
+          font-weight: bold;
+          color: #047857;
+          margin-bottom: 5px;
+        }
+        .value {
+          font-size: 1.1rem;
+        }
+        @media print {
+          body { print-color-adjust: exact; }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <div class="logo">Art Souk ${isRTL ? 'سوق آرت' : ''}</div>
+        <p>${isRTL ? 'إيصال شراء' : 'Purchase Receipt'}</p>
+      </div>
+      
+      <div class="receipt-info">
+        <div class="grid">
+          <div class="field">
+            <div class="label">${isRTL ? 'رقم الطلب' : 'Order Number'}</div>
+            <div class="value">${order.orderNumber}</div>
+          </div>
+          <div class="field">
+            <div class="label">${isRTL ? 'تاريخ الشراء' : 'Purchase Date'}</div>
+            <div class="value">${format(new Date(order.createdAt), "MMM dd, yyyy")}</div>
+          </div>
+          <div class="field">
+            <div class="label">${isRTL ? 'المبلغ الإجمالي' : 'Total Amount'}</div>
+            <div class="value">${isRTL ? 'ر.س' : 'SAR'} ${parseFloat(order.totalAmount).toLocaleString()}</div>
+          </div>
+          <div class="field">
+            <div class="label">${isRTL ? 'الحالة' : 'Status'}</div>
+            <div class="value">${isRTL ? 'مكتمل' : 'Completed'}</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="artwork-details">
+        <h3>${isRTL ? 'تفاصيل العمل الفني' : 'Artwork Details'}</h3>
+        <div class="field">
+          <div class="label">${isRTL ? 'العنوان' : 'Title'}</div>
+          <div class="value">${isRTL ? order.artwork.titleAr || order.artwork.title : order.artwork.title}</div>
+        </div>
+        <div class="field">
+          <div class="label">${isRTL ? 'الفنان' : 'Artist'}</div>
+          <div class="value">${isRTL ? order.artwork.artist.nameAr || order.artwork.artist.name : order.artwork.artist.name}</div>
+        </div>
+        <div class="field">
+          <div class="label">${isRTL ? 'السعر' : 'Price'}</div>
+          <div class="value">${isRTL ? 'ر.س' : 'SAR'} ${parseFloat(order.totalAmount).toLocaleString()}</div>
+        </div>
+      </div>
+      
+      <div class="payment-note">
+        <strong>${isRTL ? 'ملاحظة الدفع:' : 'Payment Note:'}</strong>
+        <p>${isRTL ? 'تم ترتيب الدفع مباشرة مع البائع خارج المنصة' : 'Payment was arranged directly with the seller outside the platform'}</p>
+      </div>
+      
+      <div class="footer">
+        <p>Art Souk - ${isRTL ? 'منصة الفن الخليجية الرائدة' : 'GCC\'s Premier Art Marketplace'}</p>
+        <p>${isRTL ? 'شكراً لك على اختيار آرت سوق' : 'Thank you for choosing Art Souk'}</p>
+      </div>
+    </body>
+    </html>
+  `;
+  
+  // Create and download the receipt
+  const blob = new Blob([receiptContent], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `receipt-${order.orderNumber}.html`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
 interface PurchaseOrder {
   id: number;
   orderNumber: string;
@@ -1000,10 +1148,8 @@ export default function CollectorDashboard() {
                           <Button 
                             variant="outline"
                             className="bg-white/50 border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300 transition-colors"
-                            onClick={() => {
-                              // Download receipt functionality would go here
-                              console.log('Download receipt for order:', order.orderNumber);
-                            }}
+                            onClick={() => generateReceipt(order, language)}
+                            title={t("collector.purchases.downloadReceipt", "Download Receipt")}
                           >
                             <Download className="h-4 w-4" />
                           </Button>
