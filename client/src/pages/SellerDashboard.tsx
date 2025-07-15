@@ -655,53 +655,27 @@ export default function SellerDashboard() {
               </DialogTitle>
             </DialogHeader>
 
-            <div 
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-              }}
-              onMouseDown={(e) => {
-                e.stopPropagation();
-              }}
-              style={{ isolation: 'isolate' }}
-            >
-              <Form {...paymentMethodForm}>
-                <form onSubmit={paymentMethodForm.handleSubmit(onPaymentMethodSubmit)} className="space-y-4">
-                  <FormField
-                    control={paymentMethodForm.control}
-                    name="type"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('seller.paymentType')}</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <select
-                              {...field}
-                              className="w-full h-10 px-3 py-2 text-sm bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none cursor-pointer"
-                              style={{
-                                backgroundImage: "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e\")",
-                                backgroundPosition: "right 0.5rem center",
-                                backgroundRepeat: "no-repeat",
-                                backgroundSize: "1.5em 1.5em",
-                                paddingRight: "2.5rem"
-                              }}
-                              onChange={(e) => {
-                                console.log('Payment type changed to:', e.target.value);
-                                field.onChange(e.target.value);
-                              }}
-                            >
-                              <option value="saudi_bank">{t('seller.bankTransfer')}</option>
-                              <option value="paypal">{t('seller.paypal')}</option>
-                              <option value="stc_pay">{t('seller.stcPay')}</option>
-                              <option value="wise">{t('seller.wise')}</option>
-                              <option value="cash_on_delivery">{t('seller.cashOnDelivery')}</option>
-                            </select>
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+            <Form {...paymentMethodForm}>
+              <form onSubmit={paymentMethodForm.handleSubmit(onPaymentMethodSubmit)} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="payment-type">{t('seller.paymentType')}</Label>
+                  <select
+                    id="payment-type"
+                    value={paymentMethodForm.getValues().type || 'saudi_bank'}
+                    onChange={(e) => {
+                      const value = e.target.value as 'saudi_bank' | 'paypal' | 'stc_pay' | 'wise' | 'cash_on_delivery';
+                      console.log('Payment type changed to:', value);
+                      paymentMethodForm.setValue('type', value);
+                    }}
+                    className="w-full h-10 px-3 py-2 text-sm bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                  >
+                    <option value="saudi_bank">{t('seller.bankTransfer')}</option>
+                    <option value="paypal">{t('seller.paypal')}</option>
+                    <option value="stc_pay">{t('seller.stcPay')}</option>
+                    <option value="wise">{t('seller.wise')}</option>
+                    <option value="cash_on_delivery">{t('seller.cashOnDelivery')}</option>
+                  </select>
+                </div>
 
                 {paymentMethodForm.watch('type') === 'saudi_bank' && (
                   <>
@@ -862,7 +836,6 @@ export default function SellerDashboard() {
                 </div>
               </form>
             </Form>
-            </div>
           </DialogContent>
         </Dialog>
 
