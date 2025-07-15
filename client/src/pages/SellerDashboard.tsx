@@ -639,30 +639,25 @@ export default function SellerDashboard() {
             </DialogHeader>
             <Form {...paymentMethodForm}>
               <form onSubmit={paymentMethodForm.handleSubmit(onPaymentMethodSubmit)} className="space-y-4">
-                <FormField
-                  control={paymentMethodForm.control}
-                  name="type"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('seller.paymentType')}</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={t('seller.selectPaymentType')} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="saudi_bank">{t('seller.bankTransfer')}</SelectItem>
-                          <SelectItem value="paypal">{t('seller.paypal')}</SelectItem>
-                          <SelectItem value="stc_pay">{t('seller.stcPay')}</SelectItem>
-                          <SelectItem value="wise">{t('seller.wise')}</SelectItem>
-                          <SelectItem value="cash_on_delivery">{t('seller.cashOnDelivery')}</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="space-y-2">
+                  <Label htmlFor="payment-type">{t('seller.paymentType')}</Label>
+                  <select 
+                    id="payment-type"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    value={paymentMethodForm.watch('type') || ''}
+                    onChange={(e) => {
+                      console.log('Payment type changed to:', e.target.value);
+                      paymentMethodForm.setValue('type', e.target.value as any);
+                    }}
+                  >
+                    <option value="">{t('seller.selectPaymentType')}</option>
+                    <option value="saudi_bank">{t('seller.bankTransfer')}</option>
+                    <option value="paypal">{t('seller.paypal')}</option>
+                    <option value="stc_pay">{t('seller.stcPay')}</option>
+                    <option value="wise">{t('seller.wise')}</option>
+                    <option value="cash_on_delivery">{t('seller.cashOnDelivery')}</option>
+                  </select>
+                </div>
 
                 {paymentMethodForm.watch('type') === 'saudi_bank' && (
                   <>
@@ -758,29 +753,24 @@ export default function SellerDashboard() {
                       )}
                     />
 
-                    <FormField
-                      control={paymentMethodForm.control}
-                      name="details.preferred_currency"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t('seller.preferredCurrency')}</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder={t('seller.selectCurrency')} />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="SAR">SAR</SelectItem>
-                              <SelectItem value="USD">USD</SelectItem>
-                              <SelectItem value="EUR">EUR</SelectItem>
-                              <SelectItem value="GBP">GBP</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <div className="space-y-2">
+                      <Label htmlFor="preferred-currency">{t('seller.preferredCurrency')}</Label>
+                      <select 
+                        id="preferred-currency"
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        value={paymentMethodForm.watch('details.preferred_currency') || ''}
+                        onChange={(e) => {
+                          console.log('Currency changed to:', e.target.value);
+                          paymentMethodForm.setValue('details.preferred_currency', e.target.value);
+                        }}
+                      >
+                        <option value="">{t('seller.selectCurrency')}</option>
+                        <option value="SAR">SAR</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="GBP">GBP</option>
+                      </select>
+                    </div>
                   </>
                 )}
 
