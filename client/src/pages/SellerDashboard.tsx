@@ -283,12 +283,14 @@ export default function SellerDashboard() {
   };
 
   const openOrderDialog = (order: Order) => {
+    console.log('Opening order dialog for order:', order);
     setSelectedOrder(order);
     // Ensure the status value is properly typed and valid
     const validStatus = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'].includes(order.status) 
       ? order.status 
       : 'pending';
     
+    console.log('Setting form with status:', validStatus);
     orderStatusForm.reset({
       status: validStatus as 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled',
       sellerNotes: order.sellerNotes || '',
@@ -296,6 +298,7 @@ export default function SellerDashboard() {
       carrier: order.carrier || '',
     });
     setOrderDialogOpen(true);
+    console.log('Form values after reset:', orderStatusForm.getValues());
   };
 
   const onPaymentMethodSubmit = (data: any) => {
@@ -509,7 +512,10 @@ export default function SellerDashboard() {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  onClick={() => openOrderDialog(order)}
+                                  onClick={() => {
+                                    console.log('Update button clicked for order:', order);
+                                    openOrderDialog(order);
+                                  }}
                                 >
                                   {t('seller.updateStatus')}
                                 </Button>
@@ -849,11 +855,9 @@ export default function SellerDashboard() {
                           }} 
                           value={field.value}
                         >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder={t('seller.selectOrderStatus')} />
-                            </SelectTrigger>
-                          </FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={t('seller.selectOrderStatus')} />
+                          </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="pending">{t('seller.pending')}</SelectItem>
                             <SelectItem value="confirmed">{t('seller.confirmed')}</SelectItem>
