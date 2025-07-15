@@ -560,14 +560,7 @@ export default function SellerDashboard() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>{t('seller.paymentMethodsManagement')}</CardTitle>
-                <Button onClick={() => {
-                  console.log('Add Payment Method button clicked');
-                  console.log('Current dialog state before:', paymentDialogOpen);
-                  setPaymentDialogOpen(true);
-                  console.log('Dialog state after direct set:', paymentDialogOpen);
-                  openPaymentDialog();
-                  console.log('Dialog should now be open:', paymentDialogOpen);
-                }}>
+                <Button onClick={() => openPaymentDialog()}>
                   <Plus className="w-4 h-4 mr-2" />
                   {t('seller.addPaymentMethod')}
                 </Button>
@@ -666,26 +659,32 @@ export default function SellerDashboard() {
             </div>
             <Form {...paymentMethodForm}>
               <form onSubmit={paymentMethodForm.handleSubmit(onPaymentMethodSubmit)} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="payment-type">{t('seller.paymentType')}</Label>
-                  <select 
-                    id="payment-type"
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    value={paymentMethodForm.watch('type') || 'saudi_bank'}
-                    onChange={(e) => {
-                      console.log('Payment type changed to:', e.target.value);
-                      console.log('Before setValue - form type:', paymentMethodForm.getValues('type'));
-                      paymentMethodForm.setValue('type', e.target.value as any);
-                      console.log('After setValue - form type:', paymentMethodForm.getValues('type'));
-                    }}
-                  >
-                    <option value="saudi_bank">{t('seller.bankTransfer')}</option>
-                    <option value="paypal">{t('seller.paypal')}</option>
-                    <option value="stc_pay">{t('seller.stcPay')}</option>
-                    <option value="wise">{t('seller.wise')}</option>
-                    <option value="cash_on_delivery">{t('seller.cashOnDelivery')}</option>
-                  </select>
-                </div>
+                <FormField
+                  control={paymentMethodForm.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('seller.paymentType')}</FormLabel>
+                      <FormControl>
+                        <select
+                          {...field}
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          onChange={(e) => {
+                            console.log('Payment type selected:', e.target.value);
+                            field.onChange(e.target.value);
+                          }}
+                        >
+                          <option value="saudi_bank">{t('seller.bankTransfer')}</option>
+                          <option value="paypal">{t('seller.paypal')}</option>
+                          <option value="stc_pay">{t('seller.stcPay')}</option>
+                          <option value="wise">{t('seller.wise')}</option>
+                          <option value="cash_on_delivery">{t('seller.cashOnDelivery')}</option>
+                        </select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 {paymentMethodForm.watch('type') === 'saudi_bank' && (
                   <>
