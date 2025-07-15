@@ -657,25 +657,30 @@ export default function SellerDashboard() {
 
             <Form {...paymentMethodForm}>
               <form onSubmit={paymentMethodForm.handleSubmit(onPaymentMethodSubmit)} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="payment-type">{t('seller.paymentType')}</Label>
-                  <select
-                    id="payment-type"
-                    value={paymentMethodForm.getValues().type || 'saudi_bank'}
-                    onChange={(e) => {
-                      const value = e.target.value as 'saudi_bank' | 'paypal' | 'stc_pay' | 'wise' | 'cash_on_delivery';
-                      console.log('Payment type changed to:', value);
-                      paymentMethodForm.setValue('type', value);
-                    }}
-                    className="w-full h-10 px-3 py-2 text-sm bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
-                  >
-                    <option value="saudi_bank">{t('seller.bankTransfer')}</option>
-                    <option value="paypal">{t('seller.paypal')}</option>
-                    <option value="stc_pay">{t('seller.stcPay')}</option>
-                    <option value="wise">{t('seller.wise')}</option>
-                    <option value="cash_on_delivery">{t('seller.cashOnDelivery')}</option>
-                  </select>
-                </div>
+                <FormField
+                  control={paymentMethodForm.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('seller.paymentType')}</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={t('seller.selectPaymentType')} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="saudi_bank">{t('seller.bankTransfer')}</SelectItem>
+                          <SelectItem value="paypal">{t('seller.paypal')}</SelectItem>
+                          <SelectItem value="stc_pay">{t('seller.stcPay')}</SelectItem>
+                          <SelectItem value="wise">{t('seller.wise')}</SelectItem>
+                          <SelectItem value="cash_on_delivery">{t('seller.cashOnDelivery')}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 {paymentMethodForm.watch('type') === 'saudi_bank' && (
                   <>
@@ -771,24 +776,29 @@ export default function SellerDashboard() {
                       )}
                     />
 
-                    <div className="space-y-2">
-                      <Label htmlFor="preferred-currency">{t('seller.preferredCurrency')}</Label>
-                      <select 
-                        id="preferred-currency"
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        value={paymentMethodForm.watch('details.preferred_currency') || ''}
-                        onChange={(e) => {
-                          console.log('Currency changed to:', e.target.value);
-                          paymentMethodForm.setValue('details.preferred_currency', e.target.value);
-                        }}
-                      >
-                        <option value="">{t('seller.selectCurrency')}</option>
-                        <option value="SAR">SAR</option>
-                        <option value="USD">USD</option>
-                        <option value="EUR">EUR</option>
-                        <option value="GBP">GBP</option>
-                      </select>
-                    </div>
+                    <FormField
+                      control={paymentMethodForm.control}
+                      name="details.preferred_currency"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t('seller.preferredCurrency')}</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder={t('seller.selectCurrency')} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="SAR">SAR</SelectItem>
+                              <SelectItem value="USD">USD</SelectItem>
+                              <SelectItem value="EUR">EUR</SelectItem>
+                              <SelectItem value="GBP">GBP</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </>
                 )}
 
@@ -847,26 +857,31 @@ export default function SellerDashboard() {
             </DialogHeader>
             <Form {...orderStatusForm}>
               <form onSubmit={orderStatusForm.handleSubmit(updateOrderStatus.mutate)} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="status">{t('seller.orderStatus')}</Label>
-                  <select 
-                    id="status"
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    value={orderStatusForm.watch('status')}
-                    onChange={(e) => {
-                      console.log('Native select changed to:', e.target.value);
-                      orderStatusForm.setValue('status', e.target.value as any);
-                    }}
-                  >
-                    <option value="">{t('seller.selectOrderStatus')}</option>
-                    <option value="pending">{t('seller.pending')}</option>
-                    <option value="confirmed">{t('seller.confirmed')}</option>
-                    <option value="processing">{t('seller.processing')}</option>
-                    <option value="shipped">{t('seller.shipped')}</option>
-                    <option value="delivered">{t('seller.delivered')}</option>
-                    <option value="cancelled">{t('seller.cancelled')}</option>
-                  </select>
-                </div>
+                <FormField
+                  control={orderStatusForm.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('seller.orderStatus')}</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={t('seller.selectOrderStatus')} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="pending">{t('seller.pending')}</SelectItem>
+                          <SelectItem value="confirmed">{t('seller.confirmed')}</SelectItem>
+                          <SelectItem value="processing">{t('seller.processing')}</SelectItem>
+                          <SelectItem value="shipped">{t('seller.shipped')}</SelectItem>
+                          <SelectItem value="delivered">{t('seller.delivered')}</SelectItem>
+                          <SelectItem value="cancelled">{t('seller.cancelled')}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <FormField
                   control={orderStatusForm.control}
