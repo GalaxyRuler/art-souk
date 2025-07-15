@@ -4612,6 +4612,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate UUID for ZATCA submission
       const invoiceUUID = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       
+      // Format dates for PDF
+      const issueDate = currentDate.toLocaleDateString();
+      const issueTime = currentDate.toLocaleTimeString();
+      const generatedOn = new Date().toLocaleString();
+      
       // Create enhanced ZATCA-compliant PDF content
       const pdfContent = `%PDF-1.4
 1 0 obj
@@ -4665,11 +4670,11 @@ BT
 0 -15 Td
 (Invoice UUID / معرف الفاتورة: ${invoiceUUID}) Tj
 0 -15 Td
-(Issue Date / تاريخ الإصدار: ${currentDate.toLocaleDateString()}) Tj
+(Issue Date / تاريخ الإصدار: ${issueDate}) Tj
 0 -15 Td
-(Issue Time / وقت الإصدار: ${currentDate.toLocaleTimeString()}) Tj
+(Issue Time / وقت الإصدار: ${issueTime}) Tj
 0 -15 Td
-(Supply Date / تاريخ التوريد: ${currentDate.toLocaleDateString()}) Tj
+(Supply Date / تاريخ التوريد: ${issueDate}) Tj
 0 -15 Td
 (Invoice Type / نوع الفاتورة: 01 - Standard Tax Invoice) Tj
 
@@ -4757,7 +4762,7 @@ BT
 0 -12 Td
 (هذه الفاتورة متوافقة مع متطلبات المرحلة الأولى من الزكاة والضريبة) Tj
 0 -12 Td
-(Generated on / تم إنشاؤها في: ${new Date().toLocaleString()}) Tj
+(Generated on / تم إنشاؤها في: ${generatedOn}) Tj
 ET
 endstream
 endobj
