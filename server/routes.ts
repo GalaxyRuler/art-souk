@@ -4627,6 +4627,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
       const qrCode = Buffer.from(JSON.stringify(qrCodeData)).toString('base64');
       
+      // Generate QR Code URL for display (using Google Charts API for QR code generation)
+      const qrCodeDisplayUrl = `https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${encodeURIComponent(qrCode)}`;
+      
       // Generate invoice hash (for chaining - ZATCA requirement)
       const invoiceData = `${invoiceNumber}${new Date().toISOString()}${totalAmount}`;
       const invoiceHash = Buffer.from(invoiceData).toString('base64');
@@ -4886,12 +4889,20 @@ BT
 0.6 0.4 0.1 rg
 (${totalAmount.toFixed(2)} SAR) Tj
 
-% ZATCA compliance section
+% ZATCA compliance section with QR code
 -200 -40 Td
 /F1 12 Tf
 0.2 0.3 0.6 rg
 (ZATCA COMPLIANCE) Tj
 0 -20 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(QR Code Required:) Tj
+0 -12 Td
+/F2 8 Tf
+0.4 0.4 0.4 rg
+(QR Code contains: Seller, VAT, Total, Invoice data) Tj
+0 -12 Td
 /F2 10 Tf
 0.2 0.2 0.2 rg
 (QR Code Data:) Tj
@@ -4915,6 +4926,24 @@ BT
 /F2 10 Tf
 0.4 0.4 0.4 rg
 (Phase 1 - Generation) Tj
+0 -12 Td
+/F2 10 Tf
+0.2 0.2 0.2 rg
+(Digital Signature:) Tj
+0 -12 Td
+/F2 10 Tf
+0.4 0.4 0.4 rg
+([REQUIRED FOR PHASE 2]) Tj
+
+% Note about QR code generation
+0 -25 Td
+/F2 8 Tf
+0.6 0.4 0.1 rg
+(QR Code URL: ${qrCodeDisplayUrl}) Tj
+0 -10 Td
+/F2 8 Tf
+0.4 0.4 0.4 rg
+(Scan or visit URL to view QR code for ZATCA compliance) Tj
 
 % Payment terms
 0 -30 Td
