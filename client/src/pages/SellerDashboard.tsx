@@ -23,10 +23,20 @@ import { Footer } from '@/components/Footer';
 
 interface PaymentMethod {
   id: string;
-  type: string;
-  name: string;
-  details: Record<string, any>;
-  instructions?: string;
+  type: 'saudi_bank' | 'stc_pay' | 'paypal' | 'wise' | 'cash_on_delivery';
+  details: {
+    bank_name?: string;
+    iban?: string;
+    phone_number?: string;
+    paypal_email?: string;
+    wise_email?: string;
+    preferred_currency?: string;
+    account_holder_name?: string;
+  };
+  customInstructions?: string;
+  isDefault?: boolean;
+  displayInfo?: string;
+  createdAt?: string;
 }
 
 interface Order {
@@ -61,15 +71,18 @@ interface SellerInfo {
 }
 
 const paymentMethodSchema = z.object({
-  type: z.string().min(1, 'Payment method type is required'),
-  name: z.string().min(1, 'Payment method name is required'),
-  accountNumber: z.string().optional(),
-  iban: z.string().optional(),
-  bankName: z.string().optional(),
-  swiftCode: z.string().optional(),
-  paypalEmail: z.string().optional(),
-  phoneNumber: z.string().optional(),
-  instructions: z.string().optional(),
+  type: z.enum(['saudi_bank', 'stc_pay', 'paypal', 'wise', 'cash_on_delivery']),
+  details: z.object({
+    bank_name: z.string().optional(),
+    iban: z.string().optional(), 
+    phone_number: z.string().optional(),
+    paypal_email: z.string().email().optional(),
+    wise_email: z.string().email().optional(),
+    preferred_currency: z.string().optional(),
+    account_holder_name: z.string().optional()
+  }),
+  customInstructions: z.string().optional(),
+  isDefault: z.boolean().optional()
 });
 
 const orderStatusSchema = z.object({
@@ -137,15 +150,18 @@ export default function SellerDashboard() {
   const paymentMethodForm = useForm({
     resolver: zodResolver(paymentMethodSchema),
     defaultValues: {
-      type: '',
-      name: '',
-      accountNumber: '',
-      iban: '',
-      bankName: '',
-      swiftCode: '',
-      paypalEmail: '',
-      phoneNumber: '',
-      instructions: '',
+      type: 'saudi_bank' as const,
+      details: {
+        bank_name: '',
+        iban: '',
+        phone_number: '',
+        paypal_email: '',
+        wise_email: '',
+        preferred_currency: 'SAR',
+        account_holder_name: ''
+      },
+      customInstructions: '',
+      isDefault: false
     },
   });
 
@@ -247,14 +263,17 @@ export default function SellerDashboard() {
       setEditingPaymentMethod(method);
       paymentMethodForm.reset({
         type: method.type,
-        name: method.name,
-        accountNumber: method.details.accountNumber || '',
-        iban: method.details.iban || '',
-        bankName: method.details.bankName || '',
-        swiftCode: method.details.swiftCode || '',
-        paypalEmail: method.details.paypalEmail || '',
-        phoneNumber: method.details.phoneNumber || '',
-        instructions: method.instructions || '',
+        details: {
+          bank_name: method.details.bank_name || '',
+          iban: method.details.iban || '',
+          phone_number: method.details.phone_number || '',
+          paypal_email: method.details.paypal_email || '',
+          wise_email: method.details.wise_email || '',
+          preferred_currency: method.details.preferred_currency || 'SAR',
+          account_holder_name: method.details.account_holder_name || ''
+        },
+        customInstructions: method.customInstructions || '',
+        isDefault: method.isDefault || false
       });
     } else {
       setEditingPaymentMethod(null);
@@ -275,20 +294,11 @@ export default function SellerDashboard() {
   };
 
   const onPaymentMethodSubmit = (data: any) => {
-    const details: Record<string, any> = {};
-    
-    if (data.accountNumber) details.accountNumber = data.accountNumber;
-    if (data.iban) details.iban = data.iban;
-    if (data.bankName) details.bankName = data.bankName;
-    if (data.swiftCode) details.swiftCode = data.swiftCode;
-    if (data.paypalEmail) details.paypalEmail = data.paypalEmail;
-    if (data.phoneNumber) details.phoneNumber = data.phoneNumber;
-
     savePaymentMethod.mutate({
       type: data.type,
-      name: data.name,
-      details,
-      instructions: data.instructions,
+      details: data.details,
+      customInstructions: data.customInstructions,
+      isDefault: data.isDefault
     });
   };
 
@@ -351,12 +361,16 @@ export default function SellerDashboard() {
 
   const getPaymentMethodIcon = (type: string) => {
     switch (type) {
-      case 'bank':
+      case 'saudi_bank':
         return <CreditCard className="w-5 h-5" />;
       case 'paypal':
         return <CreditCard className="w-5 h-5" />;
       case 'stc_pay':
         return <CreditCard className="w-5 h-5" />;
+      case 'wise':
+        return <CreditCard className="w-5 h-5" />;
+      case 'cash_on_delivery':
+        return <Truck className="w-5 h-5" />;
       default:
         return <CreditCard className="w-5 h-5" />;
     }
@@ -545,8 +559,8 @@ export default function SellerDashboard() {
                             <div className="flex items-center space-x-2">
                               {getPaymentMethodIcon(method.type)}
                               <div>
-                                <p className="font-medium">{method.name}</p>
-                                <p className="text-sm text-gray-500 capitalize">{method.type}</p>
+                                <p className="font-medium">{method.displayInfo || method.type}</p>
+                                <p className="text-sm text-gray-500 capitalize">{method.type.replace('_', ' ')}</p>
                               </div>
                             </div>
                             <div className="flex space-x-2">
@@ -567,17 +581,26 @@ export default function SellerDashboard() {
                             </div>
                           </div>
                           <div className="text-sm text-gray-600">
-                            {method.details.accountNumber && (
-                              <p>Account: {method.details.accountNumber}</p>
+                            {method.displayInfo && (
+                              <p className="font-medium text-sm">{method.displayInfo}</p>
+                            )}
+                            {method.details.bank_name && (
+                              <p>Bank: {method.details.bank_name}</p>
                             )}
                             {method.details.iban && (
                               <p>IBAN: {method.details.iban}</p>
                             )}
-                            {method.details.paypalEmail && (
-                              <p>PayPal: {method.details.paypalEmail}</p>
+                            {method.details.paypal_email && (
+                              <p>PayPal: {method.details.paypal_email}</p>
                             )}
-                            {method.details.phoneNumber && (
-                              <p>Phone: {method.details.phoneNumber}</p>
+                            {method.details.phone_number && (
+                              <p>Phone: {method.details.phone_number}</p>
+                            )}
+                            {method.details.wise_email && (
+                              <p>Wise: {method.details.wise_email}</p>
+                            )}
+                            {method.isDefault && (
+                              <Badge variant="secondary" className="text-xs mt-1">Default</Badge>
                             )}
                           </div>
                         </Card>
@@ -618,10 +641,11 @@ export default function SellerDashboard() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="bank">{t('seller.bankTransfer')}</SelectItem>
+                          <SelectItem value="saudi_bank">{t('seller.bankTransfer')}</SelectItem>
                           <SelectItem value="paypal">{t('seller.paypal')}</SelectItem>
                           <SelectItem value="stc_pay">{t('seller.stcPay')}</SelectItem>
                           <SelectItem value="wise">{t('seller.wise')}</SelectItem>
+                          <SelectItem value="cash_on_delivery">{t('seller.cashOnDelivery')}</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -629,25 +653,11 @@ export default function SellerDashboard() {
                   )}
                 />
 
-                <FormField
-                  control={paymentMethodForm.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('seller.methodName')}</FormLabel>
-                      <FormControl>
-                        <Input placeholder={t('seller.methodNamePlaceholder')} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {paymentMethodForm.watch('type') === 'bank' && (
+                {paymentMethodForm.watch('type') === 'saudi_bank' && (
                   <>
                     <FormField
                       control={paymentMethodForm.control}
-                      name="bankName"
+                      name="details.bank_name"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>{t('seller.bankName')}</FormLabel>
@@ -661,12 +671,12 @@ export default function SellerDashboard() {
 
                     <FormField
                       control={paymentMethodForm.control}
-                      name="accountNumber"
+                      name="details.account_holder_name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t('seller.accountNumber')}</FormLabel>
+                          <FormLabel>{t('seller.accountHolderName')}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t('seller.accountNumberPlaceholder')} {...field} />
+                            <Input placeholder={t('seller.accountHolderNamePlaceholder')} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -675,7 +685,7 @@ export default function SellerDashboard() {
 
                     <FormField
                       control={paymentMethodForm.control}
-                      name="iban"
+                      name="details.iban"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>{t('seller.iban')}</FormLabel>
@@ -692,7 +702,7 @@ export default function SellerDashboard() {
                 {paymentMethodForm.watch('type') === 'paypal' && (
                   <FormField
                     control={paymentMethodForm.control}
-                    name="paypalEmail"
+                    name="details.paypal_email"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>{t('seller.paypalEmail')}</FormLabel>
@@ -708,7 +718,7 @@ export default function SellerDashboard() {
                 {paymentMethodForm.watch('type') === 'stc_pay' && (
                   <FormField
                     control={paymentMethodForm.control}
-                    name="phoneNumber"
+                    name="details.phone_number"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>{t('seller.phoneNumber')}</FormLabel>
@@ -721,9 +731,51 @@ export default function SellerDashboard() {
                   />
                 )}
 
+                {paymentMethodForm.watch('type') === 'wise' && (
+                  <>
+                    <FormField
+                      control={paymentMethodForm.control}
+                      name="details.wise_email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t('seller.wiseEmail')}</FormLabel>
+                          <FormControl>
+                            <Input type="email" placeholder={t('seller.wiseEmailPlaceholder')} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={paymentMethodForm.control}
+                      name="details.preferred_currency"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t('seller.preferredCurrency')}</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder={t('seller.selectCurrency')} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="SAR">SAR</SelectItem>
+                              <SelectItem value="USD">USD</SelectItem>
+                              <SelectItem value="EUR">EUR</SelectItem>
+                              <SelectItem value="GBP">GBP</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
+
                 <FormField
                   control={paymentMethodForm.control}
-                  name="instructions"
+                  name="customInstructions"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t('seller.instructions')}</FormLabel>
@@ -731,6 +783,26 @@ export default function SellerDashboard() {
                         <Textarea placeholder={t('seller.instructionsPlaceholder')} {...field} />
                       </FormControl>
                       <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={paymentMethodForm.control}
+                  name="isDefault"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <input 
+                          type="checkbox" 
+                          checked={field.value}
+                          onChange={field.onChange}
+                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        />
+                      </FormControl>
+                      <FormLabel className="text-sm font-normal">
+                        {t('seller.setAsDefault')}
+                      </FormLabel>
                     </FormItem>
                   )}
                 />
