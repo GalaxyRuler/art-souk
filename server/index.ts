@@ -60,6 +60,16 @@ app.get('/health/memory', memoryHealthCheck);
 app.get('/health/ready', readinessCheck);
 app.get('/health/live', livenessCheck);
 
+// Development tools middleware
+let devTools: any = null;
+try {
+  devTools = require('./devToolsSimple');
+  app.use(devTools.middleware());
+  console.log('✅ Development tools middleware loaded');
+} catch (error) {
+  console.warn('⚠️ Development tools not loaded:', error.message);
+}
+
 // Additional monitoring endpoints will be added by routes.ts
 
 // Memory trend endpoint

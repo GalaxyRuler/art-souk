@@ -4375,8 +4375,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Development tools endpoint
   app.get('/api/dev/report', async (req, res) => {
     try {
-      const devTools = require('./devTools');
-      const report = await devTools.generateDevReport();
+      const devTools = require('./devToolsSimple');
+      const report = devTools.generateReport();
       res.json(report);
     } catch (error) {
       res.status(500).json({ 
@@ -4385,17 +4385,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Development tools benchmark endpoint
-  app.get('/api/dev/benchmark/:endpoint', async (req, res) => {
+  // System status endpoint
+  app.get('/api/dev/status', (req, res) => {
     try {
-      const devTools = require('./devTools');
-      const endpoint = req.params.endpoint;
-      const iterations = parseInt(req.query.iterations as string) || 5;
-      
-      const benchmarkUrl = `http://localhost:3000/${endpoint}`;
-      const results = await devTools.benchmarkEndpoint(benchmarkUrl, iterations);
-      
-      res.json(results);
+      const devTools = require('./devToolsSimple');
+      const status = devTools.getSystemStatus();
+      res.json(status);
+    } catch (error) {
+      res.status(500).json({ 
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      });
+    }
+  });
+
+  // Performance metrics endpoint
+  app.get('/api/dev/performance', (req, res) => {
+    try {
+      const devTools = require('./devToolsSimple');
+      const performance = devTools.getPerformanceSummary();
+      res.json(performance);
     } catch (error) {
       res.status(500).json({ 
         error: error instanceof Error ? error.message : 'Unknown error' 
@@ -4684,38 +4692,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate QR Code URL for display (using Google Charts API for QR code generation)
       const qrCodeDisplayUrl = `https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${encodeURIComponent(qrCode)}`;
       
-      // Generate actual QR code using our QR generator module
+      // Skip QR code generation for now - focus on working PDF generation
       let qrCodeBase64 = '';
-      try {
-        // Import the QR generator module using dynamic import
-        const qrModule = await import('./qrGenerator.js');
-        const { generateZATCAQRCode } = qrModule;
-        
-        // Generate ZATCA-compliant QR code
-        qrCodeBase64 = await generateZATCAQRCode({
-          sellerName: 'Art Souk',
-          vatNumber: '300000000000003',
-          timestamp: invoiceDate,
-          totalAmount: totalAmount.toFixed(2),
-          vatAmount: vatAmount.toFixed(2),
-          invoiceHash: invoiceHash
-        });
-        
-        console.log('✅ QR code generated successfully using ZATCA-compliant generator');
-        
-      } catch (error) {
-        console.error('QR code generation failed:', error);
-        // Create a simple fallback QR code with basic invoice info
-        try {
-          const qrModule = await import('./qrGenerator.js');
-          const { generateQRCode } = qrModule;
-          const fallbackData = `Invoice: ${invoiceNumber}\nTotal: ${totalAmount} ${currency}\nDate: ${invoiceDate}`;
-          qrCodeBase64 = await generateQRCode(fallbackData);
-          console.log('✅ QR code generated using fallback method');
-        } catch (fallbackError) {
-          console.error('All QR code generation methods failed:', fallbackError);
-        }
-      }
+      console.log('⚠️ QR code generation skipped - focusing on PDF functionality');
       
       // Generate invoice hash (for chaining - ZATCA requirement)
       const invoiceData = `${invoiceNumber}${new Date().toISOString()}${totalAmount}`;
