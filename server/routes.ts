@@ -4553,6 +4553,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Test endpoint to verify routing works
+  app.get('/api/test-pdf/:orderId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+    console.log('🔍 Test PDF endpoint called:', req.params.orderId);
+    res.json({ message: 'Test endpoint working', orderId: req.params.orderId });
+  });
+
   // Generate ZATCA-compliant PDF invoice from order
   app.get('/api/invoices/generate-pdf/:orderId', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {

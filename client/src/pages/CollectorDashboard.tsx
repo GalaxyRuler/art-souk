@@ -62,6 +62,22 @@ const generateZATCAInvoice = async (order: PurchaseOrder, language: string) => {
     
     // Call the backend ZATCA invoice generation endpoint
     console.log('Calling endpoint:', `/api/invoices/generate-pdf/${order.id}`);
+    
+    // First test if the test endpoint works
+    try {
+      const testResponse = await fetch(`/api/test-pdf/${order.id}`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('Test endpoint response:', testResponse.status, await testResponse.text());
+    } catch (testError) {
+      console.error('Test endpoint failed:', testError);
+    }
+    
     const response = await fetch(`/api/invoices/generate-pdf/${order.id}`, {
       method: 'GET',
       credentials: 'include',
