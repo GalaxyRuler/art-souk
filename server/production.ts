@@ -23,6 +23,20 @@ export function configureProduction(app: Express) {
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
     
+    // Content Security Policy - Allow Google Fonts and inline styles
+    res.setHeader('Content-Security-Policy', [
+      "default-src 'self'",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com", 
+      "font-src 'self' https://fonts.gstatic.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://replit.com",
+      "img-src 'self' data: https:",
+      "connect-src 'self' https:",
+      "frame-src 'self' https://replit.com",
+      "object-src 'none'",
+      "base-uri 'self'"
+    ].join('; '));
+    
     // HTTPS Strict Transport Security
     if (req.secure) {
       res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');

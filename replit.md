@@ -198,6 +198,28 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- January 17, 2025: Critical Dropdown and CSP Issues Resolution (COMPLETED)
+  ✓ **Dropdown Fix Implementation**: Successfully resolved all dropdown issues by replacing problematic Radix UI Select components with native HTML select elements
+    • Fixed order status dropdown in seller dashboard - users can now change order status without issues
+    • Fixed payment method type dropdown - all payment types (Bank Transfer, STC Pay, PayPal, Wise) now selectable
+    • Fixed currency dropdown in Wise payment method section - all currencies (SAR, USD, EUR, GBP) now working
+    • Maintained visual consistency with Tailwind CSS styling on native HTML elements
+    • Added comprehensive debugging logs to track dropdown interactions
+  ✓ **Content Security Policy (CSP) Fix**: Resolved Google Fonts blocking issues by updating server security headers
+    • Added proper CSP headers in server/production.ts allowing Google Fonts and external resources
+    • Included style-src, style-src-elem, and font-src directives for fonts.googleapis.com and fonts.gstatic.com
+    • Maintained security while allowing necessary external resources for proper font loading
+  ✓ **Radix UI Component Z-Index Enhancement**: Added CSS fixes to prevent future z-index stacking issues
+    • Added data-radix-popper-content-wrapper z-index fix (z-index: 9999)
+    • Implemented proper dialog overlay and content z-index hierarchy
+    • Enhanced pointer events for select components within dialogs
+    • Prepared fallback CSS for any remaining Radix UI components
+  ✓ **Production-Ready Solution**: All dropdown functionality confirmed working with native HTML elements
+    • Order status changes now work reliably in seller dashboard
+    • Payment method creation with all types and currencies functional
+    • Form validation and data submission working correctly
+    • Debugging infrastructure in place for future troubleshooting
+
 - January 17, 2025: Comprehensive Development Tools Implementation (COMPLETED)
   ✓ **Essential Development Tools Suite**: Created production-ready development monitoring without external dependencies
     • Performance monitoring with request tracking and memory usage alerts

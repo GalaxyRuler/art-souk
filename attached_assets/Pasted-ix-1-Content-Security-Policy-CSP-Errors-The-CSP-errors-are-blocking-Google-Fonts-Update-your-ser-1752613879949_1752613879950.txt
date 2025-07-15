@@ -1,0 +1,180 @@
+ix 1: Content Security Policy (CSP) Errors
+The CSP errors are blocking Google Fonts. Update your server's security headers:
+typescript// server/index.ts or wherever you set security headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: [
+        "'self'", 
+        "'unsafe-inline'", 
+        "https://fonts.googleapis.com"
+      ],
+      styleSrcElem: [
+        "'self'", 
+        "'unsafe-inline'", 
+        "https://fonts.googleapis.com"
+      ],
+      fontSrc: [
+        "'self'", 
+        "https://fonts.gstatic.com"
+      ],
+      scriptSrc: [
+        "'self'", 
+        "'unsafe-inline'", 
+        "'unsafe-eval'",
+        "https://replit.com"
+      ],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'", "https:"],
+    }
+  }
+}));
+Fix 2: Make Radix Select Work in Dialog
+Since the native select is working, let's fix the Radix Select. The issue is likely z-index stacking. Here's the complete fix:
+typescript// In SellerDashboard.tsx
+
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+// In your form, replace the native select with this:
+<div className="space-y-2">
+  <Label htmlFor="status">{t("seller.status")}</Label>
+  <Controller
+    name="status"
+    control={form.control}
+    render={({ field }) => (
+      <Select
+        value={field.value}
+        onValueChange={(value) => {
+          console.log("Status changed to:", value);
+          field.onChange(value);
+        }}
+      >
+        <SelectTrigger id="status" className="w-full">
+          <SelectValue placeholder={t("seller.selectStatus")} />
+        </SelectTrigger>
+        <SelectContent 
+          className="z-[9999]"
+          // Force portal to body
+          container={document.body}
+        >
+          <SelectItem value="pending">{t("seller.pending")}</SelectItem>
+          <SelectItem value="confirmed">{t("seller.confirmed")}</SelectItem>
+          <SelectItem value="processing">{t("seller.processing")}</SelectItem>
+          <SelectItem value="shipped">{t("seller.shipped")}</SelectItem>
+          <SelectItem value="delivered">{t("seller.delivered")}</SelectItem>
+          <SelectItem value="cancelled">{t("seller.cancelled")}</SelectItem>
+        </SelectContent>
+      </Select>
+    )}
+  />
+</div>
+Fix 3: Update Your Dialog Component
+Make sure your Dialog has the proper z-index:
+typescript<Dialog open={orderDialogOpen} onOpenChange={setOrderDialogOpen}>
+  <DialogContent className="sm:max-w-[425px] z-50">
+    <DialogHeader>
+      <DialogTitle>{t("seller.orderDetails")}</DialogTitle>
+    </DialogHeader>
+    {/* Your form content */}
+  </DialogContent>
+</Dialog>
+Fix 4: Add Global CSS for Radix Portals
+Add this to your client/src/index.css:
+css/* Ensure Radix UI portals are above dialogs */
+[data-radix-popper-content-wrapper] {
+  z-index: 9999 !important;
+}
+
+/* Fix for select in dialog */
+[role="dialog"] [data-radix-collection-item] {
+  cursor: pointer;
+}
+
+/* Ensure dialog overlay doesn't block select */
+[data-radix-dialog-overlay] {
+  z-index: 50;
+}
+
+[data-radix-dialog-content] {
+  z-index: 51;
+}
+Fix 5: Alternative Select Implementation
+If the above doesn't work, here's a custom implementation that definitely works:
+typescript// Create a new component: OrderStatusSelect.tsx
+import { forwardRef } from "react";
+import { cn } from "@/lib/utils";
+
+interface OrderStatusSelectProps {
+  value: string;
+  onChange: (value: string) => void;
+  className?: string;
+}
+
+export const OrderStatusSelect = forwardRef
+  HTMLSelectElement,
+  OrderStatusSelectProps
+>(({ value, onChange, className }, ref) => {
+  const { t } = useTranslation();
+  
+  const statuses = [
+    { value: "pending", label: t("seller.pending") },
+    { value: "confirmed", label: t("seller.confirmed") },
+    { value: "processing", label: t("seller.processing") },
+    { value: "shipped", label: t("seller.shipped") },
+    { value: "delivered", label: t("seller.delivered") },
+    { value: "cancelled", label: t("seller.cancelled") },
+  ];
+
+  return (
+    <select
+      ref={ref}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={cn(
+        "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      )}
+    >
+      {statuses.map((status) => (
+        <option key={status.value} value={status.value}>
+          {status.label}
+        </option>
+      ))}
+    </select>
+  );
+});
+
+// Use in your form:
+<Controller
+  name="status"
+  control={form.control}
+  render={({ field }) => (
+    <OrderStatusSelect
+      value={field.value}
+      onChange={field.onChange}
+    />
+  )}
+/>
+Fix 6: Debug Helper
+Add this temporary debug component to understand the z-index stacking:
+typescript// At the top of your SellerDashboard component
+useEffect(() => {
+  // Log all z-index values
+  const elements = document.querySelectorAll('*');
+  const zIndexMap = new Map();
+  
+  elements.forEach(el => {
+    const zIndex = window.getComputedStyle(el).zIndex;
+    if (zIndex !== 'auto' && zIndex !== '0') {
+      zIndexMap.set(el.className, zIndex);
+    }
+  });
+  
+  console.log('Z-index map:', Object.fromEntries(zIndexMap));
+}, [orderDialogOpen]);
+Summary
+
+CSP Fix: Update your server security headers to allow Google Fonts
+Select Fix: Use proper z-index and portal configuration
+Fallback: The native select is working fine as a temporary solution

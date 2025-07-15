@@ -238,4 +238,25 @@
   }
   
   /* Removed overly broad selectors */
+  
+  /* Fix for Radix UI components z-index issues */
+  [data-radix-popper-content-wrapper] {
+    z-index: 9999 !important;
+  }
+
+  [data-radix-dialog-overlay] {
+    z-index: 50;
+  }
+
+  [data-radix-dialog-content] {
+    z-index: 51;
+  }
+
+  [role="dialog"] [data-radix-collection-item] {
+    cursor: pointer;
+  }
+
+  [role="dialog"] [data-radix-select-viewport] {
+    pointer-events: auto !important;
+  }
 }
