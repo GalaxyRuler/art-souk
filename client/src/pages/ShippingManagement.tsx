@@ -298,6 +298,115 @@ export default function ShippingManagement() {
     'Aramex', 'DHL', 'FedEx', 'UPS', 'Saudi Post', 'SMSA Express', 'J&T Express'
   ];
 
+  const saudCities = [
+    'Riyadh', 'Jeddah', 'Mecca', 'Medina', 'Dammam', 'Khobar', 'Dhahran',
+    'Tabuk', 'Buraidah', 'Khamis Mushait', 'Hofuf', 'Taif', 'Najran', 'Jubail'
+  ];
+
+  // Optimized memoized filtering and sorting with better error handling
+  const filteredAndSortedOrders = React.useMemo(() => {
+    console.log('🔍 Running filteredAndSortedOrders with:', {
+      orders: orders,
+      ordersLength: orders?.length,
+      ordersType: typeof orders,
+      ordersIsArray: Array.isArray(orders),
+      searchTerm: searchTerm,
+      filterStatus: filterStatus,
+      filterCarrier: filterCarrier
+    });
+
+    // Early return for invalid or empty orders
+    if (!Array.isArray(orders) || orders.length === 0) {
+      console.log('❌ No orders or empty array:', {
+        orders: orders,
+        type: typeof orders,
+        isArray: Array.isArray(orders),
+        length: orders?.length
+      });
+      return [];
+    }
+
+    // Filter orders with improved search logic
+    const filtered = orders.filter(order => {
+      if (!order) return false;
+
+      // Search filter - case insensitive and safe property access
+      const searchLower = searchTerm.toLowerCase().trim();
+      const matchesSearch = !searchTerm || 
+        (order.order_number?.toLowerCase() || '').includes(searchLower) ||
+        (order.user?.firstName?.toLowerCase() || '').includes(searchLower) ||
+        (order.user?.lastName?.toLowerCase() || '').includes(searchLower) ||
+        (order.artwork?.title?.toLowerCase() || '').includes(searchLower) ||
+        (order.tracking_number?.toLowerCase() || '').includes(searchLower);
+
+      // Status filter
+      const matchesStatus = filterStatus === 'all' || order.status === filterStatus;
+
+      // Carrier filter
+      const matchesCarrier = filterCarrier === 'all' || order.shipping_method === filterCarrier;
+
+      return matchesSearch && matchesStatus && matchesCarrier;
+    });
+
+    // Sort orders based on selected criteria
+    return filtered.sort((a, b) => {
+      let aValue, bValue;
+
+      switch (sortBy) {
+        case 'orderNumber':
+          aValue = a.order_number || '';
+          bValue = b.order_number || '';
+          break;
+        case 'status':
+          aValue = a.status || '';
+          bValue = b.status || '';
+          break;
+        case 'totalAmount':
+          aValue = parseFloat(a.total_amount) || 0;
+          bValue = parseFloat(b.total_amount) || 0;
+          break;
+        case 'createdAt':
+        default:
+          aValue = new Date(a.created_at || 0).getTime();
+          bValue = new Date(b.created_at || 0).getTime();
+          break;
+      }
+
+      // Handle string and numeric comparisons
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      }
+
+      return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+    });
+  }, [orders, searchTerm, filterStatus, filterCarrier, sortBy, sortOrder]);
+
+  // Enhanced debugging for tabs and data - moved after filteredAndSortedOrders declaration
+  React.useEffect(() => {
+    console.log('🔍 Component render debug:', {
+      activeTab,
+      hasOrders: !!orders,
+      ordersLength: orders?.length,
+      isLoadingOrders,
+      filteredOrdersLength: filteredAndSortedOrders?.length,
+      hasValidRoles,
+      userRoles
+    });
+  }, [activeTab, orders, isLoadingOrders, filteredAndSortedOrders, hasValidRoles, userRoles]);
+
+  // Bulk selection handlers
+  const handleSelectAll = () => {
+    if (selectedOrders.size === filteredAndSortedOrders.length) {
+      setSelectedOrders(new Set());
+    } else {
+      setSelectedOrders(new Set(filteredAndSortedOrders.map(order => order.id)));
+    }
+  };
+
+  const handleDeselectAll = () => {
+    setSelectedOrders(new Set());
+  };
+
   // Enhanced Components
   function ShippingAnalytics() {
     console.log('🔍 ShippingAnalytics rendering with orders:', orders);
