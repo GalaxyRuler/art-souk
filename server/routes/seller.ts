@@ -322,6 +322,15 @@ sellerRouter.get('/orders', async (req: any, res) => {
 
     const artworkIds = sellerArtworks.map(artwork => artwork.id);
 
+    console.log('🔍 Seller orders debug:', {
+      userId: userId,
+      artistId: artist?.id,
+      galleryId: gallery?.id,
+      sellerArtworksCount: sellerArtworks.length,
+      artworkIds: artworkIds,
+      willReturnMockData: artworkIds.length === 0
+    });
+
     if (artworkIds.length === 0) {
       // Return mock orders if no real artworks found
       const mockOrders = [
@@ -442,17 +451,18 @@ sellerRouter.get('/orders', async (req: any, res) => {
     // Get orders for these artworks
     const orders = await db.select({
       id: purchaseOrders.id,
-      artworkId: purchaseOrders.artworkId,
-      buyerEmail: purchaseOrders.buyerEmail,
+      order_number: sql`CONCAT('ORD-', ${purchaseOrders.id})`,
+      artwork_id: purchaseOrders.artworkId,
+      buyer_email: purchaseOrders.buyerEmail,
       quantity: purchaseOrders.quantity,
-      totalPrice: purchaseOrders.totalPrice,
+      total_amount: purchaseOrders.totalPrice,
       currency: purchaseOrders.currency,
       status: purchaseOrders.status,
-      paymentStatus: purchaseOrders.paymentStatus,
-      createdAt: purchaseOrders.createdAt,
-      sellerNotes: purchaseOrders.sellerNotes,
-      trackingNumber: purchaseOrders.trackingNumber,
-      carrier: purchaseOrders.carrier
+      payment_status: purchaseOrders.paymentStatus,
+      created_at: purchaseOrders.createdAt,
+      seller_notes: purchaseOrders.sellerNotes,
+      tracking_number: purchaseOrders.trackingNumber,
+      shipping_method: purchaseOrders.carrier
     })
     .from(purchaseOrders)
     .where(inArray(purchaseOrders.artworkId, artworkIds))
@@ -461,19 +471,24 @@ sellerRouter.get('/orders', async (req: any, res) => {
     // Enrich orders with artwork details
     const enrichedOrders = await Promise.all(
       orders.map(async (order) => {
-        const artwork = sellerArtworks.find(a => a.id === order.artworkId);
+        const artwork = sellerArtworks.find(a => a.id === order.artwork_id);
         return {
           ...order,
           artwork: artwork ? {
             id: artwork.id,
             title: artwork.title,
-            titleAr: artwork.titleAr,
+            title_ar: artwork.titleAr,
             images: artwork.images,
             price: artwork.price
           } : null
         };
       })
     );
+
+    console.log('🔍 Final enriched orders:', {
+      ordersCount: enrichedOrders.length,
+      firstOrder: enrichedOrders[0] || null
+    });
 
     res.json(enrichedOrders);
   } catch (error) {

@@ -173,6 +173,7 @@ export default function ShippingManagement() {
     cacheTime: 0, // Don't cache
     refetchOnMount: true,
     refetchOnWindowFocus: true,
+    refetchInterval: 30000, // Refresh every 30 seconds
   });
 
   // Debug logging
@@ -188,6 +189,12 @@ export default function ShippingManagement() {
   if (orders && orders.length > 0) {
     console.log('🔍 First order sample:', orders[0]);
   }
+
+  // Force refresh orders on mount
+  React.useEffect(() => {
+    console.log('🔍 Forcing orders cache invalidation...');
+    queryClient.invalidateQueries({ queryKey: ['/api/seller/orders'] });
+  }, [queryClient]);
 
   // Create/update shipping profile mutation
   const updateProfileMutation = useMutation({
@@ -493,13 +500,21 @@ export default function ShippingManagement() {
     console.log('🔍 Running filteredAndSortedOrders with:', {
       orders: orders,
       ordersLength: orders?.length,
+      ordersType: typeof orders,
+      ordersIsArray: Array.isArray(orders),
       searchTerm: searchTerm,
       filterStatus: filterStatus,
       filterCarrier: filterCarrier
     });
     
     if (!orders || !Array.isArray(orders)) {
-      console.log('❌ No orders or not array:', orders);
+      console.log('❌ No orders or not array:', {
+        orders: orders,
+        type: typeof orders,
+        isArray: Array.isArray(orders),
+        isNull: orders === null,
+        isUndefined: orders === undefined
+      });
       return [];
     }
     
