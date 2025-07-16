@@ -131,14 +131,24 @@ export default function ShippingManagement() {
   // Defensive extraction of userRoles with comprehensive safety checks
   const userRoles = useMemo(() => {
     try {
-      console.log('userRolesData:', userRolesData);
-      if (!userRolesData) return [];
-      console.log('userRolesData.roles:', userRolesData.roles);
-      if (!userRolesData.roles) return [];
-      if (!Array.isArray(userRolesData.roles)) return [];
+      console.log('🔍 userRolesData:', userRolesData);
+      if (!userRolesData) {
+        console.log('❌ No userRolesData, returning empty array');
+        return [];
+      }
+      console.log('🔍 userRolesData.roles:', userRolesData.roles);
+      if (!userRolesData.roles) {
+        console.log('❌ No roles property, returning empty array');
+        return [];
+      }
+      if (!Array.isArray(userRolesData.roles)) {
+        console.log('❌ roles is not an array:', typeof userRolesData.roles, userRolesData.roles);
+        return [];
+      }
+      console.log('✅ Returning valid roles array:', userRolesData.roles);
       return userRolesData.roles;
     } catch (error) {
-      console.error('Error extracting user roles:', error);
+      console.error('❌ Error extracting user roles:', error);
       return [];
     }
   }, [userRolesData]);
@@ -532,12 +542,12 @@ export default function ShippingManagement() {
   };
 
   // Show loading state while checking user roles or if roles are not loaded yet
-  if (isLoadingRoles || !userRolesData) {
+  if (isLoadingRoles || !userRolesData || !userRoles || !Array.isArray(userRoles)) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white">Loading...</p>
+          <p className="text-white">Loading user roles...</p>
         </div>
       </div>
     );
@@ -546,13 +556,22 @@ export default function ShippingManagement() {
   // Check if user has proper roles - with comprehensive safety checks
   const hasValidRoles = (() => {
     try {
-      if (!userRoles) return false;
-      if (!Array.isArray(userRoles)) return false;
-      if (userRoles.length === 0) return false;
-      if (typeof userRoles.includes !== 'function') return false;
-      return userRoles.includes('artist') || userRoles.includes('gallery');
+      console.log('🔍 Checking hasValidRoles with userRoles:', userRoles);
+      
+      // Force userRoles to be an array if it's not already
+      const rolesArray = Array.isArray(userRoles) ? userRoles : [];
+      console.log('🔍 rolesArray:', rolesArray);
+      
+      if (rolesArray.length === 0) {
+        console.log('❌ No roles found');
+        return false;
+      }
+      
+      const hasAccess = rolesArray.includes('artist') || rolesArray.includes('gallery');
+      console.log('🔍 hasAccess:', hasAccess);
+      return hasAccess;
     } catch (error) {
-      console.error('Error checking user roles:', error);
+      console.error('❌ Error checking user roles:', error);
       return false;
     }
   })();

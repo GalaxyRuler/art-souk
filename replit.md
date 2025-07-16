@@ -198,6 +198,25 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- January 17, 2025: Fixed Critical userRoles.includes Runtime Error (COMPLETED)
+  ✓ **Database Property Mapping Fix**: Resolved camelCase vs snake_case property mismatch preventing order data display
+    • Fixed order display cards to use database column names: order_number, total_amount, created_at, tracking_number
+    • Updated analytics calculations to use correct database field names
+    • Fixed filtering and sorting logic to work with snake_case database columns
+  ✓ **Enhanced userRoles Error Handling**: Added comprehensive defensive coding to prevent "userRoles.includes is not a function" errors
+    • Added detailed debug logging with emoji indicators for tracking data flow
+    • Implemented multiple safety checks: null checks, array validation, type validation
+    • Added forced array conversion to ensure userRoles is always an array
+    • Enhanced loading state to wait for userRoles to be properly initialized
+  ✓ **Database Verification**: Confirmed user has correct roles in database: ["collector", "artist", "gallery"]
+    • User should have access to shipping management with artist and gallery roles
+    • Database schema properly stores roles as JSON array
+    • Role setup is complete for user 44377424
+  ✓ **Shipping Data Display**: Fixed data display issue where 6 orders exist but weren't showing on frontend
+    • Orders data: ORD-2025-004 (560 SAR), ORD-2025-003 (2800 SAR), ORD-2025-005 (1890 SAR), etc.
+    • Analytics dashboard now calculates proper metrics from real order data
+    • Fixed empty state messaging to show correct information based on data availability
+
 - January 17, 2025: Complete Saudi National Address System Implementation (COMPLETED)
   ✓ **Saudi National Address Research**: Conducted comprehensive research on Saudi Arabia's National Address guidelines
     • Analyzed official format requirements: Building Number, Street Name, Secondary Number, District, Postal Code, City
