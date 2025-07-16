@@ -113,7 +113,7 @@ export default function ShippingManagement() {
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
   // Fetch user roles
-  const { data: userRoles } = useQuery<string[]>({
+  const { data: userRoles, isLoading: isLoadingRoles, error: rolesError } = useQuery<string[]>({
     queryKey: ['/api/user/roles'],
     retry: false,
   });
@@ -501,6 +501,19 @@ export default function ShippingManagement() {
     setSelectedOrders(new Set());
   };
 
+  // Show loading state while checking user roles
+  if (isLoadingRoles) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-white">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Check if user has proper roles
   if (!userRoles || !Array.isArray(userRoles) || (!userRoles.includes('artist') && !userRoles.includes('gallery'))) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
