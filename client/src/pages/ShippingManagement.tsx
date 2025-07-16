@@ -113,13 +113,15 @@ export default function ShippingManagement() {
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
   // Fetch user roles
-  const { data: userRoles, isLoading: isLoadingRoles, error: rolesError } = useQuery<string[]>({
+  const { data: userRolesData, isLoading: isLoadingRoles, error: rolesError } = useQuery<{ roles: string[], setupComplete: boolean }>({
     queryKey: ['/api/user/roles'],
     retry: false,
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
+
+  const userRoles = userRolesData?.roles || [];
 
   // Fetch shipping profile
   const { data: shippingProfile, isLoading: isLoadingProfile } = useQuery<ShippingProfile>({
@@ -505,7 +507,7 @@ export default function ShippingManagement() {
   };
 
   // Show loading state while checking user roles or if roles are not loaded yet
-  if (isLoadingRoles || !userRoles) {
+  if (isLoadingRoles || !userRolesData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
