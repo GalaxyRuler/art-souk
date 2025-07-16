@@ -954,19 +954,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Check if user has artist or gallery roles
       const userRoles = user.roles || [];
-      if (!userRoles.includes('artist') && !userRoles.includes('gallery')) {
+      if (!Array.isArray(userRoles) || (!userRoles.includes('artist') && !userRoles.includes('gallery'))) {
         return res.status(403).json({ message: 'Access denied. Artist or gallery role required.' });
       }
 
       let artworks: any[] = [];
       
       // Get artworks based on user type
-      if (userRoles.includes('artist')) {
+      if (Array.isArray(userRoles) && userRoles.includes('artist')) {
         const artist = await storage.getArtistByUserId(userId);
         if (artist) {
           artworks = await storage.getArtworksByArtist(artist.id);
         }
-      } else if (userRoles.includes('gallery')) {
+      } else if (Array.isArray(userRoles) && userRoles.includes('gallery')) {
         const gallery = await storage.getGalleryByUserId(userId);
         if (gallery) {
           artworks = await storage.getArtworksByGallery(gallery.id);
