@@ -1,0 +1,81 @@
+```
+Refactor the entire Souk Art codebase in this Replit project to resolve the following issues and polish the implementation:
+
+1. **Select Component Rendering**  
+   - Update `client/src/components/ui/select.tsx` to remove all `SelectPrimitive.Icon` usages and `asChild` props.  
+   - Ensure the `<SelectPrimitive.Trigger>` wrapper has `relative` positioning and place `ChevronDownIcon` directly inside an absolutely positioned `<div>`.  
+   - Confirm `SelectScrollDownButton` uses `ChevronDownIcon` and clean up unused imports.
+
+2. **Content Security Policy (CSP)**  
+   - Modify the HTML `<head>` or server headers to allow loading Google Fonts by adding `https://fonts.googleapis.com` to `style-src`, and remove or securely configure the Replit dev-banner script in `script-src`.  
+   - Alternatively, self-host Inter, Playfair Display, and Noto Sans Arabic `.woff2` files in `/public/fonts` and update `@font-face` declarations.
+
+3. **Tailwind Config & Purge**  
+   - Update `tailwind.config.js` to include Radix UI `data-state`, `data-side`, and any dynamic classes in the `content` array or safelist to prevent PurgeCSS from stripping them.
+
+4. **Remove Unnecessary Injected Scripts**  
+   - Delete any Replit Dev Banner code or extension-specific scripts that are not part of application logic.
+
+5. **General CSS/Interaction Cleanup**  
+   - Remove stray `pointer-events-none` or conflicting overflow/clipping styles that might inhibit dropdown/interactions.  
+   - Confirm that `.max-h-[--radix-select-content-available-height]` resolves correctly (import Radix CSS reset if needed).
+
+6. **Internationalization (i18next)**  
+   - In `src/i18n.ts`, ensure `i18n.init()` is called only once (remove duplicate calls).  
+   - Update English locale JSON (`en.json`) to add all missing `shipping.*` keys under the `shipping` namespace, including:
+     ```jsonc
+     {
+       "shipping": {
+         "businessProfile": "Business Profile",
+         "businessInfo": "Business Information",
+         "businessName": "Business Name",
+         "shippingRates": "Shipping Rates",
+         "domesticRate": "Domestic Rate",
+         "internationalRate": "International Rate",
+         "handlingTime": "Handling Time",
+         "days": "Days",
+         "updateProfile": "Update Profile",
+         "trackingInfo": "Tracking Information",
+         "ordersToShip": "Orders to Ship",
+         "noOrders": "No Orders",
+         "noOrdersDesc": "There are no orders to ship right now.",
+         "selectCarrier": "Select Carrier",
+         "status": {
+           "pending": "Pending",
+           "confirmed": "Confirmed",
+           "processing": "Processing",
+           "in_transit": "In Transit",
+           "out_for_delivery": "Out for Delivery",
+           "delivered": "Delivered",
+           "returned": "Returned"
+         },
+         "notes": "Notes",
+         "notesPlaceholder": "Enter any special instructions...",
+         "orderNumber": "Order Number",
+         "customer": "Customer",
+         "artwork": "Artwork",
+         "addTracking": "Add Tracking Number"
+       }
+     }
+     ```
+
+7. **ShippingManagement: Fix `userRoles.includes` Error**  
+   - In `client/src/pages/ShippingManagement.tsx`, prevent `userRoles.includes is not a function` by extracting:
+     ```ts
+     const userRoles: string[] = Array.isArray(userRolesData?.roles) ? userRolesData.roles : [];
+     ```  
+   - Guard against undefined orders and shipping profile:
+     ```ts
+     const orders = Array.isArray(data?.orders) ? data.orders : [];
+     const ordersLength = orders.length;
+     if (isLoadingOrders || isLoadingProfile) return <LoadingSpinner />;
+     ```  
+   - Update `filteredAndSortedOrders` to safely work with the `orders` array.
+
+8. **filteredAndSortedOrders Initialization**  
+   - In `client/src/pages/ShippingManagement.tsx`, resolve the `Cannot access 'filteredAndSortedOrders' before initialization` error by moving the `const filteredAndSortedOrders = ...` declaration above any references to it, or wrap it in a `useMemo` hook defined before use.
+
+9. **Extension/DevTools Errors**  
+   - These console errors (`runtime.lastError`, `Invalid frameId`, async listener warnings) originate from browser extensions and can be safely ignored—they do not affect application behavior.
+
+Produce a single consolidated patch or updated files reflecting all of these changes.```
