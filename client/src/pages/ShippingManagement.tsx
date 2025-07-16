@@ -196,6 +196,28 @@ export default function ShippingManagement() {
     queryClient.invalidateQueries({ queryKey: ['/api/seller/orders'] });
   }, [queryClient]);
 
+  // Add controlled tabs state
+  const [activeTab, setActiveTab] = React.useState('analytics');
+  
+  // Enhanced debugging for tabs and data
+  React.useEffect(() => {
+    console.log('🔍 Component render debug:', {
+      activeTab,
+      hasOrders: !!orders,
+      ordersLength: orders?.length,
+      isLoadingOrders,
+      filteredOrdersLength: filteredAndSortedOrders?.length,
+      hasValidRoles,
+      userRoles
+    });
+  }, [activeTab, orders, isLoadingOrders, filteredAndSortedOrders, hasValidRoles, userRoles]);
+
+  // Tab change handler with debugging
+  const handleTabChange = (value: string) => {
+    console.log('🔍 Tab changed to:', value);
+    setActiveTab(value);
+  };
+
   // Create/update shipping profile mutation
   const updateProfileMutation = useMutation({
     mutationFn: async (data: Partial<ShippingProfile>) => {
@@ -644,7 +666,7 @@ export default function ShippingManagement() {
             </p>
           </div>
 
-          <Tabs defaultValue="analytics" className="w-full">
+          <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
             <TabsList className="grid w-full grid-cols-4 mb-6">
               <TabsTrigger value="analytics" className="flex items-center gap-2">
                 <BarChart3 className="h-4 w-4" />
@@ -678,6 +700,22 @@ export default function ShippingManagement() {
                 </>
               )}
               
+              {/* DEBUG: Raw orders data display */}
+              {orders && orders.length > 0 && (
+                <Card className="bg-red-500/10 backdrop-blur-sm border-red-500/20 mb-4">
+                  <CardHeader>
+                    <CardTitle className="text-red-400">🔍 DEBUG: Raw Orders Data</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-white text-sm">
+                      <p>Raw orders count: {orders.length}</p>
+                      <p>Filtered orders count: {filteredAndSortedOrders.length}</p>
+                      <p>First order: {JSON.stringify(orders[0], null, 2)}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
               <Card className="bg-white/10 backdrop-blur-sm border-white/20">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center justify-between">
