@@ -648,7 +648,7 @@ export default function SellerDashboard() {
 
         {/* Payment Method Dialog */}
         <Dialog open={paymentDialogOpen} onOpenChange={setPaymentDialogOpen}>
-          <DialogContent className="max-w-md z-[9999]" style={{ zIndex: 9999 }}>
+          <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle>
                 {editingPaymentMethod ? t('seller.editPaymentMethod') : t('seller.addPaymentMethod')}

@@ -81,13 +81,13 @@
     left: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
-    z-index: 10000 !important;
+    z-index: 50 !important;
     background-color: rgba(0, 0, 0, 0.5) !important;
   }
 
   .modal-content {
     position: relative !important;
-    z-index: 10001 !important;
+    z-index: 51 !important;
   }
   
   /* Typography improvements */
@@ -252,11 +252,30 @@
     z-index: 51;
   }
 
+  /* Ensure Select components work properly inside dialogs */
+  [role="dialog"] [data-radix-select-content] {
+    z-index: 9999 !important;
+  }
+
+  [role="dialog"] [data-radix-select-trigger] {
+    z-index: 52 !important;
+  }
+
   [role="dialog"] [data-radix-collection-item] {
     cursor: pointer;
   }
 
   [role="dialog"] [data-radix-select-viewport] {
     pointer-events: auto !important;
+  }
+
+  /* Ensure Select dropdown appears above dialog overlay */
+  [data-radix-select-content] {
+    z-index: 9999 !important;
+  }
+
+  /* Fix for native select elements in dialogs */
+  [role="dialog"] select {
+    z-index: 52 !important;
   }
 }
