@@ -507,7 +507,7 @@ export default function ShippingManagement() {
   };
 
   // Show loading state while checking user roles or if roles are not loaded yet
-  if (isLoadingRoles || !userRolesData) {
+  if (isLoadingRoles || !userRolesData || !userRoles) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
@@ -518,8 +518,8 @@ export default function ShippingManagement() {
     );
   }
 
-  // Check if user has proper roles - with safe null checking
-  const hasValidRoles = Array.isArray(userRoles) && (userRoles.includes('artist') || userRoles.includes('gallery'));
+  // Check if user has proper roles - with comprehensive safety checks
+  const hasValidRoles = Array.isArray(userRoles) && userRoles.length > 0 && (userRoles.includes('artist') || userRoles.includes('gallery'));
   
   if (!hasValidRoles) {
     return (
