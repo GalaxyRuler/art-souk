@@ -407,59 +407,59 @@ export default function ShippingManagement() {
     console.log('🔍 Analytics stats:', { totalOrders, shippedOrders, inTransitOrders, deliveredOrders, totalRevenue });
 
     return (
-      <Card className="mb-6 bg-white/10 backdrop-blur-sm border-white/20">
+      <Card className="mb-6 bg-white dark:bg-slate-800 shadow-lg border-slate-200 dark:border-slate-700">
         <CardHeader>
-          <CardTitle className="text-white flex items-center gap-2">
-            <BarChart3 className="h-5 w-5" />
+          <CardTitle className="text-slate-800 dark:text-white flex items-center gap-2">
+            <BarChart3 className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
             Shipping Analytics
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-blue-500/20 p-4 rounded-lg border border-blue-500/30">
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-500/30 rounded-lg">
-                  <Package className="h-5 w-5 text-blue-400" />
+                <div className="p-2 bg-blue-100 dark:bg-blue-800/30 rounded-lg">
+                  <Package className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-300">Total Orders</p>
-                  <p className="text-2xl font-bold text-white">{totalOrders}</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">Total Orders</p>
+                  <p className="text-2xl font-bold text-slate-800 dark:text-white">{totalOrders}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-green-500/20 p-4 rounded-lg border border-green-500/30">
+            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-200 dark:border-green-800">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-500/30 rounded-lg">
-                  <CheckCircle2 className="h-5 w-5 text-green-400" />
+                <div className="p-2 bg-green-100 dark:bg-green-800/30 rounded-lg">
+                  <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-300">Delivered</p>
-                  <p className="text-2xl font-bold text-white">{deliveredOrders}</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">Delivered</p>
+                  <p className="text-2xl font-bold text-slate-800 dark:text-white">{deliveredOrders}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-orange-500/20 p-4 rounded-lg border border-orange-500/30">
+            <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg border border-orange-200 dark:border-orange-800">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-orange-500/30 rounded-lg">
-                  <Truck className="h-5 w-5 text-orange-400" />
+                <div className="p-2 bg-orange-100 dark:bg-orange-800/30 rounded-lg">
+                  <Truck className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-300">In Transit</p>
-                  <p className="text-2xl font-bold text-white">{inTransitOrders}</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">In Transit</p>
+                  <p className="text-2xl font-bold text-slate-800 dark:text-white">{inTransitOrders}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-purple-500/20 p-4 rounded-lg border border-purple-500/30">
+            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-500/30 rounded-lg">
-                  <DollarSign className="h-5 w-5 text-purple-400" />
+                <div className="p-2 bg-purple-100 dark:bg-purple-800/30 rounded-lg">
+                  <DollarSign className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-300">Total Revenue</p>
-                  <p className="text-2xl font-bold text-white">{totalRevenue.toLocaleString()} SAR</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">Total Revenue</p>
+                  <p className="text-2xl font-bold text-slate-800 dark:text-white">{totalRevenue.toLocaleString()} SAR</p>
                 </div>
               </div>
             </div>
@@ -468,27 +468,27 @@ export default function ShippingManagement() {
           <div className="mt-6 space-y-4">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-300">Delivery Success Rate</span>
-                <span className="text-sm font-medium text-white">
+                <span className="text-sm text-slate-600 dark:text-slate-300">Delivery Success Rate</span>
+                <span className="text-sm font-medium text-slate-800 dark:text-white">
                   {totalOrders > 0 ? Math.round((deliveredOrders / totalOrders) * 100) : 0}%
                 </span>
               </div>
               <Progress 
                 value={totalOrders > 0 ? (deliveredOrders / totalOrders) * 100 : 0} 
-                className="h-2" 
+                className="h-2 bg-slate-200 dark:bg-slate-700" 
               />
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-300">Orders In Transit</span>
-                <span className="text-sm font-medium text-white">
+                <span className="text-sm text-slate-600 dark:text-slate-300">Orders In Transit</span>
+                <span className="text-sm font-medium text-slate-800 dark:text-white">
                   {totalOrders > 0 ? Math.round((inTransitOrders / totalOrders) * 100) : 0}%
                 </span>
               </div>
               <Progress 
                 value={totalOrders > 0 ? (inTransitOrders / totalOrders) * 100 : 0} 
-                className="h-2" 
+                className="h-2 bg-slate-200 dark:bg-slate-700" 
               />
             </div>
           </div>
@@ -499,23 +499,23 @@ export default function ShippingManagement() {
 
   function ShippingFilters() {
     return (
-      <Card className="mb-6 bg-white/10 backdrop-blur-sm border-white/20">
+      <Card className="mb-6 bg-white dark:bg-slate-800 shadow-lg border-slate-200 dark:border-slate-700">
         <CardContent className="p-4">
           <div className="flex flex-wrap gap-4 items-center">
             <div className="flex-1 min-w-64">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400 h-4 w-4" />
                 <Input
                   placeholder="Search orders, customers, or tracking numbers..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-white/5 border-white/10 text-white placeholder-gray-400"
+                  className="pl-10 bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-600 text-slate-800 dark:text-white placeholder-slate-500 dark:placeholder-slate-400"
                 />
               </div>
             </div>
 
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white">
+              <SelectTrigger className="w-48 bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-600 text-slate-800 dark:text-white">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
@@ -530,7 +530,7 @@ export default function ShippingManagement() {
             </Select>
 
             <Select value={filterCarrier} onValueChange={setFilterCarrier}>
-              <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white">
+              <SelectTrigger className="w-48 bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-600 text-slate-800 dark:text-white">
                 <SelectValue placeholder="Filter by carrier" />
               </SelectTrigger>
               <SelectContent>
@@ -542,7 +542,7 @@ export default function ShippingManagement() {
             </Select>
 
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white">
+              <SelectTrigger className="w-48 bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-600 text-slate-800 dark:text-white">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -557,7 +557,7 @@ export default function ShippingManagement() {
               variant="outline"
               size="sm"
               onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-              className="border-white/10 text-white hover:bg-white/10"
+              className="border-slate-300 dark:border-slate-600 text-slate-800 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700"
             >
               {sortOrder === 'asc' ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
             </Button>
@@ -571,24 +571,24 @@ export default function ShippingManagement() {
     if (selectedOrders.size === 0) return null;
 
     return (
-      <Card className="mb-6 bg-white/10 backdrop-blur-sm border-white/20">
+      <Card className="mb-6 bg-blue-50 dark:bg-blue-900/20 shadow-lg border-blue-200 dark:border-blue-800">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="text-white font-medium">
+              <span className="text-slate-800 dark:text-white font-medium">
                 {selectedOrders.size} order{selectedOrders.size !== 1 ? 's' : ''} selected
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <Button size="sm" variant="outline" className="border-white/10 text-white hover:bg-white/10">
+              <Button size="sm" variant="outline" className="border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/30">
                 <Package className="h-4 w-4 mr-1" />
                 Add Tracking
               </Button>
-              <Button size="sm" variant="outline" className="border-white/10 text-white hover:bg-white/10">
+              <Button size="sm" variant="outline" className="border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/30">
                 <Edit className="h-4 w-4 mr-1" />
                 Update Status
               </Button>
-              <Button size="sm" variant="outline" className="border-white/10 text-white hover:bg-white/10">
+              <Button size="sm" variant="outline" className="border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/30">
                 <Mail className="h-4 w-4 mr-1" />
                 Send Notification
               </Button>
@@ -633,36 +633,36 @@ export default function ShippingManagement() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-white mb-4 flex items-center justify-center gap-3">
-              <Truck className="h-10 w-10 text-blue-400" />
+            <h1 className="text-4xl font-bold text-slate-800 dark:text-white mb-4 flex items-center justify-center gap-3">
+              <Truck className="h-10 w-10 text-indigo-600 dark:text-indigo-400" />
               {t('shipping.title')}
             </h1>
-            <p className="text-slate-300 text-lg max-w-2xl mx-auto">
+            <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto">
               {t('shipping.subtitle')}
             </p>
           </div>
 
           <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-6">
-              <TabsTrigger value="analytics" className="flex items-center gap-2">
+            <TabsList className="grid w-full grid-cols-4 mb-6 bg-white dark:bg-slate-800 shadow-sm">
+              <TabsTrigger value="analytics" className="flex items-center gap-2 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 dark:data-[state=active]:bg-indigo-900/20 dark:data-[state=active]:text-indigo-400">
                 <BarChart3 className="h-4 w-4" />
                 Analytics
               </TabsTrigger>
-              <TabsTrigger value="profile" className="flex items-center gap-2">
+              <TabsTrigger value="profile" className="flex items-center gap-2 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 dark:data-[state=active]:bg-indigo-900/20 dark:data-[state=active]:text-indigo-400">
                 <Settings className="h-4 w-4" />
                 {t('shipping.profile')}
               </TabsTrigger>
-              <TabsTrigger value="tracking" className="flex items-center gap-2">
+              <TabsTrigger value="tracking" className="flex items-center gap-2 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 dark:data-[state=active]:bg-indigo-900/20 dark:data-[state=active]:text-indigo-400">
                 <Package className="h-4 w-4" />
                 {t('shipping.tracking')}
               </TabsTrigger>
-              <TabsTrigger value="orders" className="flex items-center gap-2">
+              <TabsTrigger value="orders" className="flex items-center gap-2 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 dark:data-[state=active]:bg-indigo-900/20 dark:data-[state=active]:text-indigo-400">
                 <Clock className="h-4 w-4" />
                 {t('shipping.orders')}
               </TabsTrigger>
@@ -684,12 +684,12 @@ export default function ShippingManagement() {
 
               {/* DEBUG: Raw orders data display */}
               {orders && orders.length > 0 && (
-                <Card className="bg-red-500/10 backdrop-blur-sm border-red-500/20 mb-4">
+                <Card className="bg-red-50 dark:bg-red-900/20 shadow-lg border-red-200 dark:border-red-800 mb-4">
                   <CardHeader>
-                    <CardTitle className="text-red-400">🔍 DEBUG: Raw Orders Data</CardTitle>
+                    <CardTitle className="text-red-700 dark:text-red-400">🔍 DEBUG: Raw Orders Data</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-white text-sm">
+                    <div className="text-slate-800 dark:text-white text-sm">
                       <p>Raw orders count: {orders.length}</p>
                       <p>Filtered orders count: {filteredAndSortedOrders?.length || 0}</p>
                       <p>First order: {JSON.stringify(orders[0], null, 2)}</p>
@@ -698,9 +698,9 @@ export default function ShippingManagement() {
                 </Card>
               )}
 
-              <Card className="bg-white/10 backdrop-blur-sm border-white/20">
+              <Card className="bg-white dark:bg-slate-800 shadow-lg border-slate-200 dark:border-slate-700">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center justify-between">
+                  <CardTitle className="text-slate-800 dark:text-white flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Package className="h-5 w-5" />
                       Order Management ({filteredAndSortedOrders?.length || 0} orders)
@@ -763,12 +763,12 @@ export default function ShippingManagement() {
                         <div 
                           key={order.id} 
                           className={cn(
-                            "bg-white/5 rounded-lg p-4 border border-white/10 relative",
-                            selectedOrders.has(order.id) && "ring-2 ring-blue-500 bg-blue-500/10"
+                            "bg-white dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-700 shadow-md relative transition-all",
+                            selectedOrders.has(order.id) && "ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20"
                           )}
                         >
                           <div className="absolute top-3 right-3">
-                            <div className="bg-white p-1 rounded">
+                            <div className="bg-white dark:bg-slate-800 p-1 rounded border border-slate-200 dark:border-slate-700">
                               <Checkbox
                                 checked={selectedOrders.has(order.id)}
                                 onCheckedChange={(checked) => {
@@ -780,20 +780,20 @@ export default function ShippingManagement() {
                                                                  }
                                   setSelectedOrders(newSelected);
                                 }}
-                                className="border-gray-400 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                                className="border-slate-400 dark:border-slate-600 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
                               />
                             </div>
                           </div>
 
                           <div className="flex justify-between items-start mb-3 mr-8">
                             <div>
-                              <p className="text-white font-semibold">
+                              <p className="text-slate-800 dark:text-white font-semibold">
                                 Order #{order.order_number}
                               </p>
-                              <p className="text-slate-300 text-sm">
+                              <p className="text-slate-600 dark:text-slate-300 text-sm">
                                 {order.user?.firstName} {order.user?.lastName}
                               </p>
-                              <p className="text-slate-300 text-sm">
+                              <p className="text-slate-600 dark:text-slate-300 text-sm">
                                 {order.artwork?.title}
                               </p>
                             </div>
@@ -804,17 +804,17 @@ export default function ShippingManagement() {
 
                           <div className="space-y-2">
                             <div className="flex justify-between text-sm">
-                              <span className="text-slate-300">Amount:</span>
-                              <span className="text-white">{parseFloat(order.total_amount)?.toLocaleString()} {order.currency}</span>
+                              <span className="text-slate-600 dark:text-slate-400">Amount:</span>
+                              <span className="text-slate-800 dark:text-white font-medium">{parseFloat(order.total_amount)?.toLocaleString()} {order.currency}</span>
                             </div>
                             <div className="flex justify-between text-sm">
-                              <span className="text-slate-300">Date:</span>
-                              <span className="text-white">{new Date(order.created_at).toLocaleDateString()}</span>
+                              <span className="text-slate-600 dark:text-slate-400">Date:</span>
+                              <span className="text-slate-800 dark:text-white">{new Date(order.created_at).toLocaleDateString()}</span>
                             </div>
                             {order.tracking_number && (
                               <div className="flex justify-between text-sm">
-                                <span className="text-slate-300">Tracking:</span>
-                                <span className="text-white">{order.tracking_number}</span>
+                                <span className="text-slate-600 dark:text-slate-400">Tracking:</span>
+                                <span className="text-slate-800 dark:text-white">{order.tracking_number}</span>
                               </div>
                             )}
                           </div>
@@ -834,11 +834,11 @@ export default function ShippingManagement() {
                     </div>
                   ) : (
                     <div className="text-center py-8">
-                      <Package className="h-16 w-16 text-slate-400 mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold text-white mb-2">
+                      <Package className="h-16 w-16 text-slate-400 dark:text-slate-500 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">
                         {orders && orders.length > 0 ? 'No Matching Orders' : 'No Orders Found'}
                       </h3>
-                      <p className="text-slate-300">
+                      <p className="text-slate-600 dark:text-slate-300">
                         {orders && orders.length > 0 
                           ? 'No orders match your current filters. Try adjusting your search or filter criteria.' 
                           : 'Orders will appear here when customers purchase your artworks.'}
@@ -851,56 +851,56 @@ export default function ShippingManagement() {
 
             {/* Shipping Profile Tab */}
             <TabsContent value="profile">
-              <Card className="bg-white/10 backdrop-blur-sm border-white/20">
+              <Card className="bg-white dark:bg-slate-800 shadow-lg border-slate-200 dark:border-slate-700">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <Building className="h-5 w-5" />
+                  <CardTitle className="text-slate-800 dark:text-white flex items-center gap-2">
+                    <Building className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                     {t('shipping.businessProfile')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {isLoadingProfile ? (
                     <div className="flex items-center justify-center py-12">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div>
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
                     </div>
                   ) : (
                     <div className="space-y-6">
                       {shippingProfile ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div>
-                            <h3 className="text-lg font-semibold text-white mb-3">
+                            <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-3">
                               {t('shipping.businessInfo')}
                             </h3>
                             <div className="space-y-2">
-                              <p className="text-slate-300">
+                              <p className="text-slate-700 dark:text-slate-300">
                                 <strong>{t('shipping.businessName')}:</strong> {shippingProfile.businessName}
                               </p>
-                              <p className="text-slate-300">
+                              <p className="text-slate-700 dark:text-slate-300">
                                 <strong>{t('shipping.contactPerson')}:</strong> {shippingProfile.contactPerson}
                               </p>
-                              <p className="text-slate-300">
+                              <p className="text-slate-700 dark:text-slate-300">
                                 <strong>{t('shipping.phone')}:</strong> {shippingProfile.contactPhone}
                               </p>
-                              <p className="text-slate-300">
+                              <p className="text-slate-700 dark:text-slate-300">
                                 <strong>{t('shipping.email')}:</strong> {shippingProfile.contactEmail}
                               </p>
                             </div>
                           </div>
                           <div>
-                            <h3 className="text-lg font-semibold text-white mb-3">
+                            <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-3">
                               {t('shipping.shippingRates')}
                             </h3>
                             <div className="space-y-2">
-                              <p className="text-slate-300">
+                              <p className="text-slate-700 dark:text-slate-300">
                                 <strong>{t('shipping.domesticRate')}:</strong> {shippingProfile.domesticShippingRate} SAR
                               </p>
-                              <p className="text-slate-300">
+                              <p className="text-slate-700 dark:text-slate-300">
                                 <strong>{t('shipping.internationalRate')}:</strong> {shippingProfile.internationalShippingRate} SAR
                               </p>
-                              <p className="text-slate-300">
+                              <p className="text-slate-700 dark:text-slate-300">
                                 <strong>{t('shipping.freeShippingThreshold')}:</strong> {shippingProfile.freeShippingThreshold} SAR
                               </p>
-                              <p className="text-slate-300">
+                              <p className="text-slate-700 dark:text-slate-300">
                                 <strong>{t('shipping.handlingTime')}:</strong> {shippingProfile.handlingTime} {t('shipping.days')}
                               </p>
                             </div>
@@ -1279,28 +1279,28 @@ export default function ShippingManagement() {
 
             {/* Tracking Tab */}
             <TabsContent value="tracking">
-              <Card className="bg-white/10 backdrop-blur-sm border-white/20">
+              <Card className="bg-white dark:bg-slate-800 shadow-lg border-slate-200 dark:border-slate-700">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <Package className="h-5 w-5" />
+                  <CardTitle className="text-slate-800 dark:text-white flex items-center gap-2">
+                    <Package className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                     {t('shipping.trackingInfo')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {isLoadingTracking ? (
                     <div className="flex items-center justify-center py-12">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div>
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
                     </div>
                   ) : trackingInfo && trackingInfo.length > 0 ? (
                     <div className="space-y-4">
                       {trackingInfo.map((tracking) => (
-                        <div key={tracking.id} className="bg-white/5 rounded-lg p-4 border border-white/10">
+                        <div key={tracking.id} className="bg-slate-50 dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
                           <div className="flex justify-between items-start mb-3">
                             <div>
-                              <p className="text-white font-semibold">
+                              <p className="text-slate-800 dark:text-white font-semibold">
                                 {t('shipping.trackingNumber')}: {tracking.trackingNumber}
                               </p>
-                              <p className="text-slate-300">
+                              <p className="text-slate-600 dark:text-slate-300">
                                 {t('shipping.carrier')}: {tracking.carrier}
                               </p>
                             </div>
@@ -1310,11 +1310,11 @@ export default function ShippingManagement() {
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                              <p className="text-slate-300">
+                              <p className="text-slate-700 dark:text-slate-300">
                                 <strong>{t('shipping.estimatedDelivery')}:</strong> {tracking.estimatedDelivery}
                               </p>
                               {tracking.actualDelivery && (
-                                <p className="text-slate-300">
+                                <p className="text-slate-700 dark:text-slate-300">
                                   <strong>{t('shipping.actualDelivery')}:</strong> {tracking.actualDelivery}
                                 </p>
                               )}
@@ -1324,6 +1324,7 @@ export default function ShippingManagement() {
                                 size="sm" 
                                 variant="outline"
                                 onClick={() => openTrackingDialog(tracking.orderId)}
+                                className="border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700"
                               >
                                 <Edit className="h-4 w-4 mr-1" />
                                 {t('shipping.updateTracking')}
@@ -1335,11 +1336,11 @@ export default function ShippingManagement() {
                     </div>
                   ) : (
                     <div className="text-center py-8">
-                      <Package className="h-16 w-16 text-slate-400 mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold text-white mb-2">
+                      <Package className="h-16 w-16 text-slate-400 dark:text-slate-500 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">
                         {t('shipping.noTracking')}
                       </h3>
-                      <p className="text-slate-300">
+                      <p className="text-slate-600 dark:text-slate-300">
                         {t('shipping.noTrackingDesc')}
                       </p>
                     </div>
@@ -1350,10 +1351,10 @@ export default function ShippingManagement() {
 
             {/* Orders Tab */}
             <TabsContent value="orders">
-              <Card className="bg-white/10 backdrop-blur-sm border-white/20">
+              <Card className="bg-white dark:bg-slate-800 shadow-lg border-slate-200 dark:border-slate-700">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <Clock className="h-5 w-5" />
+                  <CardTitle className="text-slate-800 dark:text-white flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                     {t('shipping.ordersToShip')}
                   </CardTitle>
                 </CardHeader>
@@ -1361,16 +1362,16 @@ export default function ShippingManagement() {
                   {orders && Array.isArray(orders) && orders.length > 0 ? (
                     <div className="space-y-4">
                       {orders.filter(order => order.status === 'confirmed' || order.status === 'processing').map((order) => (
-                        <div key={order.id} className="bg-white/5 rounded-lg p-4 border border-white/10">
+                        <div key={order.id} className="bg-slate-50 dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
                           <div className="flex justify-between items-start mb-3">
                             <div>
-                              <p className="text-white font-semibold">
+                              <p className="text-slate-800 dark:text-white font-semibold">
                                 {t('shipping.orderNumber')}: {order.orderNumber}
                               </p>
-                              <p className="text-slate-300">
+                              <p className="text-slate-600 dark:text-slate-300">
                                 {t('shipping.customer')}: {order.user?.firstName} {order.user?.lastName}
                               </p>
-                              <p className="text-slate-300">
+                              <p className="text-slate-600 dark:text-slate-300">
                                 {t('shipping.artwork')}: {order.artwork?.title}
                               </p>
                             </div>
@@ -1392,11 +1393,11 @@ export default function ShippingManagement() {
                     </div>
                   ) : (
                     <div className="text-center py-8">
-                      <Clock className="h-16 w-16 text-slate-400 mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold text-white mb-2">
+                      <Clock className="h-16 w-16 text-slate-400 dark:text-slate-500 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">
                         {t('shipping.noOrders')}
                       </h3>
-                      <p className="text-slate-300">
+                      <p className="text-slate-600 dark:text-slate-300">
                         {t('shipping.noOrdersDesc')}
                       </p>
                     </div>
