@@ -568,7 +568,7 @@ export default function ShippingManagement() {
   };
 
   // Show loading state while checking user roles or if roles are not loaded yet
-  if (isLoadingRoles || !userRolesData || userRoles === null || !Array.isArray(userRoles)) {
+  if (isLoadingRoles || !userRolesData || userRoles === null || userRoles === undefined || !Array.isArray(userRoles)) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
@@ -580,7 +580,8 @@ export default function ShippingManagement() {
   }
 
   // Check if user has proper roles - userRoles is guaranteed to be an array at this point
-  const hasValidRoles = userRoles.length > 0 && (userRoles.includes('artist') || userRoles.includes('gallery'));
+  // Additional defensive check to prevent TypeError
+  const hasValidRoles = userRoles && Array.isArray(userRoles) && userRoles.length > 0 && (userRoles.includes('artist') || userRoles.includes('gallery'));
   
   if (!hasValidRoles) {
     return (
