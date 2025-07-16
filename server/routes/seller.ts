@@ -327,111 +327,116 @@ sellerRouter.get('/orders', async (req: any, res) => {
       const mockOrders = [
         {
           id: 'order_001',
-          artworkId: 'artwork_001',
-          buyerEmail: 'sara.collector@gmail.com',
+          order_number: 'ORD-2025-001',
+          artwork_id: 'artwork_001',
+          buyer_email: 'sara.collector@gmail.com',
           quantity: 1,
-          totalPrice: 8500,
+          total_amount: 8500,
           currency: 'SAR',
           status: 'pending',
-          paymentStatus: 'pending',
-          createdAt: '2024-01-15T10:30:00Z',
-          sellerNotes: null,
-          trackingNumber: null,
-          carrier: null,
+          payment_status: 'pending',
+          created_at: '2024-01-15T10:30:00Z',
+          seller_notes: null,
+          tracking_number: null,
+          shipping_method: null,
           artwork: {
             id: 'artwork_001',
             title: 'Desert Sunset',
-            titleAr: 'غروب الصحراء',
+            title_ar: 'غروب الصحراء',
             images: ['/api/placeholder/400/300'],
             price: 8500
           }
         },
         {
           id: 'order_002',
-          artworkId: 'artwork_002',
-          buyerEmail: 'mohammed.art@outlook.com',
+          order_number: 'ORD-2025-002',
+          artwork_id: 'artwork_002',
+          buyer_email: 'mohammed.art@outlook.com',
           quantity: 1,
-          totalPrice: 12000,
+          total_amount: 12000,
           currency: 'SAR',
           status: 'confirmed',
-          paymentStatus: 'paid',
-          createdAt: '2024-01-12T14:15:00Z',
-          sellerNotes: 'Thank you for your purchase!',
-          trackingNumber: 'TRK123456789',
-          carrier: 'Aramex',
+          payment_status: 'paid',
+          created_at: '2024-01-12T14:15:00Z',
+          seller_notes: 'Thank you for your purchase!',
+          tracking_number: 'TRK123456789',
+          shipping_method: 'Aramex',
           artwork: {
             id: 'artwork_002',
             title: 'Modern Calligraphy',
-            titleAr: 'خط حديث',
+            title_ar: 'خط حديث',
             images: ['/api/placeholder/400/300'],
             price: 12000
           }
         },
         {
           id: 'order_003',
-          artworkId: 'artwork_003',
-          buyerEmail: 'fatima.arts@gmail.com',
+          order_number: 'ORD-2025-003',
+          artwork_id: 'artwork_003',
+          buyer_email: 'fatima.arts@gmail.com',
           quantity: 1,
-          totalPrice: 6750,
+          total_amount: 6750,
           currency: 'SAR',
           status: 'shipped',
-          paymentStatus: 'paid',
-          createdAt: '2024-01-10T09:45:00Z',
-          sellerNotes: 'Carefully packaged for safe delivery',
-          trackingNumber: 'DHL987654321',
-          carrier: 'DHL',
+          payment_status: 'paid',
+          created_at: '2024-01-10T09:45:00Z',
+          seller_notes: 'Carefully packaged for safe delivery',
+          tracking_number: 'DHL987654321',
+          shipping_method: 'DHL',
           artwork: {
             id: 'artwork_003',
             title: 'Abstract Composition',
-            titleAr: 'تركيب مجرد',
+            title_ar: 'تركيب مجرد',
             images: ['/api/placeholder/400/300'],
             price: 6750
           }
         },
         {
           id: 'order_004',
-          artworkId: 'artwork_004',
-          buyerEmail: 'khalid.collector@yahoo.com',
+          order_number: 'ORD-2025-004',
+          artwork_id: 'artwork_004',
+          buyer_email: 'khalid.collector@yahoo.com',
           quantity: 1,
-          totalPrice: 15000,
+          total_amount: 15000,
           currency: 'SAR',
           status: 'delivered',
-          paymentStatus: 'paid',
-          createdAt: '2024-01-08T16:20:00Z',
-          sellerNotes: 'Hope you enjoy this piece!',
-          trackingNumber: 'FDX456789123',
-          carrier: 'FedEx',
+          payment_status: 'paid',
+          created_at: '2024-01-08T16:20:00Z',
+          seller_notes: 'Hope you enjoy this piece!',
+          tracking_number: 'FDX456789123',
+          shipping_method: 'FedEx',
           artwork: {
             id: 'artwork_004',
             title: 'Traditional Patterns',
-            titleAr: 'أنماط تقليدية',
+            title_ar: 'أنماط تقليدية',
             images: ['/api/placeholder/400/300'],
             price: 15000
           }
         },
         {
           id: 'order_005',
-          artworkId: 'artwork_005',
-          buyerEmail: 'noor.gallery@gmail.com',
+          order_number: 'ORD-2025-005',
+          artwork_id: 'artwork_005',
+          buyer_email: 'noor.gallery@gmail.com',
           quantity: 1,
-          totalPrice: 3500,
+          total_amount: 3500,
           currency: 'SAR',
           status: 'processing',
-          paymentStatus: 'paid',
-          createdAt: '2024-01-05T11:10:00Z',
-          sellerNotes: 'Preparing for shipment',
-          trackingNumber: null,
-          carrier: null,
+          payment_status: 'paid',
+          created_at: '2024-01-05T11:10:00Z',
+          seller_notes: 'Preparing for shipment',
+          tracking_number: null,
+          shipping_method: null,
           artwork: {
             id: 'artwork_005',
             title: 'Minimalist Study',
-            titleAr: 'دراسة بسيطة',
+            title_ar: 'دراسة بسيطة',
             images: ['/api/placeholder/400/300'],
             price: 3500
           }
         }
       ];
-      return res.json({ orders: mockOrders });
+      return res.json(mockOrders);
     }
 
     // Get orders for these artworks
@@ -470,7 +475,7 @@ sellerRouter.get('/orders', async (req: any, res) => {
       })
     );
 
-    res.json({ orders: enrichedOrders });
+    res.json(enrichedOrders);
   } catch (error) {
     console.error('Get seller orders error:', error);
     res.status(500).json({ error: 'Failed to get orders' });

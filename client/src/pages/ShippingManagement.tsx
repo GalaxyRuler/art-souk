@@ -169,12 +169,18 @@ export default function ShippingManagement() {
   const { data: orders, isLoading: isLoadingOrders } = useQuery<any[]>({
     queryKey: ['/api/seller/orders'],
     retry: false,
+    staleTime: 0, // Force fresh data
+    cacheTime: 0, // Don't cache
   });
 
   // Debug logging
-  console.log('Orders data:', orders);
-  console.log('Shipping profile:', shippingProfile);
-  console.log('User roles:', userRoles);
+  console.log('🔍 Orders data:', orders);
+  console.log('🔍 Orders length:', orders?.length);
+  console.log('🔍 Orders isArray:', Array.isArray(orders));
+  console.log('🔍 Shipping profile:', shippingProfile);
+  console.log('🔍 User roles:', userRoles);
+  console.log('🔍 isLoadingOrders:', isLoadingOrders);
+  console.log('🔍 isLoadingProfile:', isLoadingProfile);
 
   // Create/update shipping profile mutation
   const updateProfileMutation = useMutation({
@@ -473,9 +479,22 @@ export default function ShippingManagement() {
 
   // Memoized filtering and sorting
   const filteredAndSortedOrders = useMemo(() => {
-    if (!orders || !Array.isArray(orders)) return [];
+    console.log('🔍 Running filteredAndSortedOrders with:', {
+      orders: orders,
+      ordersLength: orders?.length,
+      searchTerm: searchTerm,
+      filterStatus: filterStatus,
+      filterCarrier: filterCarrier
+    });
+    
+    if (!orders || !Array.isArray(orders)) {
+      console.log('❌ No orders or not array:', orders);
+      return [];
+    }
     
     let filtered = orders.filter(order => {
+      console.log('🔍 Filtering order:', order);
+      
       // Search filter
       const searchLower = searchTerm.toLowerCase();
       const matchesSearch = !searchTerm || 
@@ -490,6 +509,13 @@ export default function ShippingManagement() {
       
       // Carrier filter
       const matchesCarrier = filterCarrier === 'all' || order.shipping_method === filterCarrier;
+      
+      console.log('🔍 Filter results:', {
+        matchesSearch,
+        matchesStatus,
+        matchesCarrier,
+        passes: matchesSearch && matchesStatus && matchesCarrier
+      });
       
       return matchesSearch && matchesStatus && matchesCarrier;
     });
