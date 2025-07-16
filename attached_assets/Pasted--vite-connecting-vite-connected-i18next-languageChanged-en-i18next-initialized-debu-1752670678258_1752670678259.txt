@@ -1,0 +1,270 @@
+ [vite] connecting...
+ [vite] connected.
+ i18next: languageChanged en
+ i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+ i18n initialized with inline resources
+ Sample translation nav.home: Home
+ Sample translation auth.login: Sign In
+ Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+ Sample translation collector.dashboard.title: Collector Dashboard
+ Sample translation collector.stats.totalOrders: Total Orders
+ Sample translation collector.tabs.orders: Orders
+ i18next: languageChanged en
+ i18next: init: i18next is already initialized. You should call init just once!
+overrideMethod @ installHook.js:1
+output @ i18next.js:208
+warn @ i18next.js:201
+forward @ i18next.js:236
+warn @ i18next.js:225
+finish @ i18next.js:1815
+done @ i18next.js:1948
+(anonymous) @ i18next.js:1963
+loadResources @ i18next.js:1861
+setLng @ i18next.js:1962
+changeLanguage @ i18next.js:1975
+load @ i18next.js:1823
+init @ i18next.js:1826
+(anonymous) @ i18n.ts:2455
+ i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+ i18n initialized with inline resources
+ Sample translation nav.home: Home
+ Sample translation auth.login: Sign In
+ Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+ Sample translation collector.dashboard.title: Collector Dashboard
+ Sample translation collector.stats.totalOrders: Total Orders
+ Sample translation collector.tabs.orders: Orders
+ Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+ Script was injected!
+ Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+ 🔍 userRolesData: {roles: Array(3), setupComplete: true}
+ 🔍 userRolesData.roles: (3) ['collector', 'artist', 'gallery']
+ ✅ Returning valid roles array: (3) ['collector', 'artist', 'gallery']
+ 🔍 Orders data: undefined
+ 🔍 Orders length: undefined
+ 🔍 Orders isArray: false
+ 🔍 Shipping profile: undefined
+ 🔍 User roles: (3) ['collector', 'artist', 'gallery']
+ 🔍 isLoadingOrders: true
+ 🔍 isLoadingProfile: true
+ 🔍 Running filteredAndSortedOrders with: {orders: undefined, ordersLength: undefined, searchTerm: '', filterStatus: 'all', filterCarrier: 'all'}
+ ❌ No orders or not array: undefined
+ i18next::translator: missingKey en translation shipping.businessProfile shipping.businessProfile
+ i18next::translator: missingKey en translation shipping.trackingInfo shipping.trackingInfo
+ i18next::translator: missingKey en translation shipping.ordersToShip shipping.ordersToShip
+ i18next::translator: missingKey en translation shipping.noOrders shipping.noOrders
+ i18next::translator: missingKey en translation shipping.noOrdersDesc shipping.noOrdersDesc
+ i18next::translator: missingKey en translation shipping.selectCarrier shipping.selectCarrier
+ i18next::translator: missingKey en translation shipping.status.in_transit shipping.status.in_transit
+ i18next::translator: missingKey en translation shipping.status.out_for_delivery shipping.status.out_for_delivery
+ i18next::translator: missingKey en translation shipping.status.delivered shipping.status.delivered
+ i18next::translator: missingKey en translation shipping.status.returned shipping.status.returned
+ i18next::translator: missingKey en translation shipping.notes shipping.notes
+ i18next::translator: missingKey en translation shipping.notesPlaceholder shipping.notesPlaceholder
+ 🔍 Orders data: undefined
+ 🔍 Orders length: undefined
+ 🔍 Orders isArray: false
+ 🔍 Shipping profile: undefined
+ 🔍 User roles: (3) ['collector', 'artist', 'gallery']
+ 🔍 isLoadingOrders: true
+ 🔍 isLoadingProfile: true
+ i18next::translator: missingKey en translation shipping.businessProfile shipping.businessProfile
+ i18next::translator: missingKey en translation shipping.trackingInfo shipping.trackingInfo
+ i18next::translator: missingKey en translation shipping.noTrackingDesc shipping.noTrackingDesc
+ i18next::translator: missingKey en translation shipping.ordersToShip shipping.ordersToShip
+ i18next::translator: missingKey en translation shipping.noOrders shipping.noOrders
+ i18next::translator: missingKey en translation shipping.noOrdersDesc shipping.noOrdersDesc
+ i18next::translator: missingKey en translation shipping.selectCarrier shipping.selectCarrier
+ i18next::translator: missingKey en translation shipping.status.in_transit shipping.status.in_transit
+ i18next::translator: missingKey en translation shipping.status.out_for_delivery shipping.status.out_for_delivery
+ i18next::translator: missingKey en translation shipping.status.delivered shipping.status.delivered
+ i18next::translator: missingKey en translation shipping.status.returned shipping.status.returned
+ i18next::translator: missingKey en translation shipping.notes shipping.notes
+ i18next::translator: missingKey en translation shipping.notesPlaceholder shipping.notesPlaceholder
+ 🔍 Orders data: undefined
+ 🔍 Orders length: undefined
+ 🔍 Orders isArray: false
+ 🔍 Shipping profile: undefined
+ 🔍 User roles: (3) ['collector', 'artist', 'gallery']
+ 🔍 isLoadingOrders: true
+ 🔍 isLoadingProfile: true
+ i18next::translator: missingKey en translation shipping.businessProfile shipping.businessProfile
+ i18next::translator: missingKey en translation shipping.trackingInfo shipping.trackingInfo
+ i18next::translator: missingKey en translation shipping.noTrackingDesc shipping.noTrackingDesc
+ i18next::translator: missingKey en translation shipping.ordersToShip shipping.ordersToShip
+ i18next::translator: missingKey en translation shipping.noOrders shipping.noOrders
+ i18next::translator: missingKey en translation shipping.noOrdersDesc shipping.noOrdersDesc
+ i18next::translator: missingKey en translation shipping.selectCarrier shipping.selectCarrier
+ i18next::translator: missingKey en translation shipping.status.in_transit shipping.status.in_transit
+ i18next::translator: missingKey en translation shipping.status.out_for_delivery shipping.status.out_for_delivery
+ i18next::translator: missingKey en translation shipping.status.delivered shipping.status.delivered
+ i18next::translator: missingKey en translation shipping.status.returned shipping.status.returned
+ i18next::translator: missingKey en translation shipping.notes shipping.notes
+ i18next::translator: missingKey en translation shipping.notesPlaceholder shipping.notesPlaceholder
+ 🔍 Orders data: undefined
+ 🔍 Orders length: undefined
+ 🔍 Orders isArray: false
+ 🔍 Shipping profile: {id: 1, userId: '44377424', userType: 'artist', businessName: 'Premium Art Studio', businessNameAr: 'استوديو الفن المتميز', …}
+ 🔍 User roles: (3) ['collector', 'artist', 'gallery']
+ 🔍 isLoadingOrders: true
+ 🔍 isLoadingProfile: false
+ i18next::translator: missingKey en translation shipping.businessProfile shipping.businessProfile
+ i18next::translator: missingKey en translation shipping.businessInfo shipping.businessInfo
+ i18next::translator: missingKey en translation shipping.businessName shipping.businessName
+ i18next::translator: missingKey en translation shipping.shippingRates shipping.shippingRates
+ i18next::translator: missingKey en translation shipping.domesticRate shipping.domesticRate
+ i18next::translator: missingKey en translation shipping.internationalRate shipping.internationalRate
+ i18next::translator: missingKey en translation shipping.handlingTime shipping.handlingTime
+ i18next::translator: missingKey en translation shipping.days shipping.days
+ i18next::translator: missingKey en translation shipping.updateProfile shipping.updateProfile
+ i18next::translator: missingKey en translation shipping.updateProfile shipping.updateProfile
+ i18next::translator: missingKey en translation shipping.businessName shipping.businessName
+ i18next::translator: missingKey en translation shipping.businessNamePlaceholder shipping.businessNamePlaceholder
+ i18next::translator: missingKey en translation shipping.businessNameAr shipping.businessNameAr
+ i18next::translator: missingKey en translation shipping.businessNameArPlaceholder shipping.businessNameArPlaceholder
+ i18next::translator: missingKey en translation shipping.contactPersonPlaceholder shipping.contactPersonPlaceholder
+ i18next::translator: missingKey en translation shipping.contactPhone shipping.contactPhone
+ i18next::translator: missingKey en translation shipping.contactEmail shipping.contactEmail
+ i18next::translator: missingKey en translation shipping.selectCity shipping.selectCity
+ i18next::translator: missingKey en translation shipping.defaultCarrier shipping.defaultCarrier
+ i18next::translator: missingKey en translation shipping.selectCarrier shipping.selectCarrier
+ i18next::translator: missingKey en translation shipping.domesticRate shipping.domesticRate
+ i18next::translator: missingKey en translation shipping.internationalRate shipping.internationalRate
+ i18next::translator: missingKey en translation shipping.handlingTime shipping.handlingTime
+ i18next::translator: missingKey en translation shipping.days shipping.days
+ i18next::translator: missingKey en translation shipping.packagingInstructions shipping.packagingInstructions
+ i18next::translator: missingKey en translation shipping.packagingInstructionsPlaceholder shipping.packagingInstructionsPlaceholder
+ i18next::translator: missingKey en translation shipping.packagingInstructionsAr shipping.packagingInstructionsAr
+ i18next::translator: missingKey en translation shipping.packagingInstructionsArPlaceholder shipping.packagingInstructionsArPlaceholder
+ i18next::translator: missingKey en translation shipping.trackingInfo shipping.trackingInfo
+ i18next::translator: missingKey en translation shipping.noTrackingDesc shipping.noTrackingDesc
+ i18next::translator: missingKey en translation shipping.ordersToShip shipping.ordersToShip
+ i18next::translator: missingKey en translation shipping.noOrders shipping.noOrders
+ i18next::translator: missingKey en translation shipping.noOrdersDesc shipping.noOrdersDesc
+ i18next::translator: missingKey en translation shipping.selectCarrier shipping.selectCarrier
+ i18next::translator: missingKey en translation shipping.status.in_transit shipping.status.in_transit
+ i18next::translator: missingKey en translation shipping.status.out_for_delivery shipping.status.out_for_delivery
+ i18next::translator: missingKey en translation shipping.status.delivered shipping.status.delivered
+ i18next::translator: missingKey en translation shipping.status.returned shipping.status.returned
+ i18next::translator: missingKey en translation shipping.notes shipping.notes
+ i18next::translator: missingKey en translation shipping.notesPlaceholder shipping.notesPlaceholder
+ 🔍 Orders data: undefined
+ 🔍 Orders length: undefined
+ 🔍 Orders isArray: false
+ 🔍 Shipping profile: {id: 1, userId: '44377424', userType: 'artist', businessName: 'Premium Art Studio', businessNameAr: 'استوديو الفن المتميز', …}
+ 🔍 User roles: (3) ['collector', 'artist', 'gallery']
+ 🔍 isLoadingOrders: true
+ 🔍 isLoadingProfile: false
+ i18next::translator: missingKey en translation shipping.businessProfile shipping.businessProfile
+ i18next::translator: missingKey en translation shipping.businessInfo shipping.businessInfo
+ i18next::translator: missingKey en translation shipping.businessName shipping.businessName
+ i18next::translator: missingKey en translation shipping.shippingRates shipping.shippingRates
+ i18next::translator: missingKey en translation shipping.domesticRate shipping.domesticRate
+ i18next::translator: missingKey en translation shipping.internationalRate shipping.internationalRate
+ i18next::translator: missingKey en translation shipping.handlingTime shipping.handlingTime
+ i18next::translator: missingKey en translation shipping.days shipping.days
+ i18next::translator: missingKey en translation shipping.updateProfile shipping.updateProfile
+ i18next::translator: missingKey en translation shipping.updateProfile shipping.updateProfile
+ i18next::translator: missingKey en translation shipping.businessName shipping.businessName
+ i18next::translator: missingKey en translation shipping.businessNamePlaceholder shipping.businessNamePlaceholder
+ i18next::translator: missingKey en translation shipping.businessNameAr shipping.businessNameAr
+ i18next::translator: missingKey en translation shipping.businessNameArPlaceholder shipping.businessNameArPlaceholder
+ i18next::translator: missingKey en translation shipping.contactPersonPlaceholder shipping.contactPersonPlaceholder
+ i18next::translator: missingKey en translation shipping.contactPhone shipping.contactPhone
+ i18next::translator: missingKey en translation shipping.contactEmail shipping.contactEmail
+ i18next::translator: missingKey en translation shipping.selectCity shipping.selectCity
+ i18next::translator: missingKey en translation shipping.defaultCarrier shipping.defaultCarrier
+ i18next::translator: missingKey en translation shipping.selectCarrier shipping.selectCarrier
+ i18next::translator: missingKey en translation shipping.domesticRate shipping.domesticRate
+ i18next::translator: missingKey en translation shipping.internationalRate shipping.internationalRate
+ i18next::translator: missingKey en translation shipping.handlingTime shipping.handlingTime
+ i18next::translator: missingKey en translation shipping.days shipping.days
+ i18next::translator: missingKey en translation shipping.packagingInstructions shipping.packagingInstructions
+ i18next::translator: missingKey en translation shipping.packagingInstructionsPlaceholder shipping.packagingInstructionsPlaceholder
+ i18next::translator: missingKey en translation shipping.packagingInstructionsAr shipping.packagingInstructionsAr
+ i18next::translator: missingKey en translation shipping.packagingInstructionsArPlaceholder shipping.packagingInstructionsArPlaceholder
+ i18next::translator: missingKey en translation shipping.trackingInfo shipping.trackingInfo
+ i18next::translator: missingKey en translation shipping.noTrackingDesc shipping.noTrackingDesc
+ i18next::translator: missingKey en translation shipping.ordersToShip shipping.ordersToShip
+ i18next::translator: missingKey en translation shipping.noOrders shipping.noOrders
+ i18next::translator: missingKey en translation shipping.noOrdersDesc shipping.noOrdersDesc
+ i18next::translator: missingKey en translation shipping.selectCarrier shipping.selectCarrier
+ i18next::translator: missingKey en translation shipping.status.in_transit shipping.status.in_transit
+ i18next::translator: missingKey en translation shipping.status.out_for_delivery shipping.status.out_for_delivery
+ i18next::translator: missingKey en translation shipping.status.delivered shipping.status.delivered
+ i18next::translator: missingKey en translation shipping.status.returned shipping.status.returned
+ i18next::translator: missingKey en translation shipping.notes shipping.notes
+ i18next::translator: missingKey en translation shipping.notesPlaceholder shipping.notesPlaceholder
+ 🔍 Orders data: (5) [{…}, {…}, {…}, {…}, {…}]
+ 🔍 Orders length: 5
+ 🔍 Orders isArray: true
+ 🔍 Shipping profile: {id: 1, userId: '44377424', userType: 'artist', businessName: 'Premium Art Studio', businessNameAr: 'استوديو الفن المتميز', …}
+ 🔍 User roles: (3) ['collector', 'artist', 'gallery']
+ 🔍 isLoadingOrders: false
+ 🔍 isLoadingProfile: false
+ 🔍 Running filteredAndSortedOrders with: {orders: Array(5), ordersLength: 5, searchTerm: '', filterStatus: 'all', filterCarrier: 'all'}
+ 🔍 Filtering order: {id: 'order_001', order_number: 'ORD-2025-001', artwork_id: 'artwork_001', buyer_email: 'sara.collector@gmail.com', quantity: 1, …}
+ 🔍 Filter results: {matchesSearch: true, matchesStatus: true, matchesCarrier: true, passes: true}
+ 🔍 Filtering order: {id: 'order_002', order_number: 'ORD-2025-002', artwork_id: 'artwork_002', buyer_email: 'mohammed.art@outlook.com', quantity: 1, …}
+ 🔍 Filter results: {matchesSearch: true, matchesStatus: true, matchesCarrier: true, passes: true}
+ 🔍 Filtering order: {id: 'order_003', order_number: 'ORD-2025-003', artwork_id: 'artwork_003', buyer_email: 'fatima.arts@gmail.com', quantity: 1, …}
+ 🔍 Filter results: {matchesSearch: true, matchesStatus: true, matchesCarrier: true, passes: true}
+ 🔍 Filtering order: {id: 'order_004', order_number: 'ORD-2025-004', artwork_id: 'artwork_004', buyer_email: 'khalid.collector@yahoo.com', quantity: 1, …}
+ 🔍 Filter results: {matchesSearch: true, matchesStatus: true, matchesCarrier: true, passes: true}
+ 🔍 Filtering order: {id: 'order_005', order_number: 'ORD-2025-005', artwork_id: 'artwork_005', buyer_email: 'noor.gallery@gmail.com', quantity: 1, …}
+ShippingManagement.tsx:513 🔍 Filter results: {matchesSearch: true, matchesStatus: true, matchesCarrier: true, passes: true}
+ShippingManagement.tsx:801 i18next::translator: missingKey en translation shipping.businessProfile shipping.businessProfile
+ShippingManagement.tsx:815 i18next::translator: missingKey en translation shipping.businessInfo shipping.businessInfo
+ShippingManagement.tsx:819 i18next::translator: missingKey en translation shipping.businessName shipping.businessName
+ShippingManagement.tsx:834 i18next::translator: missingKey en translation shipping.shippingRates shipping.shippingRates
+ShippingManagement.tsx:838 i18next::translator: missingKey en translation shipping.domesticRate shipping.domesticRate
+ShippingManagement.tsx:841 i18next::translator: missingKey en translation shipping.internationalRate shipping.internationalRate
+ShippingManagement.tsx:847 i18next::translator: missingKey en translation shipping.handlingTime shipping.handlingTime
+ShippingManagement.tsx:847 i18next::translator: missingKey en translation shipping.days shipping.days
+ShippingManagement.tsx:869 i18next::translator: missingKey en translation shipping.updateProfile shipping.updateProfile
+ShippingManagement.tsx:875 i18next::translator: missingKey en translation shipping.updateProfile shipping.updateProfile
+ShippingManagement.tsx:881 i18next::translator: missingKey en translation shipping.businessName shipping.businessName
+ShippingManagement.tsx:889 i18next::translator: missingKey en translation shipping.businessNamePlaceholder shipping.businessNamePlaceholder
+ShippingManagement.tsx:893 i18next::translator: missingKey en translation shipping.businessNameAr shipping.businessNameAr
+ShippingManagement.tsx:901 i18next::translator: missingKey en translation shipping.businessNameArPlaceholder shipping.businessNameArPlaceholder
+ShippingManagement.tsx:916 i18next::translator: missingKey en translation shipping.contactPersonPlaceholder shipping.contactPersonPlaceholder
+ShippingManagement.tsx:920 i18next::translator: missingKey en translation shipping.contactPhone shipping.contactPhone
+ShippingManagement.tsx:934 i18next::translator: missingKey en translation shipping.contactEmail shipping.contactEmail
+ShippingManagement.tsx:1054 i18next::translator: missingKey en translation shipping.selectCity shipping.selectCity
+ShippingManagement.tsx:1091 i18next::translator: missingKey en translation shipping.defaultCarrier shipping.defaultCarrier
+ShippingManagement.tsx:1100 i18next::translator: missingKey en translation shipping.selectCarrier shipping.selectCarrier
+ShippingManagement.tsx:1114 i18next::translator: missingKey en translation shipping.domesticRate shipping.domesticRate
+ShippingManagement.tsx:1127 i18next::translator: missingKey en translation shipping.internationalRate shipping.internationalRate
+ShippingManagement.tsx:1155 i18next::translator: missingKey en translation shipping.handlingTime shipping.handlingTime
+ShippingManagement.tsx:1155 i18next::translator: missingKey en translation shipping.days shipping.days
+ShippingManagement.tsx:1169 i18next::translator: missingKey en translation shipping.packagingInstructions shipping.packagingInstructions
+ShippingManagement.tsx:1177 i18next::translator: missingKey en translation shipping.packagingInstructionsPlaceholder shipping.packagingInstructionsPlaceholder
+ShippingManagement.tsx:1182 i18next::translator: missingKey en translation shipping.packagingInstructionsAr shipping.packagingInstructionsAr
+ShippingManagement.tsx:1190 i18next::translator: missingKey en translation shipping.packagingInstructionsArPlaceholder shipping.packagingInstructionsArPlaceholder
+ShippingManagement.tsx:1229 i18next::translator: missingKey en translation shipping.trackingInfo shipping.trackingInfo
+ShippingManagement.tsx:1286 i18next::translator: missingKey en translation shipping.noTrackingDesc shipping.noTrackingDesc
+ShippingManagement.tsx:1300 i18next::translator: missingKey en translation shipping.ordersToShip shipping.ordersToShip
+ShippingManagement.tsx:1311 i18next::translator: missingKey en translation shipping.orderNumber shipping.orderNumber
+ShippingManagement.tsx:1314 i18next::translator: missingKey en translation shipping.customer shipping.customer
+ShippingManagement.tsx:1317 i18next::translator: missingKey en translation shipping.artwork shipping.artwork
+ShippingManagement.tsx:1321 i18next::translator: missingKey en translation shipping.orderStatus.confirmed shipping.orderStatus.confirmed
+ShippingManagement.tsx:1330 i18next::translator: missingKey en translation shipping.addTracking shipping.addTracking
+ShippingManagement.tsx:1311 i18next::translator: missingKey en translation shipping.orderNumber shipping.orderNumber
+ShippingManagement.tsx:1314 i18next::translator: missingKey en translation shipping.customer shipping.customer
+ShippingManagement.tsx:1317 i18next::translator: missingKey en translation shipping.artwork shipping.artwork
+ShippingManagement.tsx:1321 i18next::translator: missingKey en translation shipping.orderStatus.processing shipping.orderStatus.processing
+ShippingManagement.tsx:1330 i18next::translator: missingKey en translation shipping.addTracking shipping.addTracking
+ShippingManagement.tsx:1382 i18next::translator: missingKey en translation shipping.selectCarrier shipping.selectCarrier
+ShippingManagement.tsx:1407 i18next::translator: missingKey en translation shipping.status.in_transit shipping.status.in_transit
+ShippingManagement.tsx:1408 i18next::translator: missingKey en translation shipping.status.out_for_delivery shipping.status.out_for_delivery
+ShippingManagement.tsx:1409 i18next::translator: missingKey en translation shipping.status.delivered shipping.status.delivered
+ShippingManagement.tsx:1410 i18next::translator: missingKey en translation shipping.status.returned shipping.status.returned
+ShippingManagement.tsx:1429 i18next::translator: missingKey en translation shipping.notes shipping.notes
+ShippingManagement.tsx:1437 i18next::translator: missingKey en translation shipping.notesPlaceholder shipping.notesPlaceholder
+backendManager.js:1 [Click to expand] <TabsContent />
+css-generic.js:236 uBOL: Generic cosmetic filtering stopped because no more DOM changes
+backendManager.js:1 [Click to expand] <TabsContent />
+backendManager.js:1 Props: {data-replit-metadata: 'client/src/pages/ShippingManagement.tsx:641:12', data-component-name: 'TabsContent', value: 'analytics', children: Array(4)}
+backendManager.js:1 Hooks: [{…}]
+backendManager.js:1 Nodes: []
+backendManager.js:1 Right-click any value to save it as a global variable for further inspection.
+backendManager.js:1 [Click to expand] <TabsContent />

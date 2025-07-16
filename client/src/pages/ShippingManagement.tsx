@@ -166,7 +166,7 @@ export default function ShippingManagement() {
   });
 
   // Fetch orders for tracking
-  const { data: orders, isLoading: isLoadingOrders } = useQuery<any[]>({
+  const { data: orders, isLoading: isLoadingOrders, error: ordersError } = useQuery<any[]>({
     queryKey: ['/api/seller/orders'],
     retry: false,
     staleTime: 0, // Force fresh data
@@ -180,6 +180,7 @@ export default function ShippingManagement() {
   console.log('🔍 Orders data:', orders);
   console.log('🔍 Orders length:', orders?.length);
   console.log('🔍 Orders isArray:', Array.isArray(orders));
+  console.log('🔍 Orders error:', ordersError);
   console.log('🔍 Shipping profile:', shippingProfile);
   console.log('🔍 User roles:', userRoles);
   console.log('🔍 isLoadingOrders:', isLoadingOrders);

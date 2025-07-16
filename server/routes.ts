@@ -2695,22 +2695,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/seller/orders', isAuthenticated, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      
-      if (!user || (user.role !== 'artist' && user.role !== 'gallery')) {
-        return res.status(403).json({ message: "Not authorized as seller" });
-      }
-
-      const orders = await storage.getSellerOrders(userId);
-      res.json(orders);
-    } catch (error) {
-      console.error("Error fetching seller orders:", error);
-      res.status(500).json({ message: "Failed to fetch orders" });
-    }
-  });
+  // Removed duplicate /api/seller/orders route - handled by seller router
 
   app.patch('/api/seller/orders/:orderId/status', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
