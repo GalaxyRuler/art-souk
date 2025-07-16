@@ -1,0 +1,27 @@
+ShippingManagement.tsx:219 Uncaught TypeError: userRoles.includes is not a function
+    at ShippingManagement (ShippingManagement.tsx:219:33)
+
+ShippingManagement.tsx:219 Uncaught TypeError: userRoles.includes is not a function
+    at ShippingManagement (ShippingManagement.tsx:219:33)
+hook.js:608 The above error occurred in the <ShippingManagement> component:
+
+    at ShippingManagement (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/pages/ShippingManagement.tsx:37:17)
+    at Route (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=3aa5341c:323:16)
+    at Switch (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=3aa5341c:379:17)
+    at Suspense
+    at Router (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/App.tsx?v=Ir28tf3bavuIspGwc5W-Q:118:42)
+    at Provider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.…unner/workspace/node_modules/.vite/deps/chunk-UBQ2LXDH.js?v=3aa5341c:22:15)
+    at TooltipProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.…rkspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=3aa5341c:60:5)
+    at I18nextProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.…runner/workspace/node_modules/.vite/deps/react-i18next.js?v=3aa5341c:793:3)
+    at QueryClientProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.…rkspace/node_modules/.vite/deps/@tanstack_react-query.js?v=3aa5341c:2805:3)
+    at ErrorBoundary (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ErrorBoundary.tsx:10:5)
+    at App
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+ErrorBoundary.tsx:29 Error caught by boundary: TypeError: userRoles.includes is not a function
+    at ShippingManagement (ShippingManagement.tsx:219:33)
+ 
+{componentStack: '\n    at ShippingManagement (https://ec34765c-37ae-…src/components/ErrorBoundary.tsx:10:5)\n    at App'}
+ Error Component Stack
+    at ErrorBoundary (ErrorBoundary.tsx:19:5)
+    at App (<anonymous>)

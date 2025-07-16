@@ -133,23 +133,23 @@ export default function ShippingManagement() {
     try {
       console.log('🔍 userRolesData:', userRolesData);
       if (!userRolesData) {
-        console.log('❌ No userRolesData, returning empty array');
-        return [];
+        console.log('❌ No userRolesData, returning null');
+        return null;
       }
       console.log('🔍 userRolesData.roles:', userRolesData.roles);
       if (!userRolesData.roles) {
-        console.log('❌ No roles property, returning empty array');
-        return [];
+        console.log('❌ No roles property, returning null');
+        return null;
       }
       if (!Array.isArray(userRolesData.roles)) {
         console.log('❌ roles is not an array:', typeof userRolesData.roles, userRolesData.roles);
-        return [];
+        return null;
       }
       console.log('✅ Returning valid roles array:', userRolesData.roles);
       return userRolesData.roles;
     } catch (error) {
       console.error('❌ Error extracting user roles:', error);
-      return [];
+      return null;
     }
   }, [userRolesData]);
 
@@ -568,7 +568,7 @@ export default function ShippingManagement() {
   };
 
   // Show loading state while checking user roles or if roles are not loaded yet
-  if (isLoadingRoles || !userRolesData || !userRoles || !Array.isArray(userRoles)) {
+  if (isLoadingRoles || !userRolesData || userRoles === null) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
@@ -584,16 +584,20 @@ export default function ShippingManagement() {
     try {
       console.log('🔍 Checking hasValidRoles with userRoles:', userRoles);
       
-      // Force userRoles to be an array if it's not already
-      const rolesArray = Array.isArray(userRoles) ? userRoles : [];
-      console.log('🔍 rolesArray:', rolesArray);
+      // Ensure userRoles is an array before using includes
+      if (!Array.isArray(userRoles)) {
+        console.log('❌ userRoles is not an array:', typeof userRoles, userRoles);
+        return false;
+      }
       
-      if (rolesArray.length === 0) {
+      console.log('🔍 userRoles is valid array:', userRoles);
+      
+      if (userRoles.length === 0) {
         console.log('❌ No roles found');
         return false;
       }
       
-      const hasAccess = rolesArray.includes('artist') || rolesArray.includes('gallery');
+      const hasAccess = userRoles.includes('artist') || userRoles.includes('gallery');
       console.log('🔍 hasAccess:', hasAccess);
       return hasAccess;
     } catch (error) {
