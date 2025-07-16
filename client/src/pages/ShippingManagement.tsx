@@ -768,18 +768,21 @@ export default function ShippingManagement() {
                           )}
                         >
                           <div className="absolute top-3 right-3">
-                            <Checkbox
-                              checked={selectedOrders.has(order.id)}
-                              onCheckedChange={(checked) => {
-                                const newSelected = new Set(selectedOrders);
-                                if (checked) {
-                                  newSelected.add(order.id);
-                                } else {
-                                  newSelected.delete(order.id);
-                                                               }
-                                setSelectedOrders(newSelected);
-                              }}
-                            />
+                            <div className="bg-white p-1 rounded">
+                              <Checkbox
+                                checked={selectedOrders.has(order.id)}
+                                onCheckedChange={(checked) => {
+                                  const newSelected = new Set(selectedOrders);
+                                  if (checked) {
+                                    newSelected.add(order.id);
+                                  } else {
+                                    newSelected.delete(order.id);
+                                                                 }
+                                  setSelectedOrders(newSelected);
+                                }}
+                                className="border-gray-400 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                              />
+                            </div>
                           </div>
 
                           <div className="flex justify-between items-start mb-3 mr-8">
