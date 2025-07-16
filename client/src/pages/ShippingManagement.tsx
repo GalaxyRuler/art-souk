@@ -181,6 +181,7 @@ export default function ShippingManagement() {
   console.log('🔍 User roles:', userRoles);
   console.log('🔍 isLoadingOrders:', isLoadingOrders);
   console.log('🔍 isLoadingProfile:', isLoadingProfile);
+  console.log('🔍 filteredAndSortedOrders length:', filteredAndSortedOrders?.length);
 
   // Create/update shipping profile mutation
   const updateProfileMutation = useMutation({
@@ -273,11 +274,15 @@ export default function ShippingManagement() {
 
   // Enhanced Components
   function ShippingAnalytics() {
-    const totalOrders = (orders && Array.isArray(orders)) ? orders.length : 0;
-    const shippedOrders = (orders && Array.isArray(orders)) ? orders.filter(o => o.status === 'shipped').length : 0;
-    const inTransitOrders = (orders && Array.isArray(orders)) ? orders.filter(o => o.status === 'processing').length : 0;
-    const deliveredOrders = (orders && Array.isArray(orders)) ? orders.filter(o => o.status === 'delivered').length : 0;
-    const totalRevenue = (orders && Array.isArray(orders)) ? orders.reduce((sum, order) => sum + (parseFloat(order.total_amount) || 0), 0) : 0;
+    console.log('🔍 ShippingAnalytics rendering with orders:', orders);
+    const ordersArray = Array.isArray(orders) ? orders : [];
+    const totalOrders = ordersArray.length;
+    const shippedOrders = ordersArray.filter(o => o.status === 'shipped').length;
+    const inTransitOrders = ordersArray.filter(o => o.status === 'processing').length;
+    const deliveredOrders = ordersArray.filter(o => o.status === 'delivered').length;
+    const totalRevenue = ordersArray.reduce((sum, order) => sum + (parseFloat(order.total_amount) || 0), 0);
+    
+    console.log('🔍 Analytics stats:', { totalOrders, shippedOrders, inTransitOrders, deliveredOrders, totalRevenue });
     
     return (
       <Card className="mb-6 bg-white/10 backdrop-blur-sm border-white/20">
@@ -640,9 +645,17 @@ export default function ShippingManagement() {
 
             {/* Analytics Tab */}
             <TabsContent value="analytics">
-              <ShippingAnalytics />
-              <ShippingFilters />
-              <BulkShippingActions />
+              {isLoadingOrders ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div>
+                </div>
+              ) : (
+                <>
+                  <ShippingAnalytics />
+                  <ShippingFilters />
+                  <BulkShippingActions />
+                </>
+              )}
               
               <Card className="bg-white/10 backdrop-blur-sm border-white/20">
                 <CardHeader>
