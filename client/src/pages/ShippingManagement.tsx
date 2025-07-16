@@ -156,10 +156,15 @@ export default function ShippingManagement() {
   });
 
   // Fetch orders for tracking
-  const { data: orders } = useQuery<any[]>({
+  const { data: orders, isLoading: isLoadingOrders } = useQuery<any[]>({
     queryKey: ['/api/seller/orders'],
     retry: false,
   });
+
+  // Debug logging
+  console.log('Orders data:', orders);
+  console.log('Shipping profile:', shippingProfile);
+  console.log('User roles:', userRoles);
 
   // Create/update shipping profile mutation
   const updateProfileMutation = useMutation({
@@ -256,7 +261,7 @@ export default function ShippingManagement() {
     const shippedOrders = (orders && Array.isArray(orders)) ? orders.filter(o => o.status === 'shipped').length : 0;
     const inTransitOrders = (orders && Array.isArray(orders)) ? orders.filter(o => o.status === 'processing').length : 0;
     const deliveredOrders = (orders && Array.isArray(orders)) ? orders.filter(o => o.status === 'delivered').length : 0;
-    const totalRevenue = (orders && Array.isArray(orders)) ? orders.reduce((sum, order) => sum + (order.totalAmount || 0), 0) : 0;
+    const totalRevenue = (orders && Array.isArray(orders)) ? orders.reduce((sum, order) => sum + (parseFloat(order.total_amount) || 0), 0) : 0;
     
     return (
       <Card className="mb-6 bg-white/10 backdrop-blur-sm border-white/20">
@@ -457,24 +462,24 @@ export default function ShippingManagement() {
   ];
 
   // Memoized filtering and sorting
-  const filteredAndSortedOrders = React.useMemo(() => {
+  const filteredAndSortedOrders = useMemo(() => {
     if (!orders || !Array.isArray(orders)) return [];
     
     let filtered = orders.filter(order => {
       // Search filter
       const searchLower = searchTerm.toLowerCase();
       const matchesSearch = !searchTerm || 
-        order.orderNumber?.toLowerCase().includes(searchLower) ||
+        order.order_number?.toLowerCase().includes(searchLower) ||
         order.user?.firstName?.toLowerCase().includes(searchLower) ||
         order.user?.lastName?.toLowerCase().includes(searchLower) ||
         order.artwork?.title?.toLowerCase().includes(searchLower) ||
-        order.trackingNumber?.toLowerCase().includes(searchLower);
+        order.tracking_number?.toLowerCase().includes(searchLower);
       
       // Status filter
       const matchesStatus = filterStatus === 'all' || order.status === filterStatus;
       
       // Carrier filter
-      const matchesCarrier = filterCarrier === 'all' || order.carrier === filterCarrier;
+      const matchesCarrier = filterCarrier === 'all' || order.shipping_method === filterCarrier;
       
       return matchesSearch && matchesStatus && matchesCarrier;
     });
@@ -485,21 +490,21 @@ export default function ShippingManagement() {
       
       switch (sortBy) {
         case 'orderNumber':
-          aValue = a.orderNumber || '';
-          bValue = b.orderNumber || '';
+          aValue = a.order_number || '';
+          bValue = b.order_number || '';
           break;
         case 'status':
           aValue = a.status || '';
           bValue = b.status || '';
           break;
         case 'totalAmount':
-          aValue = a.totalAmount || 0;
-          bValue = b.totalAmount || 0;
+          aValue = parseFloat(a.total_amount) || 0;
+          bValue = parseFloat(b.total_amount) || 0;
           break;
         case 'createdAt':
         default:
-          aValue = new Date(a.createdAt || 0).getTime();
-          bValue = new Date(b.createdAt || 0).getTime();
+          aValue = new Date(a.created_at || 0).getTime();
+          bValue = new Date(b.created_at || 0).getTime();
           break;
       }
       
@@ -700,7 +705,7 @@ export default function ShippingManagement() {
                           <div className="flex justify-between items-start mb-3 mr-8">
                             <div>
                               <p className="text-white font-semibold">
-                                Order #{order.orderNumber}
+                                Order #{order.order_number}
                               </p>
                               <p className="text-slate-300 text-sm">
                                 {order.user?.firstName} {order.user?.lastName}
@@ -717,16 +722,16 @@ export default function ShippingManagement() {
                           <div className="space-y-2">
                             <div className="flex justify-between text-sm">
                               <span className="text-slate-300">Amount:</span>
-                              <span className="text-white">{order.totalAmount?.toLocaleString()} SAR</span>
+                              <span className="text-white">{parseFloat(order.total_amount)?.toLocaleString()} {order.currency}</span>
                             </div>
                             <div className="flex justify-between text-sm">
                               <span className="text-slate-300">Date:</span>
-                              <span className="text-white">{new Date(order.createdAt).toLocaleDateString()}</span>
+                              <span className="text-white">{new Date(order.created_at).toLocaleDateString()}</span>
                             </div>
-                            {order.trackingNumber && (
+                            {order.tracking_number && (
                               <div className="flex justify-between text-sm">
                                 <span className="text-slate-300">Tracking:</span>
-                                <span className="text-white">{order.trackingNumber}</span>
+                                <span className="text-white">{order.tracking_number}</span>
                               </div>
                             )}
                           </div>
