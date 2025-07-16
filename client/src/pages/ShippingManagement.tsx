@@ -171,6 +171,8 @@ export default function ShippingManagement() {
     retry: false,
     staleTime: 0, // Force fresh data
     cacheTime: 0, // Don't cache
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 
   // Debug logging
@@ -182,6 +184,11 @@ export default function ShippingManagement() {
   console.log('🔍 isLoadingOrders:', isLoadingOrders);
   console.log('🔍 isLoadingProfile:', isLoadingProfile);
   console.log('🔍 filteredAndSortedOrders length:', filteredAndSortedOrders?.length);
+  
+  // If we have orders data, log the first order to check structure
+  if (orders && orders.length > 0) {
+    console.log('🔍 First order sample:', orders[0]);
+  }
 
   // Create/update shipping profile mutation
   const updateProfileMutation = useMutation({
