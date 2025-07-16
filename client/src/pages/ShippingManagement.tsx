@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -128,7 +128,20 @@ export default function ShippingManagement() {
     refetchOnReconnect: false,
   });
 
-  const userRoles = userRolesData?.roles || [];
+  // Defensive extraction of userRoles with comprehensive safety checks
+  const userRoles = useMemo(() => {
+    try {
+      console.log('userRolesData:', userRolesData);
+      if (!userRolesData) return [];
+      console.log('userRolesData.roles:', userRolesData.roles);
+      if (!userRolesData.roles) return [];
+      if (!Array.isArray(userRolesData.roles)) return [];
+      return userRolesData.roles;
+    } catch (error) {
+      console.error('Error extracting user roles:', error);
+      return [];
+    }
+  }, [userRolesData]);
 
   // Fetch shipping profile
   const { data: shippingProfile, isLoading: isLoadingProfile } = useQuery<ShippingProfile>({
@@ -514,7 +527,7 @@ export default function ShippingManagement() {
   };
 
   // Show loading state while checking user roles or if roles are not loaded yet
-  if (isLoadingRoles || !userRolesData || !userRoles) {
+  if (isLoadingRoles || !userRolesData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
@@ -526,7 +539,18 @@ export default function ShippingManagement() {
   }
 
   // Check if user has proper roles - with comprehensive safety checks
-  const hasValidRoles = Array.isArray(userRoles) && userRoles.length > 0 && (userRoles.includes('artist') || userRoles.includes('gallery'));
+  const hasValidRoles = (() => {
+    try {
+      if (!userRoles) return false;
+      if (!Array.isArray(userRoles)) return false;
+      if (userRoles.length === 0) return false;
+      if (typeof userRoles.includes !== 'function') return false;
+      return userRoles.includes('artist') || userRoles.includes('gallery');
+    } catch (error) {
+      console.error('Error checking user roles:', error);
+      return false;
+    }
+  })();
   
   if (!hasValidRoles) {
     return (
