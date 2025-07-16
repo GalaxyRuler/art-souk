@@ -1,0 +1,46 @@
+```
+Refactor the entire Souk Art codebase in this Replit project to resolve the following issues and polish the implementation:
+
+1. **Select Component Rendering**  
+   - Update `client/src/components/ui/select.tsx` to remove all `SelectPrimitive.Icon` usages and `asChild` props.  
+   - Ensure the `<SelectPrimitive.Trigger>` wrapper has `relative` positioning and place `ChevronDownIcon` directly inside an absolutely positioned `<div>`.  
+   - Confirm `SelectScrollDownButton` uses `ChevronDownIcon` and clean up unused imports.
+
+2. **Content Security Policy (CSP)**  
+   - Modify the HTML `<head>` or server headers to allow loading Google Fonts by adding `https://fonts.googleapis.com` to `style-src`, and remove or securely configure the Replit dev-banner script in `script-src` or self-host any required assets.
+   - Alternatively, pull down the Inter, Playfair Display, and Noto Sans Arabic `.woff2` files into `/public/fonts` and update the CSS `@font-face` declarations.
+
+3. **Internationalization (i18next)**  
+   - Add all missing `shipping.*` keys under the `shipping` namespace into the English locale JSON (e.g., `en.json`) with appropriate labels.  
+   - Ensure `i18n.init()` is only called once (e.g., inside `src/i18n.ts` or a single top-level entrypoint) and remove any duplicate initialization.
+
+4. **Tailwind Config & Purge**  
+   - Update `tailwind.config.js` to include Radix UI `data-state`, `data-side`, and any dynamic classes in the `content` array or safelist to prevent PurgeCSS from stripping them.
+
+5. **Remove Unnecessary Injected Scripts**  
+   - Delete any injected Replit Dev Banner code or extension-specific scripts that are not part of your app logic.
+
+6. **General Cleanup**  
+   - Verify and remove stray `pointer-events-none` or overflow/clipping styles that might inhibit dropdown/interactions.  
+   - Confirm that `.max-h-[--radix-select-content-available-height]` resolves correctly (import Radix CSS reset if needed).
+
+7. **ShippingManagement: Fix `userRoles.includes` Error**  
+   - In `client/src/pages/ShippingManagement.tsx`, ensure you call `includes` on an actual array of roles rather than on an object. Replace any lines like:
+     ```ts
+     const userRoles = userRolesData;
+     // ... later
+     if (userRoles.includes('artist')) { ... }
+     ```
+     with:
+     ```ts
+     const userRoles: string[] = Array.isArray(userRolesData?.roles) ? userRolesData.roles : [];
+     ```  
+   - Update all permission checks to use this `userRoles` array, e.g.: `if (userRoles.includes('gallery')) { ... }`.  
+   - Add a guard at the top of the component to handle the loading state, e.g.:  
+     ```tsx
+     if (!userRolesData) {
+       return <LoadingSpinner />;
+     }
+     ```
+
+Produce a single consolidated patch or updated files reflecting all of these changes.```

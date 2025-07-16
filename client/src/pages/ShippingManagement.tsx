@@ -568,7 +568,7 @@ export default function ShippingManagement() {
   };
 
   // Show loading state while checking user roles or if roles are not loaded yet
-  if (isLoadingRoles || !userRolesData || userRoles === null) {
+  if (isLoadingRoles || !userRolesData || userRoles === null || !Array.isArray(userRoles)) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
@@ -579,32 +579,8 @@ export default function ShippingManagement() {
     );
   }
 
-  // Check if user has proper roles - with comprehensive safety checks
-  const hasValidRoles = (() => {
-    try {
-      console.log('🔍 Checking hasValidRoles with userRoles:', userRoles);
-      
-      // Ensure userRoles is an array before using includes
-      if (!Array.isArray(userRoles)) {
-        console.log('❌ userRoles is not an array:', typeof userRoles, userRoles);
-        return false;
-      }
-      
-      console.log('🔍 userRoles is valid array:', userRoles);
-      
-      if (userRoles.length === 0) {
-        console.log('❌ No roles found');
-        return false;
-      }
-      
-      const hasAccess = userRoles.includes('artist') || userRoles.includes('gallery');
-      console.log('🔍 hasAccess:', hasAccess);
-      return hasAccess;
-    } catch (error) {
-      console.error('❌ Error checking user roles:', error);
-      return false;
-    }
-  })();
+  // Check if user has proper roles - userRoles is guaranteed to be an array at this point
+  const hasValidRoles = userRoles.length > 0 && (userRoles.includes('artist') || userRoles.includes('gallery'));
   
   if (!hasValidRoles) {
     return (

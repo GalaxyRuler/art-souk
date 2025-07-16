@@ -3,6 +3,27 @@ import type { Config } from "tailwindcss";
 export default {
   darkMode: ["class"],
   content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
+  safelist: [
+    // Radix UI data attributes
+    { pattern: /data-state-(open|closed|on|off|checked|unchecked|delayed-open|instant-open)/ },
+    { pattern: /data-side-(top|right|bottom|left)/ },
+    { pattern: /data-align-(start|center|end)/ },
+    { pattern: /data-orientation-(horizontal|vertical)/ },
+    { pattern: /data-radix-/ },
+    // Dynamic z-index classes
+    'z-50', 'z-[9999]', 'z-[10000]', 'z-[10001]',
+    // Radix Select specific classes
+    'max-h-[--radix-select-content-available-height]',
+    'min-w-[--radix-select-trigger-width]',
+    'h-[var(--radix-select-trigger-height)]',
+    'w-[var(--radix-select-trigger-width)]',
+    'origin-[--radix-select-content-transform-origin]',
+    // Common utility classes that might be stripped
+    'pointer-events-none',
+    'overflow-hidden',
+    'whitespace-nowrap',
+    'text-ellipsis'
+  ],
   theme: {
     extend: {
       borderRadius: {
