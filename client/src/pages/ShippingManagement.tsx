@@ -29,11 +29,18 @@ interface ShippingProfile {
   contactPhone: string;
   contactEmail: string;
   address: {
-    street: string;
-    city: string;
-    state: string;
+    // Saudi National Address format
+    buildingNumber: string;        // 4 unique numbers (e.g., "1234")
+    streetName: string;            // Street name where main entrance is located
+    secondaryNumber: string;       // 4 numbers for exact coordinates (e.g., "5678")
+    district: string;             // District/Neighborhood name
+    postalCode: string;           // 5-digit postal code (e.g., "12345")
+    city: string;                 // City name
+    shortAddressCode?: string;    // Optional 4 letters + 4 numbers (e.g., "RRRD2929")
+    // Legacy/International format (for backup)
+    street?: string;
+    state?: string;
     country: string;
-    postalCode: string;
   };
   defaultCarrier: string;
   packagingInstructions: string;
@@ -883,76 +890,146 @@ export default function ShippingManagement() {
                                 />
                               </div>
                               
-                              <div>
-                                <Label htmlFor="street">{t('shipping.address')}</Label>
-                                <Input
-                                  id="street"
-                                  value={profileFormData.address?.street}
-                                  onChange={(e) => setProfileFormData({
-                                    ...profileFormData,
-                                    address: {
-                                      ...profileFormData.address!,
-                                      street: e.target.value
-                                    }
-                                  })}
-                                  placeholder={t('shipping.streetPlaceholder')}
-                                />
-                              </div>
-                              
-                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div>
-                                  <Label htmlFor="city">{t('shipping.city')}</Label>
-                                  <Select
-                                    value={profileFormData.address?.city}
-                                    onValueChange={(value) => setProfileFormData({
-                                      ...profileFormData,
-                                      address: {
-                                        ...profileFormData.address!,
-                                        city: value
-                                      }
-                                    })}
-                                  >
-                                    <SelectTrigger>
-                                      <SelectValue placeholder={t('shipping.selectCity')} />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {saudCities.map(city => (
-                                        <SelectItem key={city} value={city}>
-                                          {city}
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
+                              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
+                                  <MapPin className="h-4 w-4" />
+                                  Saudi National Address Format
+                                </h4>
+                                <p className="text-sm text-blue-700 mb-4">
+                                  Required for compliance with Saudi regulations and accurate delivery
+                                </p>
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="buildingNumber">Building Number *</Label>
+                                    <Input
+                                      id="buildingNumber"
+                                      value={profileFormData.address?.buildingNumber || ''}
+                                      onChange={(e) => setProfileFormData({
+                                        ...profileFormData,
+                                        address: {
+                                          ...profileFormData.address!,
+                                          buildingNumber: e.target.value
+                                        }
+                                      })}
+                                      placeholder="e.g., 1234"
+                                      maxLength={4}
+                                      pattern="[0-9]{4}"
+                                      title="4-digit building number"
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="streetName">Street Name *</Label>
+                                    <Input
+                                      id="streetName"
+                                      value={profileFormData.address?.streetName || ''}
+                                      onChange={(e) => setProfileFormData({
+                                        ...profileFormData,
+                                        address: {
+                                          ...profileFormData.address!,
+                                          streetName: e.target.value
+                                        }
+                                      })}
+                                      placeholder="e.g., King Fahd Road"
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="secondaryNumber">Secondary Number *</Label>
+                                    <Input
+                                      id="secondaryNumber"
+                                      value={profileFormData.address?.secondaryNumber || ''}
+                                      onChange={(e) => setProfileFormData({
+                                        ...profileFormData,
+                                        address: {
+                                          ...profileFormData.address!,
+                                          secondaryNumber: e.target.value
+                                        }
+                                      })}
+                                      placeholder="e.g., 5678"
+                                      maxLength={4}
+                                      pattern="[0-9]{4}"
+                                      title="4-digit secondary number for exact coordinates"
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="district">District/Neighborhood *</Label>
+                                    <Input
+                                      id="district"
+                                      value={profileFormData.address?.district || ''}
+                                      onChange={(e) => setProfileFormData({
+                                        ...profileFormData,
+                                        address: {
+                                          ...profileFormData.address!,
+                                          district: e.target.value
+                                        }
+                                      })}
+                                      placeholder="e.g., Al-Olaya"
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="postalCode">Postal Code *</Label>
+                                    <Input
+                                      id="postalCode"
+                                      value={profileFormData.address?.postalCode || ''}
+                                      onChange={(e) => setProfileFormData({
+                                        ...profileFormData,
+                                        address: {
+                                          ...profileFormData.address!,
+                                          postalCode: e.target.value
+                                        }
+                                      })}
+                                      placeholder="e.g., 12345"
+                                      maxLength={5}
+                                      pattern="[0-9]{5}"
+                                      title="5-digit postal code"
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="city">City *</Label>
+                                    <Select
+                                      value={profileFormData.address?.city}
+                                      onValueChange={(value) => setProfileFormData({
+                                        ...profileFormData,
+                                        address: {
+                                          ...profileFormData.address!,
+                                          city: value
+                                        }
+                                      })}
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue placeholder={t('shipping.selectCity')} />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {saudCities.map(city => (
+                                          <SelectItem key={city} value={city}>
+                                            {city}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
                                 </div>
-                                <div>
-                                  <Label htmlFor="state">{t('shipping.state')}</Label>
+                                
+                                <div className="mt-4">
+                                  <Label htmlFor="shortAddressCode">Short Address Code (Optional)</Label>
                                   <Input
-                                    id="state"
-                                    value={profileFormData.address?.state}
+                                    id="shortAddressCode"
+                                    value={profileFormData.address?.shortAddressCode || ''}
                                     onChange={(e) => setProfileFormData({
                                       ...profileFormData,
                                       address: {
                                         ...profileFormData.address!,
-                                        state: e.target.value
+                                        shortAddressCode: e.target.value.toUpperCase()
                                       }
                                     })}
-                                    placeholder={t('shipping.statePlaceholder')}
+                                    placeholder="e.g., RRRD2929"
+                                    maxLength={8}
+                                    pattern="[A-Z]{4}[0-9]{4}"
+                                    title="4 letters + 4 numbers (e.g., RRRD2929)"
                                   />
-                                </div>
-                                <div>
-                                  <Label htmlFor="postalCode">{t('shipping.postalCode')}</Label>
-                                  <Input
-                                    id="postalCode"
-                                    value={profileFormData.address?.postalCode}
-                                    onChange={(e) => setProfileFormData({
-                                      ...profileFormData,
-                                      address: {
-                                        ...profileFormData.address!,
-                                        postalCode: e.target.value
-                                      }
-                                    })}
-                                    placeholder="12345"
-                                  />
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    Format: 4 letters + 4 numbers (e.g., RRRD2929)
+                                  </p>
                                 </div>
                               </div>
                               
