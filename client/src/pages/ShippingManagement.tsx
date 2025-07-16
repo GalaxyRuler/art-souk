@@ -227,11 +227,11 @@ export default function ShippingManagement() {
 
   // Enhanced Components
   function ShippingAnalytics() {
-    const totalOrders = orders?.length || 0;
-    const shippedOrders = orders?.filter(o => o.status === 'shipped').length || 0;
-    const inTransitOrders = orders?.filter(o => o.status === 'processing').length || 0;
-    const deliveredOrders = orders?.filter(o => o.status === 'delivered').length || 0;
-    const totalRevenue = orders?.reduce((sum, order) => sum + (order.totalAmount || 0), 0) || 0;
+    const totalOrders = (orders && Array.isArray(orders)) ? orders.length : 0;
+    const shippedOrders = (orders && Array.isArray(orders)) ? orders.filter(o => o.status === 'shipped').length : 0;
+    const inTransitOrders = (orders && Array.isArray(orders)) ? orders.filter(o => o.status === 'processing').length : 0;
+    const deliveredOrders = (orders && Array.isArray(orders)) ? orders.filter(o => o.status === 'delivered').length : 0;
+    const totalRevenue = (orders && Array.isArray(orders)) ? orders.reduce((sum, order) => sum + (order.totalAmount || 0), 0) : 0;
     
     return (
       <Card className="mb-6 bg-white/10 backdrop-blur-sm border-white/20">
@@ -433,7 +433,7 @@ export default function ShippingManagement() {
 
   // Memoized filtering and sorting
   const filteredAndSortedOrders = React.useMemo(() => {
-    if (!orders) return [];
+    if (!orders || !Array.isArray(orders)) return [];
     
     let filtered = orders.filter(order => {
       // Search filter
@@ -1150,7 +1150,7 @@ export default function ShippingManagement() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {orders && orders.length > 0 ? (
+                  {orders && Array.isArray(orders) && orders.length > 0 ? (
                     <div className="space-y-4">
                       {orders.filter(order => order.status === 'confirmed' || order.status === 'processing').map((order) => (
                         <div key={order.id} className="bg-white/5 rounded-lg p-4 border border-white/10">
