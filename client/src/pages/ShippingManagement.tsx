@@ -501,7 +501,7 @@ export default function ShippingManagement() {
     setSelectedOrders(new Set());
   };
 
-  if (!userRoles || (!userRoles.includes('artist') && !userRoles.includes('gallery'))) {
+  if (!userRoles || !Array.isArray(userRoles) || (!userRoles.includes('artist') && !userRoles.includes('gallery'))) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
         <Navbar />
