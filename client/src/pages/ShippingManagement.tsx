@@ -183,22 +183,7 @@ export default function ShippingManagement() {
     refetchInterval: 30000, // Refresh every 30 seconds
   });
 
-  // Debug logging
-  console.log('🔍 Orders data:', orders);
-  console.log('🔍 Orders length:', orders?.length);
-  console.log('🔍 Orders isArray:', Array.isArray(orders));
-  console.log('🔍 Orders error:', ordersError);
-  console.log('🔍 Shipping profile:', shippingProfile);
-  console.log('🔍 User roles:', userRoles);
-  console.log('🔍 isLoadingOrders:', isLoadingOrders);
-  console.log('🔍 isLoadingProfile:', isLoadingProfile);
-
-  // If we have orders data, log the first order to check structure
-  if (orders && orders.length > 0) {
-    console.log('🔍 First order sample:', orders[0]);
-  }
-
-  // Optimized memoized filtering and sorting - MOVED HERE to fix temporal dead zone
+  // Optimized memoized filtering and sorting - MOVED RIGHT AFTER ORDERS QUERY
   const filteredAndSortedOrders = React.useMemo(() => {
     console.log('🔍 Running filteredAndSortedOrders with:', {
       orders: orders,
