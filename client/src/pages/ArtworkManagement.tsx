@@ -10,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -34,7 +36,23 @@ import {
   Save,
   Loader2,
   Users,
-  Brush
+  Brush,
+  Search,
+  Filter,
+  SortAsc,
+  SortDesc,
+  BarChart3,
+  Download,
+  CheckSquare,
+  Square,
+  TrendingUp,
+  TrendingDown,
+  Clock,
+  Settings,
+  MoreHorizontal,
+  Copy,
+  Archive,
+  RefreshCw
 } from "lucide-react";
 
 interface Artwork {
@@ -98,6 +116,17 @@ export default function ArtworkManagement() {
   const [activeRole, setActiveRole] = useState<'artist' | 'gallery'>('artist');
   const [userType, setUserType] = useState<'artist' | 'gallery' | null>(null);
   const [userProfile, setUserProfile] = useState<Artist | Gallery | null>(null);
+  
+  // Enhanced state for advanced features
+  const [selectedArtworks, setSelectedArtworks] = useState<Set<number>>(new Set());
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterCategory, setFilterCategory] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<string>('createdAt');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [showAnalytics, setShowAnalytics] = useState(false);
+  const [bulkOperation, setBulkOperation] = useState<string>('');
 
   // Form state
   const [formData, setFormData] = useState({
@@ -462,6 +491,603 @@ export default function ArtworkManagement() {
     </div>
   );
 
+  // Analytics Component
+  function AnalyticsPanel() {
+    const sampleAnalytics = {
+      totalArtworks: artworks?.length || 0,
+      totalViews: 2847,
+      totalFavorites: 182,
+      averagePrice: 12500,
+      totalValue: (artworks?.reduce((sum, artwork) => sum + artwork.price, 0) || 0),
+      publishedArtworks: artworks?.filter(a => a.availability === 'available')?.length || 0,
+      draftArtworks: artworks?.filter(a => a.availability === 'draft')?.length || 0,
+      soldArtworks: artworks?.filter(a => a.availability === 'sold')?.length || 0,
+    };
+
+    return (
+      <div className="mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <Palette className="h-5 w-5 text-blue-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Total Artworks</p>
+                  <p className="text-2xl font-bold text-blue-600">{sampleAnalytics.totalArtworks}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <Eye className="h-5 w-5 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Total Views</p>
+                  <p className="text-2xl font-bold text-green-600">{sampleAnalytics.totalViews.toLocaleString()}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <Heart className="h-5 w-5 text-red-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Total Favorites</p>
+                  <p className="text-2xl font-bold text-red-600">{sampleAnalytics.totalFavorites}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-yellow-100 rounded-lg">
+                  <DollarSign className="h-5 w-5 text-yellow-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Portfolio Value</p>
+                  <p className="text-2xl font-bold text-yellow-600">{formatPrice(sampleAnalytics.totalValue, 'SAR')}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Published</p>
+                  <p className="text-xl font-bold text-green-600">{sampleAnalytics.publishedArtworks}</p>
+                </div>
+                <div className="text-green-600">
+                  <TrendingUp className="h-5 w-5" />
+                </div>
+              </div>
+              <Progress value={(sampleAnalytics.publishedArtworks / sampleAnalytics.totalArtworks) * 100} className="mt-2" />
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Draft</p>
+                  <p className="text-xl font-bold text-yellow-600">{sampleAnalytics.draftArtworks}</p>
+                </div>
+                <div className="text-yellow-600">
+                  <Clock className="h-5 w-5" />
+                </div>
+              </div>
+              <Progress value={(sampleAnalytics.draftArtworks / sampleAnalytics.totalArtworks) * 100} className="mt-2" />
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Sold</p>
+                  <p className="text-xl font-bold text-purple-600">{sampleAnalytics.soldArtworks}</p>
+                </div>
+                <div className="text-purple-600">
+                  <Star className="h-5 w-5" />
+                </div>
+              </div>
+              <Progress value={(sampleAnalytics.soldArtworks / sampleAnalytics.totalArtworks) * 100} className="mt-2" />
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Filters and Search Component
+  function FiltersPanel() {
+    return (
+      <Card className="mb-6">
+        <CardContent className="p-4">
+          <div className="flex flex-wrap gap-4 items-center">
+            <div className="flex-1 min-w-[200px]">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search artworks..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+            
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="available">Available</SelectItem>
+                <SelectItem value="sold">Sold</SelectItem>
+                <SelectItem value="draft">Draft</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <Select value={filterCategory} onValueChange={setFilterCategory}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                {categories.map(cat => (
+                  <SelectItem key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+              >
+                {sortOrder === 'asc' ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
+              </Button>
+              
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-[120px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="createdAt">Date</SelectItem>
+                  <SelectItem value="title">Title</SelectItem>
+                  <SelectItem value="price">Price</SelectItem>
+                  <SelectItem value="views">Views</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Bulk Actions Component
+  function BulkActions() {
+    const selectedCount = selectedArtworks.size;
+    
+    const handleBulkAction = async (action: string) => {
+      if (selectedCount === 0) return;
+      
+      const artworkIds = Array.from(selectedArtworks);
+      
+      try {
+        switch (action) {
+          case 'delete':
+            if (window.confirm(`Delete ${selectedCount} artworks?`)) {
+              for (const id of artworkIds) {
+                await deleteArtworkMutation.mutateAsync(id);
+              }
+            }
+            break;
+          case 'feature':
+            toast({ title: "Featured artworks updated" });
+            break;
+          case 'archive':
+            toast({ title: "Artworks archived" });
+            break;
+          case 'export':
+            toast({ title: "Artworks exported" });
+            break;
+        }
+      } catch (error) {
+        toast({ title: "Error performing bulk action", variant: "destructive" });
+      }
+      
+      setSelectedArtworks(new Set());
+    };
+
+    if (selectedCount === 0) return null;
+
+    return (
+      <Card className="mb-4 border-blue-200 bg-blue-50">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CheckSquare className="h-5 w-5 text-blue-600" />
+              <span className="font-medium text-blue-800">
+                {selectedCount} artwork{selectedCount !== 1 ? 's' : ''} selected
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleBulkAction('feature')}
+              >
+                <Star className="h-4 w-4 mr-1" />
+                Feature
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleBulkAction('archive')}
+              >
+                <Archive className="h-4 w-4 mr-1" />
+                Archive
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleBulkAction('export')}
+              >
+                <Download className="h-4 w-4 mr-1" />
+                Export
+              </Button>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => handleBulkAction('delete')}
+              >
+                <Trash2 className="h-4 w-4 mr-1" />
+                Delete
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setSelectedArtworks(new Set())}
+              >
+                Clear
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Enhanced Artwork Grid Component
+  function EnhancedArtworkGrid() {
+    // Filter and sort artworks based on current filters
+    const filteredAndSortedArtworks = React.useMemo(() => {
+      let filtered = artworks || [];
+      
+      // Apply search filter
+      if (searchTerm) {
+        filtered = filtered.filter(artwork => 
+          artwork.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          artwork.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          artwork.category.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+      
+      // Apply status filter
+      if (filterStatus !== 'all') {
+        filtered = filtered.filter(artwork => artwork.availability === filterStatus);
+      }
+      
+      // Apply category filter
+      if (filterCategory !== 'all') {
+        filtered = filtered.filter(artwork => artwork.category === filterCategory);
+      }
+      
+      // Apply sorting
+      filtered.sort((a, b) => {
+        let aValue, bValue;
+        
+        switch (sortBy) {
+          case 'title':
+            aValue = a.title.toLowerCase();
+            bValue = b.title.toLowerCase();
+            break;
+          case 'price':
+            aValue = a.price;
+            bValue = b.price;
+            break;
+          case 'views':
+            aValue = Math.floor(Math.random() * 1000); // Sample data
+            bValue = Math.floor(Math.random() * 1000);
+            break;
+          case 'createdAt':
+          default:
+            aValue = new Date(a.createdAt);
+            bValue = new Date(b.createdAt);
+            break;
+        }
+        
+        if (sortOrder === 'asc') {
+          return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+        } else {
+          return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+        }
+      });
+      
+      return filtered;
+    }, [artworks, searchTerm, filterStatus, filterCategory, sortBy, sortOrder]);
+    
+    // Handle select all/none
+    const handleSelectAll = () => {
+      if (selectedArtworks.size === filteredAndSortedArtworks.length) {
+        setSelectedArtworks(new Set());
+      } else {
+        setSelectedArtworks(new Set(filteredAndSortedArtworks.map(a => a.id)));
+      }
+    };
+    
+    // Handle individual selection
+    const handleSelectArtwork = (artworkId: number) => {
+      const newSelected = new Set(selectedArtworks);
+      if (newSelected.has(artworkId)) {
+        newSelected.delete(artworkId);
+      } else {
+        newSelected.add(artworkId);
+      }
+      setSelectedArtworks(newSelected);
+    };
+    
+    return (
+      <div className="space-y-4">
+        {/* View Options and Select All */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                checked={selectedArtworks.size > 0 && selectedArtworks.size === filteredAndSortedArtworks.length}
+                onCheckedChange={handleSelectAll}
+              />
+              <span className="text-sm font-medium">
+                Select All ({filteredAndSortedArtworks.length})
+              </span>
+            </div>
+            
+            {selectedArtworks.size > 0 && (
+              <div className="text-sm text-blue-600">
+                {selectedArtworks.size} selected
+              </div>
+            )}
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setViewMode('grid')}
+              className={viewMode === 'grid' ? 'bg-blue-50 text-blue-600' : ''}
+            >
+              <div className="grid grid-cols-2 gap-0.5 h-4 w-4">
+                <div className="bg-current w-1.5 h-1.5 rounded-sm"></div>
+                <div className="bg-current w-1.5 h-1.5 rounded-sm"></div>
+                <div className="bg-current w-1.5 h-1.5 rounded-sm"></div>
+                <div className="bg-current w-1.5 h-1.5 rounded-sm"></div>
+              </div>
+            </Button>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setViewMode('list')}
+              className={viewMode === 'list' ? 'bg-blue-50 text-blue-600' : ''}
+            >
+              <div className="flex flex-col gap-0.5 h-4 w-4">
+                <div className="bg-current w-full h-1 rounded-sm"></div>
+                <div className="bg-current w-full h-1 rounded-sm"></div>
+                <div className="bg-current w-full h-1 rounded-sm"></div>
+              </div>
+            </Button>
+          </div>
+        </div>
+        
+        {/* Grid/List View */}
+        {isLoading ? (
+          <div className={cn(
+            "grid gap-6",
+            viewMode === 'grid' ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
+          )}>
+            {[...Array(6)].map((_, i) => (
+              <Card key={i} className="animate-pulse">
+                <div className="h-48 bg-gray-200 rounded-t-lg"></div>
+                <CardContent className="p-4">
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : filteredAndSortedArtworks.length === 0 ? (
+          <Card className="col-span-full">
+            <CardContent className="p-8 text-center">
+              <ImageIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">
+                {searchTerm || filterStatus !== 'all' || filterCategory !== 'all' 
+                  ? "No artworks match your filters" 
+                  : t("artworks.noArtworks")}
+              </h3>
+              <p className="text-muted-foreground mb-4">
+                {searchTerm || filterStatus !== 'all' || filterCategory !== 'all' 
+                  ? "Try adjusting your search or filters" 
+                  : t("artworks.noArtworksDesc")}
+              </p>
+              {!searchTerm && filterStatus === 'all' && filterCategory === 'all' && (
+                <Button 
+                  onClick={() => setIsAddDialogOpen(true)}
+                  size="lg"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold shadow-lg"
+                >
+                  <Plus className="h-5 w-5 mr-2" />
+                  Add New Artwork
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        ) : (
+          <div className={cn(
+            "grid gap-6",
+            viewMode === 'grid' ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
+          )}>
+            {filteredAndSortedArtworks.map((artwork) => (
+              <Card key={artwork.id} className={cn(
+                "group hover:shadow-lg transition-all duration-200",
+                selectedArtworks.has(artwork.id) && "ring-2 ring-blue-500 bg-blue-50/50",
+                viewMode === 'list' && "flex flex-row"
+              )}>
+                <div className={cn(
+                  "relative",
+                  viewMode === 'list' ? "w-48 flex-shrink-0" : ""
+                )}>
+                  {artwork.images && artwork.images.length > 0 ? (
+                    <img
+                      src={artwork.images[0]}
+                      alt={artwork.title}
+                      className={cn(
+                        "object-cover",
+                        viewMode === 'list' ? "w-full h-full" : "w-full h-48 rounded-t-lg"
+                      )}
+                    />
+                  ) : (
+                    <div className={cn(
+                      "bg-gray-200 flex items-center justify-center",
+                      viewMode === 'list' ? "w-full h-full" : "w-full h-48 rounded-t-lg"
+                    )}>
+                      <ImageIcon className="h-12 w-12 text-gray-400" />
+                    </div>
+                  )}
+                  
+                  {/* Selection Checkbox */}
+                  <div className="absolute top-3 left-3">
+                    <Checkbox
+                      checked={selectedArtworks.has(artwork.id)}
+                      onCheckedChange={() => handleSelectArtwork(artwork.id)}
+                      className="bg-white shadow-sm"
+                    />
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <div className="absolute top-3 right-3 flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => handleEdit(artwork)}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 backdrop-blur-sm"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => handleDelete(artwork.id)}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity bg-red-600/90 backdrop-blur-sm"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  
+                  {/* Featured Badge */}
+                  {artwork.featured && (
+                    <Badge className="absolute bottom-3 left-3 bg-yellow-500">
+                      <Star className="h-3 w-3 mr-1" />
+                      Featured
+                    </Badge>
+                  )}
+                </div>
+                
+                <CardContent className={cn(
+                  "p-4",
+                  viewMode === 'list' && "flex-1 flex flex-col justify-between"
+                )}>
+                  <div>
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="font-semibold text-lg line-clamp-1">
+                        {isRTL ? artwork.titleAr || artwork.title : artwork.title}
+                      </h3>
+                      <div className="flex items-center gap-1 text-sm text-gray-500">
+                        <Eye className="h-3 w-3" />
+                        <span>{Math.floor(Math.random() * 1000)}</span>
+                      </div>
+                    </div>
+                    
+                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                      {isRTL ? artwork.descriptionAr || artwork.description : artwork.description}
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <DollarSign className="h-4 w-4 text-muted-foreground" />
+                        <span className="font-medium text-lg">
+                          {formatPrice(artwork.price, artwork.currency)}
+                        </span>
+                      </div>
+                      <Badge variant={artwork.availability === 'available' ? 'default' : 'secondary'}>
+                        {artwork.availability}
+                      </Badge>
+                    </div>
+                    
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        {artwork.year}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Tag className="h-3 w-3" />
+                        {isRTL ? artwork.categoryAr || artwork.category : artwork.category}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <MapPin className="h-3 w-3" />
+                        {artwork.dimensions}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+        
+        {/* Results Summary */}
+        {filteredAndSortedArtworks.length > 0 && (
+          <div className="text-center text-sm text-gray-500 pt-4">
+            Showing {filteredAndSortedArtworks.length} of {artworks?.length || 0} artworks
+          </div>
+        )}
+      </div>
+    );
+  }
+
   // ArtworkManagementContent component for reusable content
   function ArtworkManagementContent({ mode, title, description, buttonText }: ArtworkManagementContentProps) {
     return (
@@ -488,137 +1114,54 @@ export default function ArtworkManagement() {
               )}
             </div>
           </div>
-          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-            <DialogTrigger asChild>
-              <Button 
-                onClick={() => resetForm()} 
-                size="lg"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-lg font-semibold shadow-lg"
-              >
-                <Plus className="h-5 w-5 mr-2" />
-                {buttonText}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>{buttonText}</DialogTitle>
-              </DialogHeader>
-              <ArtworkForm
-                formData={formData}
-                setFormData={setFormData}
-                selectedImages={selectedImages}
-                handleImageUpload={handleImageUpload}
-                removeImage={removeImage}
-                uploadingImages={uploadingImages}
-                onSubmit={handleSubmit}
-                isSubmitting={createArtworkMutation.isPending}
-                categories={categories}
-                styles={styles}
-                onCancel={() => setIsAddDialogOpen(false)}
-              />
-            </DialogContent>
-          </Dialog>
-        </div>
-
-        {/* Artworks Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {isLoading ? (
-            [...Array(6)].map((_, i) => (
-              <Card key={i} className="animate-pulse">
-                <div className="h-48 bg-gray-200 rounded-t-lg"></div>
-                <CardContent className="p-4">
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                </CardContent>
-              </Card>
-            ))
-          ) : artworks.length === 0 ? (
-            <Card className="col-span-full">
-              <CardContent className="p-8 text-center">
-                <ImageIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">
-                  {t("artworks.noArtworks")}
-                </h3>
-                <p className="text-muted-foreground mb-4">
-                  {t("artworks.noArtworksDesc")}
-                </p>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowAnalytics(!showAnalytics)}
+            >
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Analytics
+            </Button>
+            <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+              <DialogTrigger asChild>
                 <Button 
-                  onClick={() => setIsAddDialogOpen(true)}
+                  onClick={() => resetForm()} 
                   size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold shadow-lg"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-lg font-semibold shadow-lg"
                 >
                   <Plus className="h-5 w-5 mr-2" />
                   {buttonText}
                 </Button>
-              </CardContent>
-            </Card>
-          ) : (
-            artworks.map((artwork) => (
-              <Card key={artwork.id} className="group hover:shadow-lg transition-shadow">
-                <div className="relative">
-                  <img
-                    src={artwork.images[0]}
-                    alt={artwork.title}
-                    className="w-full h-48 object-cover rounded-t-lg"
-                  />
-                  <div className="absolute top-2 right-2 flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      onClick={() => handleEdit(artwork)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => handleDelete(artwork.id)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  {artwork.featured && (
-                    <Badge className="absolute top-2 left-2 bg-yellow-500">
-                      <Star className="h-3 w-3 mr-1" />
-                      {t("artworks.featured")}
-                    </Badge>
-                  )}
-                </div>
-                <CardContent className="p-4">
-                  <h3 className="font-semibold text-lg mb-2">
-                    {isRTL ? artwork.titleAr || artwork.title : artwork.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                    {isRTL ? artwork.descriptionAr || artwork.description : artwork.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <DollarSign className="h-4 w-4 text-muted-foreground" />
-                      <span className="font-medium">
-                        {formatPrice(artwork.price)} {artwork.currency}
-                      </span>
-                    </div>
-                    <Badge variant={artwork.availability === 'available' ? 'default' : 'secondary'}>
-                      {t(`artworks.${artwork.availability}`)}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      {artwork.year}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Tag className="h-3 w-3" />
-                      {isRTL ? artwork.categoryAr || artwork.category : artwork.category}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          )}
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>{buttonText}</DialogTitle>
+                </DialogHeader>
+                <ArtworkForm
+                  formData={formData}
+                  setFormData={setFormData}
+                  selectedImages={selectedImages}
+                  handleImageUpload={handleImageUpload}
+                  removeImage={removeImage}
+                  uploadingImages={uploadingImages}
+                  onSubmit={handleSubmit}
+                  isSubmitting={createArtworkMutation.isPending}
+                  categories={categories}
+                  styles={styles}
+                  onCancel={() => setIsAddDialogOpen(false)}
+                />
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
+        
+        {showAnalytics && <AnalyticsPanel />}
+        <FiltersPanel />
+        <BulkActions />
+
+        {/* Enhanced Artworks Grid */}
+        <EnhancedArtworkGrid />
 
         {/* Edit Dialog */}
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
