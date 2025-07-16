@@ -1,0 +1,15 @@
+[Click to expand] <ErrorBoundary />
+backendManager.js:1 Props: {data-replit-metadata: 'client/src/App.tsx:147:4', data-component-name: 'ErrorBoundary', children: {…}}children: {$$typeof: Symbol(react.element), key: null, ref: null, props: {…}, type: ƒ, …}data-component-name: "ErrorBoundary"data-replit-metadata: "client/src/App.tsx:147:4"[[Prototype]]: Object
+backendManager.js:1 State: {hasError: true, error: ReferenceError: Cannot access 'filteredAndSortedOrders' before initialization
+    at ShippingManage…}error: ReferenceError: Cannot access 'filteredAndSortedOrders' before initialization
+    at ShippingManagement (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/pages/ShippingManagement.tsx:160:43)
+    at renderWithHooks (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=3aa5341c:11548:26)
+    at updateFunctionComponent (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=3aa5341c:14582:28)
+    at mountLazyComponent (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=3aa5341c:14833:23)
+    at beginWork (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=3aa5341c:15918:22)
+    at beginWork$1 (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=3aa5341c:19753:22)
+    at performUnitOfWork (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=3aa5341c:19198:20)
+    at workLoopSync (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=3aa5341c:19137:13)
+    at renderRootSync (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=3aa5341c:19116:15)
+    at recoverFromConcurrentError (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=3aa5341c:18736:28)hasError: true[[Prototype]]: Object
+backendManager.js:1 Nodes: 

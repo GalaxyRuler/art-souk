@@ -120,6 +120,9 @@ export default function ShippingManagement() {
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
+  // Add controlled tabs state
+  const [activeTab, setActiveTab] = React.useState('analytics');
+
   // Fetch user roles
   const { data: userRolesData, isLoading: isLoadingRoles, error: rolesError } = useQuery<{ roles: string[], setupComplete: boolean }>({
     queryKey: ['/api/user/roles'],
@@ -279,9 +282,6 @@ export default function ShippingManagement() {
     queryClient.invalidateQueries({ queryKey: ['/api/seller/orders'] });
   }, [queryClient]);
 
-  // Add controlled tabs state
-  const [activeTab, setActiveTab] = React.useState('analytics');
-
   // Tab change handler with debugging
   const handleTabChange = (value: string) => {
     console.log('🔍 Tab changed to:', value);
@@ -397,6 +397,7 @@ export default function ShippingManagement() {
 
   // Bulk selection handlers
   const handleSelectAll = () => {
+    if (!filteredAndSortedOrders) return;
     if (selectedOrders.size === filteredAndSortedOrders.length) {
       setSelectedOrders(new Set());
     } else {
@@ -705,7 +706,7 @@ export default function ShippingManagement() {
                   <CardContent>
                     <div className="text-white text-sm">
                       <p>Raw orders count: {orders.length}</p>
-                      <p>Filtered orders count: {filteredAndSortedOrders.length}</p>
+                      <p>Filtered orders count: {filteredAndSortedOrders?.length || 0}</p>
                       <p>First order: {JSON.stringify(orders[0], null, 2)}</p>
                     </div>
                   </CardContent>
@@ -717,8 +718,8 @@ export default function ShippingManagement() {
                   <CardTitle className="text-white flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Package className="h-5 w-5" />
-                      Order Management ({filteredAndSortedOrders.length} orders)
-                      {filteredAndSortedOrders.length > 0 && (
+                      Order Management ({filteredAndSortedOrders?.length || 0} orders)
+                      {filteredAndSortedOrders && filteredAndSortedOrders.length > 0 && (
                         <div className="flex items-center gap-2 ml-4">
                           <Button
                             variant="outline"
@@ -726,7 +727,7 @@ export default function ShippingManagement() {
                             onClick={handleSelectAll}
                             className="border-white/10 text-white hover:bg-white/10"
                           >
-                            {selectedOrders.size === filteredAndSortedOrders.length ? 'Deselect All' : 'Select All'}
+                            {selectedOrders.size === (filteredAndSortedOrders?.length || 0) ? 'Deselect All' : 'Select All'}
                           </Button>
                           {selectedOrders.size > 0 && (
                             <Button
@@ -768,7 +769,7 @@ export default function ShippingManagement() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {filteredAndSortedOrders.length > 0 ? (
+                  {filteredAndSortedOrders && filteredAndSortedOrders.length > 0 ? (
                     <div className={cn(
                       "gap-4",
                       viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "space-y-4"
