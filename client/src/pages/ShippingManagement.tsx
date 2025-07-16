@@ -200,19 +200,6 @@ export default function ShippingManagement() {
   // Add controlled tabs state
   const [activeTab, setActiveTab] = React.useState('analytics');
   
-  // Enhanced debugging for tabs and data
-  React.useEffect(() => {
-    console.log('🔍 Component render debug:', {
-      activeTab,
-      hasOrders: !!orders,
-      ordersLength: orders?.length,
-      isLoadingOrders,
-      filteredOrdersLength: filteredAndSortedOrders?.length,
-      hasValidRoles,
-      userRoles
-    });
-  }, [activeTab, orders, isLoadingOrders, filteredAndSortedOrders, hasValidRoles, userRoles]);
-
   // Tab change handler with debugging
   const handleTabChange = (value: string) => {
     console.log('🔍 Tab changed to:', value);
@@ -602,6 +589,19 @@ export default function ShippingManagement() {
     
     return filtered;
   }, [orders, searchTerm, filterStatus, filterCarrier, sortBy, sortOrder]);
+
+  // Enhanced debugging for tabs and data - moved after filteredAndSortedOrders declaration
+  React.useEffect(() => {
+    console.log('🔍 Component render debug:', {
+      activeTab,
+      hasOrders: !!orders,
+      ordersLength: orders?.length,
+      isLoadingOrders,
+      filteredOrdersLength: filteredAndSortedOrders?.length,
+      hasValidRoles,
+      userRoles
+    });
+  }, [activeTab, orders, isLoadingOrders, filteredAndSortedOrders, hasValidRoles, userRoles]);
 
   // Bulk selection handlers
   const handleSelectAll = () => {
