@@ -10,14 +10,14 @@ class CSRFTokenManager {
   generateToken(sessionId: string): string {
     const token = randomBytes(32).toString('hex');
     const expires = Date.now() + this.tokenExpiry;
-    
+
     this.tokens.set(sessionId, { token, expires });
     return token;
   }
 
   validateToken(sessionId: string, token: string): boolean {
     const storedToken = this.tokens.get(sessionId);
-    
+
     if (!storedToken) {
       return false;
     }
@@ -83,7 +83,7 @@ export const csrfProtection = (req: Request, res: Response, next: NextFunction) 
 export const generateCSRFToken = (req: Request, res: Response) => {
   const sessionId = req.sessionID || req.ip;
   const token = csrfTokenManager.generateToken(sessionId);
-  
+
   res.json({ csrfToken: token });
 };
 
@@ -91,7 +91,7 @@ export const generateCSRFToken = (req: Request, res: Response) => {
 export const sqlInjectionProtection = (req: Request, res: Response, next: NextFunction) => {
   const checkForSQLInjection = (value: any): boolean => {
     if (typeof value !== 'string') return false;
-    
+
     const sqlPatterns = [
       /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION|SCRIPT)\b)/gi,
       /(\b(OR|AND)\s+\d+\s*=\s*\d+)/gi,
@@ -99,7 +99,7 @@ export const sqlInjectionProtection = (req: Request, res: Response, next: NextFu
       /(\bINFORMATION_SCHEMA\b)/gi,
       /(\bSYS\b)/gi,
     ];
-    
+
     return sqlPatterns.some(pattern => pattern.test(value));
   };
 
@@ -107,21 +107,21 @@ export const sqlInjectionProtection = (req: Request, res: Response, next: NextFu
     if (typeof obj === 'string') {
       return checkForSQLInjection(obj);
     }
-    
+
     if (Array.isArray(obj)) {
       return obj.some(item => scanObject(item));
     }
-    
+
     if (typeof obj === 'object' && obj !== null) {
       return Object.values(obj).some(value => scanObject(value));
     }
-    
+
     return false;
   };
 
   // Check request body, params, and query
   const hasInjection = scanObject(req.body) || scanObject(req.params) || scanObject(req.query);
-  
+
   if (hasInjection) {
     console.warn('SQL injection attempt detected:', {
       ip: req.ip,
@@ -132,7 +132,7 @@ export const sqlInjectionProtection = (req: Request, res: Response, next: NextFu
       params: req.params,
       query: req.query,
     });
-    
+
     return res.status(400).json({
       error: 'Invalid input detected',
       message: 'Request contains potentially harmful content',
@@ -153,11 +153,11 @@ export const xssProtection = (req: Request, res: Response, next: NextFunction) =
         .replace(/'/g, '&#x27;')
         .replace(/\//g, '&#x2F;');
     }
-    
+
     if (Array.isArray(value)) {
       return value.map(item => sanitizeValue(item));
     }
-    
+
     if (typeof value === 'object' && value !== null) {
       const sanitized: any = {};
       for (const [key, val] of Object.entries(value)) {
@@ -165,7 +165,7 @@ export const xssProtection = (req: Request, res: Response, next: NextFunction) =
       }
       return sanitized;
     }
-    
+
     return value;
   };
 
@@ -187,7 +187,7 @@ export const inputValidation = (schema: z.ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = schema.safeParse(req.body);
-      
+
       if (!result.success) {
         return res.status(400).json({
           error: 'Validation failed',
@@ -195,7 +195,7 @@ export const inputValidation = (schema: z.ZodSchema) => {
           details: result.error.errors,
         });
       }
-      
+
       req.body = result.data;
       next();
     } catch (error) {
@@ -216,20 +216,20 @@ export const fileUploadSecurity = (req: Request, res: Response, next: NextFuncti
   const validateFile = (file: any): boolean => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     const maxSize = 5 * 1024 * 1024; // 5MB
-    
+
     if (!allowedTypes.includes(file.mimetype)) {
       return false;
     }
-    
+
     if (file.size > maxSize) {
       return false;
     }
-    
+
     return true;
   };
 
   const files = req.files ? (Array.isArray(req.files) ? req.files : [req.files]) : [req.file];
-  
+
   for (const file of files) {
     if (file && !validateFile(file)) {
       return res.status(400).json({
@@ -246,14 +246,14 @@ export const fileUploadSecurity = (req: Request, res: Response, next: NextFuncti
 export const requestSizeLimit = (maxSize: number = 10 * 1024 * 1024) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const contentLength = parseInt(req.headers['content-length'] || '0', 10);
-    
+
     if (contentLength > maxSize) {
       return res.status(413).json({
         error: 'Request too large',
         message: `Request size ${contentLength} exceeds maximum ${maxSize}`,
       });
     }
-    
+
     next();
   };
 };
@@ -262,21 +262,21 @@ export const requestSizeLimit = (maxSize: number = 10 * 1024 * 1024) => {
 export const ipFilter = (options: { whitelist?: string[]; blacklist?: string[] }) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const clientIP = req.ip;
-    
+
     if (options.blacklist && options.blacklist.includes(clientIP)) {
       return res.status(403).json({
         error: 'IP blocked',
         message: 'Your IP address is not allowed',
       });
     }
-    
+
     if (options.whitelist && !options.whitelist.includes(clientIP)) {
       return res.status(403).json({
         error: 'IP not allowed',
         message: 'Your IP address is not whitelisted',
       });
     }
-    
+
     next();
   };
 };
@@ -292,15 +292,15 @@ export const requestTimeout = (timeoutMs: number = 30000) => {
         });
       }
     }, timeoutMs);
-    
+
     res.on('finish', () => {
       clearTimeout(timeout);
     });
-    
+
     res.on('close', () => {
       clearTimeout(timeout);
     });
-    
+
     next();
   };
 };
@@ -311,9 +311,9 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
   res.set('Content-Security-Policy', 
     "default-src 'self'; " +
     "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
-    "style-src 'self' 'unsafe-inline'; " +
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
     "img-src 'self' data: https:; " +
-    "font-src 'self' https:; " +
+    "font-src 'self' https://fonts.gstatic.com data:; " +
     "connect-src 'self' https:; " +
     "media-src 'self'; " +
     "object-src 'none'; " +
@@ -348,7 +348,7 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
 // API Key Validation
 export const apiKeyValidation = (req: Request, res: Response, next: NextFunction) => {
   const apiKey = req.headers['x-api-key'];
-  
+
   if (!apiKey) {
     return res.status(401).json({
       error: 'API key required',
@@ -366,7 +366,7 @@ export const apiKeyValidation = (req: Request, res: Response, next: NextFunction
 
   // Here you would validate against your API key store
   // For now, we'll just check if it's not empty
-  
+
   next();
 };
 

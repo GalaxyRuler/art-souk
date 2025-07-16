@@ -1,3 +1,4 @@
+json
 {
   "site": {
     "name": "Art Souk",
@@ -872,7 +873,8 @@
     "signInToComment": "Sign in to comment",
     "recentActivity": "Recent Activity",
     "joinedDate": "Joined {{date}}",
-    "website": "Website"
+    ```text
+ "website": "Website"
   },
   "errors": {
     "generic": "Something went wrong",
@@ -884,5 +886,79 @@
     "artworkNotFoundDescription": "The artwork you're looking for doesn't exist or has been removed.",
     "artistNotFound": "Artist not found",
     "artistNotFoundDescription": "The artist profile you're looking for doesn't exist or has been removed."
+  },
+  "shipping": {
+    "title": "Shipping Management",
+    "subtitle": "Manage your shipping profiles, tracking, and orders efficiently",
+    "profile": "Shipping Profile",
+    "tracking": "Package Tracking",
+    "orders": "Ready to Ship",
+    "createProfile": "Create Shipping Profile",
+    "updateProfile": "Update Profile",
+    "noProfile": "No Shipping Profile",
+    "noProfileDesc": "Create a shipping profile to manage your orders and delivery information.",
+    "businessProfile": "Business Profile",
+    "businessInfo": "Business Information",
+    "businessName": "Business Name",
+    "businessNameAr": "Business Name (Arabic)",
+    "businessNamePlaceholder": "Enter your business name",
+    "businessNameArPlaceholder": "Enter your business name in Arabic",
+    "contactPerson": "Contact Person",
+    "contactPersonPlaceholder": "Enter contact person name",
+    "contactPhone": "Contact Phone",
+    "contactEmail": "Contact Email",
+    "address": "Business Address",
+    "selectCity": "Select City",
+    "defaultCarrier": "Default Carrier",
+    "selectCarrier": "Select Carrier",
+    "packagingInstructions": "Packaging Instructions",
+    "packagingInstructionsAr": "Packaging Instructions (Arabic)",
+    "packagingInstructionsPlaceholder": "Enter packaging instructions",
+    "packagingInstructionsArPlaceholder": "Enter packaging instructions in Arabic",
+    "handlingTime": "Handling Time",
+    "days": "days",
+    "domesticRate": "Domestic Rate",
+    "internationalRate": "International Rate",
+    "freeShippingThreshold": "Free Shipping Threshold",
+    "domesticShippingRate": "Domestic Shipping Rate",
+    "internationalShippingRate": "International Shipping Rate",
+    "shippingRates": "Shipping Rates",
+    "trackingInfo": "Tracking Information",
+    "trackingNumber": "Tracking Number",
+    "carrier": "Carrier",
+    "status": {
+      "in_transit": "In Transit",
+      "out_for_delivery": "Out for Delivery",
+      "delivered": "Delivered",
+      "returned": "Returned"
+    },
+    "estimatedDelivery": "Estimated Delivery",
+    "actualDelivery": "Actual Delivery",
+    "updateTracking": "Update Tracking",
+    "noTracking": "No Tracking Information",
+    "noTrackingDesc": "No tracking information available at this time.",
+    "ordersToShip": "Orders to Ship",
+    "orderNumber": "Order Number",
+    "customer": "Customer",
+    "artwork": "Artwork",
+    "addTracking": "Add Tracking",
+    "orderStatus": {
+      "confirmed": "Confirmed",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered"
+    },
+    "noOrders": "No Orders",
+    "noOrdersDesc": "No orders available for shipping at this time.",
+    "notes": "Notes",
+    "notesPlaceholder": "Enter any additional notes",
+    "profileUpdated": "Profile Updated",
+    "profileUpdatedDesc": "Your shipping profile has been updated successfully",
+    "profileUpdateError": "Failed to update shipping profile",
+    "trackingUpdated": "Tracking Updated",
+    "trackingUpdatedDesc": "Package tracking information has been updated",
+    "trackingUpdateError": "Failed to update tracking information",
+    "accessDenied": "Access Denied",
+    "artistGalleryOnly": "This page is only accessible to artists and galleries"
   }
 }
