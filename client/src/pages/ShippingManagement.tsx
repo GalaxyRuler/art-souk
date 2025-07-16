@@ -153,6 +153,9 @@ export default function ShippingManagement() {
     }
   }, [userRolesData]);
 
+  // Check if user has proper roles - moved up to prevent temporal dead zone error
+  const hasValidRoles = userRoles && Array.isArray(userRoles) && userRoles.length > 0 && (userRoles.includes('artist') || userRoles.includes('gallery'));
+
   // Fetch shipping profile
   const { data: shippingProfile, isLoading: isLoadingProfile } = useQuery<ShippingProfile>({
     queryKey: ['/api/shipping/profile'],
@@ -621,10 +624,6 @@ export default function ShippingManagement() {
       </div>
     );
   }
-
-  // Check if user has proper roles - userRoles is guaranteed to be an array at this point
-  // Additional defensive check to prevent TypeError
-  const hasValidRoles = userRoles && Array.isArray(userRoles) && userRoles.length > 0 && (userRoles.includes('artist') || userRoles.includes('gallery'));
 
   if (!hasValidRoles) {
     return (
