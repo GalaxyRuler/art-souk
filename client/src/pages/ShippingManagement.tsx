@@ -185,7 +185,7 @@ export default function ShippingManagement() {
   console.log('🔍 User roles:', userRoles);
   console.log('🔍 isLoadingOrders:', isLoadingOrders);
   console.log('🔍 isLoadingProfile:', isLoadingProfile);
-  
+
   // If we have orders data, log the first order to check structure
   if (orders && orders.length > 0) {
     console.log('🔍 First order sample:', orders[0]);
@@ -199,7 +199,7 @@ export default function ShippingManagement() {
 
   // Add controlled tabs state
   const [activeTab, setActiveTab] = React.useState('analytics');
-  
+
   // Tab change handler with debugging
   const handleTabChange = (value: string) => {
     console.log('🔍 Tab changed to:', value);
@@ -304,9 +304,9 @@ export default function ShippingManagement() {
     const inTransitOrders = ordersArray.filter(o => o.status === 'processing').length;
     const deliveredOrders = ordersArray.filter(o => o.status === 'delivered').length;
     const totalRevenue = ordersArray.reduce((sum, order) => sum + (parseFloat(order.total_amount) || 0), 0);
-    
+
     console.log('🔍 Analytics stats:', { totalOrders, shippedOrders, inTransitOrders, deliveredOrders, totalRevenue });
-    
+
     return (
       <Card className="mb-6 bg-white/10 backdrop-blur-sm border-white/20">
         <CardHeader>
@@ -328,7 +328,7 @@ export default function ShippingManagement() {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-green-500/20 p-4 rounded-lg border border-green-500/30">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-green-500/30 rounded-lg">
@@ -340,7 +340,7 @@ export default function ShippingManagement() {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-orange-500/20 p-4 rounded-lg border border-orange-500/30">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-orange-500/30 rounded-lg">
@@ -352,7 +352,7 @@ export default function ShippingManagement() {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-purple-500/20 p-4 rounded-lg border border-purple-500/30">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-purple-500/30 rounded-lg">
@@ -365,7 +365,7 @@ export default function ShippingManagement() {
               </div>
             </div>
           </div>
-          
+
           <div className="mt-6 space-y-4">
             <div>
               <div className="flex items-center justify-between mb-2">
@@ -379,7 +379,7 @@ export default function ShippingManagement() {
                 className="h-2" 
               />
             </div>
-            
+
             <div>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-slate-300">Orders In Transit</span>
@@ -414,7 +414,7 @@ export default function ShippingManagement() {
                 />
               </div>
             </div>
-            
+
             <Select value={filterStatus} onValueChange={setFilterStatus}>
               <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white">
                 <SelectValue placeholder="Filter by status" />
@@ -429,7 +429,7 @@ export default function ShippingManagement() {
                 <SelectItem value="cancelled">Cancelled</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Select value={filterCarrier} onValueChange={setFilterCarrier}>
               <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white">
                 <SelectValue placeholder="Filter by carrier" />
@@ -441,7 +441,7 @@ export default function ShippingManagement() {
                 ))}
               </SelectContent>
             </Select>
-            
+
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white">
                 <SelectValue />
@@ -453,7 +453,7 @@ export default function ShippingManagement() {
                 <SelectItem value="totalAmount">Amount</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Button
               variant="outline"
               size="sm"
@@ -470,7 +470,7 @@ export default function ShippingManagement() {
 
   function BulkShippingActions() {
     if (selectedOrders.size === 0) return null;
-    
+
     return (
       <Card className="mb-6 bg-white/10 backdrop-blur-sm border-white/20">
         <CardContent className="p-4">
@@ -505,8 +505,8 @@ export default function ShippingManagement() {
     'Tabuk', 'Buraidah', 'Khamis Mushait', 'Hofuf', 'Taif', 'Najran', 'Jubail'
   ];
 
-  // Memoized filtering and sorting
-  const filteredAndSortedOrders = useMemo(() => {
+  // Optimized memoized filtering and sorting with better error handling
+  const filteredAndSortedOrders = React.useMemo(() => {
     console.log('🔍 Running filteredAndSortedOrders with:', {
       orders: orders,
       ordersLength: orders?.length,
@@ -516,50 +516,45 @@ export default function ShippingManagement() {
       filterStatus: filterStatus,
       filterCarrier: filterCarrier
     });
-    
-    if (!orders || !Array.isArray(orders)) {
-      console.log('❌ No orders or not array:', {
+
+    // Early return for invalid or empty orders
+    if (!Array.isArray(orders) || orders.length === 0) {
+      console.log('❌ No orders or empty array:', {
         orders: orders,
         type: typeof orders,
         isArray: Array.isArray(orders),
-        isNull: orders === null,
-        isUndefined: orders === undefined
+        length: orders?.length
       });
       return [];
     }
-    
-    let filtered = orders.filter(order => {
-      console.log('🔍 Filtering order:', order);
-      
-      // Search filter
-      const searchLower = searchTerm.toLowerCase();
+
+    // Filter orders with improved search logic
+    const filtered = orders.filter(order => {
+      if (!order) return false;
+
+      // Search filter - case insensitive and safe property access
+      const searchLower = searchTerm.toLowerCase().trim();
       const matchesSearch = !searchTerm || 
-        order.order_number?.toLowerCase().includes(searchLower) ||
-        order.user?.firstName?.toLowerCase().includes(searchLower) ||
-        order.user?.lastName?.toLowerCase().includes(searchLower) ||
-        order.artwork?.title?.toLowerCase().includes(searchLower) ||
-        order.tracking_number?.toLowerCase().includes(searchLower);
-      
+        (order.order_number?.toLowerCase() || '').includes(searchLower) ||
+        (order.user?.firstName?.toLowerCase() || '').includes(searchLower) ||
+        (order.user?.lastName?.toLowerCase() || '').includes(searchLower) ||
+        (order.artwork?.title?.toLowerCase() || '').includes(searchLower) ||
+        (order.tracking_number?.toLowerCase() || '').includes(searchLower);
+
       // Status filter
       const matchesStatus = filterStatus === 'all' || order.status === filterStatus;
-      
-      // Carrier filter
-      const matchesCarrier = filterCarrier === 'all' || order.shipping_method === filterCarrier;
-      
-      console.log('🔍 Filter results:', {
-        matchesSearch,
-        matchesStatus,
-        matchesCarrier,
-        passes: matchesSearch && matchesStatus && matchesCarrier
-      });
-      
+
+      // Carrier filter - check both shipping_method and carrier fields
+      const orderCarrier = order.shipping_method || order.carrier;
+      const matchesCarrier = filterCarrier === 'all' || orderCarrier === filterCarrier;
+
       return matchesSearch && matchesStatus && matchesCarrier;
     });
-    
-    // Sort orders
-    filtered.sort((a, b) => {
+
+    // Sort orders with improved performance
+    return filtered.sort((a, b) => {
       let aValue, bValue;
-      
+
       switch (sortBy) {
         case 'orderNumber':
           aValue = a.order_number || '';
@@ -579,15 +574,14 @@ export default function ShippingManagement() {
           bValue = new Date(b.created_at || 0).getTime();
           break;
       }
-      
+
+      // Handle string and numeric comparisons
       if (typeof aValue === 'string' && typeof bValue === 'string') {
         return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
       }
-      
+
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
     });
-    
-    return filtered;
   }, [orders, searchTerm, filterStatus, filterCarrier, sortBy, sortOrder]);
 
   // Enhanced debugging for tabs and data - moved after filteredAndSortedOrders declaration
@@ -631,7 +625,7 @@ export default function ShippingManagement() {
   // Check if user has proper roles - userRoles is guaranteed to be an array at this point
   // Additional defensive check to prevent TypeError
   const hasValidRoles = userRoles && Array.isArray(userRoles) && userRoles.length > 0 && (userRoles.includes('artist') || userRoles.includes('gallery'));
-  
+
   if (!hasValidRoles) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
@@ -700,7 +694,7 @@ export default function ShippingManagement() {
                   <BulkShippingActions />
                 </>
               )}
-              
+
               {/* DEBUG: Raw orders data display */}
               {orders && orders.length > 0 && (
                 <Card className="bg-red-500/10 backdrop-blur-sm border-red-500/20 mb-4">
@@ -795,12 +789,12 @@ export default function ShippingManagement() {
                                   newSelected.add(order.id);
                                 } else {
                                   newSelected.delete(order.id);
-                                }
+                                                               }
                                 setSelectedOrders(newSelected);
                               }}
                             />
                           </div>
-                          
+
                           <div className="flex justify-between items-start mb-3 mr-8">
                             <div>
                               <p className="text-white font-semibold">
@@ -817,7 +811,7 @@ export default function ShippingManagement() {
                               {order.status}
                             </Badge>
                           </div>
-                          
+
                           <div className="space-y-2">
                             <div className="flex justify-between text-sm">
                               <span className="text-slate-300">Amount:</span>
@@ -834,7 +828,7 @@ export default function ShippingManagement() {
                               </div>
                             )}
                           </div>
-                          
+
                           <div className="flex justify-end gap-2 mt-4">
                             <Button 
                               size="sm"
@@ -934,7 +928,7 @@ export default function ShippingManagement() {
                           </p>
                         </div>
                       )}
-                      
+
                       <div className="flex justify-center">
                         <Dialog open={isProfileDialogOpen} onOpenChange={setIsProfileDialogOpen}>
                           <DialogTrigger asChild>
@@ -976,7 +970,7 @@ export default function ShippingManagement() {
                                   />
                                 </div>
                               </div>
-                              
+
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                   <Label htmlFor="contactPerson">{t('shipping.contactPerson')}</Label>
@@ -1003,7 +997,7 @@ export default function ShippingManagement() {
                                   />
                                 </div>
                               </div>
-                              
+
                               <div>
                                 <Label htmlFor="contactEmail">{t('shipping.contactEmail')}</Label>
                                 <Input
@@ -1017,7 +1011,7 @@ export default function ShippingManagement() {
                                   placeholder="contact@business.com"
                                 />
                               </div>
-                              
+
                               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                                 <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
                                   <MapPin className="h-4 w-4" />
@@ -1026,7 +1020,7 @@ export default function ShippingManagement() {
                                 <p className="text-sm text-blue-700 mb-4">
                                   Required for compliance with Saudi regulations and accurate delivery
                                 </p>
-                                
+
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                   <div>
                                     <Label htmlFor="buildingNumber">Building Number *</Label>
@@ -1137,7 +1131,7 @@ export default function ShippingManagement() {
                                     </Select>
                                   </div>
                                 </div>
-                                
+
                                 <div className="mt-4">
                                   <Label htmlFor="shortAddressCode">Short Address Code (Optional)</Label>
                                   <Input
@@ -1160,7 +1154,7 @@ export default function ShippingManagement() {
                                   </p>
                                 </div>
                               </div>
-                              
+
                               <div>
                                 <Label htmlFor="defaultCarrier">{t('shipping.defaultCarrier')}</Label>
                                 <Select
@@ -1182,7 +1176,7 @@ export default function ShippingManagement() {
                                   </SelectContent>
                                 </Select>
                               </div>
-                              
+
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
                                   <Label htmlFor="domesticRate">{t('shipping.domesticRate')} (SAR)</Label>
@@ -1224,7 +1218,7 @@ export default function ShippingManagement() {
                                   />
                                 </div>
                               </div>
-                              
+
                               <div>
                                 <Label htmlFor="handlingTime">{t('shipping.handlingTime')} ({t('shipping.days')})</Label>
                                 <Input
@@ -1238,7 +1232,7 @@ export default function ShippingManagement() {
                                   placeholder="3"
                                 />
                               </div>
-                              
+
                               <div>
                                 <Label htmlFor="packagingInstructions">{t('shipping.packagingInstructions')}</Label>
                                 <Textarea
@@ -1251,7 +1245,7 @@ export default function ShippingManagement() {
                                   placeholder={t('shipping.packagingInstructionsPlaceholder')}
                                 />
                               </div>
-                              
+
                               <div>
                                 <Label htmlFor="packagingInstructionsAr">{t('shipping.packagingInstructionsAr')}</Label>
                                 <Textarea
@@ -1264,7 +1258,7 @@ export default function ShippingManagement() {
                                   placeholder={t('shipping.packagingInstructionsArPlaceholder')}
                                 />
                               </div>
-                              
+
                               <div className="flex justify-end gap-2">
                                 <Button 
                                   variant="outline" 
@@ -1442,12 +1436,12 @@ export default function ShippingManagement() {
                     placeholder="1234567890"
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="carrier">{t('shipping.carrier')}</Label>
                   <Select
                     value={trackingData.carrier}
-                    onValueChange={(value) => setTrackingData({
+                    onChange={(value) => setTrackingData({
                       ...trackingData,
                       carrier: value
                     })}
@@ -1464,12 +1458,12 @@ export default function ShippingManagement() {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label htmlFor="status">{t('shipping.status')}</Label>
                   <Select
                     value={trackingData.status}
-                    onValueChange={(value) => setTrackingData({
+                    onChange={(value) => setTrackingData({
                       ...trackingData,
                       status: value as any
                     })}
@@ -1485,7 +1479,7 @@ export default function ShippingManagement() {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label htmlFor="estimatedDelivery">{t('shipping.estimatedDelivery')}</Label>
                   <Input
@@ -1498,7 +1492,7 @@ export default function ShippingManagement() {
                     })}
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="notes">{t('shipping.notes')}</Label>
                   <Textarea
@@ -1511,7 +1505,7 @@ export default function ShippingManagement() {
                     placeholder={t('shipping.notesPlaceholder')}
                   />
                 </div>
-                
+
                 <div className="flex justify-end gap-2">
                   <Button 
                     variant="outline" 
