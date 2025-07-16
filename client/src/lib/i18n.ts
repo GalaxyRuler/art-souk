@@ -967,7 +967,7 @@ const resources = {
         newUsersThisMonth: "New Users This Month",
         systemHealth: "System Health",
         activeUsers: "Active Users",
-        newSubmissions: "New Submissions",
+        newSubmissions: "NewSubmissions",
         systemAlerts: "System Alerts",
         recentActivity: "Recent Activity",
         userManagement: "User Management",
