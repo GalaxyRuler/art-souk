@@ -116,6 +116,9 @@ export default function ShippingManagement() {
   const { data: userRoles, isLoading: isLoadingRoles, error: rolesError } = useQuery<string[]>({
     queryKey: ['/api/user/roles'],
     retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
   // Fetch shipping profile
@@ -501,8 +504,8 @@ export default function ShippingManagement() {
     setSelectedOrders(new Set());
   };
 
-  // Show loading state while checking user roles
-  if (isLoadingRoles) {
+  // Show loading state while checking user roles or if roles are not loaded yet
+  if (isLoadingRoles || !userRoles) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
@@ -513,8 +516,10 @@ export default function ShippingManagement() {
     );
   }
 
-  // Check if user has proper roles
-  if (!userRoles || !Array.isArray(userRoles) || (!userRoles.includes('artist') && !userRoles.includes('gallery'))) {
+  // Check if user has proper roles - with safe null checking
+  const hasValidRoles = Array.isArray(userRoles) && (userRoles.includes('artist') || userRoles.includes('gallery'));
+  
+  if (!hasValidRoles) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
         <Navbar />
