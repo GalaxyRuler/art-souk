@@ -707,19 +707,17 @@ export default function ShippingManagement() {
                       {filteredAndSortedOrders && filteredAndSortedOrders.length > 0 && (
                         <div className="flex items-center gap-2 ml-4">
                           <Button
-                            variant="outline"
                             size="sm"
                             onClick={handleSelectAll}
-                            className="border-white/10 text-white hover:bg-white/10"
+                            className="bg-blue-600 hover:bg-blue-700 text-white border-0"
                           >
                             {selectedOrders.size === (filteredAndSortedOrders?.length || 0) ? 'Deselect All' : 'Select All'}
                           </Button>
                           {selectedOrders.size > 0 && (
                             <Button
-                              variant="outline"
                               size="sm"
                               onClick={handleDeselectAll}
-                              className="border-white/10 text-white hover:bg-white/10"
+                              className="bg-red-600 hover:bg-red-700 text-white border-0"
                             >
                               Clear ({selectedOrders.size})
                             </Button>
@@ -729,23 +727,25 @@ export default function ShippingManagement() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Button
-                        variant="outline"
                         size="sm"
                         onClick={() => setViewMode('grid')}
                         className={cn(
-                          "border-white/10 text-white hover:bg-white/10",
-                          viewMode === 'grid' && "bg-white/20"
+                          "border-0 text-white",
+                          viewMode === 'grid' 
+                            ? "bg-blue-600 hover:bg-blue-700" 
+                            : "bg-gray-600 hover:bg-gray-700"
                         )}
                       >
                         <Grid className="h-4 w-4" />
                       </Button>
                       <Button
-                        variant="outline"
                         size="sm"
                         onClick={() => setViewMode('list')}
                         className={cn(
-                          "border-white/10 text-white hover:bg-white/10",
-                          viewMode === 'list' && "bg-white/20"
+                          "border-0 text-white",
+                          viewMode === 'list' 
+                            ? "bg-blue-600 hover:bg-blue-700" 
+                            : "bg-gray-600 hover:bg-gray-700"
                         )}
                       >
                         <List className="h-4 w-4" />
@@ -819,9 +819,8 @@ export default function ShippingManagement() {
                           <div className="flex justify-end gap-2 mt-4">
                             <Button 
                               size="sm"
-                              variant="outline"
                               onClick={() => openTrackingDialog(order.id)}
-                              className="border-white/10 text-white hover:bg-white/10"
+                              className="bg-blue-600 hover:bg-blue-700 text-white border-0"
                             >
                               <Package className="h-4 w-4 mr-1" />
                               Track
