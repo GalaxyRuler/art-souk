@@ -1,0 +1,193 @@
+client:495 [vite] connecting...
+client:618 [vite] connected.
+i18n.ts:2460 i18next: languageChanged en
+i18n.ts:2460 i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+i18n.ts:2479 i18n initialized with inline resources
+i18n.ts:2480 Sample translation nav.home: Home
+i18n.ts:2481 Sample translation auth.login: Sign In
+i18n.ts:2482 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2483 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2484 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2485 Sample translation collector.tabs.orders: Orders
+i18n.ts:2460 i18next: languageChanged en
+i18n.ts:2460 i18next: init: i18next is already initialized. You should call init just once!
+overrideMethod @ hook.js:608
+output @ i18next.js?v=3aa5341c:208
+warn @ i18next.js?v=3aa5341c:201
+forward @ i18next.js?v=3aa5341c:236
+warn @ i18next.js?v=3aa5341c:225
+finish @ i18next.js?v=3aa5341c:1815
+done @ i18next.js?v=3aa5341c:1948
+(anonymous) @ i18next.js?v=3aa5341c:1963
+loadResources @ i18next.js?v=3aa5341c:1861
+setLng @ i18next.js?v=3aa5341c:1962
+changeLanguage @ i18next.js?v=3aa5341c:1975
+load @ i18next.js?v=3aa5341c:1823
+init @ i18next.js?v=3aa5341c:1826
+(anonymous) @ i18n.ts:2460
+i18n.ts:2460 i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+i18n.ts:2479 i18n initialized with inline resources
+i18n.ts:2480 Sample translation nav.home: Home
+i18n.ts:2481 Sample translation auth.login: Sign In
+i18n.ts:2482 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2483 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2484 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2485 Sample translation collector.tabs.orders: Orders
+content.bundle.js:31149 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+injected.js:1 Script was injected!
+content.js:202 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+ShippingManagement.tsx:134 🔍 userRolesData: {roles: Array(3), setupComplete: true}
+ShippingManagement.tsx:139 🔍 userRolesData.roles: (3) ['collector', 'artist', 'gallery']
+ShippingManagement.tsx:148 ✅ Returning valid roles array: (3) ['collector', 'artist', 'gallery']
+ShippingManagement.tsx:179 🔍 Orders data: undefined
+ShippingManagement.tsx:180 🔍 Orders length: undefined
+ShippingManagement.tsx:181 🔍 Orders isArray: false
+ShippingManagement.tsx:182 🔍 Shipping profile: undefined
+ShippingManagement.tsx:183 🔍 User roles: (3) ['collector', 'artist', 'gallery']
+ShippingManagement.tsx:184 🔍 isLoadingOrders: true
+ShippingManagement.tsx:185 🔍 isLoadingProfile: true
+ShippingManagement.tsx:134 🔍 userRolesData: {roles: Array(3), setupComplete: true}
+ShippingManagement.tsx:139 🔍 userRolesData.roles: (3) ['collector', 'artist', 'gallery']
+ShippingManagement.tsx:148 ✅ Returning valid roles array: (3) ['collector', 'artist', 'gallery']
+ShippingManagement.tsx:179 🔍 Orders data: undefined
+ShippingManagement.tsx:180 🔍 Orders length: undefined
+ShippingManagement.tsx:181 🔍 Orders isArray: false
+ShippingManagement.tsx:182 🔍 Shipping profile: undefined
+ShippingManagement.tsx:183 🔍 User roles: (3) ['collector', 'artist', 'gallery']
+ShippingManagement.tsx:184 🔍 isLoadingOrders: true
+ShippingManagement.tsx:185 🔍 isLoadingProfile: true
+ShippingManagement.tsx:186 Uncaught ReferenceError: Cannot access 'filteredAndSortedOrders' before initialization
+    at ShippingManagement (ShippingManagement.tsx:186:53)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=3aa5341c:11548:26)
+    at updateFunctionComponent (chunk-RPCDYKBN.js?v=3aa5341c:14582:28)
+    at mountLazyComponent (chunk-RPCDYKBN.js?v=3aa5341c:14833:23)
+    at beginWork (chunk-RPCDYKBN.js?v=3aa5341c:15918:22)
+    at HTMLUnknownElement.callCallback2 (chunk-RPCDYKBN.js?v=3aa5341c:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-RPCDYKBN.js?v=3aa5341c:3699:24)
+    at invokeGuardedCallback (chunk-RPCDYKBN.js?v=3aa5341c:3733:39)
+    at beginWork$1 (chunk-RPCDYKBN.js?v=3aa5341c:19765:15)
+    at performUnitOfWork (chunk-RPCDYKBN.js?v=3aa5341c:19198:20)
+ShippingManagement @ ShippingManagement.tsx:186
+renderWithHooks @ chunk-RPCDYKBN.js?v=3aa5341c:11548
+updateFunctionComponent @ chunk-RPCDYKBN.js?v=3aa5341c:14582
+mountLazyComponent @ chunk-RPCDYKBN.js?v=3aa5341c:14833
+beginWork @ chunk-RPCDYKBN.js?v=3aa5341c:15918
+callCallback2 @ chunk-RPCDYKBN.js?v=3aa5341c:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=3aa5341c:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=3aa5341c:3733
+beginWork$1 @ chunk-RPCDYKBN.js?v=3aa5341c:19765
+performUnitOfWork @ chunk-RPCDYKBN.js?v=3aa5341c:19198
+workLoopConcurrent @ chunk-RPCDYKBN.js?v=3aa5341c:19189
+renderRootConcurrent @ chunk-RPCDYKBN.js?v=3aa5341c:19164
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=3aa5341c:18678
+workLoop @ chunk-RPCDYKBN.js?v=3aa5341c:197
+flushWork @ chunk-RPCDYKBN.js?v=3aa5341c:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=3aa5341c:384
+ShippingManagement.tsx:134 🔍 userRolesData: {roles: Array(3), setupComplete: true}
+ShippingManagement.tsx:139 🔍 userRolesData.roles: (3) ['collector', 'artist', 'gallery']
+ShippingManagement.tsx:148 ✅ Returning valid roles array: (3) ['collector', 'artist', 'gallery']
+ShippingManagement.tsx:179 🔍 Orders data: undefined
+ShippingManagement.tsx:180 🔍 Orders length: undefined
+ShippingManagement.tsx:181 🔍 Orders isArray: false
+ShippingManagement.tsx:182 🔍 Shipping profile: undefined
+ShippingManagement.tsx:183 🔍 User roles: (3) ['collector', 'artist', 'gallery']
+ShippingManagement.tsx:184 🔍 isLoadingOrders: true
+ShippingManagement.tsx:185 🔍 isLoadingProfile: true
+ShippingManagement.tsx:134 🔍 userRolesData: {roles: Array(3), setupComplete: true}
+ShippingManagement.tsx:139 🔍 userRolesData.roles: (3) ['collector', 'artist', 'gallery']
+ShippingManagement.tsx:148 ✅ Returning valid roles array: (3) ['collector', 'artist', 'gallery']
+ShippingManagement.tsx:179 🔍 Orders data: undefined
+ShippingManagement.tsx:180 🔍 Orders length: undefined
+ShippingManagement.tsx:181 🔍 Orders isArray: false
+ShippingManagement.tsx:182 🔍 Shipping profile: undefined
+ShippingManagement.tsx:183 🔍 User roles: (3) ['collector', 'artist', 'gallery']
+ShippingManagement.tsx:184 🔍 isLoadingOrders: true
+ShippingManagement.tsx:185 🔍 isLoadingProfile: true
+ShippingManagement.tsx:186 Uncaught ReferenceError: Cannot access 'filteredAndSortedOrders' before initialization
+    at ShippingManagement (ShippingManagement.tsx:186:53)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=3aa5341c:11548:26)
+    at updateFunctionComponent (chunk-RPCDYKBN.js?v=3aa5341c:14582:28)
+    at mountLazyComponent (chunk-RPCDYKBN.js?v=3aa5341c:14833:23)
+    at beginWork (chunk-RPCDYKBN.js?v=3aa5341c:15918:22)
+    at HTMLUnknownElement.callCallback2 (chunk-RPCDYKBN.js?v=3aa5341c:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-RPCDYKBN.js?v=3aa5341c:3699:24)
+    at invokeGuardedCallback (chunk-RPCDYKBN.js?v=3aa5341c:3733:39)
+    at beginWork$1 (chunk-RPCDYKBN.js?v=3aa5341c:19765:15)
+    at performUnitOfWork (chunk-RPCDYKBN.js?v=3aa5341c:19198:20)
+ShippingManagement @ ShippingManagement.tsx:186
+renderWithHooks @ chunk-RPCDYKBN.js?v=3aa5341c:11548
+updateFunctionComponent @ chunk-RPCDYKBN.js?v=3aa5341c:14582
+mountLazyComponent @ chunk-RPCDYKBN.js?v=3aa5341c:14833
+beginWork @ chunk-RPCDYKBN.js?v=3aa5341c:15918
+callCallback2 @ chunk-RPCDYKBN.js?v=3aa5341c:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=3aa5341c:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=3aa5341c:3733
+beginWork$1 @ chunk-RPCDYKBN.js?v=3aa5341c:19765
+performUnitOfWork @ chunk-RPCDYKBN.js?v=3aa5341c:19198
+workLoopSync @ chunk-RPCDYKBN.js?v=3aa5341c:19137
+renderRootSync @ chunk-RPCDYKBN.js?v=3aa5341c:19116
+recoverFromConcurrentError @ chunk-RPCDYKBN.js?v=3aa5341c:18736
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=3aa5341c:18684
+workLoop @ chunk-RPCDYKBN.js?v=3aa5341c:197
+flushWork @ chunk-RPCDYKBN.js?v=3aa5341c:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=3aa5341c:384
+hook.js:608 The above error occurred in the <ShippingManagement> component:
+
+    at ShippingManagement (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/pages/ShippingManagement.tsx?t=1752669758977:40:17)
+    at Route (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=3aa5341c:323:16)
+    at Switch (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=3aa5341c:379:17)
+    at Suspense
+    at Router (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/App.tsx?t=1752669758977&v=zObebZFYvmq1ElRG0EPTC:118:42)
+    at Provider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-UBQ2LXDH.js?v=3aa5341c:22:15)
+    at TooltipProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=3aa5341c:60:5)
+    at I18nextProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/react-i18next.js?v=3aa5341c:793:3)
+    at QueryClientProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=3aa5341c:2805:3)
+    at ErrorBoundary (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ErrorBoundary.tsx:10:5)
+    at App
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+overrideMethod @ hook.js:608
+logCapturedError @ chunk-RPCDYKBN.js?v=3aa5341c:14032
+callback @ chunk-RPCDYKBN.js?v=3aa5341c:14078
+callCallback @ chunk-RPCDYKBN.js?v=3aa5341c:11248
+commitUpdateQueue @ chunk-RPCDYKBN.js?v=3aa5341c:11265
+commitLayoutEffectOnFiber @ chunk-RPCDYKBN.js?v=3aa5341c:17075
+commitLayoutMountEffects_complete @ chunk-RPCDYKBN.js?v=3aa5341c:17980
+commitLayoutEffects_begin @ chunk-RPCDYKBN.js?v=3aa5341c:17969
+commitLayoutEffects @ chunk-RPCDYKBN.js?v=3aa5341c:17920
+commitRootImpl @ chunk-RPCDYKBN.js?v=3aa5341c:19353
+commitRoot @ chunk-RPCDYKBN.js?v=3aa5341c:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=3aa5341c:18760
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=3aa5341c:18718
+workLoop @ chunk-RPCDYKBN.js?v=3aa5341c:197
+flushWork @ chunk-RPCDYKBN.js?v=3aa5341c:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=3aa5341c:384
+ErrorBoundary.tsx:29 Error caught by boundary: ReferenceError: Cannot access 'filteredAndSortedOrders' before initialization
+    at ShippingManagement (ShippingManagement.tsx:186:53)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=3aa5341c:11548:26)
+    at updateFunctionComponent (chunk-RPCDYKBN.js?v=3aa5341c:14582:28)
+    at mountLazyComponent (chunk-RPCDYKBN.js?v=3aa5341c:14833:23)
+    at beginWork (chunk-RPCDYKBN.js?v=3aa5341c:15918:22)
+    at beginWork$1 (chunk-RPCDYKBN.js?v=3aa5341c:19753:22)
+    at performUnitOfWork (chunk-RPCDYKBN.js?v=3aa5341c:19198:20)
+    at workLoopSync (chunk-RPCDYKBN.js?v=3aa5341c:19137:13)
+    at renderRootSync (chunk-RPCDYKBN.js?v=3aa5341c:19116:15)
+    at recoverFromConcurrentError (chunk-RPCDYKBN.js?v=3aa5341c:18736:28) {componentStack: '\n    at ShippingManagement (https://ec34765c-37ae-…src/components/ErrorBoundary.tsx:10:5)\n    at App'} Error Component Stack
+    at ErrorBoundary (ErrorBoundary.tsx:19:5)
+    at App (<anonymous>)
+overrideMethod @ hook.js:608
+componentDidCatch @ ErrorBoundary.tsx:29
+callback @ chunk-RPCDYKBN.js?v=3aa5341c:14084
+callCallback @ chunk-RPCDYKBN.js?v=3aa5341c:11248
+commitUpdateQueue @ chunk-RPCDYKBN.js?v=3aa5341c:11265
+commitLayoutEffectOnFiber @ chunk-RPCDYKBN.js?v=3aa5341c:17075
+commitLayoutMountEffects_complete @ chunk-RPCDYKBN.js?v=3aa5341c:17980
+commitLayoutEffects_begin @ chunk-RPCDYKBN.js?v=3aa5341c:17969
+commitLayoutEffects @ chunk-RPCDYKBN.js?v=3aa5341c:17920
+commitRootImpl @ chunk-RPCDYKBN.js?v=3aa5341c:19353
+commitRoot @ chunk-RPCDYKBN.js?v=3aa5341c:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=3aa5341c:18760
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=3aa5341c:18718
+workLoop @ chunk-RPCDYKBN.js?v=3aa5341c:197
+flushWork @ chunk-RPCDYKBN.js?v=3aa5341c:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=3aa5341c:384

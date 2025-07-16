@@ -183,7 +183,6 @@ export default function ShippingManagement() {
   console.log('🔍 User roles:', userRoles);
   console.log('🔍 isLoadingOrders:', isLoadingOrders);
   console.log('🔍 isLoadingProfile:', isLoadingProfile);
-  console.log('🔍 filteredAndSortedOrders length:', filteredAndSortedOrders?.length);
   
   // If we have orders data, log the first order to check structure
   if (orders && orders.length > 0) {
