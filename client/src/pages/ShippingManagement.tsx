@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -11,7 +11,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { toast } from '@/hooks/use-toast';
-import { Truck, Package, MapPin, Clock, Settings, Phone, Mail, Building, Plus, Edit, Trash2, Check } from 'lucide-react';
+import { Truck, Package, MapPin, Clock, Settings, Phone, Mail, Building, Plus, Edit, Trash2, Check, Search, Filter, Grid, List, TrendingUp, TrendingDown, BarChart3, Eye, Calendar, DollarSign, Users, ShoppingCart, AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
 import { apiRequest } from '@/lib/queryClient';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -97,6 +100,17 @@ export default function ShippingManagement() {
     estimatedDelivery: '',
     notes: ''
   });
+
+  // Enhanced state management for advanced features
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterCarrier, setFilterCarrier] = useState('all');
+  const [sortBy, setSortBy] = useState('createdAt');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [selectedOrders, setSelectedOrders] = useState<Set<number>>(new Set());
+  const [showAnalytics, setShowAnalytics] = useState(false);
+  const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
   // Fetch user roles
   const { data: userRoles } = useQuery<string[]>({
@@ -211,10 +225,281 @@ export default function ShippingManagement() {
     'Aramex', 'DHL', 'FedEx', 'UPS', 'Saudi Post', 'SMSA Express', 'J&T Express'
   ];
 
+  // Enhanced Components
+  function ShippingAnalytics() {
+    const totalOrders = orders?.length || 0;
+    const shippedOrders = orders?.filter(o => o.status === 'shipped').length || 0;
+    const inTransitOrders = orders?.filter(o => o.status === 'processing').length || 0;
+    const deliveredOrders = orders?.filter(o => o.status === 'delivered').length || 0;
+    const totalRevenue = orders?.reduce((sum, order) => sum + (order.totalAmount || 0), 0) || 0;
+    
+    return (
+      <Card className="mb-6 bg-white/10 backdrop-blur-sm border-white/20">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center gap-2">
+            <BarChart3 className="h-5 w-5" />
+            Shipping Analytics
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-blue-500/20 p-4 rounded-lg border border-blue-500/30">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-500/30 rounded-lg">
+                  <Package className="h-5 w-5 text-blue-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-slate-300">Total Orders</p>
+                  <p className="text-2xl font-bold text-white">{totalOrders}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-green-500/20 p-4 rounded-lg border border-green-500/30">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-green-500/30 rounded-lg">
+                  <CheckCircle2 className="h-5 w-5 text-green-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-slate-300">Delivered</p>
+                  <p className="text-2xl font-bold text-white">{deliveredOrders}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-orange-500/20 p-4 rounded-lg border border-orange-500/30">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-orange-500/30 rounded-lg">
+                  <Truck className="h-5 w-5 text-orange-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-slate-300">In Transit</p>
+                  <p className="text-2xl font-bold text-white">{inTransitOrders}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-purple-500/20 p-4 rounded-lg border border-purple-500/30">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-500/30 rounded-lg">
+                  <DollarSign className="h-5 w-5 text-purple-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-slate-300">Total Revenue</p>
+                  <p className="text-2xl font-bold text-white">{totalRevenue.toLocaleString()} SAR</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-6 space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-slate-300">Delivery Success Rate</span>
+                <span className="text-sm font-medium text-white">
+                  {totalOrders > 0 ? Math.round((deliveredOrders / totalOrders) * 100) : 0}%
+                </span>
+              </div>
+              <Progress 
+                value={totalOrders > 0 ? (deliveredOrders / totalOrders) * 100 : 0} 
+                className="h-2" 
+              />
+            </div>
+            
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-slate-300">Orders In Transit</span>
+                <span className="text-sm font-medium text-white">
+                  {totalOrders > 0 ? Math.round((inTransitOrders / totalOrders) * 100) : 0}%
+                </span>
+              </div>
+              <Progress 
+                value={totalOrders > 0 ? (inTransitOrders / totalOrders) * 100 : 0} 
+                className="h-2" 
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  function ShippingFilters() {
+    return (
+      <Card className="mb-6 bg-white/10 backdrop-blur-sm border-white/20">
+        <CardContent className="p-4">
+          <div className="flex flex-wrap gap-4 items-center">
+            <div className="flex-1 min-w-64">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input
+                  placeholder="Search orders, customers, or tracking numbers..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 bg-white/5 border-white/10 text-white placeholder-gray-400"
+                />
+              </div>
+            </div>
+            
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white">
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="confirmed">Confirmed</SelectItem>
+                <SelectItem value="processing">Processing</SelectItem>
+                <SelectItem value="shipped">Shipped</SelectItem>
+                <SelectItem value="delivered">Delivered</SelectItem>
+                <SelectItem value="cancelled">Cancelled</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <Select value={filterCarrier} onValueChange={setFilterCarrier}>
+              <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white">
+                <SelectValue placeholder="Filter by carrier" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Carriers</SelectItem>
+                {carriers.map(carrier => (
+                  <SelectItem key={carrier} value={carrier}>{carrier}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="createdAt">Sort by Date</SelectItem>
+                <SelectItem value="orderNumber">Order Number</SelectItem>
+                <SelectItem value="status">Status</SelectItem>
+                <SelectItem value="totalAmount">Amount</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+              className="border-white/10 text-white hover:bg-white/10"
+            >
+              {sortOrder === 'asc' ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  function BulkShippingActions() {
+    if (selectedOrders.size === 0) return null;
+    
+    return (
+      <Card className="mb-6 bg-white/10 backdrop-blur-sm border-white/20">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-white font-medium">
+                {selectedOrders.size} order{selectedOrders.size !== 1 ? 's' : ''} selected
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="outline" className="border-white/10 text-white hover:bg-white/10">
+                <Package className="h-4 w-4 mr-1" />
+                Add Tracking
+              </Button>
+              <Button size="sm" variant="outline" className="border-white/10 text-white hover:bg-white/10">
+                <Edit className="h-4 w-4 mr-1" />
+                Update Status
+              </Button>
+              <Button size="sm" variant="outline" className="border-white/10 text-white hover:bg-white/10">
+                <Mail className="h-4 w-4 mr-1" />
+                Send Notification
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   const saudCities = [
     'Riyadh', 'Jeddah', 'Mecca', 'Medina', 'Dammam', 'Khobar', 'Dhahran',
     'Tabuk', 'Buraidah', 'Khamis Mushait', 'Hofuf', 'Taif', 'Najran', 'Jubail'
   ];
+
+  // Memoized filtering and sorting
+  const filteredAndSortedOrders = React.useMemo(() => {
+    if (!orders) return [];
+    
+    let filtered = orders.filter(order => {
+      // Search filter
+      const searchLower = searchTerm.toLowerCase();
+      const matchesSearch = !searchTerm || 
+        order.orderNumber?.toLowerCase().includes(searchLower) ||
+        order.user?.firstName?.toLowerCase().includes(searchLower) ||
+        order.user?.lastName?.toLowerCase().includes(searchLower) ||
+        order.artwork?.title?.toLowerCase().includes(searchLower) ||
+        order.trackingNumber?.toLowerCase().includes(searchLower);
+      
+      // Status filter
+      const matchesStatus = filterStatus === 'all' || order.status === filterStatus;
+      
+      // Carrier filter
+      const matchesCarrier = filterCarrier === 'all' || order.carrier === filterCarrier;
+      
+      return matchesSearch && matchesStatus && matchesCarrier;
+    });
+    
+    // Sort orders
+    filtered.sort((a, b) => {
+      let aValue, bValue;
+      
+      switch (sortBy) {
+        case 'orderNumber':
+          aValue = a.orderNumber || '';
+          bValue = b.orderNumber || '';
+          break;
+        case 'status':
+          aValue = a.status || '';
+          bValue = b.status || '';
+          break;
+        case 'totalAmount':
+          aValue = a.totalAmount || 0;
+          bValue = b.totalAmount || 0;
+          break;
+        case 'createdAt':
+        default:
+          aValue = new Date(a.createdAt || 0).getTime();
+          bValue = new Date(b.createdAt || 0).getTime();
+          break;
+      }
+      
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      }
+      
+      return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+    });
+    
+    return filtered;
+  }, [orders, searchTerm, filterStatus, filterCarrier, sortBy, sortOrder]);
+
+  // Bulk selection handlers
+  const handleSelectAll = () => {
+    if (selectedOrders.size === filteredAndSortedOrders.length) {
+      setSelectedOrders(new Set());
+    } else {
+      setSelectedOrders(new Set(filteredAndSortedOrders.map(order => order.id)));
+    }
+  };
+
+  const handleDeselectAll = () => {
+    setSelectedOrders(new Set());
+  };
 
   if (!userRoles || (!userRoles.includes('artist') && !userRoles.includes('gallery'))) {
     return (
@@ -251,8 +536,12 @@ export default function ShippingManagement() {
             </p>
           </div>
 
-          <Tabs defaultValue="profile" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-6">
+          <Tabs defaultValue="analytics" className="w-full">
+            <TabsList className="grid w-full grid-cols-4 mb-6">
+              <TabsTrigger value="analytics" className="flex items-center gap-2">
+                <BarChart3 className="h-4 w-4" />
+                Analytics
+              </TabsTrigger>
               <TabsTrigger value="profile" className="flex items-center gap-2">
                 <Settings className="h-4 w-4" />
                 {t('shipping.profile')}
@@ -266,6 +555,161 @@ export default function ShippingManagement() {
                 {t('shipping.orders')}
               </TabsTrigger>
             </TabsList>
+
+            {/* Analytics Tab */}
+            <TabsContent value="analytics">
+              <ShippingAnalytics />
+              <ShippingFilters />
+              <BulkShippingActions />
+              
+              <Card className="bg-white/10 backdrop-blur-sm border-white/20">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Package className="h-5 w-5" />
+                      Order Management ({filteredAndSortedOrders.length} orders)
+                      {filteredAndSortedOrders.length > 0 && (
+                        <div className="flex items-center gap-2 ml-4">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleSelectAll}
+                            className="border-white/10 text-white hover:bg-white/10"
+                          >
+                            {selectedOrders.size === filteredAndSortedOrders.length ? 'Deselect All' : 'Select All'}
+                          </Button>
+                          {selectedOrders.size > 0 && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={handleDeselectAll}
+                              className="border-white/10 text-white hover:bg-white/10"
+                            >
+                              Clear ({selectedOrders.size})
+                            </Button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setViewMode('grid')}
+                        className={cn(
+                          "border-white/10 text-white hover:bg-white/10",
+                          viewMode === 'grid' && "bg-white/20"
+                        )}
+                      >
+                        <Grid className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setViewMode('list')}
+                        className={cn(
+                          "border-white/10 text-white hover:bg-white/10",
+                          viewMode === 'list' && "bg-white/20"
+                        )}
+                      >
+                        <List className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {filteredAndSortedOrders.length > 0 ? (
+                    <div className={cn(
+                      "gap-4",
+                      viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "space-y-4"
+                    )}>
+                      {filteredAndSortedOrders.map((order) => (
+                        <div 
+                          key={order.id} 
+                          className={cn(
+                            "bg-white/5 rounded-lg p-4 border border-white/10 relative",
+                            selectedOrders.has(order.id) && "ring-2 ring-blue-500 bg-blue-500/10"
+                          )}
+                        >
+                          <div className="absolute top-3 right-3">
+                            <Checkbox
+                              checked={selectedOrders.has(order.id)}
+                              onCheckedChange={(checked) => {
+                                const newSelected = new Set(selectedOrders);
+                                if (checked) {
+                                  newSelected.add(order.id);
+                                } else {
+                                  newSelected.delete(order.id);
+                                }
+                                setSelectedOrders(newSelected);
+                              }}
+                            />
+                          </div>
+                          
+                          <div className="flex justify-between items-start mb-3 mr-8">
+                            <div>
+                              <p className="text-white font-semibold">
+                                Order #{order.orderNumber}
+                              </p>
+                              <p className="text-slate-300 text-sm">
+                                {order.user?.firstName} {order.user?.lastName}
+                              </p>
+                              <p className="text-slate-300 text-sm">
+                                {order.artwork?.title}
+                              </p>
+                            </div>
+                            <Badge className={getStatusColor(order.status)}>
+                              {order.status}
+                            </Badge>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-slate-300">Amount:</span>
+                              <span className="text-white">{order.totalAmount?.toLocaleString()} SAR</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-slate-300">Date:</span>
+                              <span className="text-white">{new Date(order.createdAt).toLocaleDateString()}</span>
+                            </div>
+                            {order.trackingNumber && (
+                              <div className="flex justify-between text-sm">
+                                <span className="text-slate-300">Tracking:</span>
+                                <span className="text-white">{order.trackingNumber}</span>
+                              </div>
+                            )}
+                          </div>
+                          
+                          <div className="flex justify-end gap-2 mt-4">
+                            <Button 
+                              size="sm"
+                              variant="outline"
+                              onClick={() => openTrackingDialog(order.id)}
+                              className="border-white/10 text-white hover:bg-white/10"
+                            >
+                              <Package className="h-4 w-4 mr-1" />
+                              Track
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <Package className="h-16 w-16 text-slate-400 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-white mb-2">
+                        {orders && orders.length > 0 ? 'No Matching Orders' : 'No Orders Found'}
+                      </h3>
+                      <p className="text-slate-300">
+                        {orders && orders.length > 0 
+                          ? 'No orders match your current filters. Try adjusting your search or filter criteria.' 
+                          : 'Orders will appear here when customers purchase your artworks.'}
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
 
             {/* Shipping Profile Tab */}
             <TabsContent value="profile">
