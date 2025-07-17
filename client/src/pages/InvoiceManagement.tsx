@@ -421,7 +421,7 @@ export default function InvoiceManagement() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {isLoading ? (
+                  {isLoadingInvoices ? (
                     <div className="flex items-center justify-center py-12">
                       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div>
                     </div>
