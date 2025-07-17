@@ -115,10 +115,12 @@ export default function InvoiceManagement() {
   });
 
   // Fetch user roles
-  const { data: userRoles } = useQuery<string[]>({
+  const { data: userRoleData } = useQuery<{roles: string[], setupComplete: boolean}>({
     queryKey: ['/api/user/roles'],
     retry: false,
   });
+
+  const userRoles = userRoleData?.roles || [];
 
   // Fetch invoices
   const { data: invoices, isLoading } = useQuery<Invoice[]>({
