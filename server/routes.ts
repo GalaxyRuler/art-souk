@@ -4517,13 +4517,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         invoiceHash,
         zatcaUuid,
         status: 'draft',
-        issueDate: new Date().toISOString(),
-        dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
-        sellerBusinessName: req.body.seller_business_name || user?.firstName + ' ' + user?.lastName,
-        sellerBusinessNameAr: req.body.seller_business_name_ar || user?.firstName + ' ' + user?.lastName,
-        sellerAddress: req.body.seller_address || 'Saudi Arabia',
-        buyerAddress: req.body.buyer_address,
-        invoiceType: req.body.invoice_type || 'standard'
+        issueDate: new Date(),
+        dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        sellerBusinessName: req.body.seller_business_name || `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || 'Art Souk Seller',
+        sellerBusinessNameAr: req.body.seller_business_name_ar || `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || 'بائع سوق الفن',
+        sellerAddress: req.body.seller_address || { country: 'Saudi Arabia' },
+        buyerAddress: req.body.buyer_address || { country: 'Saudi Arabia' }
       };
       
       const [invoice] = await db
