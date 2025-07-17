@@ -120,6 +120,10 @@ function Router() {
         {/* Testing: Make seller dashboard accessible for debugging */}
         <Route path="/seller" component={SellerDashboard} />
         
+        {/* Testing: Make invoice management accessible for debugging */}
+        <Route path="/invoice-management" component={InvoiceManagement} />
+        <Route path="/shipping-management" component={ShippingManagement} />
+        
         {/* Authenticated-only routes */}
         {isAuthenticated && (
           <>
@@ -129,8 +133,6 @@ function Router() {
             <Route path="/manage/events" component={ManageEvents} />
             <Route path="/artworks/manage" component={ArtworkManagement} />
             <Route path="/role-selection" component={RoleSelection} />
-            <Route path="/shipping-management" component={ShippingManagement} />
-            <Route path="/invoice-management" component={InvoiceManagement} />
             {/* <Route path="/tap-payment-setup" component={TapPaymentSetup} /> */}
           </>
         )}
