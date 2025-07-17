@@ -613,7 +613,8 @@ export const invoices = pgTable("invoices", {
   buyerId: varchar("buyer_id").references(() => users.id), // Optional for standalone invoices
   
   // ZATCA Required Fields
-  vatNumber: varchar("vat_number"), // VAT registration number
+  vatNumber: varchar("vat_number"), // Seller's VAT registration number
+  buyerVatNumber: varchar("buyer_vat_number"), // Buyer's VAT number (required for B2B)
   vatRate: decimal("vat_rate", { precision: 5, scale: 2 }).default("15.00"), // 15% VAT in Saudi Arabia
   subtotal: decimal("subtotal", { precision: 10, scale: 2 }).notNull(),
   vatAmount: decimal("vat_amount", { precision: 10, scale: 2 }).notNull(),
@@ -631,17 +632,52 @@ export const invoices = pgTable("invoices", {
   invoiceHash: varchar("invoice_hash"), // Cryptographic hash
   previousInvoiceHash: varchar("previous_invoice_hash"), // Hash of previous invoice
   
+  // Invoice type and transaction details
+  invoiceType: varchar("invoice_type").default("standard"), // standard (B2B) or simplified (B2C)
+  transactionType: varchar("transaction_type").default("sale"), // sale, refund, debit_note, credit_note
+  paymentMethod: varchar("payment_method"), // cash, credit, bank_transfer, etc.
+  
+  // Commercial Registration and Tax details
+  sellerCrNumber: varchar("seller_cr_number"), // Commercial Registration Number
+  sellerBuildingNumber: varchar("seller_building_number"), // Saudi National Address
+  sellerStreetName: varchar("seller_street_name"),
+  sellerDistrict: varchar("seller_district"),
+  sellerCity: varchar("seller_city"),
+  sellerPostalCode: varchar("seller_postal_code"),
+  sellerAdditionalNumber: varchar("seller_additional_number"),
+  
   // Invoice status
-  status: varchar("status").default("draft"), // draft, sent, paid, cancelled
+  status: varchar("status").default("draft"), // draft, sent, paid, cancelled, refunded
   issueDate: timestamp("issue_date").defaultNow(),
   dueDate: timestamp("due_date"),
   paidDate: timestamp("paid_date"),
+  supplyDate: timestamp("supply_date"), // Date of supply (ZATCA requirement)
   
   // Additional business info
   sellerBusinessName: varchar("seller_business_name").notNull(),
   sellerBusinessNameAr: varchar("seller_business_name_ar").notNull(),
   sellerAddress: jsonb("seller_address").notNull(), // Full address with postal code
   buyerAddress: jsonb("buyer_address").notNull(),
+  buyerName: varchar("buyer_name"), // Buyer's full name
+  
+  // ZATCA submission details
+  zatcaSubmissionDate: timestamp("zatca_submission_date"),
+  zatcaResponseCode: varchar("zatca_response_code"),
+  zatcaClearanceStatus: varchar("zatca_clearance_status"), // cleared, rejected, pending
+  zatcaWarnings: jsonb("zatca_warnings"), // Array of warnings from ZATCA
+  
+  // Line items for detailed invoicing
+  lineItems: jsonb("line_items"), // Array of {description, quantity, unitPrice, vatRate, vatAmount, totalAmount}
+  
+  // Additional charges and discounts
+  discountAmount: decimal("discount_amount", { precision: 10, scale: 2 }).default("0"),
+  discountPercentage: decimal("discount_percentage", { precision: 5, scale: 2 }).default("0"),
+  shippingAmount: decimal("shipping_amount", { precision: 10, scale: 2 }).default("0"),
+  
+  // Notes and references
+  notes: text("notes"),
+  notesAr: text("notes_ar"),
+  referenceNumber: varchar("reference_number"), // Purchase order or contract reference
   
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

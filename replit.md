@@ -203,6 +203,21 @@ Preferred communication style: Simple, everyday language.
     • Added all 29 required fields including VAT calculations, digital signatures, QR codes, and bilingual descriptions
     • Resolved "relation 'invoices' does not exist" error that was preventing invoice management access
     • Database now supports full ZATCA compliance with Saudi Arabia tax regulations
+- January 17, 2025: Enhanced ZATCA Compliance with Additional Required Fields
+  ✓ **Extended Invoice Table for Full ZATCA Phase 2 Compliance**: Added 25 additional columns for complete Saudi tax compliance
+    • Added buyer VAT number field for B2B transactions
+    • Added complete Saudi National Address fields (building number, street, district, city, postal code, additional number)
+    • Added invoice type (standard/simplified) and transaction type (sale/refund/credit_note/debit_note)
+    • Added commercial registration number field for seller identification
+    • Added supply date field as required by ZATCA regulations
+    • Added buyer name field for proper invoice recipient identification
+    • Added ZATCA submission tracking fields (submission date, response code, clearance status, warnings)
+    • Added line items JSONB field for detailed product/service breakdown
+    • Added discount fields (amount and percentage) and shipping amount
+    • Added bilingual notes fields (Arabic and English)
+    • Added reference number field for purchase order/contract tracking
+  ✓ **Database Schema Updated**: All 54 columns now present in invoices table for complete ZATCA compliance
+  ✓ **Production Ready**: Invoice system now supports all ZATCA Phase 1 and Phase 2 requirements
   ✓ **Access Control Logic Fixed**: Resolved "Access Denied" error preventing artists and galleries from accessing invoice management
     • Fixed frontend role checking to properly extract roles from API response object
     • Backend returns {roles: string[], setupComplete: boolean} but frontend was expecting string[]

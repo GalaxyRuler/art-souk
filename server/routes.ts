@@ -4484,11 +4484,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Generate QR code data (ZATCA requirement)
       const qrCodeData = {
-        sellerName: req.body.seller_business_name || req.body.buyer_name,
+        sellerName: req.body.seller_business_name || `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || 'Art Souk Seller',
         vatNumber: req.body.buyer_vat_number || '000000000',
         timestamp: new Date().toISOString(),
         total: totalAmount,
-        vatAmount: vatAmount
+        vatAmount: vatAmount,
+        buyerName: req.body.buyer_name
       };
       const qrCode = Buffer.from(JSON.stringify(qrCodeData)).toString('base64');
       
@@ -4522,7 +4523,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         sellerBusinessName: req.body.seller_business_name || `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || 'Art Souk Seller',
         sellerBusinessNameAr: req.body.seller_business_name_ar || `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || 'بائع سوق الفن',
         sellerAddress: req.body.seller_address || { country: 'Saudi Arabia' },
-        buyerAddress: req.body.buyer_address || { country: 'Saudi Arabia' }
+        buyerAddress: {
+          name: req.body.buyer_name,
+          address: req.body.buyer_address || '',
+          country: 'Saudi Arabia'
+        }
       };
       
       const [invoice] = await db

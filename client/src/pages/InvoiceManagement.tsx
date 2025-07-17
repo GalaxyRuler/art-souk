@@ -300,9 +300,9 @@ export default function InvoiceManagement() {
                                 <h3 className="text-lg font-semibold">{invoice.invoice_number}</h3>
                                 {getStatusBadge(invoice.status)}
                               </div>
-                              <p className="text-gray-600 mb-1">{invoice.buyer_name}</p>
+                              <p className="text-gray-600 mb-1">{invoice.buyer_address?.name || invoice.buyer_name || 'N/A'}</p>
                               <p className="text-sm text-gray-500">
-                                {format(new Date(invoice.created_at), 'PPP')}
+                                {invoice.created_at ? format(new Date(invoice.created_at), 'PPP') : format(new Date(invoice.issue_date), 'PPP')}
                               </p>
                               <p className="text-lg font-semibold text-amber-600 mt-2">
                                 {invoice.total_amount.toLocaleString()} SAR
