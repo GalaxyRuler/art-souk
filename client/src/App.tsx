@@ -18,6 +18,7 @@ import Home from "@/pages/Home";
 import Auth from "@/pages/Auth";
 import Dashboard from "@/pages/Dashboard";
 import InvoiceManagement from "@/pages/InvoiceManagement";
+import InvoiceTest from "@/pages/InvoiceTest";
 
 // Lazy load non-critical pages for better performance
 const Artists = lazy(() => import("@/pages/Artists"));
@@ -121,12 +122,9 @@ function Router() {
         <Route path="/seller" component={SellerDashboard} />
         
         {/* Testing: Make invoice management accessible for debugging */}
-        <Route path="/invoice-management">
-          <InvoiceManagement />
-        </Route>
-        <Route path="/shipping-management">
-          <ShippingManagement />
-        </Route>
+        <Route path="/invoice-test" component={InvoiceTest} />
+        <Route path="/invoice-management" component={InvoiceManagement} />
+        <Route path="/shipping-management" component={ShippingManagement} />
         
         {/* Authenticated-only routes */}
         {isAuthenticated && (
