@@ -17,6 +17,7 @@ import Landing from "@/pages/Landing";
 import Home from "@/pages/Home";
 import Auth from "@/pages/Auth";
 import Dashboard from "@/pages/Dashboard";
+import InvoiceManagement from "@/pages/InvoiceManagement";
 
 // Lazy load non-critical pages for better performance
 const Artists = lazy(() => import("@/pages/Artists"));
@@ -45,7 +46,6 @@ const TestCommissions = lazy(() => import("@/pages/TestCommissions"));
 const RoleSelection = lazy(() => import("@/pages/RoleSelection"));
 const ArtworkManagement = lazy(() => import("@/pages/ArtworkManagement"));
 const ShippingManagement = lazy(() => import("@/pages/ShippingManagement"));
-const InvoiceManagement = lazy(() => import("@/pages/InvoiceManagement"));
 // const TapPaymentSetup = lazy(() => import("@/pages/TapPaymentSetup")); // Disabled until sufficient traffic
 
 // Admin pages
