@@ -1,0 +1,39 @@
+i18n.ts:2650 i18next: languageChanged en
+i18n.ts:2650 i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+i18n.ts:2669 i18n initialized with inline resources
+i18n.ts:2670 Sample translation nav.home: Home
+i18n.ts:2671 Sample translation auth.login: Sign In
+i18n.ts:2672 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2673 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2674 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2675 Sample translation collector.tabs.orders: Orders
+i18n.ts:2650 i18next: languageChanged en
+i18n.ts:2650 i18next: init: i18next is already initialized. You should call init just once!
+overrideMethod @ hook.js:608
+output @ i18next.js?v=3aa5341c:208
+warn @ i18next.js?v=3aa5341c:201
+forward @ i18next.js?v=3aa5341c:236
+warn @ i18next.js?v=3aa5341c:225
+finish @ i18next.js?v=3aa5341c:1815
+done @ i18next.js?v=3aa5341c:1948
+(anonymous) @ i18next.js?v=3aa5341c:1963
+loadResources @ i18next.js?v=3aa5341c:1861
+setLng @ i18next.js?v=3aa5341c:1962
+changeLanguage @ i18next.js?v=3aa5341c:1975
+load @ i18next.js?v=3aa5341c:1823
+init @ i18next.js?v=3aa5341c:1826
+(anonymous) @ i18n.ts:2650
+i18n.ts:2650 i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+i18n.ts:2669 i18n initialized with inline resources
+i18n.ts:2670 Sample translation nav.home: Home
+i18n.ts:2671 Sample translation auth.login: Sign In
+i18n.ts:2672 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2673 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2674 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2675 Sample translation collector.tabs.orders: Orders
+content.bundle.js:31149 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+injected.js:1 Script was injected!
+content.js:202 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+QalamExtension.js:25 Uncaught (in promise) Error: An unexpected error occurred
+    at h (QalamExtension.js:25:128682)
+h @ QalamExtension.js:25

@@ -121,8 +121,12 @@ function Router() {
         <Route path="/seller" component={SellerDashboard} />
         
         {/* Testing: Make invoice management accessible for debugging */}
-        <Route path="/invoice-management" component={InvoiceManagement} />
-        <Route path="/shipping-management" component={ShippingManagement} />
+        <Route path="/invoice-management">
+          <InvoiceManagement />
+        </Route>
+        <Route path="/shipping-management">
+          <ShippingManagement />
+        </Route>
         
         {/* Authenticated-only routes */}
         {isAuthenticated && (
