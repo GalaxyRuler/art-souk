@@ -18,6 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
+import { InvoiceDetail } from "@/components/InvoiceDetail";
 
 export default function InvoiceManagement() {
   const { t, i18n } = useTranslation();
@@ -25,6 +26,7 @@ export default function InvoiceManagement() {
   const { toast } = useToast();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
 
   // Fetch user roles
   const { data: roleData } = useQuery({
@@ -213,6 +215,13 @@ export default function InvoiceManagement() {
                     invoice_description_ar: formData.get('invoice_description_ar'),
                     amount: parseFloat(formData.get('amount') as string),
                     invoice_type: formData.get('invoice_type'),
+                    payment_method: formData.get('payment_method'),
+                    discount_percentage: formData.get('discount_percentage') ? parseFloat(formData.get('discount_percentage') as string) : 0,
+                    shipping_amount: formData.get('shipping_amount') ? parseFloat(formData.get('shipping_amount') as string) : 0,
+                    reference_number: formData.get('reference_number'),
+                    supply_date: formData.get('supply_date'),
+                    notes: formData.get('notes'),
+                    notes_ar: formData.get('notes_ar'),
                   });
                 }} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
@@ -222,13 +231,42 @@ export default function InvoiceManagement() {
                     </div>
                     <div>
                       <Label htmlFor="buyer_vat_number">{t('invoice.buyerVatNumber')}</Label>
-                      <Input id="buyer_vat_number" name="buyer_vat_number" />
+                      <Input id="buyer_vat_number" name="buyer_vat_number" placeholder="300000000000000" />
                     </div>
                   </div>
                   
                   <div>
                     <Label htmlFor="buyer_address">{t('invoice.buyerAddress')}</Label>
                     <Textarea id="buyer_address" name="buyer_address" required />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="invoice_type">{t('invoice.type')}</Label>
+                      <Select name="invoice_type" defaultValue="standard">
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="standard">{t('invoice.typeStandard')} (B2B)</SelectItem>
+                          <SelectItem value="simplified">{t('invoice.typeSimplified')} (B2C)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="payment_method">{t('invoice.paymentMethod')}</Label>
+                      <select
+                        id="payment_method"
+                        name="payment_method"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      >
+                        <option value="">{t('invoice.selectPaymentMethod')}</option>
+                        <option value="bank_transfer">{t('invoice.bankTransfer')}</option>
+                        <option value="cash">{t('invoice.cash')}</option>
+                        <option value="credit_card">{t('invoice.creditCard')}</option>
+                        <option value="stc_pay">STC Pay</option>
+                      </select>
+                    </div>
                   </div>
                   
                   <div>
@@ -241,23 +279,40 @@ export default function InvoiceManagement() {
                     <Textarea id="invoice_description_ar" name="invoice_description_ar" required dir="rtl" />
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     <div>
                       <Label htmlFor="amount">{t('invoice.amount')}</Label>
                       <Input id="amount" name="amount" type="number" step="0.01" required />
                     </div>
                     <div>
-                      <Label htmlFor="invoice_type">{t('invoice.type')}</Label>
-                      <Select name="invoice_type" defaultValue="standard">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="standard">{t('invoice.typeStandard')}</SelectItem>
-                          <SelectItem value="simplified">{t('invoice.typeSimplified')}</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label htmlFor="discount_percentage">{t('invoice.discountPercentage')}</Label>
+                      <Input id="discount_percentage" name="discount_percentage" type="number" step="0.01" placeholder="0" />
                     </div>
+                    <div>
+                      <Label htmlFor="shipping_amount">{t('invoice.shippingAmount')}</Label>
+                      <Input id="shipping_amount" name="shipping_amount" type="number" step="0.01" placeholder="0" />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="reference_number">{t('invoice.referenceNumber')}</Label>
+                      <Input id="reference_number" name="reference_number" placeholder="PO-12345" />
+                    </div>
+                    <div>
+                      <Label htmlFor="supply_date">{t('invoice.supplyDate')}</Label>
+                      <Input id="supply_date" name="supply_date" type="date" />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="notes">{t('invoice.notes')}</Label>
+                    <Textarea id="notes" name="notes" rows={2} placeholder={t('invoice.notesPlaceholder')} />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="notes_ar">{t('invoice.notesAr')}</Label>
+                    <Textarea id="notes_ar" name="notes_ar" rows={2} dir="rtl" placeholder={t('invoice.notesArPlaceholder')} />
                   </div>
                   
                   <DialogFooter>
@@ -313,7 +368,10 @@ export default function InvoiceManagement() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => setSelectedInvoice(invoice)}
+                                onClick={() => {
+                                  setSelectedInvoice(invoice);
+                                  setDetailDialogOpen(true);
+                                }}
                               >
                                 <Eye className="h-4 w-4 mr-1" />
                                 {t('common.view')}
@@ -358,6 +416,15 @@ export default function InvoiceManagement() {
           ))}
         </Tabs>
       </div>
+      
+      {/* Invoice Detail Dialog */}
+      <InvoiceDetail
+        invoice={selectedInvoice}
+        open={detailDialogOpen}
+        onOpenChange={setDetailDialogOpen}
+        onDownloadPdf={handleDownloadPDF}
+        onSubmitToZatca={handleZATCASubmit}
+      />
       
       <Footer />
     </div>

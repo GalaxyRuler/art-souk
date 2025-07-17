@@ -4500,6 +4500,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate ZATCA UUID
       const zatcaUuid = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       
+      // Calculate discount if provided
+      const discountPercentage = parseFloat(req.body.discount_percentage) || 0;
+      const discountAmount = (subtotal * discountPercentage) / 100;
+      const shippingAmount = parseFloat(req.body.shipping_amount) || 0;
+      
+      // Recalculate with discount and shipping
+      const subtotalAfterDiscount = subtotal - discountAmount;
+      const subtotalWithShipping = subtotalAfterDiscount + shippingAmount;
+      const finalVatAmount = (subtotalWithShipping * vatRate) / 100;
+      const finalTotalAmount = subtotalWithShipping + finalVatAmount;
+
       const invoicePayload = {
         invoiceNumber,
         orderId: req.body.orderId || null,
@@ -4507,16 +4518,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         sellerType,
         buyerId: null, // Standalone invoice
         vatNumber: req.body.buyer_vat_number || null,
+        buyerVatNumber: req.body.buyer_vat_number || null,
         vatRate,
         subtotal,
-        vatAmount,
-        totalAmount,
+        vatAmount: finalVatAmount,
+        totalAmount: finalTotalAmount,
         currency: 'SAR',
         itemDescription: req.body.invoice_description_en,
         itemDescriptionAr: req.body.invoice_description_ar,
         qrCode,
         invoiceHash,
         zatcaUuid,
+        invoiceType: req.body.invoice_type || 'standard',
+        paymentMethod: req.body.payment_method || null,
+        discountAmount,
+        discountPercentage,
+        shippingAmount,
+        referenceNumber: req.body.reference_number || null,
+        supplyDate: req.body.supply_date ? new Date(req.body.supply_date) : new Date(),
+        notes: req.body.notes || null,
+        notesAr: req.body.notes_ar || null,
+        buyerName: req.body.buyer_name || null,
         status: 'draft',
         issueDate: new Date(),
         dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
