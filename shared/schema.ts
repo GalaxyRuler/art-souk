@@ -607,10 +607,10 @@ export const shippingTracking = pgTable("shipping_tracking", {
 export const invoices = pgTable("invoices", {
   id: serial("id").primaryKey(),
   invoiceNumber: varchar("invoice_number").unique().notNull(), // ZATCA-compliant format
-  orderId: integer("order_id").references(() => purchaseOrders.id).notNull(),
+  orderId: integer("order_id").references(() => purchaseOrders.id), // Optional - can create standalone invoices
   sellerId: varchar("seller_id").references(() => users.id).notNull(), // Artist or Gallery
   sellerType: varchar("seller_type").notNull(), // 'artist' or 'gallery'
-  buyerId: varchar("buyer_id").references(() => users.id).notNull(),
+  buyerId: varchar("buyer_id").references(() => users.id), // Optional for standalone invoices
   
   // ZATCA Required Fields
   vatNumber: varchar("vat_number"), // VAT registration number

@@ -4464,23 +4464,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       
-      // Get order details
-      const [order] = await db
+      // Get user details to determine seller type
+      const [user] = await db
         .select()
-        .from(schema.purchaseOrders)
-        .innerJoin(schema.artworks, eq(schema.purchaseOrders.artworkId, schema.artworks.id))
-        .innerJoin(schema.users, eq(schema.purchaseOrders.userId, schema.users.id))
-        .where(and(
-          eq(schema.purchaseOrders.id, req.body.orderId),
-          eq(schema.artworks.artistId, userId)
-        ));
+        .from(schema.users)
+        .where(eq(schema.users.id, userId));
       
-      if (!order) {
-        return res.status(404).json({ message: "Order not found" });
-      }
+      const userRoles = user?.roles || [];
+      const sellerType = userRoles.includes('gallery') ? 'gallery' : 'artist';
       
       // Calculate VAT (15% standard rate in Saudi Arabia)
-      const subtotal = order.purchase_orders.totalAmount;
+      const subtotal = parseFloat(req.body.amount) || 0;
       const vatRate = 15;
       const vatAmount = (subtotal * vatRate) / 100;
       const totalAmount = subtotal + vatAmount;
@@ -4490,8 +4484,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Generate QR code data (ZATCA requirement)
       const qrCodeData = {
-        sellerName: req.body.sellerBusinessName,
-        vatNumber: req.body.vatNumber,
+        sellerName: req.body.seller_business_name || req.body.buyer_name,
+        vatNumber: req.body.buyer_vat_number || '000000000',
         timestamp: new Date().toISOString(),
         total: totalAmount,
         vatAmount: vatAmount
@@ -4502,30 +4496,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const invoiceData = `${invoiceNumber}${new Date().toISOString()}${totalAmount}`;
       const invoiceHash = Buffer.from(invoiceData).toString('base64');
       
-      const invoicePayload = schema.insertInvoiceSchema.parse({
+      // Generate ZATCA UUID
+      const zatcaUuid = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      
+      const invoicePayload = {
         invoiceNumber,
-        orderId: req.body.orderId,
+        orderId: req.body.orderId || null,
         sellerId: userId,
-        sellerType: 'artist', // TODO: Determine from user role
-        buyerId: order.purchase_orders.userId,
-        vatNumber: req.body.vatNumber,
+        sellerType,
+        buyerId: null, // Standalone invoice
+        vatNumber: req.body.buyer_vat_number || null,
         vatRate,
         subtotal,
         vatAmount,
         totalAmount,
         currency: 'SAR',
-        itemDescription: req.body.itemDescription,
-        itemDescriptionAr: req.body.itemDescriptionAr,
+        itemDescription: req.body.invoice_description_en,
+        itemDescriptionAr: req.body.invoice_description_ar,
         qrCode,
         invoiceHash,
+        zatcaUuid,
         status: 'draft',
         issueDate: new Date().toISOString(),
-        dueDate: req.body.dueDate,
-        sellerBusinessName: req.body.sellerBusinessName,
-        sellerBusinessNameAr: req.body.sellerBusinessNameAr,
-        sellerAddress: req.body.sellerAddress,
-        buyerAddress: req.body.buyerAddress
-      });
+        dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
+        sellerBusinessName: req.body.seller_business_name || user?.firstName + ' ' + user?.lastName,
+        sellerBusinessNameAr: req.body.seller_business_name_ar || user?.firstName + ' ' + user?.lastName,
+        sellerAddress: req.body.seller_address || 'Saudi Arabia',
+        buyerAddress: req.body.buyer_address,
+        invoiceType: req.body.invoice_type || 'standard'
+      };
       
       const [invoice] = await db
         .insert(schema.invoices)
