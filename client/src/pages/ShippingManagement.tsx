@@ -573,21 +573,21 @@ export default function ShippingManagement() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="text-purple-800 dark:text-purple-200 font-medium">
-                {selectedOrders.size} order{selectedOrders.size !== 1 ? 's' : ''} selected
+                {selectedOrders.size} {t('shipping.ordersCount')} {t('shipping.selected')}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <Button size="sm" variant="outline" className="border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-800/30">
                 <Package className="h-4 w-4 mr-1" />
-                Add Tracking
+                {t('shipping.addTracking')}
               </Button>
               <Button size="sm" variant="outline" className="border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-800/30">
                 <Edit className="h-4 w-4 mr-1" />
-                Update Status
+                {t('shipping.updateStatus')}
               </Button>
               <Button size="sm" variant="outline" className="border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-800/30">
                 <Mail className="h-4 w-4 mr-1" />
-                Send Notification
+                {t('shipping.sendNotification')}
               </Button>
             </div>
           </div>
@@ -604,7 +604,7 @@ export default function ShippingManagement() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white">Loading user roles...</p>
+          <p className="text-white">{t('shipping.loadingUserRoles')}</p>
         </div>
       </div>
     );
@@ -649,7 +649,7 @@ export default function ShippingManagement() {
             <TabsList className="grid w-full grid-cols-4 mb-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm shadow-lg border border-purple-100 dark:border-purple-900">
               <TabsTrigger value="analytics" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white dark:data-[state=active]:from-purple-600 dark:data-[state=active]:to-pink-600">
                 <BarChart3 className="h-4 w-4" />
-                Analytics
+                {t('shipping.analytics')}
               </TabsTrigger>
               <TabsTrigger value="profile" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white dark:data-[state=active]:from-purple-600 dark:data-[state=active]:to-pink-600">
                 <Settings className="h-4 w-4" />
@@ -687,7 +687,7 @@ export default function ShippingManagement() {
                   <CardTitle className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Package className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                      Order Management ({filteredAndSortedOrders?.length || 0} orders)
+                      {t('shipping.orderManagement')} ({filteredAndSortedOrders?.length || 0} {t('shipping.ordersCount')})
                       {filteredAndSortedOrders && filteredAndSortedOrders.length > 0 && (
                         <div className="flex items-center gap-2 ml-4">
                           <Button
@@ -695,7 +695,7 @@ export default function ShippingManagement() {
                             onClick={handleSelectAll}
                             className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 shadow-md"
                           >
-                            {selectedOrders.size === (filteredAndSortedOrders?.length || 0) ? 'Deselect All' : 'Select All'}
+                            {selectedOrders.size === (filteredAndSortedOrders?.length || 0) ? t('shipping.deselectAll') : t('shipping.selectAll')}
                           </Button>
                           {selectedOrders.size > 0 && (
                             <Button
@@ -703,7 +703,7 @@ export default function ShippingManagement() {
                               onClick={handleDeselectAll}
                               className="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white border-0 shadow-md"
                             >
-                              Clear ({selectedOrders.size})
+                              {t('shipping.clear')} ({selectedOrders.size})
                             </Button>
                           )}
                         </div>
