@@ -148,14 +148,44 @@ export default function InvoiceManagement() {
     }
   }, [userRolesData]);
 
-  // Check if user has proper roles - moved up to prevent temporal dead zone error
-  const hasValidRoles = userRoles && Array.isArray(userRoles) && userRoles.length > 0 && (userRoles.includes('artist') || userRoles.includes('gallery'));
-
   // Fetch invoices
-  const { data: invoices, isLoading } = useQuery<Invoice[]>({
+  const { data: invoices, isLoading: isLoadingInvoices, error: invoicesError } = useQuery<Invoice[]>({
     queryKey: ['/api/invoices'],
     retry: false,
   });
+
+  // Check if user has proper roles - if they can access invoices, they have proper roles
+  const hasValidRoles = useMemo(() => {
+    console.log('🔍 hasValidRoles check:', { 
+      userRoles, 
+      isLoadingRoles, 
+      isLoadingInvoices,
+      invoicesError,
+      userRolesData
+    });
+    
+    // If user can access invoices (no 401 error), they have proper roles
+    if (invoices !== undefined && !invoicesError) {
+      console.log('✅ User can access invoices, has valid roles');
+      return true;
+    }
+    
+    // Fallback to user roles if available
+    if (userRoles && Array.isArray(userRoles) && userRoles.length > 0) {
+      const hasRoles = userRoles.includes('artist') || userRoles.includes('gallery');
+      console.log('✅ User roles check:', { userRoles, hasRoles });
+      return hasRoles;
+    }
+    
+    // If still loading, allow access
+    if (isLoadingRoles || isLoadingInvoices) {
+      console.log('⏳ Still loading, allowing access');
+      return true;
+    }
+    
+    console.log('❌ No valid roles found');
+    return false;
+  }, [userRoles, isLoadingRoles, isLoadingInvoices, invoices, invoicesError, userRolesData]);
 
   // Fetch orders for invoice creation
   const { data: orders } = useQuery<any[]>({

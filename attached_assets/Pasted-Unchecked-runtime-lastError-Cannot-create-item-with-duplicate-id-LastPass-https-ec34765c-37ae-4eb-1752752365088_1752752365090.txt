@@ -1,0 +1,62 @@
+Unchecked runtime.lastError: Cannot create item with duplicate id LastPass https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/dashboard
+Unchecked runtime.lastError: Cannot create item with duplicate id separator https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/dashboard
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Item https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/dashboard
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Password https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/dashboard
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Address https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/dashboard
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Payment Card https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/dashboard
+Unchecked runtime.lastError: Cannot create item with duplicate id Add other item https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/dashboard
+Unchecked runtime.lastError: Cannot create item with duplicate id Save all entered data https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/dashboard
+Unchecked runtime.lastError: Cannot create item with duplicate id Generate Secure Password https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/dashboard
+background-redux-new.js:2 Error: Invalid frameId for foreground frameId: 0
+    at ae (background-redux-new.js:2:7171659)
+    at h (background-redux-new.js:2:7238562)
+    at background-redux-new.js:2:7239564
+ae @ background-redux-new.js:2
+background-redux-new.js:2 Error: Invalid frameId for foreground frameId: 0
+    at ae (background-redux-new.js:2:7171659)
+    at h (background-redux-new.js:2:7238562)
+    at background-redux-new.js:2:7239564
+ae @ background-redux-new.js:2
+background-redux-new.js:2 Error: Invalid frameId for foreground frameId: 0
+    at ae (background-redux-new.js:2:7171659)
+    at h (background-redux-new.js:2:7238562)
+    at background-redux-new.js:2:7239564
+ae @ background-redux-new.js:2
+background-redux-new.js:2 Error: Invalid frameId for foreground frameId: 0
+    at ae (background-redux-new.js:2:7171659)
+    at h (background-redux-new.js:2:7238562)
+    at background-redux-new.js:2:7239564
+ae @ background-redux-new.js:2
+background-redux-new.js:2 Error: Invalid frameId for foreground frameId: 0
+    at ae (background-redux-new.js:2:7171659)
+    at h (background-redux-new.js:2:7238562)
+    at background-redux-new.js:2:7239564
+ae @ background-redux-new.js:2
+i18next.js?v=3aa5341c:208 i18next: languageChanged en
+i18next.js?v=3aa5341c:208 i18next: initialized Object
+i18n.ts:2669 i18n initialized with inline resources
+i18n.ts:2670 Sample translation nav.home: Home
+i18n.ts:2671 Sample translation auth.login: Sign In
+i18n.ts:2672 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2673 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2674 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2675 Sample translation collector.tabs.orders: Orders
+i18next.js?v=3aa5341c:208 i18next: languageChanged en
+hook.js:608 i18next: init: i18next is already initialized. You should call init just once!
+overrideMethod @ hook.js:608
+i18next.js?v=3aa5341c:208 i18next: initialized Object
+i18n.ts:2669 i18n initialized with inline resources
+i18n.ts:2670 Sample translation nav.home: Home
+i18n.ts:2671 Sample translation auth.login: Sign In
+i18n.ts:2672 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2673 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2674 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2675 Sample translation collector.tabs.orders: Orders
+content.bundle.js:31149 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+injected.js:1 Script was injected!
+content.js:202 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+QalamExtension.js:25 Uncaught (in promise) Error: An unexpected error occurred
+    at h (QalamExtension.js:25:128682)
+i18next.js?v=3aa5341c:208 i18next::translator: missingKey en translation common.items common.items
+i18next.js?v=3aa5341c:208 i18next::translator: missingKey en translation common.items common.items
+i18next.js?v=3aa5341c:208 i18next::translator: missingKey en translation common.items common.items
