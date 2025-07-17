@@ -139,8 +139,8 @@ function Router() {
           </>
         )}
         
-        {/* 404 Route */}
-        <Route component={NotFound} />
+        {/* 404 Route - Must be last */}
+        <Route path="*" component={NotFound} />
       </Switch>
     </Suspense>
   );
