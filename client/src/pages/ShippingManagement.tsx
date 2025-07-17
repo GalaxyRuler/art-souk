@@ -396,7 +396,6 @@ export default function ShippingManagement() {
 
   // Enhanced Components
   function ShippingAnalytics() {
-    console.log('🔍 ShippingAnalytics rendering with orders:', orders);
     const ordersArray = Array.isArray(orders) ? orders : [];
     const totalOrders = ordersArray.length;
     const shippedOrders = ordersArray.filter(o => o.status === 'shipped').length;
@@ -404,62 +403,60 @@ export default function ShippingManagement() {
     const deliveredOrders = ordersArray.filter(o => o.status === 'delivered').length;
     const totalRevenue = ordersArray.reduce((sum, order) => sum + (parseFloat(order.total_amount) || 0), 0);
 
-    console.log('🔍 Analytics stats:', { totalOrders, shippedOrders, inTransitOrders, deliveredOrders, totalRevenue });
-
     return (
-      <Card className="mb-6 bg-white dark:bg-slate-800 shadow-lg border-slate-200 dark:border-slate-700">
+      <Card className="mb-6 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-xl border border-purple-100 dark:border-purple-900">
         <CardHeader>
-          <CardTitle className="text-slate-800 dark:text-white flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+          <CardTitle className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 flex items-center gap-2">
+            <BarChart3 className="h-5 w-5 text-purple-600 dark:text-purple-400" />
             Shipping Analytics
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+            <div className="bg-gradient-to-br from-violet-400 to-purple-600 p-4 rounded-lg text-white shadow-lg transform hover:scale-105 transition-transform">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 dark:bg-blue-800/30 rounded-lg">
-                  <Package className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
+                  <Package className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">Total Orders</p>
-                  <p className="text-2xl font-bold text-slate-800 dark:text-white">{totalOrders}</p>
+                  <p className="text-sm text-purple-100">Total Orders</p>
+                  <p className="text-2xl font-bold">{totalOrders}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-200 dark:border-green-800">
+            <div className="bg-gradient-to-br from-emerald-400 to-teal-600 p-4 rounded-lg text-white shadow-lg transform hover:scale-105 transition-transform">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 dark:bg-green-800/30 rounded-lg">
-                  <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+                <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
+                  <CheckCircle2 className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">Delivered</p>
-                  <p className="text-2xl font-bold text-slate-800 dark:text-white">{deliveredOrders}</p>
+                  <p className="text-sm text-emerald-100">Delivered</p>
+                  <p className="text-2xl font-bold">{deliveredOrders}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg border border-orange-200 dark:border-orange-800">
+            <div className="bg-gradient-to-br from-amber-400 to-orange-600 p-4 rounded-lg text-white shadow-lg transform hover:scale-105 transition-transform">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-orange-100 dark:bg-orange-800/30 rounded-lg">
-                  <Truck className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+                <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
+                  <Truck className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">In Transit</p>
-                  <p className="text-2xl font-bold text-slate-800 dark:text-white">{inTransitOrders}</p>
+                  <p className="text-sm text-amber-100">In Transit</p>
+                  <p className="text-2xl font-bold">{inTransitOrders}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
+            <div className="bg-gradient-to-br from-pink-400 to-rose-600 p-4 rounded-lg text-white shadow-lg transform hover:scale-105 transition-transform">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-100 dark:bg-purple-800/30 rounded-lg">
-                  <DollarSign className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
+                  <DollarSign className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">Total Revenue</p>
-                  <p className="text-2xl font-bold text-slate-800 dark:text-white">{totalRevenue.toLocaleString()} SAR</p>
+                  <p className="text-sm text-pink-100">Total Revenue</p>
+                  <p className="text-2xl font-bold">{totalRevenue.toLocaleString()} SAR</p>
                 </div>
               </div>
             </div>
@@ -499,23 +496,23 @@ export default function ShippingManagement() {
 
   function ShippingFilters() {
     return (
-      <Card className="mb-6 bg-white dark:bg-slate-800 shadow-lg border-slate-200 dark:border-slate-700">
+      <Card className="mb-6 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-xl border border-purple-100 dark:border-purple-900">
         <CardContent className="p-4">
           <div className="flex flex-wrap gap-4 items-center">
             <div className="flex-1 min-w-64">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400 h-4 w-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-500 dark:text-purple-400 h-4 w-4" />
                 <Input
                   placeholder="Search orders, customers, or tracking numbers..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-600 text-slate-800 dark:text-white placeholder-slate-500 dark:placeholder-slate-400"
+                  className="pl-10 bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-700 text-slate-800 dark:text-white placeholder-purple-400 dark:placeholder-purple-300 focus:border-purple-500 focus:ring-purple-500"
                 />
               </div>
             </div>
 
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-48 bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-600 text-slate-800 dark:text-white">
+              <SelectTrigger className="w-48 bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-700 text-slate-800 dark:text-white hover:border-purple-400">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
@@ -530,7 +527,7 @@ export default function ShippingManagement() {
             </Select>
 
             <Select value={filterCarrier} onValueChange={setFilterCarrier}>
-              <SelectTrigger className="w-48 bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-600 text-slate-800 dark:text-white">
+              <SelectTrigger className="w-48 bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-700 text-slate-800 dark:text-white hover:border-purple-400">
                 <SelectValue placeholder="Filter by carrier" />
               </SelectTrigger>
               <SelectContent>
@@ -542,7 +539,7 @@ export default function ShippingManagement() {
             </Select>
 
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-48 bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-600 text-slate-800 dark:text-white">
+              <SelectTrigger className="w-48 bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-700 text-slate-800 dark:text-white hover:border-purple-400">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -557,7 +554,7 @@ export default function ShippingManagement() {
               variant="outline"
               size="sm"
               onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-              className="border-slate-300 dark:border-slate-600 text-slate-800 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700"
+              className="border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-800/30"
             >
               {sortOrder === 'asc' ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
             </Button>
@@ -571,24 +568,24 @@ export default function ShippingManagement() {
     if (selectedOrders.size === 0) return null;
 
     return (
-      <Card className="mb-6 bg-blue-50 dark:bg-blue-900/20 shadow-lg border-blue-200 dark:border-blue-800">
+      <Card className="mb-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 shadow-xl border border-purple-200 dark:border-purple-800">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="text-slate-800 dark:text-white font-medium">
+              <span className="text-purple-800 dark:text-purple-200 font-medium">
                 {selectedOrders.size} order{selectedOrders.size !== 1 ? 's' : ''} selected
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <Button size="sm" variant="outline" className="border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/30">
+              <Button size="sm" variant="outline" className="border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-800/30">
                 <Package className="h-4 w-4 mr-1" />
                 Add Tracking
               </Button>
-              <Button size="sm" variant="outline" className="border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/30">
+              <Button size="sm" variant="outline" className="border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-800/30">
                 <Edit className="h-4 w-4 mr-1" />
                 Update Status
               </Button>
-              <Button size="sm" variant="outline" className="border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/30">
+              <Button size="sm" variant="outline" className="border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-800/30">
                 <Mail className="h-4 w-4 mr-1" />
                 Send Notification
               </Button>
@@ -633,36 +630,36 @@ export default function ShippingManagement() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-slate-800 dark:text-white mb-4 flex items-center justify-center gap-3">
-              <Truck className="h-10 w-10 text-indigo-600 dark:text-indigo-400" />
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 flex items-center justify-center gap-3">
+              <Truck className="h-10 w-10 text-purple-600 dark:text-purple-400" />
               {t('shipping.title')}
             </h1>
-            <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto">
+            <p className="text-purple-700 dark:text-purple-300 text-lg max-w-2xl mx-auto">
               {t('shipping.subtitle')}
             </p>
           </div>
 
           <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-6 bg-white dark:bg-slate-800 shadow-sm">
-              <TabsTrigger value="analytics" className="flex items-center gap-2 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 dark:data-[state=active]:bg-indigo-900/20 dark:data-[state=active]:text-indigo-400">
+            <TabsList className="grid w-full grid-cols-4 mb-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm shadow-lg border border-purple-100 dark:border-purple-900">
+              <TabsTrigger value="analytics" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white dark:data-[state=active]:from-purple-600 dark:data-[state=active]:to-pink-600">
                 <BarChart3 className="h-4 w-4" />
                 Analytics
               </TabsTrigger>
-              <TabsTrigger value="profile" className="flex items-center gap-2 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 dark:data-[state=active]:bg-indigo-900/20 dark:data-[state=active]:text-indigo-400">
+              <TabsTrigger value="profile" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white dark:data-[state=active]:from-purple-600 dark:data-[state=active]:to-pink-600">
                 <Settings className="h-4 w-4" />
                 {t('shipping.profile')}
               </TabsTrigger>
-              <TabsTrigger value="tracking" className="flex items-center gap-2 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 dark:data-[state=active]:bg-indigo-900/20 dark:data-[state=active]:text-indigo-400">
+              <TabsTrigger value="tracking" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white dark:data-[state=active]:from-purple-600 dark:data-[state=active]:to-pink-600">
                 <Package className="h-4 w-4" />
                 {t('shipping.tracking')}
               </TabsTrigger>
-              <TabsTrigger value="orders" className="flex items-center gap-2 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 dark:data-[state=active]:bg-indigo-900/20 dark:data-[state=active]:text-indigo-400">
+              <TabsTrigger value="orders" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white dark:data-[state=active]:from-purple-600 dark:data-[state=active]:to-pink-600">
                 <Clock className="h-4 w-4" />
                 {t('shipping.orders')}
               </TabsTrigger>
@@ -685,18 +682,18 @@ export default function ShippingManagement() {
               {/* DEBUG: Raw orders data display */}
 
 
-              <Card className="bg-white dark:bg-slate-800 shadow-lg border-slate-200 dark:border-slate-700">
+              <Card className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-xl border border-purple-100 dark:border-purple-900">
                 <CardHeader>
-                  <CardTitle className="text-slate-800 dark:text-white flex items-center justify-between">
+                  <CardTitle className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Package className="h-5 w-5" />
+                      <Package className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                       Order Management ({filteredAndSortedOrders?.length || 0} orders)
                       {filteredAndSortedOrders && filteredAndSortedOrders.length > 0 && (
                         <div className="flex items-center gap-2 ml-4">
                           <Button
                             size="sm"
                             onClick={handleSelectAll}
-                            className="bg-blue-600 hover:bg-blue-700 text-white border-0"
+                            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 shadow-md"
                           >
                             {selectedOrders.size === (filteredAndSortedOrders?.length || 0) ? 'Deselect All' : 'Select All'}
                           </Button>
@@ -704,7 +701,7 @@ export default function ShippingManagement() {
                             <Button
                               size="sm"
                               onClick={handleDeselectAll}
-                              className="bg-red-600 hover:bg-red-700 text-white border-0"
+                              className="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white border-0 shadow-md"
                             >
                               Clear ({selectedOrders.size})
                             </Button>
@@ -719,8 +716,8 @@ export default function ShippingManagement() {
                         className={cn(
                           "border-0 text-white",
                           viewMode === 'grid' 
-                            ? "bg-blue-600 hover:bg-blue-700" 
-                            : "bg-gray-600 hover:bg-gray-700"
+                            ? "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700" 
+                            : "bg-gray-400 hover:bg-gray-500"
                         )}
                       >
                         <Grid className="h-4 w-4" />
@@ -731,8 +728,8 @@ export default function ShippingManagement() {
                         className={cn(
                           "border-0 text-white",
                           viewMode === 'list' 
-                            ? "bg-blue-600 hover:bg-blue-700" 
-                            : "bg-gray-600 hover:bg-gray-700"
+                            ? "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700" 
+                            : "bg-gray-400 hover:bg-gray-500"
                         )}
                       >
                         <List className="h-4 w-4" />
@@ -750,8 +747,10 @@ export default function ShippingManagement() {
                         <div 
                           key={order.id} 
                           className={cn(
-                            "bg-white dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-700 shadow-md relative transition-all",
-                            selectedOrders.has(order.id) && "ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                            "bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-lg p-4 border shadow-lg relative transition-all hover:scale-105",
+                            selectedOrders.has(order.id) 
+                              ? "border-purple-500 ring-2 ring-purple-400/50 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20" 
+                              : "border-purple-100 dark:border-purple-900 hover:shadow-xl hover:border-purple-300 dark:hover:border-purple-700"
                           )}
                         >
                           <div className="absolute top-3 right-3">
@@ -810,7 +809,7 @@ export default function ShippingManagement() {
                             <Button 
                               size="sm"
                               onClick={() => openTrackingDialog(order.id)}
-                              className="bg-blue-600 hover:bg-blue-700 text-white border-0"
+                              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 shadow-md"
                             >
                               <Package className="h-4 w-4 mr-1" />
                               Track
