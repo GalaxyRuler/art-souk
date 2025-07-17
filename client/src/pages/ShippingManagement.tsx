@@ -683,20 +683,7 @@ export default function ShippingManagement() {
               )}
 
               {/* DEBUG: Raw orders data display */}
-              {orders && orders.length > 0 && (
-                <Card className="bg-red-50 dark:bg-red-900/20 shadow-lg border-red-200 dark:border-red-800 mb-4">
-                  <CardHeader>
-                    <CardTitle className="text-red-700 dark:text-red-400">🔍 DEBUG: Raw Orders Data</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-slate-800 dark:text-white text-sm">
-                      <p>Raw orders count: {orders.length}</p>
-                      <p>Filtered orders count: {filteredAndSortedOrders?.length || 0}</p>
-                      <p>First order: {JSON.stringify(orders[0], null, 2)}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+
 
               <Card className="bg-white dark:bg-slate-800 shadow-lg border-slate-200 dark:border-slate-700">
                 <CardHeader>
