@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -115,12 +115,41 @@ export default function InvoiceManagement() {
   });
 
   // Fetch user roles
-  const { data: userRoleData } = useQuery<{roles: string[], setupComplete: boolean}>({
+  const { data: userRolesData, isLoading: isLoadingRoles, error: rolesError } = useQuery<{ roles: string[], setupComplete: boolean }>({
     queryKey: ['/api/user/roles'],
     retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
-  const userRoles = userRoleData?.roles || [];
+  // Defensive extraction of userRoles with comprehensive safety checks
+  const userRoles = useMemo(() => {
+    try {
+      console.log('🔍 userRolesData:', userRolesData);
+      if (!userRolesData) {
+        console.log('❌ No userRolesData, returning null');
+        return null;
+      }
+      console.log('🔍 userRolesData.roles:', userRolesData.roles);
+      if (!userRolesData.roles) {
+        console.log('❌ No roles property, returning null');
+        return null;
+      }
+      if (!Array.isArray(userRolesData.roles)) {
+        console.log('❌ roles is not an array:', typeof userRolesData.roles, userRolesData.roles);
+        return null;
+      }
+      console.log('✅ Returning valid roles array:', userRolesData.roles);
+      return userRolesData.roles;
+    } catch (error) {
+      console.error('❌ Error extracting user roles:', error);
+      return null;
+    }
+  }, [userRolesData]);
+
+  // Check if user has proper roles - moved up to prevent temporal dead zone error
+  const hasValidRoles = userRoles && Array.isArray(userRoles) && userRoles.length > 0 && (userRoles.includes('artist') || userRoles.includes('gallery'));
 
   // Fetch invoices
   const { data: invoices, isLoading } = useQuery<Invoice[]>({
@@ -301,7 +330,7 @@ export default function InvoiceManagement() {
     'Tabuk', 'Buraidah', 'Khamis Mushait', 'Hofuf', 'Taif', 'Najran', 'Jubail'
   ];
 
-  if (!userRoles || !Array.isArray(userRoles) || (!userRoles.includes('artist') && !userRoles.includes('gallery'))) {
+  if (!hasValidRoles) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
         <Navbar />
