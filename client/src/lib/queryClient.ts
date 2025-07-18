@@ -69,7 +69,7 @@ export const queryClient = new QueryClient({
       refetchInterval: false,
       refetchOnWindowFocus: false,
       staleTime: 1 * 60 * 1000, // Reduce from Infinity to 1min
-      cacheTime: 2 * 60 * 1000, // Reduce from 10min to 2min
+      gcTime: 2 * 60 * 1000, // Updated from cacheTime to gcTime
       retry: false,
     },
     mutations: {

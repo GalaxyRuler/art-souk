@@ -38,14 +38,32 @@ export default function InvoiceManagement() {
   const userRoles = roleData?.roles || [];
   const hasSellerAccess = userRoles.includes('artist') || userRoles.includes('gallery');
 
-  // Fetch invoices
-  const { data: invoices = [], isLoading } = useQuery({
-    queryKey: ['/api/invoices'],
+  // Fetch invoices with custom fetch function
+  const { data: invoices = [], isLoading, error } = useQuery({
+    queryKey: ['/api/invoices', Date.now()], // Add timestamp to force fresh requests
     enabled: hasSellerAccess,
     staleTime: 0, // Always fetch fresh data
-    cacheTime: 0, // Don't cache results
+    gcTime: 0, // Don't cache results (updated from cacheTime)
     refetchOnMount: true,
     refetchOnWindowFocus: true,
+    queryFn: async () => {
+      console.log('🔄 Custom fetch function called for invoices');
+      const response = await fetch('/api/invoices', {
+        credentials: 'include',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('📦 Raw invoice data from server:', data);
+      return data;
+    },
   });
 
   // Debug logging
@@ -56,7 +74,10 @@ export default function InvoiceManagement() {
     invoicesData: invoices,
     invoicesLength: invoices?.length || 0,
     invoicesType: typeof invoices,
-    invoicesIsArray: Array.isArray(invoices)
+    invoicesIsArray: Array.isArray(invoices),
+    error: error?.message || 'No error',
+    queryEnabled: hasSellerAccess,
+    rawInvoicesData: JSON.stringify(invoices),
   });
 
   // Create invoice mutation

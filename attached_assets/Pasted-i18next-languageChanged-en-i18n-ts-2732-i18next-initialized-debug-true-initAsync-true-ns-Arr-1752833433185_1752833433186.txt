@@ -1,0 +1,284 @@
+i18next: languageChanged en
+i18n.ts:2732 i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+i18n.ts:2751 i18n initialized with inline resources
+i18n.ts:2752 Sample translation nav.home: Home
+i18n.ts:2753 Sample translation auth.login: Sign In
+i18n.ts:2754 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2755 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2756 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2757 Sample translation collector.tabs.orders: Orders
+i18n.ts:2732 i18next: languageChanged en
+i18n.ts:2732 i18next: init: i18next is already initialized. You should call init just once!
+overrideMethod @ hook.js:608
+output @ i18next.js?v=b98196d6:208
+warn @ i18next.js?v=b98196d6:201
+forward @ i18next.js?v=b98196d6:236
+warn @ i18next.js?v=b98196d6:225
+finish @ i18next.js?v=b98196d6:1815
+done @ i18next.js?v=b98196d6:1948
+(anonymous) @ i18next.js?v=b98196d6:1963
+loadResources @ i18next.js?v=b98196d6:1861
+setLng @ i18next.js?v=b98196d6:1962
+changeLanguage @ i18next.js?v=b98196d6:1975
+load @ i18next.js?v=b98196d6:1823
+init @ i18next.js?v=b98196d6:1826
+(anonymous) @ i18n.ts:2732Understand this warning
+i18n.ts:2732 i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+i18n.ts:2751 i18n initialized with inline resources
+i18n.ts:2752 Sample translation nav.home: Home
+i18n.ts:2753 Sample translation auth.login: Sign In
+i18n.ts:2754 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2755 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2756 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2757 Sample translation collector.tabs.orders: Orders
+App.tsx:73 🔍 Router Debug: {isAuthenticated: false, isLoading: true, roleLoading: false, setupComplete: false}
+content.bundle.js:31149 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+injected.js:1 Script was injected!
+content.js:202 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+QalamExtension.js:25 Uncaught (in promise) Error: An unexpected error occurred
+    at h (QalamExtension.js:25:128682)
+h @ QalamExtension.js:25Understand this error
+App.tsx:73 🔍 Router Debug: {isAuthenticated: true, isLoading: false, roleLoading: true, setupComplete: false}
+App.tsx:73 🔍 Router Debug: {isAuthenticated: true, isLoading: false, roleLoading: false, setupComplete: true}
+InvoiceManagement.tsx:52 🔍 InvoiceManagement Debug: {hasSellerAccess: true, userRoles: Array(3), isLoading: true, invoicesData: Array(0), invoicesLength: 0, …}
+InvoiceManagement.tsx:355 i18next::translator: missingKey en translation common.create common.create
+hook.js:608 Warning: validateDOMNesting(...): <button> cannot appear as a descendant of <button>. Error Component Stack
+    at button (<anonymous>)
+    at _c (button.tsx:43:6)
+    at button (<anonymous>)
+    at dialog.tsx:37:6
+    at Dialog (dialog.tsx:15:3)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at InvoiceManagement (InvoiceManagement.tsx:24:23)
+    at Route (wouter.js?v=b98196d6:323:16)
+    at Switch (wouter.js?v=b98196d6:379:17)
+    at Suspense (<anonymous>)
+    at Router (App.tsx:69:42)
+    at Provider (chunk-UBQ2LXDH.js?v=b98196d6:22:15)
+    at TooltipProvider (@radix-ui_react-tooltip.js?v=b98196d6:60:5)
+    at I18nextProvider (react-i18next.js?v=b98196d6:793:3)
+    at QueryClientProvider (@tanstack_react-query.js?v=b98196d6:2805:3)
+    at ErrorBoundary (ErrorBoundary.tsx:19:5)
+    at App (<anonymous>)
+overrideMethod @ hook.js:608
+printWarning @ chunk-RPCDYKBN.js?v=b98196d6:521
+error @ chunk-RPCDYKBN.js?v=b98196d6:505
+validateDOMNesting @ chunk-RPCDYKBN.js?v=b98196d6:8256
+createInstance @ chunk-RPCDYKBN.js?v=b98196d6:8328
+completeWork @ chunk-RPCDYKBN.js?v=b98196d6:16290
+completeUnitOfWork @ chunk-RPCDYKBN.js?v=b98196d6:19224
+performUnitOfWork @ chunk-RPCDYKBN.js?v=b98196d6:19206
+workLoopSync @ chunk-RPCDYKBN.js?v=b98196d6:19137
+renderRootSync @ chunk-RPCDYKBN.js?v=b98196d6:19116
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=b98196d6:18874
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=b98196d6:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=b98196d6:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=b98196d6:555
+flush @ @tanstack_react-query.js?v=b98196d6:569
+batch @ @tanstack_react-query.js?v=b98196d6:587
+dispatch_fn @ @tanstack_react-query.js?v=b98196d6:996
+setData @ @tanstack_react-query.js?v=b98196d6:696
+onSuccess @ @tanstack_react-query.js?v=b98196d6:897
+resolve @ @tanstack_react-query.js?v=b98196d6:456
+Promise.then
+run @ @tanstack_react-query.js?v=b98196d6:498
+start @ @tanstack_react-query.js?v=b98196d6:536
+fetch @ @tanstack_react-query.js?v=b98196d6:926
+executeFetch_fn @ @tanstack_react-query.js?v=b98196d6:2211
+setOptions @ @tanstack_react-query.js?v=b98196d6:1955
+(anonymous) @ @tanstack_react-query.js?v=b98196d6:3032
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=b98196d6:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=b98196d6:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=b98196d6:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=b98196d6:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=b98196d6:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=b98196d6:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=b98196d6:19447
+commitRootImpl @ chunk-RPCDYKBN.js?v=b98196d6:19416
+commitRoot @ chunk-RPCDYKBN.js?v=b98196d6:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=b98196d6:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=b98196d6:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=b98196d6:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=b98196d6:555
+flush @ @tanstack_react-query.js?v=b98196d6:569
+batch @ @tanstack_react-query.js?v=b98196d6:587
+dispatch_fn @ @tanstack_react-query.js?v=b98196d6:996
+setData @ @tanstack_react-query.js?v=b98196d6:696
+onSuccess @ @tanstack_react-query.js?v=b98196d6:897
+resolve @ @tanstack_react-query.js?v=b98196d6:456
+Promise.then
+run @ @tanstack_react-query.js?v=b98196d6:498
+start @ @tanstack_react-query.js?v=b98196d6:536
+fetch @ @tanstack_react-query.js?v=b98196d6:926
+executeFetch_fn @ @tanstack_react-query.js?v=b98196d6:2211
+onSubscribe @ @tanstack_react-query.js?v=b98196d6:1898
+subscribe @ @tanstack_react-query.js?v=b98196d6:24
+(anonymous) @ @tanstack_react-query.js?v=b98196d6:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=b98196d6:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=b98196d6:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=b98196d6:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=b98196d6:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=b98196d6:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=b98196d6:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=b98196d6:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=b98196d6:19447
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=b98196d6:18868
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=b98196d6:9119
+commitRootImpl @ chunk-RPCDYKBN.js?v=b98196d6:19432
+commitRoot @ chunk-RPCDYKBN.js?v=b98196d6:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=b98196d6:18805
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=b98196d6:18718
+workLoop @ chunk-RPCDYKBN.js?v=b98196d6:197
+flushWork @ chunk-RPCDYKBN.js?v=b98196d6:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=b98196d6:384Understand this error
+hook.js:608 Warning: React does not recognize the `asChild` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `aschild` instead. If you accidentally passed it from a parent component, remove it from the DOM element. Error Component Stack
+    at button (<anonymous>)
+    at dialog.tsx:37:6
+    at Dialog (dialog.tsx:15:3)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at InvoiceManagement (InvoiceManagement.tsx:24:23)
+    at Route (wouter.js?v=b98196d6:323:16)
+    at Switch (wouter.js?v=b98196d6:379:17)
+    at Suspense (<anonymous>)
+    at Router (App.tsx:69:42)
+    at Provider (chunk-UBQ2LXDH.js?v=b98196d6:22:15)
+    at TooltipProvider (@radix-ui_react-tooltip.js?v=b98196d6:60:5)
+    at I18nextProvider (react-i18next.js?v=b98196d6:793:3)
+    at QueryClientProvider (@tanstack_react-query.js?v=b98196d6:2805:3)
+    at ErrorBoundary (ErrorBoundary.tsx:19:5)
+    at App (<anonymous>)
+overrideMethod @ hook.js:608
+printWarning @ chunk-RPCDYKBN.js?v=b98196d6:521
+error @ chunk-RPCDYKBN.js?v=b98196d6:505
+validateProperty$1 @ chunk-RPCDYKBN.js?v=b98196d6:3427
+warnUnknownProperties @ chunk-RPCDYKBN.js?v=b98196d6:3459
+validateProperties$2 @ chunk-RPCDYKBN.js?v=b98196d6:3478
+validatePropertiesInDevelopment @ chunk-RPCDYKBN.js?v=b98196d6:7346
+setInitialProperties @ chunk-RPCDYKBN.js?v=b98196d6:7535
+finalizeInitialChildren @ chunk-RPCDYKBN.js?v=b98196d6:8345
+completeWork @ chunk-RPCDYKBN.js?v=b98196d6:16293
+completeUnitOfWork @ chunk-RPCDYKBN.js?v=b98196d6:19224
+performUnitOfWork @ chunk-RPCDYKBN.js?v=b98196d6:19206
+workLoopSync @ chunk-RPCDYKBN.js?v=b98196d6:19137
+renderRootSync @ chunk-RPCDYKBN.js?v=b98196d6:19116
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=b98196d6:18874
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=b98196d6:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=b98196d6:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=b98196d6:555
+flush @ @tanstack_react-query.js?v=b98196d6:569
+batch @ @tanstack_react-query.js?v=b98196d6:587
+dispatch_fn @ @tanstack_react-query.js?v=b98196d6:996
+setData @ @tanstack_react-query.js?v=b98196d6:696
+onSuccess @ @tanstack_react-query.js?v=b98196d6:897
+resolve @ @tanstack_react-query.js?v=b98196d6:456
+Promise.then
+run @ @tanstack_react-query.js?v=b98196d6:498
+start @ @tanstack_react-query.js?v=b98196d6:536
+fetch @ @tanstack_react-query.js?v=b98196d6:926
+executeFetch_fn @ @tanstack_react-query.js?v=b98196d6:2211
+setOptions @ @tanstack_react-query.js?v=b98196d6:1955
+(anonymous) @ @tanstack_react-query.js?v=b98196d6:3032
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=b98196d6:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=b98196d6:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=b98196d6:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=b98196d6:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=b98196d6:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=b98196d6:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=b98196d6:19447
+commitRootImpl @ chunk-RPCDYKBN.js?v=b98196d6:19416
+commitRoot @ chunk-RPCDYKBN.js?v=b98196d6:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=b98196d6:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=b98196d6:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=b98196d6:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=b98196d6:555
+flush @ @tanstack_react-query.js?v=b98196d6:569
+batch @ @tanstack_react-query.js?v=b98196d6:587
+dispatch_fn @ @tanstack_react-query.js?v=b98196d6:996
+setData @ @tanstack_react-query.js?v=b98196d6:696
+onSuccess @ @tanstack_react-query.js?v=b98196d6:897
+resolve @ @tanstack_react-query.js?v=b98196d6:456
+Promise.then
+run @ @tanstack_react-query.js?v=b98196d6:498
+start @ @tanstack_react-query.js?v=b98196d6:536
+fetch @ @tanstack_react-query.js?v=b98196d6:926
+executeFetch_fn @ @tanstack_react-query.js?v=b98196d6:2211
+onSubscribe @ @tanstack_react-query.js?v=b98196d6:1898
+subscribe @ @tanstack_react-query.js?v=b98196d6:24
+(anonymous) @ @tanstack_react-query.js?v=b98196d6:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=b98196d6:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=b98196d6:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=b98196d6:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=b98196d6:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=b98196d6:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=b98196d6:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=b98196d6:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=b98196d6:19447
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=b98196d6:18868
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=b98196d6:9119
+commitRootImpl @ chunk-RPCDYKBN.js?v=b98196d6:19432
+commitRoot @ chunk-RPCDYKBN.js?v=b98196d6:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=b98196d6:18805
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=b98196d6:18718
+workLoop @ chunk-RPCDYKBN.js?v=b98196d6:197
+flushWork @ chunk-RPCDYKBN.js?v=b98196d6:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=b98196d6:384Understand this error
+InvoiceManagement.tsx:52 🔍 InvoiceManagement Debug: {hasSellerAccess: true, userRoles: Array(3), isLoading: false, invoicesData: Array(3), invoicesLength: 3, …}
+InvoiceManagement.tsx:355 i18next::translator: missingKey en translation common.create common.create
+3InvoiceManagement.tsx:382 🔍 Tab all - Invoice undefined (draft): MATCHES
+InvoiceManagement.tsx:424 i18next::translator: missingKey en translation common.view common.view
+InvoiceManagement.tsx:433 i18next::translator: missingKey en translation invoice.downloadPDF invoice.downloadPDF
+InvoiceManagement.tsx:443 i18next::translator: missingKey en translation invoice.submitZATCA invoice.submitZATCA
+InvoiceManagement.tsx:424 i18next::translator: missingKey en translation common.view common.view
+InvoiceManagement.tsx:433 i18next::translator: missingKey en translation invoice.downloadPDF invoice.downloadPDF
+InvoiceManagement.tsx:443 i18next::translator: missingKey en translation invoice.submitZATCA invoice.submitZATCA
+InvoiceManagement.tsx:424 i18next::translator: missingKey en translation common.view common.view
+InvoiceManagement.tsx:433 i18next::translator: missingKey en translation invoice.downloadPDF invoice.downloadPDF
+InvoiceManagement.tsx:443 i18next::translator: missingKey en translation invoice.submitZATCA invoice.submitZATCA
+3InvoiceManagement.tsx:382 🔍 Tab draft - Invoice undefined (draft): MATCHES
+InvoiceManagement.tsx:424 i18next::translator: missingKey en translation common.view common.view
+InvoiceManagement.tsx:433 i18next::translator: missingKey en translation invoice.downloadPDF invoice.downloadPDF
+InvoiceManagement.tsx:443 i18next::translator: missingKey en translation invoice.submitZATCA invoice.submitZATCA
+InvoiceManagement.tsx:424 i18next::translator: missingKey en translation common.view common.view
+InvoiceManagement.tsx:433 i18next::translator: missingKey en translation invoice.downloadPDF invoice.downloadPDF
+InvoiceManagement.tsx:443 i18next::translator: missingKey en translation invoice.submitZATCA invoice.submitZATCA
+InvoiceManagement.tsx:424 i18next::translator: missingKey en translation common.view common.view
+InvoiceManagement.tsx:433 i18next::translator: missingKey en translation invoice.downloadPDF invoice.downloadPDF
+InvoiceManagement.tsx:443 i18next::translator: missingKey en translation invoice.submitZATCA invoice.submitZATCA
+3InvoiceManagement.tsx:382 🔍 Tab sent - Invoice undefined (draft): FILTERED OUT
+3InvoiceManagement.tsx:382 🔍 Tab paid - Invoice undefined (draft): FILTERED OUT
+3InvoiceManagement.tsx:382 🔍 Tab overdue - Invoice undefined (draft): FILTERED OUT
+InvoiceManagement.tsx:52 🔍 InvoiceManagement Debug: {hasSellerAccess: true, userRoles: Array(3), isLoading: false, invoicesData: Array(3), invoicesLength: 3, …}
+InvoiceManagement.tsx:355 i18next::translator: missingKey en translation common.create common.create
+3InvoiceManagement.tsx:382 🔍 Tab all - Invoice undefined (draft): MATCHES
+InvoiceManagement.tsx:424 i18next::translator: missingKey en translation common.view common.view
+InvoiceManagement.tsx:433 i18next::translator: missingKey en translation invoice.downloadPDF invoice.downloadPDF
+InvoiceManagement.tsx:443 i18next::translator: missingKey en translation invoice.submitZATCA invoice.submitZATCA
+InvoiceManagement.tsx:424 i18next::translator: missingKey en translation common.view common.view
+InvoiceManagement.tsx:433 i18next::translator: missingKey en translation invoice.downloadPDF invoice.downloadPDF
+InvoiceManagement.tsx:443 i18next::translator: missingKey en translation invoice.submitZATCA invoice.submitZATCA
+InvoiceManagement.tsx:424 i18next::translator: missingKey en translation common.view common.view
+InvoiceManagement.tsx:433 i18next::translator: missingKey en translation invoice.downloadPDF invoice.downloadPDF
+InvoiceManagement.tsx:443 i18next::translator: missingKey en translation invoice.submitZATCA invoice.submitZATCA
+3InvoiceManagement.tsx:382 🔍 Tab draft - Invoice undefined (draft): MATCHES
+InvoiceManagement.tsx:424 i18next::translator: missingKey en translation common.view common.view
+InvoiceManagement.tsx:433 i18next::translator: missingKey en translation invoice.downloadPDF invoice.downloadPDF
+InvoiceManagement.tsx:443 i18next::translator: missingKey en translation invoice.submitZATCA invoice.submitZATCA
+InvoiceManagement.tsx:424 i18next::translator: missingKey en translation common.view common.view
+InvoiceManagement.tsx:433 i18next::translator: missingKey en translation invoice.downloadPDF invoice.downloadPDF
+InvoiceManagement.tsx:443 i18next::translator: missingKey en translation invoice.submitZATCA invoice.submitZATCA
+InvoiceManagement.tsx:424 i18next::translator: missingKey en translation common.view common.view
+InvoiceManagement.tsx:433 i18next::translator: missingKey en translation invoice.downloadPDF invoice.downloadPDF
+InvoiceManagement.tsx:443 i18next::translator: missingKey en translation invoice.submitZATCA invoice.submitZATCA
+3InvoiceManagement.tsx:382 🔍 Tab sent - Invoice undefined (draft): FILTERED OUT
+3InvoiceManagement.tsx:382 🔍 Tab paid - Invoice undefined (draft): FILTERED OUT
+3InvoiceManagement.tsx:382 🔍 Tab overdue - Invoice undefined (draft): FILTERED OUT
