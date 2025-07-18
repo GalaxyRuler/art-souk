@@ -370,7 +370,7 @@ export default function InvoiceManagement() {
                                 })()}
                               </p>
                               <p className="text-lg font-semibold text-amber-600 mt-2">
-                                {invoice.total_amount.toLocaleString()} SAR
+                                {invoice.total_amount ? invoice.total_amount.toLocaleString() : '0'} SAR
                               </p>
                             </div>
                             
