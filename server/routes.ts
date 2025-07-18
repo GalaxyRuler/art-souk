@@ -4274,8 +4274,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Initialize database optimization
-  await databaseOptimizer.addPerformanceIndexes();
+  // Initialize database optimization (DISABLED for faster startup)
+  // databaseOptimizer.addPerformanceIndexes().catch(error => {
+  //   console.error('⚠️  Database index creation failed (non-blocking):', error);
+  // });
 
   // Performance monitoring endpoints
   app.get('/health/performance', async (req, res) => {
