@@ -42,29 +42,57 @@ export default function InvoiceManagement() {
   const { data: invoices = [], isLoading } = useQuery({
     queryKey: ['/api/invoices'],
     enabled: hasSellerAccess,
+    staleTime: 0, // Always fetch fresh data
+    cacheTime: 0, // Don't cache results
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    onSuccess: (data) => {
+      console.log('📋 Invoices fetched successfully:', data);
+      console.log('📊 Number of invoices:', data?.length || 0);
+    },
+    onError: (error) => {
+      console.error('❌ Error fetching invoices:', error);
+    },
   });
 
   // Create invoice mutation
   const createInvoiceMutation = useMutation({
     mutationFn: async (data: any) => {
+      console.log('🔄 Creating invoice with data:', data);
       const response = await fetch('/api/invoices', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(data),
       });
-      if (!response.ok) throw new Error('Failed to create invoice');
-      return response.json();
+      
+      console.log('📄 Invoice creation response status:', response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ Invoice creation failed:', errorText);
+        throw new Error(`Failed to create invoice: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      console.log('✅ Invoice created successfully:', result);
+      return result;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('🎉 Invoice creation success callback triggered');
       toast({
         title: t('invoice.createSuccess'),
         description: t('invoice.createSuccessDesc'),
       });
+      
+      // Force refetch and invalidate cache
       queryClient.invalidateQueries({ queryKey: ['/api/invoices'] });
+      queryClient.refetchQueries({ queryKey: ['/api/invoices'] });
+      
       setCreateDialogOpen(false);
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('❌ Invoice creation error:', error);
       toast({
         title: t('invoice.createError'),
         description: t('invoice.createErrorDesc'),

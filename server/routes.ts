@@ -4446,12 +4446,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/invoices', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
+      console.log('🔍 Fetching invoices for user:', userId);
       
       const invoices = await db
         .select()
         .from(schema.invoices)
         .where(eq(schema.invoices.sellerId, userId))
         .orderBy(desc(schema.invoices.createdAt));
+      
+      console.log('📋 Found invoices:', invoices.length);
+      console.log('📊 Invoice details:', invoices.map(inv => ({
+        id: inv.id,
+        number: inv.invoiceNumber,
+        status: inv.status,
+        total: inv.totalAmount,
+        created: inv.createdAt
+      })));
       
       res.json(invoices);
     } catch (error) {
@@ -4463,6 +4473,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/invoices', isAuthenticated, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user.claims.sub;
+      console.log('💼 Creating invoice for user:', userId);
+      console.log('📝 Request body:', req.body);
       
       // Get user details to determine seller type
       const [user] = await db
@@ -4552,10 +4564,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       };
       
+      console.log('🔄 Inserting invoice with payload:', invoicePayload);
+      
       const [invoice] = await db
         .insert(schema.invoices)
         .values(invoicePayload)
         .returning();
+      
+      console.log('✅ Invoice created successfully:', {
+        id: invoice.id,
+        number: invoice.invoiceNumber,
+        status: invoice.status,
+        total: invoice.totalAmount
+      });
       
       res.json(invoice);
     } catch (error) {
