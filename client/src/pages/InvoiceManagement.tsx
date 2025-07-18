@@ -46,13 +46,17 @@ export default function InvoiceManagement() {
     cacheTime: 0, // Don't cache results
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-    onSuccess: (data) => {
-      console.log('📋 Invoices fetched successfully:', data);
-      console.log('📊 Number of invoices:', data?.length || 0);
-    },
-    onError: (error) => {
-      console.error('❌ Error fetching invoices:', error);
-    },
+  });
+
+  // Debug logging
+  console.log('🔍 InvoiceManagement Debug:', {
+    hasSellerAccess,
+    userRoles,
+    isLoading,
+    invoicesData: invoices,
+    invoicesLength: invoices?.length || 0,
+    invoicesType: typeof invoices,
+    invoicesIsArray: Array.isArray(invoices)
   });
 
   // Create invoice mutation
@@ -373,7 +377,11 @@ export default function InvoiceManagement() {
               ) : (
                 <div className="grid gap-4">
                   {invoices
-                    .filter((invoice: any) => status === 'all' || invoice.status === status)
+                    .filter((invoice: any) => {
+                      const isMatch = status === 'all' || invoice.status === status;
+                      console.log(`🔍 Tab ${status} - Invoice ${invoice.invoice_number} (${invoice.status}): ${isMatch ? 'MATCHES' : 'FILTERED OUT'}`);
+                      return isMatch;
+                    })
                     .map((invoice: any) => (
                       <Card key={invoice.id} className="hover:shadow-lg transition-shadow">
                         <CardContent className="p-6">
