@@ -22,6 +22,18 @@ export function InvoiceDetail({ invoice, open, onOpenChange, onDownloadPdf, onSu
 
   if (!invoice) return null;
 
+  // Safe date formatting utility
+  const formatDate = (dateValue: string | Date | null | undefined, formatStr: string = 'PPP') => {
+    try {
+      if (!dateValue) return 'No date available';
+      const date = new Date(dateValue);
+      if (isNaN(date.getTime())) return 'Invalid date';
+      return format(date, formatStr, { locale: dateLocale });
+    } catch (error) {
+      return 'Date format error';
+    }
+  };
+
   const getStatusBadge = (status: string) => {
     const statusConfig = {
       draft: { variant: 'secondary' as const, icon: FileText },
@@ -49,7 +61,7 @@ export function InvoiceDetail({ invoice, open, onOpenChange, onDownloadPdf, onSu
             <div>
               <DialogTitle className="text-2xl">{t('invoice.invoiceNumber')} {invoice.invoiceNumber}</DialogTitle>
               <DialogDescription>
-                {format(new Date(invoice.issueDate), 'PPP', { locale: dateLocale })}
+                {formatDate(invoice.issue_date || invoice.issueDate)}
               </DialogDescription>
             </div>
             {getStatusBadge(invoice.status)}
@@ -150,7 +162,7 @@ export function InvoiceDetail({ invoice, open, onOpenChange, onDownloadPdf, onSu
               {invoice.supplyDate && (
                 <p className="text-sm">
                   <span className="text-gray-600">{t('invoice.supplyDate')}:</span>{' '}
-                  {format(new Date(invoice.supplyDate), 'PP', { locale: dateLocale })}
+                  {formatDate(invoice.supplyDate || invoice.supply_date, 'PP')}
                 </p>
               )}
             </CardContent>

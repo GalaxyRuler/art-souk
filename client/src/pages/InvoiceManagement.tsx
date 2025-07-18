@@ -357,7 +357,17 @@ export default function InvoiceManagement() {
                               </div>
                               <p className="text-gray-600 mb-1">{invoice.buyer_address?.name || invoice.buyer_name || 'N/A'}</p>
                               <p className="text-sm text-gray-500">
-                                {invoice.created_at ? format(new Date(invoice.created_at), 'PPP') : format(new Date(invoice.issue_date), 'PPP')}
+                                {(() => {
+                                  try {
+                                    const dateToFormat = invoice.created_at || invoice.issue_date;
+                                    if (!dateToFormat) return 'No date available';
+                                    const date = new Date(dateToFormat);
+                                    if (isNaN(date.getTime())) return 'Invalid date';
+                                    return format(date, 'PPP');
+                                  } catch (error) {
+                                    return 'Date format error';
+                                  }
+                                })()}
                               </p>
                               <p className="text-lg font-semibold text-amber-600 mt-2">
                                 {invoice.total_amount.toLocaleString()} SAR
