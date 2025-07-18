@@ -80,6 +80,23 @@ export default function InvoiceManagement() {
     rawInvoicesData: JSON.stringify(invoices),
   });
 
+  // Debug first invoice structure
+  if (invoices && invoices.length > 0) {
+    console.log('🔍 First invoice structure:', {
+      id: invoices[0].id,
+      invoice_number: invoices[0].invoice_number,
+      invoiceNumber: invoices[0].invoiceNumber,
+      status: invoices[0].status,
+      buyer_name: invoices[0].buyer_name,
+      buyerName: invoices[0].buyerName,
+      total_amount: invoices[0].total_amount,
+      totalAmount: invoices[0].totalAmount,
+      created_at: invoices[0].created_at,
+      createdAt: invoices[0].createdAt,
+      allKeys: Object.keys(invoices[0])
+    });
+  }
+
   // Create invoice mutation
   const createInvoiceMutation = useMutation({
     mutationFn: async (data: any) => {
