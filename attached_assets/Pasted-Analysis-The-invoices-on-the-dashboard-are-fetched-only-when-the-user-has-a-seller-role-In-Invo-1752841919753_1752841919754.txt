@@ -1,0 +1,66 @@
+Analysis
+
+The invoices on the dashboard are fetched only when the user has a seller role.
+In InvoiceManagement.tsx the useQuery call for /api/invoices is enabled only if the hasSellerAccess flag is true:
+
+  const { data: roleData } = useQuery({
+    queryKey: ['/api/user/roles'],
+    enabled: !!user,
+  });
+
+  const userRoles = roleData?.roles || [];
+  const hasSellerAccess = userRoles.includes('artist') || userRoles.includes('gallery');
+
+  const { data: invoices = [], isLoading, error } = useQuery({
+    queryKey: ['/api/invoices', Date.now()],
+    enabled: hasSellerAccess,
+    ...
+  });
+
+If hasSellerAccess is false, the component early‑returns an “access denied” message and never requests invoices:
+
+  if (!hasSellerAccess) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <Alert>
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              {t('invoice.accessDenied')}
+            </AlertDescription>
+          </Alert>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+Therefore, if the logged-in user lacks the 'artist' or 'gallery' role (or the /api/user/roles request fails), hasSellerAccess remains false and the invoice query never runs. The UI then only renders the static layout without any invoice rows.
+
+The backend endpoint for fetching invoices works and simply returns invoices belonging to the authenticated user:
+
+app.get('/api/invoices', isAuthenticated, async (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user.claims.sub;
+    const invoices = await db
+      .select()
+      .from(schema.invoices)
+      .where(eq(schema.invoices.sellerId, userId))
+      .orderBy(desc(schema.invoices.createdAt));
+
+    res.json(invoices);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch invoices" });
+  }
+});
+
+Thus, if the roles endpoint doesn’t return 'artist' or 'gallery', the invoice list is never requested and you only see the table headers.
+
+Recommended checks
+
+Verify the /api/user/roles endpoint returns the roles array with 'artist' or 'gallery'.
+
+Ensure the logged-in user has the proper role in the database.
+
+If roles are correct but invoices still don’t appear, inspect network responses in the browser to confirm /api/invoices is actually requested and returns data.
