@@ -380,14 +380,14 @@ export default function InvoiceManagement() {
                           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-2">
-                                <h3 className="text-lg font-semibold">{invoice.invoice_number}</h3>
+                                <h3 className="text-lg font-semibold">{invoice.invoiceNumber || invoice.invoice_number}</h3>
                                 {getStatusBadge(invoice.status)}
                               </div>
-                              <p className="text-gray-600 mb-1">{invoice.buyer_address?.name || invoice.buyer_name || 'N/A'}</p>
+                              <p className="text-gray-600 mb-1">{invoice.buyerName || invoice.buyer_name || 'N/A'}</p>
                               <p className="text-sm text-gray-500">
                                 {(() => {
                                   try {
-                                    const dateToFormat = invoice.created_at || invoice.issue_date;
+                                    const dateToFormat = invoice.createdAt || invoice.created_at || invoice.issueDate || invoice.issue_date;
                                     if (!dateToFormat) return 'No date available';
                                     const date = new Date(dateToFormat);
                                     if (isNaN(date.getTime())) return 'Invalid date';
@@ -398,7 +398,8 @@ export default function InvoiceManagement() {
                                 })()}
                               </p>
                               <p className="text-lg font-semibold text-amber-600 mt-2">
-                                {invoice.total_amount ? invoice.total_amount.toLocaleString() : '0'} SAR
+                                {(invoice.totalAmount || invoice.total_amount) ? 
+                                  parseFloat(invoice.totalAmount || invoice.total_amount).toLocaleString() : '0'} SAR
                               </p>
                             </div>
                             

@@ -1283,7 +1283,15 @@ const resources = {
           draft: "Draft",
           sent: "Sent",
           paid: "Paid",
-          cancelled: "Cancelled"
+          cancelled: "Cancelled",
+          overdue: "Overdue"
+        },
+        tabs: {
+          all: "All Invoices",
+          draft: "Draft",
+          sent: "Sent",
+          paid: "Paid",
+          overdue: "Overdue"
         },
         zatcaCompliant: "ZATCA Compliant",
         zatcaApproved: "ZATCA Approved",
@@ -1571,7 +1579,15 @@ const resources = {
           draft: "مسودة",
           sent: "مرسلة",
           paid: "مدفوعة",
-          cancelled: "ملغية"
+          cancelled: "ملغية",
+          overdue: "متأخرة"
+        },
+        tabs: {
+          all: "جميع الفواتير",
+          draft: "مسودة",
+          sent: "مرسلة",
+          paid: "مدفوعة",
+          overdue: "متأخرة"
         },
         zatcaCompliant: "متوافق مع ZATCA",
         zatcaApproved: "معتمد من ZATCA",
