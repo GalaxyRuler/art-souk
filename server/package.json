@@ -5,9 +5,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --loader ts-node/esm index.ts",
-    "start": "node --loader ts-node/esm index.ts",
-    "seed": "node --loader ts-node/esm runSeed.ts"
+    "dev": "npx tsx index.ts",
+    "start": "npx tsx index.ts",
+    "seed": "npx tsx runSeed.ts"
   },
   "dependencies": {
     "express": "^4.18.2",
