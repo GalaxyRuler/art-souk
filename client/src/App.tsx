@@ -89,10 +89,10 @@ function Router() {
         <Route path="/" component={isAuthenticated ? Home : Landing} />
         <Route path="/home" component={Home} />
         <Route path="/landing" component={Landing} />
-        
+
         {/* Make artwork management publicly accessible for testing */}
         <Route path="/artworks/manage" component={ArtworkManagement} />
-        
+
         {/* Public routes - accessible to all users */}
         <Route path="/artists" component={Artists} />
         <Route path="/artists/:id" component={ArtistProfile} />
@@ -108,32 +108,32 @@ function Router() {
         <Route path="/auth" component={Auth} />
         <Route path="/commissions" component={CommissionRequests} />
         <Route path="/commissions/:id" component={CommissionDetail} />
-        
+
         {/* Admin routes */}
         <Route path="/admin/setup" component={AdminSetup} />
         <Route path="/admin/test" component={AdminTest} />
         <Route path="/admin" component={AdminDashboard} />
-        
+
         {/* Test routes */}
         <Route path="/auth/test" component={AuthTest} />
         <Route path="/email/test" component={EmailTest} />
         <Route path="/test/commissions" component={TestCommissions} />
-        
+
         {/* Dashboard route - accessible to authenticated users */}
         <Route path="/dashboard" component={Dashboard} />
-        
+
         {/* Testing: Make analytics accessible for debugging */}
         <Route path="/analytics" component={Analytics} />
         <Route path="/analytics/dashboard" component={AnalyticsDashboard} />
-        
+
         {/* Testing: Make seller dashboard accessible for debugging */}
         <Route path="/seller" component={SellerDashboard} />
-        
+
         {/* Testing: Make invoice management accessible for debugging */}
         <Route path="/invoice-test" component={InvoiceTest} />
         <Route path="/invoice-management" component={InvoiceManagement} />
         <Route path="/shipping-management" component={ShippingManagement} />
-        
+
         {/* Authenticated-only routes */}
         {isAuthenticated && (
           <>
@@ -143,10 +143,11 @@ function Router() {
             <Route path="/manage/events" component={ManageEvents} />
             <Route path="/artworks/manage" component={ArtworkManagement} />
             <Route path="/role-selection" component={RoleSelection} />
+            <Route path="/role-debug" component={() => import("@/pages/RoleDebug")} />
             {/* <Route path="/tap-payment-setup" component={TapPaymentSetup} /> */}
           </>
         )}
-        
+
         {/* 404 Route - Must be last */}
         <Route path="*" component={NotFound} />
       </Switch>
