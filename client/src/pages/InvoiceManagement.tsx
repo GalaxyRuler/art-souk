@@ -159,10 +159,37 @@ export default function InvoiceManagement() {
     },
   });
 
-  // Debug: Log actual invoice data structure
+  // COMPREHENSIVE DEBUG: Log actual invoice data structure
   React.useEffect(() => {
-    console.log('=== INVOICE DEBUG START ===');
-    console.log('Invoices data:', invoices);
+    console.log('=== COMPREHENSIVE INVOICE DEBUG START ===');
+    console.log('🔍 Invoices data:', invoices);
+    console.log('🔍 Invoices type:', typeof invoices);
+    console.log('🔍 Invoices isArray:', Array.isArray(invoices));
+    console.log('🔍 Invoices length:', invoices?.length);
+    console.log('🔍 IsLoading:', isLoading);
+    console.log('🔍 IsSuccess:', isSuccess);
+    console.log('🔍 IsFetching:', isFetching);
+    console.log('🔍 Error:', error);
+    console.log('🔍 Raw invoices:', JSON.stringify(invoices, null, 2));
+    
+    if (invoices && Array.isArray(invoices) && invoices.length > 0) {
+      console.log('🔍 First invoice FULL:', invoices[0]);
+      console.log('🔍 First invoice keys:', Object.keys(invoices[0]));
+      console.log('🔍 First invoice ID:', invoices[0].id);
+      console.log('🔍 First invoice number:', invoices[0].invoice_number);
+      console.log('🔍 First invoice total:', invoices[0].total_amount);
+      console.log('🔍 First invoice buyer:', invoices[0].buyer_name);
+      console.log('🔍 First invoice created:', invoices[0].created_at);
+      console.log('🔍 Field validation: {');
+      console.log('   id exists:', 'id' in invoices[0]);
+      console.log('   invoice_number exists:', 'invoice_number' in invoices[0]);
+      console.log('   total_amount exists:', 'total_amount' in invoices[0]);
+      console.log('   buyer_name exists:', 'buyer_name' in invoices[0]);
+      console.log('   created_at exists:', 'created_at' in invoices[0]);
+      console.log('🔍 }');
+    } else {
+      console.log('🔍 NO INVOICES OR NOT ARRAY!');
+    }
     console.log('Invoices length:', invoices?.length || 0);
     console.log('Is loading:', isLoading);
     console.log('Has error:', error);
