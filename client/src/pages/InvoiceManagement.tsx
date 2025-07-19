@@ -154,14 +154,17 @@ export default function InvoiceManagement() {
 
   // Debug: Log actual invoice data structure
   React.useEffect(() => {
+    console.log('=== INVOICE DEBUG START ===');
+    console.log('Invoices data:', invoices);
+    console.log('Invoices length:', invoices?.length || 0);
+    console.log('Is loading:', isInvoicesLoading);
+    console.log('Has error:', isInvoicesError);
     if (invoices && invoices.length > 0) {
-      console.log('🔍 Frontend invoice data:', invoices);
-      console.log('🔍 First invoice structure:', invoices[0]);
-      console.log('🔍 Invoice field names:', Object.keys(invoices[0]));
-      console.log('🔍 Invoice number field:', invoices[0].invoice_number);
-      console.log('🔍 Total amount field:', invoices[0].total_amount);
+      console.log('First invoice:', invoices[0]);
+      console.log('Invoice fields:', Object.keys(invoices[0]));
     }
-  }, [invoices]);
+    console.log('=== INVOICE DEBUG END ===');
+  }, [invoices, isInvoicesLoading, isInvoicesError]);
 
   // Enhanced debug logging for React Query state
   console.log('🔍 REACT QUERY STATE:', {
@@ -526,7 +529,7 @@ export default function InvoiceManagement() {
           <div className="mt-6">
             {activeTab === 'all' && (
               <div className="grid gap-4">
-                {invoices?.map((invoice: any, index: number) => (
+                {invoices?.map((invoice: any) => (
                   <Card key={invoice.id} className="p-6">
                     <div className="flex justify-between items-start">
                       <div>
