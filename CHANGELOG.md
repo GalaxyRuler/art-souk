@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🏗️ Architecture
 - **BREAKING**: Converted to Turborepo monorepo structure
-- **BREAKING**: Restructured apps into `/apps/web` and `/apps/api`
+- **BREAKING**: Restructured apps into `/client` (web) and `/server` (api)
 - **NEW**: Added shared packages for database, UI components, and TypeScript configs
 - **NEW**: Implemented comprehensive build pipeline with turbo.json
 
