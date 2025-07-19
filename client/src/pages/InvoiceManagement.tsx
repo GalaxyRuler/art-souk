@@ -529,11 +529,22 @@ export default function InvoiceManagement() {
           <div className="mt-6">
             {activeTab === 'all' && (
               <div className="grid gap-4">
-                {invoices?.map((invoice: any) => (
-                  <Card key={invoice.id} className="p-6">
+                <div className="bg-yellow-100 p-4 border">
+                  DEBUG: Invoices array length: {invoices?.length || 0} | 
+                  Type: {typeof invoices} | 
+                  IsArray: {Array.isArray(invoices) ? 'true' : 'false'}
+                </div>
+                {invoices?.map((invoice: any, index: number) => (
+                  <Card key={invoice.id} className="p-6 border-2 border-green-500">
+                    <div className="bg-blue-50 p-2 mb-4 text-xs">
+                      DEBUG CARD #{index}: ID={invoice.id} | 
+                      Number={invoice.invoice_number} | 
+                      Total={invoice.total_amount} | 
+                      Keys={Object.keys(invoice).slice(0,5).join(',')}...
+                    </div>
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-lg font-semibold">{invoice.invoice_number}</h3>
+                        <h3 className="text-lg font-semibold">{invoice.invoice_number || 'NO NUMBER'}</h3>
                         <p className="text-gray-600">{invoice.buyer_name || t('invoice.customer')}</p>
                         <p className="text-sm text-gray-500">
                           {invoice.created_at ? format(new Date(invoice.created_at), 'MMM dd, yyyy') : 'N/A'}
@@ -541,10 +552,10 @@ export default function InvoiceManagement() {
                       </div>
                       <div className="text-right">
                         <Badge variant={invoice.status === 'draft' ? 'secondary' : 'default'}>
-                          {t(`invoice.status.${invoice.status}`)}
+                          {t(`invoice.status.${invoice.status}`) || invoice.status}
                         </Badge>
                         <p className="text-lg font-semibold mt-2">
-                          {invoice.total_amount} {invoice.currency || 'SAR'}
+                          {invoice.total_amount || 'NO AMOUNT'} {invoice.currency || 'SAR'}
                         </p>
                       </div>
                     </div>
