@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { Download, Eye, FileText, Plus, AlertCircle, CheckCircle, Send, Clock } from "lucide-react";
@@ -69,6 +69,17 @@ export default function InvoiceManagement() {
       }
     },
   });
+
+  // Debug: Log actual invoice data structure
+  React.useEffect(() => {
+    if (invoices && invoices.length > 0) {
+      console.log('🔍 Frontend invoice data:', invoices);
+      console.log('🔍 First invoice structure:', invoices[0]);
+      console.log('🔍 Invoice field names:', Object.keys(invoices[0]));
+      console.log('🔍 Invoice number field:', invoices[0].invoice_number);
+      console.log('🔍 Total amount field:', invoices[0].total_amount);
+    }
+  }, [invoices]);
 
   // Enhanced debug logging for React Query state
   console.log('🔍 REACT QUERY STATE:', {
@@ -454,7 +465,7 @@ export default function InvoiceManagement() {
                     <div className="flex justify-between items-start">
                       <div>
                         <h3 className="text-lg font-semibold">{invoice.invoice_number}</h3>
-                        <p className="text-gray-600">{invoice.buyer_name || 'Customer'}</p>
+                        <p className="text-gray-600">{invoice.buyer_name || t('invoice.customer')}</p>
                         <p className="text-sm text-gray-500">
                           {invoice.created_at ? format(new Date(invoice.created_at), 'MMM dd, yyyy') : 'N/A'}
                         </p>
@@ -471,11 +482,11 @@ export default function InvoiceManagement() {
                     <div className="flex gap-2 mt-4">
                       <Button size="sm" variant="outline">
                         <Eye className="w-4 h-4 mr-2" />
-                        {t('common.view')}
+                        {t('invoice.view')}
                       </Button>
                       <Button size="sm" variant="outline">
                         <Download className="w-4 h-4 mr-2" />
-                        {t('common.download')}
+                        {t('invoice.download')}
                       </Button>
                     </div>
                   </Card>
@@ -496,7 +507,7 @@ export default function InvoiceManagement() {
                     <div className="flex justify-between items-start">
                       <div>
                         <h3 className="text-lg font-semibold">{invoice.invoice_number}</h3>
-                        <p className="text-gray-600">{invoice.buyer_name || 'Customer'}</p>
+                        <p className="text-gray-600">{invoice.buyer_name || t('invoice.customer')}</p>
                         <p className="text-sm text-gray-500">
                           {invoice.created_at ? format(new Date(invoice.created_at), 'MMM dd, yyyy') : 'N/A'}
                         </p>
@@ -511,7 +522,7 @@ export default function InvoiceManagement() {
                     <div className="flex gap-2 mt-4">
                       <Button size="sm" variant="outline">
                         <Eye className="w-4 h-4 mr-2" />
-                        {t('common.view')}
+                        {t('invoice.view')}
                       </Button>
                       <Button size="sm">
                         <Send className="w-4 h-4 mr-2" />
