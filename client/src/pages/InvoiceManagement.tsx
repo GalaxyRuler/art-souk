@@ -48,7 +48,8 @@ export default function InvoiceManagement() {
         throw new Error('Invoice ID is missing');
       }
       
-      const response = await fetch(`/api/invoices/generate-pdf/${invoice.id}`, {
+      const response = await fetch(`/api/invoices/${invoice.id}/pdf`, {
+        method: 'GET',
         credentials: 'include',
       });
       

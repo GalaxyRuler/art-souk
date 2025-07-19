@@ -220,9 +220,11 @@ Preferred communication style: Simple, everyday language.
     • Backend API working perfectly with 200 status responses
     • React Query data flow confirmed operational
     • Database persistence and invoice retrieval fully functional
-  ✓ **PDF Download Function Fully Operational**: Fixed all field mapping issues in download function
+  ✓ **PDF Download Function Fully Operational**: Fixed all field mapping and endpoint issues
     • Updated handleDownloadInvoice to use correct camelCase field names (invoice.invoiceNumber)
-    • PDF download now generates authentic ZATCA-compliant invoices successfully
+    • Created new `/api/invoices/:invoiceId/pdf` endpoint that works with invoice records directly
+    • Fixed backend logic to query invoices table instead of non-existent purchase orders
+    • PDF download now generates authentic ZATCA-compliant invoices successfully with real data
     • Proper filename generation and success notifications working
     • Complete end-to-end invoice management workflow functional
 
