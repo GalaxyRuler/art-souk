@@ -224,7 +224,9 @@ Preferred communication style: Simple, everyday language.
     • Updated handleDownloadInvoice to use correct camelCase field names (invoice.invoiceNumber)
     • Created new `/api/invoices/:invoiceId/pdf` endpoint that works with invoice records directly
     • Fixed backend logic to query invoices table instead of non-existent purchase orders
-    • PDF download now generates authentic ZATCA-compliant invoices successfully with real data
+    • Created wrapper function handleDownloadInvoiceById to fix modal download button interface mismatch
+    • PDF download now works from both invoice cards and invoice detail modal
+    • PDF generation uses authentic ZATCA-compliant invoices with real data (INV numbers, amounts, customer names)
     • Proper filename generation and success notifications working
     • Complete end-to-end invoice management workflow functional
 

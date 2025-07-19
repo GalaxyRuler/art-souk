@@ -89,10 +89,31 @@ export default function InvoiceManagement() {
     }
   };
 
-  // Handle ZATCA submission
-  const handleZATCASubmit = async (invoice: any) => {
+  // Wrapper function for InvoiceDetail component that expects just invoice ID
+  const handleDownloadInvoiceById = async (invoiceId: number) => {
+    console.log('🔄 Converting invoice ID to invoice object for download:', invoiceId);
+    const invoice = invoices?.find((inv: any) => inv.id === invoiceId);
+    if (invoice) {
+      await handleDownloadInvoice(invoice);
+    } else {
+      console.error('❌ Invoice not found with ID:', invoiceId);
+      toast({
+        title: t('invoice.downloadError'),
+        description: 'Invoice not found for download',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // Handle ZATCA submission with corrected field names
+  const handleZATCASubmit = async (invoiceId: number) => {
     try {
-      console.log('📨 Submitting invoice to ZATCA:', invoice.invoice_number);
+      const invoice = invoices?.find((inv: any) => inv.id === invoiceId);
+      if (!invoice) {
+        throw new Error('Invoice not found');
+      }
+      
+      console.log('📨 Submitting invoice to ZATCA:', invoice.invoiceNumber);
       const response = await fetch(`/api/invoices/${invoice.id}/zatca-submit`, {
         method: 'POST',
         credentials: 'include',
@@ -107,7 +128,7 @@ export default function InvoiceManagement() {
       
       toast({
         title: t('invoice.zatcaSubmitSuccess'),
-        description: `${invoice.invoice_number} submitted to ZATCA successfully`,
+        description: `${invoice.invoiceNumber} submitted to ZATCA successfully`,
       });
     } catch (error) {
       console.error('Error submitting to ZATCA:', error);
@@ -632,7 +653,7 @@ export default function InvoiceManagement() {
         invoice={selectedInvoice}
         open={detailDialogOpen}
         onOpenChange={setDetailDialogOpen}
-        onDownloadPdf={handleDownloadInvoice}
+        onDownloadPdf={handleDownloadInvoiceById}
         onSubmitToZatca={handleZATCASubmit}
       />
       
