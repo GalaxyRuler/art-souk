@@ -469,10 +469,10 @@ export default function InvoiceManagement() {
                   <Card key={invoice.id} className="p-6">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-lg font-semibold">{invoice.number || invoice.invoice_number}</h3>
-                        <p className="text-gray-600">{invoice.buyer_name || t('invoice.customer')}</p>
+                        <h3 className="text-lg font-semibold">{invoice.invoiceNumber}</h3>
+                        <p className="text-gray-600">{invoice.buyerName || t('invoice.customer')}</p>
                         <p className="text-sm text-gray-500">
-                          {invoice.created ? format(new Date(invoice.created), 'MMM dd, yyyy') : 'N/A'}
+                          {invoice.createdAt ? format(new Date(invoice.createdAt), 'MMM dd, yyyy') : 'N/A'}
                         </p>
                       </div>
                       <div className="text-right">
@@ -480,7 +480,7 @@ export default function InvoiceManagement() {
                           {t(`invoice.status.${invoice.status}`)}
                         </Badge>
                         <p className="text-lg font-semibold mt-2">
-                          {invoice.total || invoice.total_amount} {invoice.currency || 'SAR'}
+                          {invoice.totalAmount} {invoice.currency || 'SAR'}
                         </p>
                       </div>
                     </div>
@@ -511,16 +511,16 @@ export default function InvoiceManagement() {
                   <Card key={invoice.id} className="p-6">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-lg font-semibold">{invoice.number || invoice.invoice_number}</h3>
-                        <p className="text-gray-600">{invoice.buyer_name || t('invoice.customer')}</p>
+                        <h3 className="text-lg font-semibold">{invoice.invoiceNumber}</h3>
+                        <p className="text-gray-600">{invoice.buyerName || t('invoice.customer')}</p>
                         <p className="text-sm text-gray-500">
-                          {invoice.created ? format(new Date(invoice.created), 'MMM dd, yyyy') : 'N/A'}
+                          {invoice.createdAt ? format(new Date(invoice.createdAt), 'MMM dd, yyyy') : 'N/A'}
                         </p>
                       </div>
                       <div className="text-right">
                         <Badge variant="secondary">{t('invoice.status.draft')}</Badge>
                         <p className="text-lg font-semibold mt-2">
-                          {invoice.total || invoice.total_amount} {invoice.currency || 'SAR'}
+                          {invoice.totalAmount} {invoice.currency || 'SAR'}
                         </p>
                       </div>
                     </div>
