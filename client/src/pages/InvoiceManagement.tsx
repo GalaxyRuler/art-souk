@@ -427,7 +427,7 @@ export default function InvoiceManagement() {
                     .map((invoice: any) => {
                       console.log(`🎨 Rendering card for: ${invoice.invoiceNumber}`);
                       return (
-                        <Card key={invoice.id} className="hover:shadow-lg transition-shadow">
+                        <Card key={invoice.id} className="hover:shadow-lg transition-shadow bg-green-50 border-green-200">
                         <CardContent className="p-6">
                           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                             <div className="flex-1">
@@ -491,7 +491,8 @@ export default function InvoiceManagement() {
                           </div>
                         </CardContent>
                       </Card>
-                    ))}
+                      );
+                    })}
                   
                   {invoices.filter((invoice: any) => status === 'all' || invoice.status === status).length === 0 && (
                     <Card>
