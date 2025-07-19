@@ -159,7 +159,7 @@ export default function InvoiceManagement() {
     },
   });
 
-  // Simple debug logging
+  // Detailed field debugging
   React.useEffect(() => {
     console.log('INVOICE DEBUG:', {
       isLoading,
@@ -167,11 +167,18 @@ export default function InvoiceManagement() {
       invoicesLength: invoices?.length || 0,
       invoicesType: typeof invoices,
       isArray: Array.isArray(invoices),
-      firstInvoice: invoices?.[0] ? {
-        id: invoices[0].id,
-        invoice_number: invoices[0].invoice_number,
-        total_amount: invoices[0].total_amount,
-        status: invoices[0].status
+      firstInvoiceAllFields: invoices?.[0] || null,
+      firstInvoiceKeys: invoices?.[0] ? Object.keys(invoices[0]) : [],
+      fieldTesting: invoices?.[0] ? {
+        'id': invoices[0].id,
+        'number': invoices[0].number,
+        'invoice_number': invoices[0].invoice_number, 
+        'total': invoices[0].total,
+        'total_amount': invoices[0].total_amount,
+        'status': invoices[0].status,
+        'buyer_name': invoices[0].buyer_name,
+        'created_at': invoices[0].created_at,
+        'created': invoices[0].created
       } : null
     });
   }, [invoices, isLoading, error]);
@@ -512,7 +519,10 @@ export default function InvoiceManagement() {
                 {invoices?.map((invoice: any, index: number) => (
                   <Card key={invoice.id || index} className="p-6">
                     <div className="bg-green-50 p-2 mb-2 text-xs border-l-4 border-green-400">
-                      Card {index + 1}: ID={invoice.id} | Number={invoice.invoice_number} | Amount={invoice.total_amount}
+                      Card {index + 1}: ID={invoice.id} | Fields={Object.keys(invoice).join(', ')}
+                    </div>
+                    <div className="bg-yellow-50 p-1 mb-2 text-xs">
+                      Testing: number={invoice.number} | invoice_number={invoice.invoice_number} | total={invoice.total} | total_amount={invoice.total_amount}
                     </div>
                     <div className="flex justify-between items-start">
                       <div>
