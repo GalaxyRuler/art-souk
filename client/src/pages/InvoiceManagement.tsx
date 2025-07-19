@@ -39,7 +39,7 @@ export default function InvoiceManagement() {
   // Handle downloading invoice PDF
   const handleDownloadInvoice = async (invoice: any) => {
     try {
-      console.log('📥 Downloading invoice:', invoice.invoice_number);
+      console.log('📥 Downloading invoice:', invoice.invoiceNumber);
       console.log('📋 Full invoice object:', invoice);
       console.log('🆔 Invoice ID:', invoice.id);
       console.log('🔍 Invoice keys:', Object.keys(invoice));
@@ -68,7 +68,7 @@ export default function InvoiceManagement() {
       const a = document.createElement('a');
       a.style.display = 'none';
       a.href = url;
-      a.download = `${invoice.invoice_number}.pdf`;
+      a.download = `${invoice.invoiceNumber}.pdf`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -76,7 +76,7 @@ export default function InvoiceManagement() {
       
       toast({
         title: t('invoice.downloadSuccess'),
-        description: `${invoice.invoice_number} PDF downloaded successfully`,
+        description: `${invoice.invoiceNumber} PDF downloaded successfully`,
       });
     } catch (error) {
       console.error('❌ Error downloading invoice:', error);
