@@ -1,0 +1,36 @@
+
+{
+  "name": "art-souk-codex-framework",
+  "version": "1.0.0",
+  "description": "Codex compatibility framework for Art Souk marketplace",
+  "type": "module",
+  "main": "server/index.ts",
+  "scripts": {
+    "codex:start": "NODE_ENV=development tsx server/index.ts",
+    "codex:build": "vite build client && tsc server/index.ts --outDir dist",
+    "codex:test": "vitest run",
+    "codex:lint": "./lint.sh",
+    "codex:setup": "./setup-codex.sh"
+  },
+  "codex": {
+    "runtime": "nodejs-20",
+    "port": 5000,
+    "host": "0.0.0.0",
+    "environment": "development",
+    "features": {
+      "database": "postgresql-16",
+      "storage": "local",
+      "auth": "replit-auth",
+      "payments": "tap-payments"
+    },
+    "dependencies": {
+      "resolved": true,
+      "workspace_packages": [
+        "client",
+        "server", 
+        "packages/ui",
+        "packages/db"
+      ]
+    }
+  }
+}

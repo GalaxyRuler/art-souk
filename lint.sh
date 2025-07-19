@@ -33,8 +33,8 @@ run_lint() {
 }
 
 # Run lint in all workspace packages
-run_lint "apps/web" "@art-souk/web"
-run_lint "apps/api" "@art-souk/api"
+run_lint "client" "@art-souk/client"
+run_lint "server" "@art-souk/server"
 run_lint "packages/ui" "@art-souk/ui"
 run_lint "packages/db" "@art-souk/db"
 
