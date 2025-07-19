@@ -386,6 +386,23 @@ export default function InvoiceManagement() {
           </div>
         </div>
 
+        {/* TEMPORARY DEBUG BOX */}
+        <div className="bg-red-100 border border-red-400 p-4 rounded mb-6">
+          <h3 className="font-bold text-red-800">FRONTEND DEBUG:</h3>
+          <p><strong>Loading:</strong> {isLoading ? 'YES' : 'NO'}</p>
+          <p><strong>Error:</strong> {error ? error.message : 'None'}</p>
+          <p><strong>Invoices Array:</strong> {invoices ? `${invoices.length} items` : 'undefined'}</p>
+          <p><strong>Array Type:</strong> {Array.isArray(invoices) ? 'Array' : typeof invoices}</p>
+          {invoices && invoices.length > 0 && (
+            <div>
+              <p><strong>First Invoice:</strong></p>
+              <pre className="text-xs bg-white p-2 mt-1 rounded">
+                {JSON.stringify(invoices[0], null, 2).slice(0, 300)}...
+              </pre>
+            </div>
+          )}
+        </div>
+
         <Tabs defaultValue="all" className="space-y-6">
           <TabsList>
             <TabsTrigger value="all">{t('invoice.tabs.all')}</TabsTrigger>
