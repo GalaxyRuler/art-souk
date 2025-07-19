@@ -32,34 +32,25 @@ export default function InvoiceManagement() {
   const hasSellerAccess = true;
   const userRoles = [];
 
-  // Fetch invoices with custom fetch function - ALWAYS ENABLED
+  // Fetch invoices - SIMPLIFIED AND FIXED
   const { data: invoices = [], isLoading, error } = useQuery({
-    queryKey: ['/api/invoices', Date.now()], // Add timestamp to force fresh requests
-    enabled: true, // ALWAYS FETCH INVOICES
-    staleTime: 0, // Always fetch fresh data
-    gcTime: 0, // Don't cache results (updated from cacheTime)
+    queryKey: ['/api/invoices'], // FIXED: Removed Date.now() which was causing infinite re-renders
+    staleTime: 0,
     refetchOnMount: true,
-    refetchOnWindowFocus: true,
     queryFn: async () => {
-      console.log('🔄 INVOICE FETCH STARTED - Custom fetch function called');
+      console.log('🔄 STARTING INVOICE FETCH');
       const response = await fetch('/api/invoices', {
         credentials: 'include',
-        headers: {
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache',
-        },
+        headers: { 'Cache-Control': 'no-cache' },
       });
       
-      console.log('📡 Response status:', response.status, response.statusText);
-      
       if (!response.ok) {
-        console.error('❌ FETCH FAILED - HTTP error:', response.status);
-        throw new Error(`HTTP error! status: ${response.status}`);
+        console.error('❌ FETCH FAILED:', response.status);
+        throw new Error(`HTTP ${response.status}`);
       }
       
       const data = await response.json();
-      console.log('📦 INVOICE DATA RECEIVED:', data);
-      console.log('📊 Invoice count:', Array.isArray(data) ? data.length : 'Not an array');
+      console.log('✅ INVOICE FETCH SUCCESS:', data.length, 'invoices');
       return data;
     },
   });
