@@ -157,14 +157,14 @@ export default function InvoiceManagement() {
     console.log('=== INVOICE DEBUG START ===');
     console.log('Invoices data:', invoices);
     console.log('Invoices length:', invoices?.length || 0);
-    console.log('Is loading:', isInvoicesLoading);
-    console.log('Has error:', isInvoicesError);
+    console.log('Is loading:', isLoading);
+    console.log('Has error:', error);
     if (invoices && invoices.length > 0) {
       console.log('First invoice:', invoices[0]);
       console.log('Invoice fields:', Object.keys(invoices[0]));
     }
     console.log('=== INVOICE DEBUG END ===');
-  }, [invoices, isInvoicesLoading, isInvoicesError]);
+  }, [invoices, isLoading, error]);
 
   // Enhanced debug logging for React Query state
   console.log('🔍 REACT QUERY STATE:', {

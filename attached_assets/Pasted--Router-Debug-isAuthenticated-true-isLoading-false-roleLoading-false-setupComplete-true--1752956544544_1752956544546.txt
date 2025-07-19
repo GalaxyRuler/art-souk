@@ -1,0 +1,263 @@
+🔍 Router Debug: {isAuthenticated: true, isLoading: false, roleLoading: false, setupComplete: true}
+InvoiceManagement.tsx:167 Uncaught ReferenceError: isInvoicesLoading is not defined
+    at InvoiceManagement (InvoiceManagement.tsx:167:17)
+    at renderWithHooks (chunk-7SSXMLWA.js?v=2e795fa3:11548:26)
+    at mountIndeterminateComponent (chunk-7SSXMLWA.js?v=2e795fa3:14926:21)
+    at beginWork (chunk-7SSXMLWA.js?v=2e795fa3:15914:22)
+    at HTMLUnknownElement.callCallback2 (chunk-7SSXMLWA.js?v=2e795fa3:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-7SSXMLWA.js?v=2e795fa3:3699:24)
+    at invokeGuardedCallback (chunk-7SSXMLWA.js?v=2e795fa3:3733:39)
+    at beginWork$1 (chunk-7SSXMLWA.js?v=2e795fa3:19765:15)
+    at performUnitOfWork (chunk-7SSXMLWA.js?v=2e795fa3:19198:20)
+    at workLoopSync (chunk-7SSXMLWA.js?v=2e795fa3:19137:13)
+InvoiceManagement @ InvoiceManagement.tsx:167
+renderWithHooks @ chunk-7SSXMLWA.js?v=2e795fa3:11548
+mountIndeterminateComponent @ chunk-7SSXMLWA.js?v=2e795fa3:14926
+beginWork @ chunk-7SSXMLWA.js?v=2e795fa3:15914
+callCallback2 @ chunk-7SSXMLWA.js?v=2e795fa3:3674
+invokeGuardedCallbackDev @ chunk-7SSXMLWA.js?v=2e795fa3:3699
+invokeGuardedCallback @ chunk-7SSXMLWA.js?v=2e795fa3:3733
+beginWork$1 @ chunk-7SSXMLWA.js?v=2e795fa3:19765
+performUnitOfWork @ chunk-7SSXMLWA.js?v=2e795fa3:19198
+workLoopSync @ chunk-7SSXMLWA.js?v=2e795fa3:19137
+renderRootSync @ chunk-7SSXMLWA.js?v=2e795fa3:19116
+recoverFromConcurrentError @ chunk-7SSXMLWA.js?v=2e795fa3:18736
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18879
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+(anonymous) @ chunk-7SSXMLWA.js?v=2e795fa3:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2e795fa3:555
+flush @ @tanstack_react-query.js?v=2e795fa3:569
+batch @ @tanstack_react-query.js?v=2e795fa3:587
+dispatch_fn @ @tanstack_react-query.js?v=2e795fa3:996
+setData @ @tanstack_react-query.js?v=2e795fa3:696
+onSuccess @ @tanstack_react-query.js?v=2e795fa3:897
+resolve @ @tanstack_react-query.js?v=2e795fa3:456
+Promise.then
+run @ @tanstack_react-query.js?v=2e795fa3:498
+start @ @tanstack_react-query.js?v=2e795fa3:536
+fetch @ @tanstack_react-query.js?v=2e795fa3:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e795fa3:2211
+setOptions @ @tanstack_react-query.js?v=2e795fa3:1955
+(anonymous) @ @tanstack_react-query.js?v=2e795fa3:3032
+commitHookEffectListMount @ chunk-7SSXMLWA.js?v=2e795fa3:16915
+commitPassiveMountOnFiber @ chunk-7SSXMLWA.js?v=2e795fa3:18156
+commitPassiveMountEffects_complete @ chunk-7SSXMLWA.js?v=2e795fa3:18129
+commitPassiveMountEffects_begin @ chunk-7SSXMLWA.js?v=2e795fa3:18119
+commitPassiveMountEffects @ chunk-7SSXMLWA.js?v=2e795fa3:18109
+flushPassiveEffectsImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19490
+flushPassiveEffects @ chunk-7SSXMLWA.js?v=2e795fa3:19447
+commitRootImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19416
+commitRoot @ chunk-7SSXMLWA.js?v=2e795fa3:19277
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18895
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+(anonymous) @ chunk-7SSXMLWA.js?v=2e795fa3:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2e795fa3:555
+flush @ @tanstack_react-query.js?v=2e795fa3:569
+batch @ @tanstack_react-query.js?v=2e795fa3:587
+dispatch_fn @ @tanstack_react-query.js?v=2e795fa3:996
+setData @ @tanstack_react-query.js?v=2e795fa3:696
+onSuccess @ @tanstack_react-query.js?v=2e795fa3:897
+resolve @ @tanstack_react-query.js?v=2e795fa3:456
+Promise.then
+run @ @tanstack_react-query.js?v=2e795fa3:498
+start @ @tanstack_react-query.js?v=2e795fa3:536
+fetch @ @tanstack_react-query.js?v=2e795fa3:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e795fa3:2211
+onSubscribe @ @tanstack_react-query.js?v=2e795fa3:1898
+subscribe @ @tanstack_react-query.js?v=2e795fa3:24
+(anonymous) @ @tanstack_react-query.js?v=2e795fa3:3022
+subscribeToStore @ chunk-7SSXMLWA.js?v=2e795fa3:11984
+commitHookEffectListMount @ chunk-7SSXMLWA.js?v=2e795fa3:16915
+commitPassiveMountOnFiber @ chunk-7SSXMLWA.js?v=2e795fa3:18156
+commitPassiveMountEffects_complete @ chunk-7SSXMLWA.js?v=2e795fa3:18129
+commitPassiveMountEffects_begin @ chunk-7SSXMLWA.js?v=2e795fa3:18119
+commitPassiveMountEffects @ chunk-7SSXMLWA.js?v=2e795fa3:18109
+flushPassiveEffectsImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19490
+flushPassiveEffects @ chunk-7SSXMLWA.js?v=2e795fa3:19447
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18868
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+commitRootImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19432
+commitRoot @ chunk-7SSXMLWA.js?v=2e795fa3:19277
+finishConcurrentRender @ chunk-7SSXMLWA.js?v=2e795fa3:18805
+performConcurrentWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18718
+workLoop @ chunk-7SSXMLWA.js?v=2e795fa3:197
+flushWork @ chunk-7SSXMLWA.js?v=2e795fa3:176
+performWorkUntilDeadline @ chunk-7SSXMLWA.js?v=2e795fa3:384Understand this error
+hook.js:608 The above error occurred in the <InvoiceManagement> component:
+
+    at InvoiceManagement (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/pages/InvoiceManagement.tsx?t=1752956345436:39:23)
+    at Route (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/node_modules/.vite/deps/wouter.js?v=2e795fa3:323:16)
+    at Switch (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/node_modules/.vite/deps/wouter.js?v=2e795fa3:379:17)
+    at Suspense
+    at Router (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/App.tsx?t=1752956345436&v=N0H9_Q1pz5KCX_b5Z2cxT:118:42)
+    at Provider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/node_modules/.vite/deps/chunk-7KRCBXUP.js?v=2e795fa3:22:15)
+    at TooltipProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=2e795fa3:60:5)
+    at I18nextProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/node_modules/.vite/deps/react-i18next.js?v=2e795fa3:793:3)
+    at QueryClientProvider (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/node_modules/.vite/deps/@tanstack_react-query.js?v=2e795fa3:2805:3)
+    at ErrorBoundary (https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/src/components/ErrorBoundary.tsx:10:5)
+    at App
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+overrideMethod @ hook.js:608
+logCapturedError @ chunk-7SSXMLWA.js?v=2e795fa3:14032
+callback @ chunk-7SSXMLWA.js?v=2e795fa3:14078
+callCallback @ chunk-7SSXMLWA.js?v=2e795fa3:11248
+commitUpdateQueue @ chunk-7SSXMLWA.js?v=2e795fa3:11265
+commitLayoutEffectOnFiber @ chunk-7SSXMLWA.js?v=2e795fa3:17075
+commitLayoutMountEffects_complete @ chunk-7SSXMLWA.js?v=2e795fa3:17980
+commitLayoutEffects_begin @ chunk-7SSXMLWA.js?v=2e795fa3:17969
+commitLayoutEffects @ chunk-7SSXMLWA.js?v=2e795fa3:17920
+commitRootImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19353
+commitRoot @ chunk-7SSXMLWA.js?v=2e795fa3:19277
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18895
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+(anonymous) @ chunk-7SSXMLWA.js?v=2e795fa3:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2e795fa3:555
+flush @ @tanstack_react-query.js?v=2e795fa3:569
+batch @ @tanstack_react-query.js?v=2e795fa3:587
+dispatch_fn @ @tanstack_react-query.js?v=2e795fa3:996
+setData @ @tanstack_react-query.js?v=2e795fa3:696
+onSuccess @ @tanstack_react-query.js?v=2e795fa3:897
+resolve @ @tanstack_react-query.js?v=2e795fa3:456
+Promise.then
+run @ @tanstack_react-query.js?v=2e795fa3:498
+start @ @tanstack_react-query.js?v=2e795fa3:536
+fetch @ @tanstack_react-query.js?v=2e795fa3:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e795fa3:2211
+setOptions @ @tanstack_react-query.js?v=2e795fa3:1955
+(anonymous) @ @tanstack_react-query.js?v=2e795fa3:3032
+commitHookEffectListMount @ chunk-7SSXMLWA.js?v=2e795fa3:16915
+commitPassiveMountOnFiber @ chunk-7SSXMLWA.js?v=2e795fa3:18156
+commitPassiveMountEffects_complete @ chunk-7SSXMLWA.js?v=2e795fa3:18129
+commitPassiveMountEffects_begin @ chunk-7SSXMLWA.js?v=2e795fa3:18119
+commitPassiveMountEffects @ chunk-7SSXMLWA.js?v=2e795fa3:18109
+flushPassiveEffectsImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19490
+flushPassiveEffects @ chunk-7SSXMLWA.js?v=2e795fa3:19447
+commitRootImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19416
+commitRoot @ chunk-7SSXMLWA.js?v=2e795fa3:19277
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18895
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+(anonymous) @ chunk-7SSXMLWA.js?v=2e795fa3:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2e795fa3:555
+flush @ @tanstack_react-query.js?v=2e795fa3:569
+batch @ @tanstack_react-query.js?v=2e795fa3:587
+dispatch_fn @ @tanstack_react-query.js?v=2e795fa3:996
+setData @ @tanstack_react-query.js?v=2e795fa3:696
+onSuccess @ @tanstack_react-query.js?v=2e795fa3:897
+resolve @ @tanstack_react-query.js?v=2e795fa3:456
+Promise.then
+run @ @tanstack_react-query.js?v=2e795fa3:498
+start @ @tanstack_react-query.js?v=2e795fa3:536
+fetch @ @tanstack_react-query.js?v=2e795fa3:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e795fa3:2211
+onSubscribe @ @tanstack_react-query.js?v=2e795fa3:1898
+subscribe @ @tanstack_react-query.js?v=2e795fa3:24
+(anonymous) @ @tanstack_react-query.js?v=2e795fa3:3022
+subscribeToStore @ chunk-7SSXMLWA.js?v=2e795fa3:11984
+commitHookEffectListMount @ chunk-7SSXMLWA.js?v=2e795fa3:16915
+commitPassiveMountOnFiber @ chunk-7SSXMLWA.js?v=2e795fa3:18156
+commitPassiveMountEffects_complete @ chunk-7SSXMLWA.js?v=2e795fa3:18129
+commitPassiveMountEffects_begin @ chunk-7SSXMLWA.js?v=2e795fa3:18119
+commitPassiveMountEffects @ chunk-7SSXMLWA.js?v=2e795fa3:18109
+flushPassiveEffectsImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19490
+flushPassiveEffects @ chunk-7SSXMLWA.js?v=2e795fa3:19447
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18868
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+commitRootImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19432
+commitRoot @ chunk-7SSXMLWA.js?v=2e795fa3:19277
+finishConcurrentRender @ chunk-7SSXMLWA.js?v=2e795fa3:18805
+performConcurrentWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18718
+workLoop @ chunk-7SSXMLWA.js?v=2e795fa3:197
+flushWork @ chunk-7SSXMLWA.js?v=2e795fa3:176
+performWorkUntilDeadline @ chunk-7SSXMLWA.js?v=2e795fa3:384Understand this error
+ErrorBoundary.tsx:29 Error caught by boundary: ReferenceError: isInvoicesLoading is not defined
+    at InvoiceManagement (InvoiceManagement.tsx:167:17)
+    at renderWithHooks (chunk-7SSXMLWA.js?v=2e795fa3:11548:26)
+    at mountIndeterminateComponent (chunk-7SSXMLWA.js?v=2e795fa3:14926:21)
+    at beginWork (chunk-7SSXMLWA.js?v=2e795fa3:15914:22)
+    at beginWork$1 (chunk-7SSXMLWA.js?v=2e795fa3:19753:22)
+    at performUnitOfWork (chunk-7SSXMLWA.js?v=2e795fa3:19198:20)
+    at workLoopSync (chunk-7SSXMLWA.js?v=2e795fa3:19137:13)
+    at renderRootSync (chunk-7SSXMLWA.js?v=2e795fa3:19116:15)
+    at recoverFromConcurrentError (chunk-7SSXMLWA.js?v=2e795fa3:18736:28)
+    at performSyncWorkOnRoot (chunk-7SSXMLWA.js?v=2e795fa3:18879:28) {componentStack: '\n    at InvoiceManagement (https://ec34765c-37ae-4…src/components/ErrorBoundary.tsx:10:5)\n    at App'} Error Component Stack
+    at ErrorBoundary (ErrorBoundary.tsx:19:5)
+    at App (<anonymous>)
+overrideMethod @ hook.js:608
+componentDidCatch @ ErrorBoundary.tsx:29
+callback @ chunk-7SSXMLWA.js?v=2e795fa3:14084
+callCallback @ chunk-7SSXMLWA.js?v=2e795fa3:11248
+commitUpdateQueue @ chunk-7SSXMLWA.js?v=2e795fa3:11265
+commitLayoutEffectOnFiber @ chunk-7SSXMLWA.js?v=2e795fa3:17075
+commitLayoutMountEffects_complete @ chunk-7SSXMLWA.js?v=2e795fa3:17980
+commitLayoutEffects_begin @ chunk-7SSXMLWA.js?v=2e795fa3:17969
+commitLayoutEffects @ chunk-7SSXMLWA.js?v=2e795fa3:17920
+commitRootImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19353
+commitRoot @ chunk-7SSXMLWA.js?v=2e795fa3:19277
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18895
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+(anonymous) @ chunk-7SSXMLWA.js?v=2e795fa3:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2e795fa3:555
+flush @ @tanstack_react-query.js?v=2e795fa3:569
+batch @ @tanstack_react-query.js?v=2e795fa3:587
+dispatch_fn @ @tanstack_react-query.js?v=2e795fa3:996
+setData @ @tanstack_react-query.js?v=2e795fa3:696
+onSuccess @ @tanstack_react-query.js?v=2e795fa3:897
+resolve @ @tanstack_react-query.js?v=2e795fa3:456
+Promise.then
+run @ @tanstack_react-query.js?v=2e795fa3:498
+start @ @tanstack_react-query.js?v=2e795fa3:536
+fetch @ @tanstack_react-query.js?v=2e795fa3:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e795fa3:2211
+setOptions @ @tanstack_react-query.js?v=2e795fa3:1955
+(anonymous) @ @tanstack_react-query.js?v=2e795fa3:3032
+commitHookEffectListMount @ chunk-7SSXMLWA.js?v=2e795fa3:16915
+commitPassiveMountOnFiber @ chunk-7SSXMLWA.js?v=2e795fa3:18156
+commitPassiveMountEffects_complete @ chunk-7SSXMLWA.js?v=2e795fa3:18129
+commitPassiveMountEffects_begin @ chunk-7SSXMLWA.js?v=2e795fa3:18119
+commitPassiveMountEffects @ chunk-7SSXMLWA.js?v=2e795fa3:18109
+flushPassiveEffectsImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19490
+flushPassiveEffects @ chunk-7SSXMLWA.js?v=2e795fa3:19447
+commitRootImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19416
+commitRoot @ chunk-7SSXMLWA.js?v=2e795fa3:19277
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18895
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+(anonymous) @ chunk-7SSXMLWA.js?v=2e795fa3:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2e795fa3:555
+flush @ @tanstack_react-query.js?v=2e795fa3:569
+batch @ @tanstack_react-query.js?v=2e795fa3:587
+dispatch_fn @ @tanstack_react-query.js?v=2e795fa3:996
+setData @ @tanstack_react-query.js?v=2e795fa3:696
+onSuccess @ @tanstack_react-query.js?v=2e795fa3:897
+resolve @ @tanstack_react-query.js?v=2e795fa3:456
+Promise.then
+run @ @tanstack_react-query.js?v=2e795fa3:498
+start @ @tanstack_react-query.js?v=2e795fa3:536
+fetch @ @tanstack_react-query.js?v=2e795fa3:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e795fa3:2211
+onSubscribe @ @tanstack_react-query.js?v=2e795fa3:1898
+subscribe @ @tanstack_react-query.js?v=2e795fa3:24
+(anonymous) @ @tanstack_react-query.js?v=2e795fa3:3022
+subscribeToStore @ chunk-7SSXMLWA.js?v=2e795fa3:11984
+commitHookEffectListMount @ chunk-7SSXMLWA.js?v=2e795fa3:16915
+commitPassiveMountOnFiber @ chunk-7SSXMLWA.js?v=2e795fa3:18156
+commitPassiveMountEffects_complete @ chunk-7SSXMLWA.js?v=2e795fa3:18129
+commitPassiveMountEffects_begin @ chunk-7SSXMLWA.js?v=2e795fa3:18119
+commitPassiveMountEffects @ chunk-7SSXMLWA.js?v=2e795fa3:18109
+flushPassiveEffectsImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19490
+flushPassiveEffects @ chunk-7SSXMLWA.js?v=2e795fa3:19447
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18868
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+commitRootImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19432
+commitRoot @ chunk-7SSXMLWA.js?v=2e795fa3:19277
+finishConcurrentRender @ chunk-7SSXMLWA.js?v=2e795fa3:18805
+performConcurrentWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18718
+workLoop @ chunk-7SSXMLWA.js?v=2e795fa3:197
+flushWork @ chunk-7SSXMLWA.js?v=2e795fa3:176
+performWorkUntilDeadline @ chunk-7SSXMLWA.js?v=2e795fa3:384Understand this error
