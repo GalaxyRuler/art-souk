@@ -96,21 +96,26 @@ export default function InvoiceManagement() {
   });
 
   // Debug first invoice structure
-  if (invoices && invoices.length > 0) {
-    console.log('🔍 First invoice structure:', {
-      id: invoices[0].id,
-      invoice_number: invoices[0].invoice_number,
-      invoiceNumber: invoices[0].invoiceNumber,
-      status: invoices[0].status,
-      buyer_name: invoices[0].buyer_name,
-      buyerName: invoices[0].buyerName,
-      total_amount: invoices[0].total_amount,
-      totalAmount: invoices[0].totalAmount,
-      created_at: invoices[0].created_at,
-      createdAt: invoices[0].createdAt,
-      allKeys: Object.keys(invoices[0])
-    });
-  }
+  React.useEffect(() => {
+    if (invoices && invoices.length > 0) {
+      console.log('🔍 TAB DEBUG:', { activeTab, invoicesLength: invoices.length });
+      console.log('🔍 First invoice structure:', {
+        id: invoices[0].id,
+        number: invoices[0].number,
+        invoice_number: invoices[0].invoice_number,
+        status: invoices[0].status,
+        total: invoices[0].total,
+        total_amount: invoices[0].total_amount,
+        created: invoices[0].created,
+        created_at: invoices[0].created_at,
+        allKeys: Object.keys(invoices[0])
+      });
+      
+      // Check if the filter is working for drafts
+      const draftInvoices = invoices.filter((inv: any) => inv.status === 'draft');
+      console.log('🔍 DRAFT FILTER:', { totalInvoices: invoices.length, draftCount: draftInvoices.length });
+    }
+  }, [invoices, activeTab]);
 
   // Create invoice mutation
   const createInvoiceMutation = useMutation({
@@ -460,7 +465,7 @@ export default function InvoiceManagement() {
           <div className="mt-6">
             {activeTab === 'all' && (
               <div className="grid gap-4">
-                {invoices?.map((invoice: any) => (
+                {invoices?.map((invoice: any, index: number) => (
                   <Card key={invoice.id} className="p-6">
                     <div className="flex justify-between items-start">
                       <div>
