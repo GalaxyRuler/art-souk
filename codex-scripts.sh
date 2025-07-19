@@ -55,11 +55,11 @@ show_usage() {
 # Setup project
 setup() {
     print_header "Project Setup"
-    
+
     # Install dependencies
     print_info "Installing dependencies..."
     npm install
-    
+
     # Create environment file
     if [ ! -f .env.local ]; then
         echo "DATABASE_URL=postgresql://localhost:5432/art_souk" > .env.local
@@ -67,11 +67,11 @@ setup() {
         echo "NODE_ENV=development" >> .env.local
         print_success "Created .env.local"
     fi
-    
+
     # Setup database
     print_info "Setting up database..."
     npm run db:push
-    
+
     print_success "Setup complete!"
 }
 
@@ -184,35 +184,35 @@ health() {
 # Full check (lint, type, test)
 full_check() {
     print_header "Running Full Check"
-    
+
     print_info "1. Running TypeScript check..."
     npx tsc --noEmit
     if [ $? -ne 0 ]; then
         print_error "TypeScript check failed"
         return 1
     fi
-    
+
     print_info "2. Running ESLint..."
     npx eslint . --ext .ts,.tsx --max-warnings 0
     if [ $? -ne 0 ]; then
         print_error "ESLint check failed"
         return 1
     fi
-    
+
     print_info "3. Running tests..."
     npx vitest run
     if [ $? -ne 0 ]; then
         print_error "Tests failed"
         return 1
     fi
-    
+
     print_info "4. Building project..."
     npm run build
     if [ $? -ne 0 ]; then
         print_error "Build failed"
         return 1
     fi
-    
+
     print_success "All checks passed!"
 }
 
@@ -220,11 +220,11 @@ full_check() {
 memory_fix() {
     print_header "Fixing Memory Issues"
     export NODE_OPTIONS="--max-old-space-size=4096"
-    
+
     # Clear caches
     npm cache clean --force
     rm -rf node_modules/.cache
-    
+
     # Restart with memory fix
     print_info "Restarting with increased memory limit..."
     npm run dev
@@ -287,3 +287,4 @@ case "$1" in
         show_usage
         ;;
 esac
+\ No newline at end of file

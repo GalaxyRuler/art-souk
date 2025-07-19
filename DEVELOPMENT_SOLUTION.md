@@ -2,7 +2,7 @@
 
 ## Problem Analysis
 
-The main issue preventing package installation is the `workspace:*` protocol used in the monorepo structure, which npm cannot resolve. This prevents installation of useful development tools like:
+The main issue preventing package installation is the `workspace:*` protocol used in the monorepo structure, which npm cannot resolve. This prevents installation of useful development tools in the client/ and server/ directories like:
 - `qrcode` for QR code generation
 - `nodemon` for development server auto-restart
 - `jest` for testing

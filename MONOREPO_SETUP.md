@@ -2,17 +2,17 @@
 
 ## Current Status
 
-The project is structured as a Turborepo monorepo with the following workspaces:
-- `apps/web` - React frontend application
-- `apps/api` - Express backend API
+The project is structured as a monorepo with the following workspaces:
+- `client/` - React frontend application
+- `server/` - Express backend API
 - `packages/ui` - Shared UI components
 - `packages/db` - Database schema and utilities
 - `packages/tsconfig` - Shared TypeScript configurations
 
 ## Lint Scripts Added
 
-✅ **apps/web**: `eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0`
-✅ **apps/api**: `eslint . --ext ts --report-unused-disable-directives --max-warnings 0`
+✅ **client**: `eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0`
+✅ **server**: `eslint . --ext ts --report-unused-disable-directives --max-warnings 0`
 ✅ **packages/ui**: `eslint src --ext .ts,.tsx`
 ✅ **packages/db**: `eslint "**/*.{ts,tsx,js,jsx}\" --fix`
 ⏭️  **packages/tsconfig**: No lint needed (config-only package)
@@ -47,8 +47,8 @@ Since `package.json` cannot be edited, Turbo treats this as a single-package pro
 
 ### Option 1: Direct Workspace Linting
 ```bash
-cd apps/web && npm run lint
-cd apps/api && npm run lint
+cd client && npm run lint
+cd server && npm run lint
 cd packages/ui && npm run lint
 cd packages/db && npm run lint
 ```
