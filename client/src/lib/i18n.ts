@@ -2527,7 +2527,6 @@ const resources = {
         updateOrderStatus: "تحديث حالة الطلب",
         orderStatus: "حالة الطلب",
         selectOrderStatus: "اختر حالة الطلب",
-        selectPaymentType: "اختر نوع الدفع",
         sellerNotes: "ملاحظات البائع",
         sellerNotesPlaceholder: "أدخل ملاحظات للمشتري",
         trackingNumber: "رقم التتبع",

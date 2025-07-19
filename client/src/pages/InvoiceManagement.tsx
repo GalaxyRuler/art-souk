@@ -29,6 +29,80 @@ export default function InvoiceManagement() {
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
 
+  // Handle viewing an invoice
+  const handleViewInvoice = (invoice: any) => {
+    console.log('📋 Opening invoice details for:', invoice.invoiceNumber);
+    setSelectedInvoice(invoice);
+    setDetailDialogOpen(true);
+  };
+
+  // Handle downloading invoice PDF
+  const handleDownloadInvoice = async (invoice: any) => {
+    try {
+      console.log('📥 Downloading invoice:', invoice.invoiceNumber);
+      const response = await fetch(`/api/invoices/generate-pdf/${invoice.id}`, {
+        credentials: 'include',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to generate PDF');
+      }
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = `${invoice.invoiceNumber}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      toast({
+        title: t('invoice.downloadSuccess'),
+        description: `${invoice.invoiceNumber} PDF downloaded successfully`,
+      });
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+      toast({
+        title: t('invoice.downloadError'),
+        description: 'Failed to download invoice PDF',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // Handle ZATCA submission
+  const handleZATCASubmit = async (invoice: any) => {
+    try {
+      console.log('📨 Submitting invoice to ZATCA:', invoice.invoiceNumber);
+      const response = await fetch(`/api/invoices/${invoice.id}/zatca-submit`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to submit to ZATCA');
+      }
+      
+      toast({
+        title: t('invoice.zatcaSubmitSuccess'),
+        description: `${invoice.invoiceNumber} submitted to ZATCA successfully`,
+      });
+    } catch (error) {
+      console.error('Error submitting to ZATCA:', error);
+      toast({
+        title: t('invoice.zatcaSubmitError'),
+        description: 'Failed to submit invoice to ZATCA',
+        variant: 'destructive',
+      });
+    }
+  };
+
   // Simplified: Always allow access and fetch invoices
   const hasSellerAccess = true;
   const userRoles = [];
@@ -211,28 +285,7 @@ export default function InvoiceManagement() {
     }
   };
 
-  // Handle ZATCA submission
-  const handleZATCASubmit = async (invoiceId: string) => {
-    try {
-      const response = await fetch(`/api/invoices/${invoiceId}/zatca-submit`, {
-        method: 'POST',
-        credentials: 'include',
-      });
-      if (!response.ok) throw new Error('Failed to submit to ZATCA');
-      
-      toast({
-        title: t('invoice.zatcaSubmitSuccess'),
-        description: t('invoice.zatcaSubmitSuccessDesc'),
-      });
-      queryClient.invalidateQueries({ queryKey: ['/api/invoices'] });
-    } catch (error) {
-      toast({
-        title: t('invoice.zatcaSubmitError'),
-        description: t('invoice.zatcaSubmitErrorDesc'),
-        variant: 'destructive',
-      });
-    }
-  };
+
 
   // Enhanced debugging for rendering
   console.log('🎯 INVOICE MANAGEMENT RENDER DEBUG:', {
@@ -485,11 +538,11 @@ export default function InvoiceManagement() {
                       </div>
                     </div>
                     <div className="flex gap-2 mt-4">
-                      <Button size="sm" variant="outline">
+                      <Button size="sm" variant="outline" onClick={() => handleViewInvoice(invoice)}>
                         <Eye className="w-4 h-4 mr-2" />
                         {t('invoice.view')}
                       </Button>
-                      <Button size="sm" variant="outline">
+                      <Button size="sm" variant="outline" onClick={() => handleDownloadInvoice(invoice)}>
                         <Download className="w-4 h-4 mr-2" />
                         {t('invoice.download')}
                       </Button>
@@ -525,7 +578,7 @@ export default function InvoiceManagement() {
                       </div>
                     </div>
                     <div className="flex gap-2 mt-4">
-                      <Button size="sm" variant="outline">
+                      <Button size="sm" variant="outline" onClick={() => handleViewInvoice(invoice)}>
                         <Eye className="w-4 h-4 mr-2" />
                         {t('invoice.view')}
                       </Button>
@@ -574,7 +627,7 @@ export default function InvoiceManagement() {
         invoice={selectedInvoice}
         open={detailDialogOpen}
         onOpenChange={setDetailDialogOpen}
-        onDownloadPdf={handleDownloadPDF}
+        onDownloadPdf={handleDownloadInvoice}
         onSubmitToZatca={handleZATCASubmit}
       />
       
