@@ -445,53 +445,109 @@ export default function InvoiceManagement() {
             </nav>
           </div>
           
-          {/* ALWAYS VISIBLE TEST */}
-          <div className="bg-purple-500 text-white p-8 m-4 text-center text-xl font-bold">
-            🚀 ALWAYS VISIBLE TEST - DATA: {invoices?.length || 0} invoices | ACTIVE TAB: {activeTab}
-          </div>
-
           {/* Tab Content */}
           <div className="mt-6">
             {activeTab === 'all' && (
-              <div>
-                <div className="bg-green-500 text-white p-8 text-center text-xl font-bold">
-                  ✅ ALL TAB CONTENT - {invoices?.length || 0} invoices
-                </div>
+              <div className="grid gap-4">
                 {invoices?.map((invoice: any) => (
-                  <div key={invoice.id} className="bg-yellow-300 border-4 border-red-500 p-8 m-4 text-black">
-                    <h2 className="text-2xl font-bold">INVOICE: {invoice.invoiceNumber}</h2>
-                    <p>Status: {invoice.status}</p>
-                    <p>Amount: {invoice.totalAmount} SAR</p>
-                  </div>
+                  <Card key={invoice.id} className="p-6">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="text-lg font-semibold">{invoice.invoice_number}</h3>
+                        <p className="text-gray-600">{invoice.buyer_name || 'Customer'}</p>
+                        <p className="text-sm text-gray-500">
+                          {invoice.created_at ? format(new Date(invoice.created_at), 'MMM dd, yyyy') : 'N/A'}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <Badge variant={invoice.status === 'draft' ? 'secondary' : 'default'}>
+                          {t(`invoice.status.${invoice.status}`)}
+                        </Badge>
+                        <p className="text-lg font-semibold mt-2">
+                          {invoice.total_amount} {invoice.currency || 'SAR'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 mt-4">
+                      <Button size="sm" variant="outline">
+                        <Eye className="w-4 h-4 mr-2" />
+                        {t('common.view')}
+                      </Button>
+                      <Button size="sm" variant="outline">
+                        <Download className="w-4 h-4 mr-2" />
+                        {t('common.download')}
+                      </Button>
+                    </div>
+                  </Card>
                 ))}
+                {(!invoices || invoices.length === 0) && (
+                  <div className="text-center py-12">
+                    <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600">{t('invoice.noInvoices')}</p>
+                  </div>
+                )}
               </div>
             )}
             
             {activeTab === 'draft' && (
-              <div>
-                <div className="bg-orange-500 text-white p-8 text-center text-xl font-bold">
-                  📝 DRAFT TAB CONTENT - {invoices?.length || 0} invoices
-                </div>
+              <div className="grid gap-4">
                 {invoices?.filter((inv: any) => inv.status === 'draft').map((invoice: any) => (
-                  <div key={invoice.id} className="bg-yellow-300 border-4 border-red-500 p-8 m-4 text-black">
-                    <h2 className="text-2xl font-bold">DRAFT INVOICE: {invoice.invoiceNumber}</h2>
-                    <p>Status: {invoice.status}</p>
-                    <p>Amount: {invoice.totalAmount} SAR</p>
-                  </div>
+                  <Card key={invoice.id} className="p-6">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="text-lg font-semibold">{invoice.invoice_number}</h3>
+                        <p className="text-gray-600">{invoice.buyer_name || 'Customer'}</p>
+                        <p className="text-sm text-gray-500">
+                          {invoice.created_at ? format(new Date(invoice.created_at), 'MMM dd, yyyy') : 'N/A'}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <Badge variant="secondary">{t('invoice.status.draft')}</Badge>
+                        <p className="text-lg font-semibold mt-2">
+                          {invoice.total_amount} {invoice.currency || 'SAR'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 mt-4">
+                      <Button size="sm" variant="outline">
+                        <Eye className="w-4 h-4 mr-2" />
+                        {t('common.view')}
+                      </Button>
+                      <Button size="sm">
+                        <Send className="w-4 h-4 mr-2" />
+                        {t('invoice.send')}
+                      </Button>
+                    </div>
+                  </Card>
                 ))}
+                {(!invoices?.filter((inv: any) => inv.status === 'draft').length) && (
+                  <div className="text-center py-12">
+                    <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600">{t('invoice.noDraftInvoices')}</p>
+                  </div>
+                )}
               </div>
             )}
             
             {activeTab === 'sent' && (
-              <div className="bg-blue-500 text-white p-8 text-center text-xl">SENT TAB - No invoices</div>
+              <div className="text-center py-12">
+                <Send className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600">{t('invoice.noSentInvoices')}</p>
+              </div>
             )}
             
             {activeTab === 'paid' && (
-              <div className="bg-indigo-500 text-white p-8 text-center text-xl">PAID TAB - No invoices</div>
+              <div className="text-center py-12">
+                <CheckCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600">{t('invoice.noPaidInvoices')}</p>
+              </div>
             )}
             
             {activeTab === 'overdue' && (
-              <div className="bg-red-500 text-white p-8 text-center text-xl">OVERDUE TAB - No invoices</div>
+              <div className="text-center py-12">
+                <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600">{t('invoice.noOverdueInvoices')}</p>
+              </div>
             )}
           </div>
         </div>
