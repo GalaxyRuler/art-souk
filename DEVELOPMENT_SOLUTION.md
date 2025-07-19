@@ -174,7 +174,7 @@ npm install qrcode --save --no-workspaces
 ### Option 2: Local Package Management
 ```bash
 # Install packages in specific workspace
-cd apps/api && npm install qrcode
+cd server && npm install qrcode
 ```
 
 ### Option 3: Global Package Installation
@@ -194,3 +194,7 @@ The current custom implementation provides all necessary functionality without e
 The QR code generation system is now fully functional and ZATCA-compliant. The PDF invoice system should work correctly with the implemented QR code generation.
 
 **Ready for Testing**: The system is ready for comprehensive testing of the QR code generation and ZATCA-compliant invoice system.
+
+## Backend Structure
+
+The backend is now located in the `server/` directory (previously `apps/api`). All development commands should be run from the project root or the `server/` directory as needed.

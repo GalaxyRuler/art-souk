@@ -70,10 +70,12 @@ art-souk/
 │   │   ├── hooks/           # Custom React hooks
 │   │   └── lib/             # Utility functions
 │   └── package.json
-├── server/                  # Express backend application
+├── server/              # Express backend application
 │   ├── middleware/          # Express middleware
 │   ├── routes/              # API routes
-│   ├── emailTemplates/      # Email template definitions
+│   ├── emailTemplates/  # Email templates
+│   ├── types/           # TypeScript type definitions
+│   ├── index.ts         # Main server entry point
 │   └── package.json
 ├── packages/
 │   ├── db/                  # Database schema and migrations
