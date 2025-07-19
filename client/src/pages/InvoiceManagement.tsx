@@ -213,6 +213,11 @@ export default function InvoiceManagement() {
     timestamp: new Date().toISOString()
   });
 
+  // Simple display debug
+  console.log('🔍 BEFORE RENDER - Invoices array:', JSON.stringify(invoices, null, 2));
+  console.log('🔍 BEFORE RENDER - Is Loading:', isLoading);
+  console.log('🔍 BEFORE RENDER - Has Error:', !!error);
+
   const getStatusBadge = (status: string) => {
     const statusConfig = {
       draft: { variant: 'secondary' as const, icon: FileText },
@@ -399,7 +404,6 @@ export default function InvoiceManagement() {
                   {invoices
                     .filter((invoice: any) => {
                       const isMatch = status === 'all' || invoice.status === status;
-                      console.log(`🔍 Tab ${status} - Invoice ${invoice.invoice_number} (${invoice.status}): ${isMatch ? 'MATCHES' : 'FILTERED OUT'}`);
                       return isMatch;
                     })
                     .map((invoice: any) => (
