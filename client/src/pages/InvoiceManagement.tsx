@@ -105,40 +105,7 @@ export default function InvoiceManagement() {
     }
   };
 
-  // Handle ZATCA submission with corrected field names
-  const handleZATCASubmit = async (invoiceId: number) => {
-    try {
-      const invoice = invoices?.find((inv: any) => inv.id === invoiceId);
-      if (!invoice) {
-        throw new Error('Invoice not found');
-      }
-      
-      console.log('📨 Submitting invoice to ZATCA:', invoice.invoiceNumber);
-      const response = await fetch(`/api/invoices/${invoice.id}/zatca-submit`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to submit to ZATCA');
-      }
-      
-      toast({
-        title: t('invoice.zatcaSubmitSuccess'),
-        description: `${invoice.invoiceNumber} submitted to ZATCA successfully`,
-      });
-    } catch (error) {
-      console.error('Error submitting to ZATCA:', error);
-      toast({
-        title: t('invoice.zatcaSubmitError'),
-        description: 'Failed to submit invoice to ZATCA',
-        variant: 'destructive',
-      });
-    }
-  };
+
 
   // Simplified: Always allow access and fetch invoices
   const hasSellerAccess = true;
@@ -716,7 +683,6 @@ export default function InvoiceManagement() {
         open={detailDialogOpen}
         onOpenChange={setDetailDialogOpen}
         onDownloadPdf={handleDownloadInvoiceById}
-        onSubmitToZatca={handleZATCASubmit}
       />
       
       <Footer />

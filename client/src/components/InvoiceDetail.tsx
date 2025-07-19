@@ -12,10 +12,9 @@ interface InvoiceDetailProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onDownloadPdf: (invoiceId: number) => void;
-  onSubmitToZatca: (invoiceId: number) => void;
 }
 
-export function InvoiceDetail({ invoice, open, onOpenChange, onDownloadPdf, onSubmitToZatca }: InvoiceDetailProps) {
+export function InvoiceDetail({ invoice, open, onOpenChange, onDownloadPdf }: InvoiceDetailProps) {
   const { t, i18n } = useTranslation();
   const isArabic = i18n.language === 'ar';
   const dateLocale = isArabic ? ar : enUS;
@@ -295,22 +294,14 @@ export function InvoiceDetail({ invoice, open, onOpenChange, onDownloadPdf, onSu
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-3 pt-6 border-t border-gray-200">
+          <div className="flex justify-center pt-6 border-t border-gray-200">
             <Button
-              variant="outline"
+              variant="default"
               onClick={() => onDownloadPdf(invoice.id)}
-              className="flex-1 border-amber-300 text-amber-700 hover:bg-amber-50 hover:border-amber-400 hover:text-amber-800 transition-all duration-200"
+              className="px-8 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 border-0 shadow-md hover:shadow-lg transition-all duration-200"
             >
               <Download className="h-4 w-4 mr-2" />
               {t('invoice.downloadPdf')}
-            </Button>
-            <Button
-              variant="default"
-              onClick={() => onSubmitToZatca(invoice.id)}
-              className="flex-1 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 border-0 shadow-md hover:shadow-lg transition-all duration-200"
-            >
-              <Send className="h-4 w-4 mr-2" />
-              {t('invoice.submitToZatca')}
             </Button>
           </div>
         </div>
