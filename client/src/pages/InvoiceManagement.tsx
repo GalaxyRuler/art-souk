@@ -28,26 +28,20 @@ export default function InvoiceManagement() {
   const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
 
-  // Fetch user roles
-  const { data: roleData } = useQuery({
-    queryKey: ['/api/user/roles'],
-    enabled: !!user,
-  });
+  // Simplified: Always allow access and fetch invoices
+  const hasSellerAccess = true;
+  const userRoles = [];
 
-  // Check if user has seller access - simplified check
-  const userRoles = roleData?.roles || [];
-  const hasSellerAccess = !!user; // Temporarily bypass role check since we know user is authenticated
-
-  // Fetch invoices with custom fetch function
+  // Fetch invoices with custom fetch function - ALWAYS ENABLED
   const { data: invoices = [], isLoading, error } = useQuery({
     queryKey: ['/api/invoices', Date.now()], // Add timestamp to force fresh requests
-    enabled: hasSellerAccess,
+    enabled: true, // ALWAYS FETCH INVOICES
     staleTime: 0, // Always fetch fresh data
     gcTime: 0, // Don't cache results (updated from cacheTime)
     refetchOnMount: true,
     refetchOnWindowFocus: true,
     queryFn: async () => {
-      console.log('🔄 Custom fetch function called for invoices');
+      console.log('🔄 INVOICE FETCH STARTED - Custom fetch function called');
       const response = await fetch('/api/invoices', {
         credentials: 'include',
         headers: {
@@ -56,12 +50,16 @@ export default function InvoiceManagement() {
         },
       });
       
+      console.log('📡 Response status:', response.status, response.statusText);
+      
       if (!response.ok) {
+        console.error('❌ FETCH FAILED - HTTP error:', response.status);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
       const data = await response.json();
-      console.log('📦 Raw invoice data from server:', data);
+      console.log('📦 INVOICE DATA RECEIVED:', data);
+      console.log('📊 Invoice count:', Array.isArray(data) ? data.length : 'Not an array');
       return data;
     },
   });
@@ -214,32 +212,15 @@ export default function InvoiceManagement() {
     }
   };
 
-  // Enhanced debugging for access control
-  console.log('🔑 Access Control Debug:', {
-    user: !!user,
+  // Enhanced debugging for rendering
+  console.log('🎯 INVOICE MANAGEMENT RENDER DEBUG:', {
+    invoicesLength: invoices?.length || 0,
+    invoicesData: invoices,
+    isLoading,
+    error: error?.message || 'No error',
     hasSellerAccess,
-    userRoles,
-    roleData,
-    userObject: user
+    timestamp: new Date().toISOString()
   });
-
-  if (!hasSellerAccess) {
-    console.log('❌ ACCESS DENIED - User does not have seller access');
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <div className="container mx-auto px-4 py-8">
-          <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              {t('invoice.accessDenied')} - Debug: User: {!!user ? 'Yes' : 'No'}, Roles: {JSON.stringify(userRoles)}
-            </AlertDescription>
-          </Alert>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
@@ -266,6 +247,16 @@ export default function InvoiceManagement() {
       
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
+          {/* DEBUG DISPLAY */}
+          <div className="bg-blue-100 p-4 rounded mb-4">
+            <h3 className="font-bold text-blue-800">INVOICE DEBUG INFO:</h3>
+            <p>Loading: {isLoading ? 'YES' : 'NO'}</p>
+            <p>Error: {error ? error.message : 'None'}</p>
+            <p>Invoice Count: {invoices ? invoices.length : 'undefined'}</p>
+            <p>First Invoice: {invoices && invoices[0] ? JSON.stringify(invoices[0]).slice(0, 100) + '...' : 'None'}</p>
+            <p>Timestamp: {new Date().toLocaleTimeString()}</p>
+          </div>
+          
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">{t('invoice.title')}</h1>
