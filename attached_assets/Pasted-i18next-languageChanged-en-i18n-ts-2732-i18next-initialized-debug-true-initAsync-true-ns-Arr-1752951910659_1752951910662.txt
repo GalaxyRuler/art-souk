@@ -1,0 +1,614 @@
+i18next: languageChanged en
+i18n.ts:2732 i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+i18n.ts:2751 i18n initialized with inline resources
+i18n.ts:2752 Sample translation nav.home: Home
+i18n.ts:2753 Sample translation auth.login: Sign In
+i18n.ts:2754 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2755 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2756 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2757 Sample translation collector.tabs.orders: Orders
+i18n.ts:2732 i18next: languageChanged en
+i18n.ts:2732 i18next: init: i18next is already initialized. You should call init just once!
+overrideMethod @ hook.js:608
+output @ i18next.js?v=2e795fa3:208
+warn @ i18next.js?v=2e795fa3:201
+forward @ i18next.js?v=2e795fa3:236
+warn @ i18next.js?v=2e795fa3:225
+finish @ i18next.js?v=2e795fa3:1815
+done @ i18next.js?v=2e795fa3:1948
+(anonymous) @ i18next.js?v=2e795fa3:1963
+loadResources @ i18next.js?v=2e795fa3:1861
+setLng @ i18next.js?v=2e795fa3:1962
+changeLanguage @ i18next.js?v=2e795fa3:1975
+load @ i18next.js?v=2e795fa3:1823
+init @ i18next.js?v=2e795fa3:1826
+(anonymous) @ i18n.ts:2732Understand this warning
+i18n.ts:2732 i18next: initialized {debug: true, initAsync: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+i18n.ts:2751 i18n initialized with inline resources
+i18n.ts:2752 Sample translation nav.home: Home
+i18n.ts:2753 Sample translation auth.login: Sign In
+i18n.ts:2754 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2755 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2756 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2757 Sample translation collector.tabs.orders: Orders
+App.tsx:73 🔍 Router Debug: {isAuthenticated: false, isLoading: true, roleLoading: false, setupComplete: false}
+content.bundle.js:31149 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+injected.js:1 Script was injected!
+content.js:202 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+App.tsx:73 🔍 Router Debug: {isAuthenticated: true, isLoading: false, roleLoading: true, setupComplete: false}
+QalamExtension.js:25 Uncaught (in promise) Error: An unexpected error occurred
+    at h (QalamExtension.js:25:128682)
+h @ QalamExtension.js:25Understand this error
+App.tsx:73 🔍 Router Debug: {isAuthenticated: true, isLoading: false, roleLoading: false, setupComplete: true}
+InvoiceManagement.tsx:59 🔍 InvoiceManagement Debug: {hasSellerAccess: true, userRoles: Array(0), isLoading: true, invoicesData: Array(0), invoicesLength: 0, …}
+InvoiceManagement.tsx:207 🎯 INVOICE MANAGEMENT RENDER DEBUG: {invoicesLength: 0, invoicesData: Array(0), isLoading: true, error: 'No error', hasSellerAccess: true, …}
+InvoiceManagement.tsx:217 🔍 BEFORE RENDER - Invoices array: []
+InvoiceManagement.tsx:218 🔍 BEFORE RENDER - Is Loading: true
+InvoiceManagement.tsx:219 🔍 BEFORE RENDER - Has Error: false
+InvoiceManagement.tsx:380 i18next::translator: missingKey en translation common.create common.create
+hook.js:608 Warning: validateDOMNesting(...): <button> cannot appear as a descendant of <button>. Error Component Stack
+    at button (<anonymous>)
+    at _c (button.tsx:43:6)
+    at button (<anonymous>)
+    at dialog.tsx:37:6
+    at Dialog (dialog.tsx:15:3)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at InvoiceManagement (InvoiceManagement.tsx:24:23)
+    at Route (wouter.js?v=2e795fa3:323:16)
+    at Switch (wouter.js?v=2e795fa3:379:17)
+    at Suspense (<anonymous>)
+    at Router (App.tsx:69:42)
+    at Provider (chunk-7KRCBXUP.js?v=2e795fa3:22:15)
+    at TooltipProvider (@radix-ui_react-tooltip.js?v=2e795fa3:60:5)
+    at I18nextProvider (react-i18next.js?v=2e795fa3:793:3)
+    at QueryClientProvider (@tanstack_react-query.js?v=2e795fa3:2805:3)
+    at ErrorBoundary (ErrorBoundary.tsx:19:5)
+    at App (<anonymous>)
+overrideMethod @ hook.js:608
+printWarning @ chunk-7SSXMLWA.js?v=2e795fa3:521
+error @ chunk-7SSXMLWA.js?v=2e795fa3:505
+validateDOMNesting @ chunk-7SSXMLWA.js?v=2e795fa3:8256
+createInstance @ chunk-7SSXMLWA.js?v=2e795fa3:8328
+completeWork @ chunk-7SSXMLWA.js?v=2e795fa3:16290
+completeUnitOfWork @ chunk-7SSXMLWA.js?v=2e795fa3:19224
+performUnitOfWork @ chunk-7SSXMLWA.js?v=2e795fa3:19206
+workLoopSync @ chunk-7SSXMLWA.js?v=2e795fa3:19137
+renderRootSync @ chunk-7SSXMLWA.js?v=2e795fa3:19116
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18874
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+(anonymous) @ chunk-7SSXMLWA.js?v=2e795fa3:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2e795fa3:555
+flush @ @tanstack_react-query.js?v=2e795fa3:569
+batch @ @tanstack_react-query.js?v=2e795fa3:587
+dispatch_fn @ @tanstack_react-query.js?v=2e795fa3:996
+setData @ @tanstack_react-query.js?v=2e795fa3:696
+onSuccess @ @tanstack_react-query.js?v=2e795fa3:897
+resolve @ @tanstack_react-query.js?v=2e795fa3:456
+Promise.then
+run @ @tanstack_react-query.js?v=2e795fa3:498
+start @ @tanstack_react-query.js?v=2e795fa3:536
+fetch @ @tanstack_react-query.js?v=2e795fa3:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e795fa3:2211
+setOptions @ @tanstack_react-query.js?v=2e795fa3:1955
+(anonymous) @ @tanstack_react-query.js?v=2e795fa3:3032
+commitHookEffectListMount @ chunk-7SSXMLWA.js?v=2e795fa3:16915
+commitPassiveMountOnFiber @ chunk-7SSXMLWA.js?v=2e795fa3:18156
+commitPassiveMountEffects_complete @ chunk-7SSXMLWA.js?v=2e795fa3:18129
+commitPassiveMountEffects_begin @ chunk-7SSXMLWA.js?v=2e795fa3:18119
+commitPassiveMountEffects @ chunk-7SSXMLWA.js?v=2e795fa3:18109
+flushPassiveEffectsImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19490
+flushPassiveEffects @ chunk-7SSXMLWA.js?v=2e795fa3:19447
+commitRootImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19416
+commitRoot @ chunk-7SSXMLWA.js?v=2e795fa3:19277
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18895
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+(anonymous) @ chunk-7SSXMLWA.js?v=2e795fa3:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2e795fa3:555
+flush @ @tanstack_react-query.js?v=2e795fa3:569
+batch @ @tanstack_react-query.js?v=2e795fa3:587
+dispatch_fn @ @tanstack_react-query.js?v=2e795fa3:996
+setData @ @tanstack_react-query.js?v=2e795fa3:696
+onSuccess @ @tanstack_react-query.js?v=2e795fa3:897
+resolve @ @tanstack_react-query.js?v=2e795fa3:456
+Promise.then
+run @ @tanstack_react-query.js?v=2e795fa3:498
+start @ @tanstack_react-query.js?v=2e795fa3:536
+fetch @ @tanstack_react-query.js?v=2e795fa3:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e795fa3:2211
+onSubscribe @ @tanstack_react-query.js?v=2e795fa3:1898
+subscribe @ @tanstack_react-query.js?v=2e795fa3:24
+(anonymous) @ @tanstack_react-query.js?v=2e795fa3:3022
+subscribeToStore @ chunk-7SSXMLWA.js?v=2e795fa3:11984
+commitHookEffectListMount @ chunk-7SSXMLWA.js?v=2e795fa3:16915
+commitPassiveMountOnFiber @ chunk-7SSXMLWA.js?v=2e795fa3:18156
+commitPassiveMountEffects_complete @ chunk-7SSXMLWA.js?v=2e795fa3:18129
+commitPassiveMountEffects_begin @ chunk-7SSXMLWA.js?v=2e795fa3:18119
+commitPassiveMountEffects @ chunk-7SSXMLWA.js?v=2e795fa3:18109
+flushPassiveEffectsImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19490
+flushPassiveEffects @ chunk-7SSXMLWA.js?v=2e795fa3:19447
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18868
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+commitRootImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19432
+commitRoot @ chunk-7SSXMLWA.js?v=2e795fa3:19277
+finishConcurrentRender @ chunk-7SSXMLWA.js?v=2e795fa3:18805
+performConcurrentWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18718
+workLoop @ chunk-7SSXMLWA.js?v=2e795fa3:197
+flushWork @ chunk-7SSXMLWA.js?v=2e795fa3:176
+performWorkUntilDeadline @ chunk-7SSXMLWA.js?v=2e795fa3:384Understand this error
+hook.js:608 Warning: React does not recognize the `asChild` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `aschild` instead. If you accidentally passed it from a parent component, remove it from the DOM element. Error Component Stack
+    at button (<anonymous>)
+    at dialog.tsx:37:6
+    at Dialog (dialog.tsx:15:3)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at InvoiceManagement (InvoiceManagement.tsx:24:23)
+    at Route (wouter.js?v=2e795fa3:323:16)
+    at Switch (wouter.js?v=2e795fa3:379:17)
+    at Suspense (<anonymous>)
+    at Router (App.tsx:69:42)
+    at Provider (chunk-7KRCBXUP.js?v=2e795fa3:22:15)
+    at TooltipProvider (@radix-ui_react-tooltip.js?v=2e795fa3:60:5)
+    at I18nextProvider (react-i18next.js?v=2e795fa3:793:3)
+    at QueryClientProvider (@tanstack_react-query.js?v=2e795fa3:2805:3)
+    at ErrorBoundary (ErrorBoundary.tsx:19:5)
+    at App (<anonymous>)
+overrideMethod @ hook.js:608
+printWarning @ chunk-7SSXMLWA.js?v=2e795fa3:521
+error @ chunk-7SSXMLWA.js?v=2e795fa3:505
+validateProperty$1 @ chunk-7SSXMLWA.js?v=2e795fa3:3427
+warnUnknownProperties @ chunk-7SSXMLWA.js?v=2e795fa3:3459
+validateProperties$2 @ chunk-7SSXMLWA.js?v=2e795fa3:3478
+validatePropertiesInDevelopment @ chunk-7SSXMLWA.js?v=2e795fa3:7346
+setInitialProperties @ chunk-7SSXMLWA.js?v=2e795fa3:7535
+finalizeInitialChildren @ chunk-7SSXMLWA.js?v=2e795fa3:8345
+completeWork @ chunk-7SSXMLWA.js?v=2e795fa3:16293
+completeUnitOfWork @ chunk-7SSXMLWA.js?v=2e795fa3:19224
+performUnitOfWork @ chunk-7SSXMLWA.js?v=2e795fa3:19206
+workLoopSync @ chunk-7SSXMLWA.js?v=2e795fa3:19137
+renderRootSync @ chunk-7SSXMLWA.js?v=2e795fa3:19116
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18874
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+(anonymous) @ chunk-7SSXMLWA.js?v=2e795fa3:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2e795fa3:555
+flush @ @tanstack_react-query.js?v=2e795fa3:569
+batch @ @tanstack_react-query.js?v=2e795fa3:587
+dispatch_fn @ @tanstack_react-query.js?v=2e795fa3:996
+setData @ @tanstack_react-query.js?v=2e795fa3:696
+onSuccess @ @tanstack_react-query.js?v=2e795fa3:897
+resolve @ @tanstack_react-query.js?v=2e795fa3:456
+Promise.then
+run @ @tanstack_react-query.js?v=2e795fa3:498
+start @ @tanstack_react-query.js?v=2e795fa3:536
+fetch @ @tanstack_react-query.js?v=2e795fa3:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e795fa3:2211
+setOptions @ @tanstack_react-query.js?v=2e795fa3:1955
+(anonymous) @ @tanstack_react-query.js?v=2e795fa3:3032
+commitHookEffectListMount @ chunk-7SSXMLWA.js?v=2e795fa3:16915
+commitPassiveMountOnFiber @ chunk-7SSXMLWA.js?v=2e795fa3:18156
+commitPassiveMountEffects_complete @ chunk-7SSXMLWA.js?v=2e795fa3:18129
+commitPassiveMountEffects_begin @ chunk-7SSXMLWA.js?v=2e795fa3:18119
+commitPassiveMountEffects @ chunk-7SSXMLWA.js?v=2e795fa3:18109
+flushPassiveEffectsImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19490
+flushPassiveEffects @ chunk-7SSXMLWA.js?v=2e795fa3:19447
+commitRootImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19416
+commitRoot @ chunk-7SSXMLWA.js?v=2e795fa3:19277
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18895
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+(anonymous) @ chunk-7SSXMLWA.js?v=2e795fa3:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2e795fa3:555
+flush @ @tanstack_react-query.js?v=2e795fa3:569
+batch @ @tanstack_react-query.js?v=2e795fa3:587
+dispatch_fn @ @tanstack_react-query.js?v=2e795fa3:996
+setData @ @tanstack_react-query.js?v=2e795fa3:696
+onSuccess @ @tanstack_react-query.js?v=2e795fa3:897
+resolve @ @tanstack_react-query.js?v=2e795fa3:456
+Promise.then
+run @ @tanstack_react-query.js?v=2e795fa3:498
+start @ @tanstack_react-query.js?v=2e795fa3:536
+fetch @ @tanstack_react-query.js?v=2e795fa3:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e795fa3:2211
+onSubscribe @ @tanstack_react-query.js?v=2e795fa3:1898
+subscribe @ @tanstack_react-query.js?v=2e795fa3:24
+(anonymous) @ @tanstack_react-query.js?v=2e795fa3:3022
+subscribeToStore @ chunk-7SSXMLWA.js?v=2e795fa3:11984
+commitHookEffectListMount @ chunk-7SSXMLWA.js?v=2e795fa3:16915
+commitPassiveMountOnFiber @ chunk-7SSXMLWA.js?v=2e795fa3:18156
+commitPassiveMountEffects_complete @ chunk-7SSXMLWA.js?v=2e795fa3:18129
+commitPassiveMountEffects_begin @ chunk-7SSXMLWA.js?v=2e795fa3:18119
+commitPassiveMountEffects @ chunk-7SSXMLWA.js?v=2e795fa3:18109
+flushPassiveEffectsImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19490
+flushPassiveEffects @ chunk-7SSXMLWA.js?v=2e795fa3:19447
+performSyncWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18868
+flushSyncCallbacks @ chunk-7SSXMLWA.js?v=2e795fa3:9119
+commitRootImpl @ chunk-7SSXMLWA.js?v=2e795fa3:19432
+commitRoot @ chunk-7SSXMLWA.js?v=2e795fa3:19277
+finishConcurrentRender @ chunk-7SSXMLWA.js?v=2e795fa3:18805
+performConcurrentWorkOnRoot @ chunk-7SSXMLWA.js?v=2e795fa3:18718
+workLoop @ chunk-7SSXMLWA.js?v=2e795fa3:197
+flushWork @ chunk-7SSXMLWA.js?v=2e795fa3:176
+performWorkUntilDeadline @ chunk-7SSXMLWA.js?v=2e795fa3:384Understand this error
+InvoiceManagement.tsx:41 🔄 STARTING INVOICE FETCH
+InvoiceManagement.tsx:53 ✅ INVOICE FETCH SUCCESS: 3 invoices
+InvoiceManagement.tsx:59 🔍 InvoiceManagement Debug: {hasSellerAccess: true, userRoles: Array(0), isLoading: false, invoicesData: Array(3), invoicesLength: 3, …}
+InvoiceManagement.tsx:74 🔍 First invoice structure: {id: 3, invoice_number: undefined, invoiceNumber: 'INV-2025-888039', status: 'draft', buyer_name: undefined, …}
+InvoiceManagement.tsx:207 🎯 INVOICE MANAGEMENT RENDER DEBUG: {invoicesLength: 3, invoicesData: Array(3), isLoading: false, error: 'No error', hasSellerAccess: true, …}
+InvoiceManagement.tsx:217 🔍 BEFORE RENDER - Invoices array: [
+  {
+    "id": 3,
+    "invoiceNumber": "INV-2025-888039",
+    "orderId": null,
+    "sellerId": "44377424",
+    "sellerType": "gallery",
+    "buyerId": null,
+    "vatNumber": "564",
+    "buyerVatNumber": "564",
+    "vatRate": "15.00",
+    "subtotal": "53.00",
+    "vatAmount": "7.50",
+    "totalAmount": "57.50",
+    "currency": "SAR",
+    "itemDescription": "Amet dolor quae ali",
+    "itemDescriptionAr": "Eos ipsum inventore",
+    "qrCode": "eyJzZWxsZXJOYW1lIjoiQWJkdWxsYWggQWwgS3VsYWliIiwidmF0TnVtYmVyIjoiNTY0IiwidGltZXN0YW1wIjoiMjAyNS0wNy0xOFQxMDowMToyOC4wMzlaIiwidG90YWwiOjYwLjk1LCJ2YXRBbW91bnQiOjcuOTUsImJ1eWVyTmFtZSI6IlZpb2xldCBNY2NsdXJlIn0=",
+    "digitalSignature": null,
+    "zatcaUuid": "1752832888039-z52x4uegm",
+    "invoiceHash": "SU5WLTIwMjUtODg4MDM5MjAyNS0wNy0xOFQxMDowMToyOC4wMzlaNjAuOTU=",
+    "previousInvoiceHash": null,
+    "invoiceType": "simplified",
+    "transactionType": "sale",
+    "paymentMethod": "stc_pay",
+    "sellerCrNumber": null,
+    "sellerBuildingNumber": null,
+    "sellerStreetName": null,
+    "sellerDistrict": null,
+    "sellerCity": null,
+    "sellerPostalCode": null,
+    "sellerAdditionalNumber": null,
+    "status": "draft",
+    "issueDate": "2025-07-18T10:01:28.039Z",
+    "dueDate": "2025-08-17T10:01:28.039Z",
+    "paidDate": null,
+    "supplyDate": "1993-08-24T00:00:00.000Z",
+    "sellerBusinessName": "Abdullah Al Kulaib",
+    "sellerBusinessNameAr": "Abdullah Al Kulaib",
+    "sellerAddress": {
+      "country": "Saudi Arabia"
+    },
+    "buyerAddress": {
+      "name": "Violet Mcclure",
+      "address": "Nostrud ea rerum ill",
+      "country": "Saudi Arabia"
+    },
+    "buyerName": "Violet Mcclure",
+    "zatcaSubmissionDate": null,
+    "zatcaResponseCode": null,
+    "zatcaClearanceStatus": null,
+    "zatcaWarnings": null,
+    "lineItems": null,
+    "discountAmount": "53.00",
+    "discountPercentage": "100.00",
+    "shippingAmount": "50.00",
+    "notes": "Excepturi ea odit ei",
+    "notesAr": "Omnis non odit qui n",
+    "referenceNumber": "271",
+    "createdAt": "2025-07-18T10:01:28.053Z",
+    "updatedAt": "2025-07-18T10:01:28.053Z"
+  },
+  {
+    "id": 2,
+    "invoiceNumber": "INV-2025-465414",
+    "orderId": null,
+    "sellerId": "44377424",
+    "sellerType": "gallery",
+    "buyerId": null,
+    "vatNumber": "845",
+    "buyerVatNumber": "845",
+    "vatRate": "15.00",
+    "subtotal": "2.00",
+    "vatAmount": "10.31",
+    "totalAmount": "79.07",
+    "currency": "SAR",
+    "itemDescription": "Eum totam rerum rati",
+    "itemDescriptionAr": "Adipisci sit est ea",
+    "qrCode": "eyJzZWxsZXJOYW1lIjoiQWJkdWxsYWggQWwgS3VsYWliIiwidmF0TnVtYmVyIjoiODQ1IiwidGltZXN0YW1wIjoiMjAyNS0wNy0xOFQwOTo1NDoyNS40MTRaIiwidG90YWwiOjIuMywidmF0QW1vdW50IjowLjMsImJ1eWVyTmFtZSI6IkdhbGVuYSBHcmVnb3J5In0=",
+    "digitalSignature": null,
+    "zatcaUuid": "1752832465414-40niwnc4i",
+    "invoiceHash": "SU5WLTIwMjUtNDY1NDE0MjAyNS0wNy0xOFQwOTo1NDoyNS40MTRaMi4z",
+    "previousInvoiceHash": null,
+    "invoiceType": "simplified",
+    "transactionType": "sale",
+    "paymentMethod": "cash",
+    "sellerCrNumber": null,
+    "sellerBuildingNumber": null,
+    "sellerStreetName": null,
+    "sellerDistrict": null,
+    "sellerCity": null,
+    "sellerPostalCode": null,
+    "sellerAdditionalNumber": null,
+    "status": "draft",
+    "issueDate": "2025-07-18T09:54:25.414Z",
+    "dueDate": "2025-08-17T09:54:25.414Z",
+    "paidDate": null,
+    "supplyDate": "1972-07-07T00:00:00.000Z",
+    "sellerBusinessName": "Abdullah Al Kulaib",
+    "sellerBusinessNameAr": "Abdullah Al Kulaib",
+    "sellerAddress": {
+      "country": "Saudi Arabia"
+    },
+    "buyerAddress": {
+      "name": "Galena Gregory",
+      "address": "Aut molestiae dolore",
+      "country": "Saudi Arabia"
+    },
+    "buyerName": "Galena Gregory",
+    "zatcaSubmissionDate": null,
+    "zatcaResponseCode": null,
+    "zatcaClearanceStatus": null,
+    "zatcaWarnings": null,
+    "lineItems": null,
+    "discountAmount": "1.24",
+    "discountPercentage": "62.00",
+    "shippingAmount": "68.00",
+    "notes": "Voluptas perspiciati",
+    "notesAr": "Consequatur deserun",
+    "referenceNumber": "61",
+    "createdAt": "2025-07-18T09:54:25.429Z",
+    "updatedAt": "2025-07-18T09:54:25.429Z"
+  },
+  {
+    "id": 1,
+    "invoiceNumber": "INV-2025-989226",
+    "orderId": null,
+    "sellerId": "44377424",
+    "sellerType": "gallery",
+    "buyerId": null,
+    "vatNumber": "647",
+    "buyerVatNumber": null,
+    "vatRate": "15.00",
+    "subtotal": "49.00",
+    "vatAmount": "7.35",
+    "totalAmount": "56.35",
+    "currency": "SAR",
+    "itemDescription": "Culpa pariatur Ven",
+    "itemDescriptionAr": "Ratione facilis est",
+    "qrCode": "eyJzZWxsZXJOYW1lIjoiS2VubmFuIEF2ZXJ5IiwidmF0TnVtYmVyIjoiNjQ3IiwidGltZXN0YW1wIjoiMjAyNS0wNy0xN1QxMzoxMzowOS4yMjZaIiwidG90YWwiOjU2LjM1LCJ2YXRBbW91bnQiOjcuMzV9",
+    "digitalSignature": null,
+    "zatcaUuid": "1752757989226-zqvnugw2i",
+    "invoiceHash": "SU5WLTIwMjUtOTg5MjI2MjAyNS0wNy0xN1QxMzoxMzowOS4yMjZaNTYuMzU=",
+    "previousInvoiceHash": null,
+    "invoiceType": "standard",
+    "transactionType": "sale",
+    "paymentMethod": null,
+    "sellerCrNumber": null,
+    "sellerBuildingNumber": null,
+    "sellerStreetName": null,
+    "sellerDistrict": null,
+    "sellerCity": null,
+    "sellerPostalCode": null,
+    "sellerAdditionalNumber": null,
+    "status": "draft",
+    "issueDate": "2025-07-17T13:13:09.226Z",
+    "dueDate": "2025-08-16T13:13:09.226Z",
+    "paidDate": null,
+    "supplyDate": null,
+    "sellerBusinessName": "Abdullah Al Kulaib",
+    "sellerBusinessNameAr": "Abdullah Al Kulaib",
+    "sellerAddress": {
+      "country": "Saudi Arabia"
+    },
+    "buyerAddress": "Assumenda iusto illu",
+    "buyerName": null,
+    "zatcaSubmissionDate": null,
+    "zatcaResponseCode": null,
+    "zatcaClearanceStatus": null,
+    "zatcaWarnings": null,
+    "lineItems": null,
+    "discountAmount": "0.00",
+    "discountPercentage": "0.00",
+    "shippingAmount": "0.00",
+    "notes": null,
+    "notesAr": null,
+    "referenceNumber": null,
+    "createdAt": "2025-07-17T13:13:09.240Z",
+    "updatedAt": "2025-07-17T13:13:09.240Z"
+  }
+]
+InvoiceManagement.tsx:218 🔍 BEFORE RENDER - Is Loading: false
+InvoiceManagement.tsx:219 🔍 BEFORE RENDER - Has Error: false
+InvoiceManagement.tsx:380 i18next::translator: missingKey en translation common.create common.create
+InvoiceManagement.tsx:59 🔍 InvoiceManagement Debug: {hasSellerAccess: true, userRoles: Array(0), isLoading: false, invoicesData: Array(3), invoicesLength: 3, …}
+InvoiceManagement.tsx:74 🔍 First invoice structure: {id: 3, invoice_number: undefined, invoiceNumber: 'INV-2025-888039', status: 'draft', buyer_name: undefined, …}
+InvoiceManagement.tsx:207 🎯 INVOICE MANAGEMENT RENDER DEBUG: {invoicesLength: 3, invoicesData: Array(3), isLoading: false, error: 'No error', hasSellerAccess: true, …}error: "No error"hasSellerAccess: trueinvoicesData: Array(3)0: {id: 3, invoiceNumber: 'INV-2025-888039', orderId: null, sellerId: '44377424', sellerType: 'gallery', …}1: {id: 2, invoiceNumber: 'INV-2025-465414', orderId: null, sellerId: '44377424', sellerType: 'gallery', …}2: {id: 1, invoiceNumber: 'INV-2025-989226', orderId: null, sellerId: '44377424', sellerType: 'gallery', …}length: 3[[Prototype]]: Array(0)at: ƒ at()concat: ƒ concat()constructor: ƒ Array()copyWithin: ƒ copyWithin()entries: ƒ entries()every: ƒ every()fill: ƒ fill()filter: ƒ filter()find: ƒ find()findIndex: ƒ findIndex()findLast: ƒ findLast()findLastIndex: ƒ findLastIndex()flat: ƒ flat()flatMap: ƒ flatMap()forEach: ƒ forEach()includes: ƒ includes()indexOf: ƒ indexOf()join: ƒ join()keys: ƒ keys()lastIndexOf: ƒ lastIndexOf()length: 0map: ƒ map()pop: ƒ pop()push: ƒ push()reduce: ƒ reduce()reduceRight: ƒ reduceRight()reverse: ƒ reverse()shift: ƒ shift()slice: ƒ slice()some: ƒ some()sort: ƒ sort()splice: ƒ splice()toLocaleString: ƒ toLocaleString()toReversed: ƒ toReversed()toSorted: ƒ toSorted()toSpliced: ƒ toSpliced()toString: ƒ toString()unshift: ƒ unshift()values: ƒ values()with: ƒ with()Symbol(Symbol.iterator): ƒ values()Symbol(Symbol.unscopables): {at: true, copyWithin: true, entries: true, fill: true, find: true, …}[[Prototype]]: ObjectinvoicesLength: 3isLoading: falsetimestamp: "2025-07-19T19:04:05.474Z"[[Prototype]]: Object
+InvoiceManagement.tsx:217 🔍 BEFORE RENDER - Invoices array: [
+  {
+    "id": 3,
+    "invoiceNumber": "INV-2025-888039",
+    "orderId": null,
+    "sellerId": "44377424",
+    "sellerType": "gallery",
+    "buyerId": null,
+    "vatNumber": "564",
+    "buyerVatNumber": "564",
+    "vatRate": "15.00",
+    "subtotal": "53.00",
+    "vatAmount": "7.50",
+    "totalAmount": "57.50",
+    "currency": "SAR",
+    "itemDescription": "Amet dolor quae ali",
+    "itemDescriptionAr": "Eos ipsum inventore",
+    "qrCode": "eyJzZWxsZXJOYW1lIjoiQWJkdWxsYWggQWwgS3VsYWliIiwidmF0TnVtYmVyIjoiNTY0IiwidGltZXN0YW1wIjoiMjAyNS0wNy0xOFQxMDowMToyOC4wMzlaIiwidG90YWwiOjYwLjk1LCJ2YXRBbW91bnQiOjcuOTUsImJ1eWVyTmFtZSI6IlZpb2xldCBNY2NsdXJlIn0=",
+    "digitalSignature": null,
+    "zatcaUuid": "1752832888039-z52x4uegm",
+    "invoiceHash": "SU5WLTIwMjUtODg4MDM5MjAyNS0wNy0xOFQxMDowMToyOC4wMzlaNjAuOTU=",
+    "previousInvoiceHash": null,
+    "invoiceType": "simplified",
+    "transactionType": "sale",
+    "paymentMethod": "stc_pay",
+    "sellerCrNumber": null,
+    "sellerBuildingNumber": null,
+    "sellerStreetName": null,
+    "sellerDistrict": null,
+    "sellerCity": null,
+    "sellerPostalCode": null,
+    "sellerAdditionalNumber": null,
+    "status": "draft",
+    "issueDate": "2025-07-18T10:01:28.039Z",
+    "dueDate": "2025-08-17T10:01:28.039Z",
+    "paidDate": null,
+    "supplyDate": "1993-08-24T00:00:00.000Z",
+    "sellerBusinessName": "Abdullah Al Kulaib",
+    "sellerBusinessNameAr": "Abdullah Al Kulaib",
+    "sellerAddress": {
+      "country": "Saudi Arabia"
+    },
+    "buyerAddress": {
+      "name": "Violet Mcclure",
+      "address": "Nostrud ea rerum ill",
+      "country": "Saudi Arabia"
+    },
+    "buyerName": "Violet Mcclure",
+    "zatcaSubmissionDate": null,
+    "zatcaResponseCode": null,
+    "zatcaClearanceStatus": null,
+    "zatcaWarnings": null,
+    "lineItems": null,
+    "discountAmount": "53.00",
+    "discountPercentage": "100.00",
+    "shippingAmount": "50.00",
+    "notes": "Excepturi ea odit ei",
+    "notesAr": "Omnis non odit qui n",
+    "referenceNumber": "271",
+    "createdAt": "2025-07-18T10:01:28.053Z",
+    "updatedAt": "2025-07-18T10:01:28.053Z"
+  },
+  {
+    "id": 2,
+    "invoiceNumber": "INV-2025-465414",
+    "orderId": null,
+    "sellerId": "44377424",
+    "sellerType": "gallery",
+    "buyerId": null,
+    "vatNumber": "845",
+    "buyerVatNumber": "845",
+    "vatRate": "15.00",
+    "subtotal": "2.00",
+    "vatAmount": "10.31",
+    "totalAmount": "79.07",
+    "currency": "SAR",
+    "itemDescription": "Eum totam rerum rati",
+    "itemDescriptionAr": "Adipisci sit est ea",
+    "qrCode": "eyJzZWxsZXJOYW1lIjoiQWJkdWxsYWggQWwgS3VsYWliIiwidmF0TnVtYmVyIjoiODQ1IiwidGltZXN0YW1wIjoiMjAyNS0wNy0xOFQwOTo1NDoyNS40MTRaIiwidG90YWwiOjIuMywidmF0QW1vdW50IjowLjMsImJ1eWVyTmFtZSI6IkdhbGVuYSBHcmVnb3J5In0=",
+    "digitalSignature": null,
+    "zatcaUuid": "1752832465414-40niwnc4i",
+    "invoiceHash": "SU5WLTIwMjUtNDY1NDE0MjAyNS0wNy0xOFQwOTo1NDoyNS40MTRaMi4z",
+    "previousInvoiceHash": null,
+    "invoiceType": "simplified",
+    "transactionType": "sale",
+    "paymentMethod": "cash",
+    "sellerCrNumber": null,
+    "sellerBuildingNumber": null,
+    "sellerStreetName": null,
+    "sellerDistrict": null,
+    "sellerCity": null,
+    "sellerPostalCode": null,
+    "sellerAdditionalNumber": null,
+    "status": "draft",
+    "issueDate": "2025-07-18T09:54:25.414Z",
+    "dueDate": "2025-08-17T09:54:25.414Z",
+    "paidDate": null,
+    "supplyDate": "1972-07-07T00:00:00.000Z",
+    "sellerBusinessName": "Abdullah Al Kulaib",
+    "sellerBusinessNameAr": "Abdullah Al Kulaib",
+    "sellerAddress": {
+      "country": "Saudi Arabia"
+    },
+    "buyerAddress": {
+      "name": "Galena Gregory",
+      "address": "Aut molestiae dolore",
+      "country": "Saudi Arabia"
+    },
+    "buyerName": "Galena Gregory",
+    "zatcaSubmissionDate": null,
+    "zatcaResponseCode": null,
+    "zatcaClearanceStatus": null,
+    "zatcaWarnings": null,
+    "lineItems": null,
+    "discountAmount": "1.24",
+    "discountPercentage": "62.00",
+    "shippingAmount": "68.00",
+    "notes": "Voluptas perspiciati",
+    "notesAr": "Consequatur deserun",
+    "referenceNumber": "61",
+    "createdAt": "2025-07-18T09:54:25.429Z",
+    "updatedAt": "2025-07-18T09:54:25.429Z"
+  },
+  {
+    "id": 1,
+    "invoiceNumber": "INV-2025-989226",
+    "orderId": null,
+    "sellerId": "44377424",
+    "sellerType": "gallery",
+    "buyerId": null,
+    "vatNumber": "647",
+    "buyerVatNumber": null,
+    "vatRate": "15.00",
+    "subtotal": "49.00",
+    "vatAmount": "7.35",
+    "totalAmount": "56.35",
+    "currency": "SAR",
+    "itemDescription": "Culpa pariatur Ven",
+    "itemDescriptionAr": "Ratione facilis est",
+    "qrCode": "eyJzZWxsZXJOYW1lIjoiS2VubmFuIEF2ZXJ5IiwidmF0TnVtYmVyIjoiNjQ3IiwidGltZXN0YW1wIjoiMjAyNS0wNy0xN1QxMzoxMzowOS4yMjZaIiwidG90YWwiOjU2LjM1LCJ2YXRBbW91bnQiOjcuMzV9",
+    "digitalSignature": null,
+    "zatcaUuid": "1752757989226-zqvnugw2i",
+    "invoiceHash": "SU5WLTIwMjUtOTg5MjI2MjAyNS0wNy0xN1QxMzoxMzowOS4yMjZaNTYuMzU=",
+    "previousInvoiceHash": null,
+    "invoiceType": "standard",
+    "transactionType": "sale",
+    "paymentMethod": null,
+    "sellerCrNumber": null,
+    "sellerBuildingNumber": null,
+    "sellerStreetName": null,
+    "sellerDistrict": null,
+    "sellerCity": null,
+    "sellerPostalCode": null,
+    "sellerAdditionalNumber": null,
+    "status": "draft",
+    "issueDate": "2025-07-17T13:13:09.226Z",
+    "dueDate": "2025-08-16T13:13:09.226Z",
+    "paidDate": null,
+    "supplyDate": null,
+    "sellerBusinessName": "Abdullah Al Kulaib",
+    "sellerBusinessNameAr": "Abdullah Al Kulaib",
+    "sellerAddress": {
+      "country": "Saudi Arabia"
+    },
+    "buyerAddress": "Assumenda iusto illu",
+    "buyerName": null,
+    "zatcaSubmissionDate": null,
+    "zatcaResponseCode": null,
+    "zatcaClearanceStatus": null,
+    "zatcaWarnings": null,
+    "lineItems": null,
+    "discountAmount": "0.00",
+    "discountPercentage": "0.00",
+    "shippingAmount": "0.00",
+    "notes": null,
+    "notesAr": null,
+    "referenceNumber": null,
+    "createdAt": "2025-07-17T13:13:09.240Z",
+    "updatedAt": "2025-07-17T13:13:09.240Z"
+  }
+]
+InvoiceManagement.tsx:218 🔍 BEFORE RENDER - Is Loading: false
+InvoiceManagement.tsx:219 🔍 BEFORE RENDER - Has Error: false
+InvoiceManagement.tsx:380 i18next::translator: missingKey en translation common.create common.create

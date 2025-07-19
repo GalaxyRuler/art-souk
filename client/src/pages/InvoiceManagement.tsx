@@ -32,41 +32,55 @@ export default function InvoiceManagement() {
   const hasSellerAccess = true;
   const userRoles = [];
 
-  // Fetch invoices - SIMPLIFIED AND FIXED
-  const { data: invoices = [], isLoading, error } = useQuery({
-    queryKey: ['/api/invoices'], // FIXED: Removed Date.now() which was causing infinite re-renders
+  // Fetch invoices with enhanced debugging
+  const { data: invoices = [], isLoading, error, isSuccess, isFetching } = useQuery({
+    queryKey: ['/api/invoices'],
     staleTime: 0,
     refetchOnMount: true,
+    retry: false,
     queryFn: async () => {
-      console.log('🔄 STARTING INVOICE FETCH');
+      console.log('🚀 STARTING INVOICE FETCH');
       const response = await fetch('/api/invoices', {
         credentials: 'include',
         headers: { 'Cache-Control': 'no-cache' },
       });
       
+      console.log('📡 Response status:', response.status);
+      console.log('📡 Response ok:', response.ok);
+      
       if (!response.ok) {
-        console.error('❌ FETCH FAILED:', response.status);
-        throw new Error(`HTTP ${response.status}`);
+        console.error('❌ FETCH FAILED:', response.status, response.statusText);
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       
-      const data = await response.json();
-      console.log('✅ INVOICE FETCH SUCCESS:', data.length, 'invoices');
-      return data;
+      const responseText = await response.text();
+      console.log('📋 Raw response:', responseText.substring(0, 200) + '...');
+      
+      let data;
+      try {
+        data = JSON.parse(responseText);
+        console.log('✅ PARSED JSON SUCCESS:', Array.isArray(data), data?.length || 0, 'items');
+        console.log('🔍 First item keys:', data?.[0] ? Object.keys(data[0]) : 'No items');
+        return data;
+      } catch (parseError) {
+        console.error('❌ JSON PARSE ERROR:', parseError);
+        throw new Error('Invalid JSON response');
+      }
     },
   });
 
-  // Debug logging
-  console.log('🔍 InvoiceManagement Debug:', {
-    hasSellerAccess,
-    userRoles,
+  // Enhanced debug logging for React Query state
+  console.log('🔍 REACT QUERY STATE:', {
     isLoading,
-    invoicesData: invoices,
+    isFetching,
+    isSuccess,
+    hasError: !!error,
+    error: error?.message || null,
     invoicesLength: invoices?.length || 0,
     invoicesType: typeof invoices,
     invoicesIsArray: Array.isArray(invoices),
-    error: error?.message || 'No error',
-    queryEnabled: hasSellerAccess,
-    rawInvoicesData: JSON.stringify(invoices),
+    rawInvoicesKeys: invoices?.[0] ? Object.keys(invoices[0]) : [],
+    timestamp: new Date().toISOString()
   });
 
   // Debug first invoice structure
