@@ -238,16 +238,6 @@ export default function InvoiceManagement() {
       
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          {/* DEBUG DISPLAY */}
-          <div className="bg-blue-100 p-4 rounded mb-4">
-            <h3 className="font-bold text-blue-800">INVOICE DEBUG INFO:</h3>
-            <p>Loading: {isLoading ? 'YES' : 'NO'}</p>
-            <p>Error: {error ? error.message : 'None'}</p>
-            <p>Invoice Count: {invoices ? invoices.length : 'undefined'}</p>
-            <p>First Invoice: {invoices && invoices[0] ? JSON.stringify(invoices[0]).slice(0, 100) + '...' : 'None'}</p>
-            <p>Timestamp: {new Date().toLocaleTimeString()}</p>
-          </div>
-          
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">{t('invoice.title')}</h1>
