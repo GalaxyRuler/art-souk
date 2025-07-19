@@ -39,7 +39,7 @@ export default function InvoiceManagement() {
   // Handle downloading invoice PDF
   const handleDownloadInvoice = async (invoice: any) => {
     try {
-      console.log('📥 Downloading invoice:', invoice.invoice_number);
+      console.log('📥 Downloading invoice:', invoice.invoiceNumber);
       console.log('📋 Full invoice object:', invoice);
       console.log('🆔 Invoice ID:', invoice.id);
       console.log('🔍 Invoice keys:', Object.keys(invoice));
@@ -52,16 +52,23 @@ export default function InvoiceManagement() {
         credentials: 'include',
       });
       
+      console.log('📡 PDF Response status:', response.status);
+      console.log('📡 PDF Response ok:', response.ok);
+      
       if (!response.ok) {
-        throw new Error('Failed to generate PDF');
+        const errorText = await response.text();
+        console.error('❌ PDF Generation failed:', response.status, errorText);
+        throw new Error(`Failed to generate PDF: ${response.status} - ${errorText}`);
       }
       
       const blob = await response.blob();
+      console.log('📄 PDF Blob created, size:', blob.size, 'bytes');
+      
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.style.display = 'none';
       a.href = url;
-      a.download = `${invoice.invoice_number}.pdf`;
+      a.download = `${invoice.invoiceNumber}.pdf`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -69,13 +76,13 @@ export default function InvoiceManagement() {
       
       toast({
         title: t('invoice.downloadSuccess'),
-        description: `${invoice.invoice_number} PDF downloaded successfully`,
+        description: `${invoice.invoiceNumber} PDF downloaded successfully`,
       });
     } catch (error) {
-      console.error('Error downloading invoice:', error);
+      console.error('❌ Error downloading invoice:', error);
       toast({
         title: t('invoice.downloadError'),
-        description: 'Failed to download invoice PDF',
+        description: `Failed to download invoice PDF: ${error.message}`,
         variant: 'destructive',
       });
     }
@@ -84,7 +91,7 @@ export default function InvoiceManagement() {
   // Handle ZATCA submission
   const handleZATCASubmit = async (invoice: any) => {
     try {
-      console.log('📨 Submitting invoice to ZATCA:', invoice.invoice_number);
+      console.log('📨 Submitting invoice to ZATCA:', invoice.invoiceNumber);
       const response = await fetch(`/api/invoices/${invoice.id}/zatca-submit`, {
         method: 'POST',
         credentials: 'include',
@@ -99,7 +106,7 @@ export default function InvoiceManagement() {
       
       toast({
         title: t('invoice.zatcaSubmitSuccess'),
-        description: `${invoice.invoice_number} submitted to ZATCA successfully`,
+        description: `${invoice.invoiceNumber} submitted to ZATCA successfully`,
       });
     } catch (error) {
       console.error('Error submitting to ZATCA:', error);
