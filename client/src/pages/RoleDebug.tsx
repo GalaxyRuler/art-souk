@@ -202,3 +202,122 @@ export default function RoleDebug() {
     </div>
   );
 }
+import React from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
+import { useTranslation } from 'react-i18next';
+
+export default function RoleDebug() {
+  const { t } = useTranslation();
+  const { user, isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">{t('common.loading')}</div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Authentication Required</CardTitle>
+            <CardDescription>Please log in to view role debugging information.</CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <Card>
+        <CardHeader>
+          <CardTitle>Role Debug Information</CardTitle>
+          <CardDescription>Current user role and authentication status</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <h3 className="font-semibold mb-2">User Information</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <span className="text-sm text-gray-600">User ID:</span>
+                <p className="font-mono">{user?.id || 'N/A'}</p>
+              </div>
+              <div>
+                <span className="text-sm text-gray-600">Email:</span>
+                <p>{user?.email || 'N/A'}</p>
+              </div>
+              <div>
+                <span className="text-sm text-gray-600">Name:</span>
+                <p>{user?.firstName} {user?.lastName}</p>
+              </div>
+              <div>
+                <span className="text-sm text-gray-600">Lifecycle Stage:</span>
+                <p>{user?.lifecycleStage || 'N/A'}</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-2">Role Information</h3>
+            <div className="space-y-2">
+              <div>
+                <span className="text-sm text-gray-600">Legacy Role:</span>
+                <Badge variant="outline">{user?.role || 'None'}</Badge>
+              </div>
+              <div>
+                <span className="text-sm text-gray-600">Current Roles:</span>
+                <div className="flex gap-2 mt-1">
+                  {user?.roles && Array.isArray(user.roles) ? (
+                    user.roles.map((role) => (
+                      <Badge key={role} variant="default">{role}</Badge>
+                    ))
+                  ) : (
+                    <Badge variant="outline">No roles assigned</Badge>
+                  )}
+                </div>
+              </div>
+              <div>
+                <span className="text-sm text-gray-600">Role Setup Complete:</span>
+                <Badge variant={user?.roleSetupComplete ? "default" : "destructive"}>
+                  {user?.roleSetupComplete ? 'Yes' : 'No'}
+                </Badge>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-2">Authentication Status</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <span className="text-sm text-gray-600">Authenticated:</span>
+                <Badge variant={isAuthenticated ? "default" : "destructive"}>
+                  {isAuthenticated ? 'Yes' : 'No'}
+                </Badge>
+              </div>
+              <div>
+                <span className="text-sm text-gray-600">Profile Completeness:</span>
+                <p>{user?.profileCompleteness || 0}%</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-4">
+            <Button 
+              onClick={() => window.location.reload()} 
+              variant="outline"
+            >
+              Refresh Data
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

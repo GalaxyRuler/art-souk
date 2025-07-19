@@ -63,21 +63,18 @@ Art Souk is a comprehensive bilingual art marketplace platform serving Saudi Ara
 
 ```
 art-souk/
-├── apps/
-│   ├── web/                 # React frontend application
-│   │   ├── src/
-│   │   │   ├── components/  # Reusable UI components
-│   │   │   ├── pages/       # Application pages
-│   │   │   ├── hooks/       # Custom React hooks
-│   │   │   └── lib/         # Utility functions
-│   │   └── package.json
-│   └── api/                 # Express backend application
-│       ├── src/
-│       │   ├── middleware/  # Express middleware
-│       │   ├── routes/      # API routes
-│       │   ├── queues/      # Background job queues
-│       │   └── socket.ts    # Real-time WebSocket server
-│       └── package.json
+├── client/                  # React frontend application
+│   ├── src/
+│   │   ├── components/      # Reusable UI components
+│   │   ├── pages/           # Application pages
+│   │   ├── hooks/           # Custom React hooks
+│   │   └── lib/             # Utility functions
+│   └── package.json
+├── server/                  # Express backend application
+│   ├── middleware/          # Express middleware
+│   ├── routes/              # API routes
+│   ├── emailTemplates/      # Email template definitions
+│   └── package.json
 ├── packages/
 │   ├── db/                  # Database schema and migrations
 │   ├── ui/                  # Shared UI component library
