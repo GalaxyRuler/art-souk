@@ -538,16 +538,16 @@ export default function InvoiceManagement() {
                   <Card key={invoice.id} className="p-6 border-2 border-green-500">
                     <div className="bg-blue-50 p-2 mb-4 text-xs">
                       DEBUG CARD #{index}: ID={invoice.id} | 
-                      Number={invoice.invoice_number} | 
-                      Total={invoice.total_amount} | 
+                      Number={invoice.invoiceNumber} | 
+                      Total={invoice.totalAmount} | 
                       Keys={Object.keys(invoice).slice(0,5).join(',')}...
                     </div>
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-lg font-semibold">{invoice.invoice_number || 'NO NUMBER'}</h3>
-                        <p className="text-gray-600">{invoice.buyer_name || t('invoice.customer')}</p>
+                        <h3 className="text-lg font-semibold">{invoice.invoiceNumber || 'NO NUMBER'}</h3>
+                        <p className="text-gray-600">{invoice.buyerName || t('invoice.customer')}</p>
                         <p className="text-sm text-gray-500">
-                          {invoice.created_at ? format(new Date(invoice.created_at), 'MMM dd, yyyy') : 'N/A'}
+                          {invoice.createdAt ? format(new Date(invoice.createdAt), 'MMM dd, yyyy') : 'N/A'}
                         </p>
                       </div>
                       <div className="text-right">
@@ -555,7 +555,7 @@ export default function InvoiceManagement() {
                           {t(`invoice.status.${invoice.status}`) || invoice.status}
                         </Badge>
                         <p className="text-lg font-semibold mt-2">
-                          {invoice.total_amount || 'NO AMOUNT'} {invoice.currency || 'SAR'}
+                          {invoice.totalAmount || 'NO AMOUNT'} {invoice.currency || 'SAR'}
                         </p>
                       </div>
                     </div>
@@ -586,16 +586,16 @@ export default function InvoiceManagement() {
                   <Card key={invoice.id} className="p-6">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-lg font-semibold">{invoice.invoice_number}</h3>
-                        <p className="text-gray-600">{invoice.buyer_name || t('invoice.customer')}</p>
+                        <h3 className="text-lg font-semibold">{invoice.invoiceNumber}</h3>
+                        <p className="text-gray-600">{invoice.buyerName || t('invoice.customer')}</p>
                         <p className="text-sm text-gray-500">
-                          {invoice.created_at ? format(new Date(invoice.created_at), 'MMM dd, yyyy') : 'N/A'}
+                          {invoice.createdAt ? format(new Date(invoice.createdAt), 'MMM dd, yyyy') : 'N/A'}
                         </p>
                       </div>
                       <div className="text-right">
                         <Badge variant="secondary">{t('invoice.status.draft')}</Badge>
                         <p className="text-lg font-semibold mt-2">
-                          {invoice.total_amount} {invoice.currency || 'SAR'}
+                          {invoice.totalAmount} {invoice.currency || 'SAR'}
                         </p>
                       </div>
                     </div>
