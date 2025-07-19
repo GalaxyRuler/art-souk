@@ -40,6 +40,14 @@ export default function InvoiceManagement() {
   const handleDownloadInvoice = async (invoice: any) => {
     try {
       console.log('📥 Downloading invoice:', invoice.invoiceNumber);
+      console.log('📋 Full invoice object:', invoice);
+      console.log('🆔 Invoice ID:', invoice.id);
+      console.log('🔍 Invoice keys:', Object.keys(invoice));
+      
+      if (!invoice.id) {
+        throw new Error('Invoice ID is missing');
+      }
+      
       const response = await fetch(`/api/invoices/generate-pdf/${invoice.id}`, {
         credentials: 'include',
       });
