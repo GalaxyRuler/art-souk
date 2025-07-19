@@ -426,35 +426,42 @@ export default function InvoiceManagement() {
             <TabsTrigger value="overdue">{t('invoice.tabs.overdue')}</TabsTrigger>
           </TabsList>
 
-          {['all', 'draft', 'sent', 'paid', 'overdue'].map((status) => (
-            <TabsContent key={status} value={status}>
-              {isLoading ? (
-                <div className="text-center py-8">{t('common.loading')}</div>
-              ) : (
-                <div className="grid gap-4">
-                  {/* SIMPLE TEST */}
-                  <div className="bg-red-500 text-white p-4 text-center font-bold">
-                    TEST: ABOUT TO RENDER {invoices?.length || 0} INVOICES
-                  </div>
-                  
-                  {invoices?.map((invoice: any) => (
-                    <div key={invoice.id} className="bg-yellow-300 border-4 border-red-500 p-8 text-black">
-                      <h2 className="text-2xl font-bold">INVOICE CARD TEST</h2>
-                      <p>Number: {invoice.invoiceNumber}</p>
-                      <p>Status: {invoice.status}</p>
-                      <p>Amount: {invoice.totalAmount} SAR</p>
-                    </div>
-                  ))}
-                  
-                  {(!invoices || invoices.length === 0) && (
-                    <div className="text-center py-12 bg-gray-100">
-                      <p className="text-gray-600">No invoices found</p>
-                    </div>
-                  )}
+          {['all', 'draft', 'sent', 'paid', 'overdue'].map((status) => {
+            console.log(`🏷️ Creating tab content for status: ${status}`);
+            return (
+              <TabsContent key={status} value={status}>
+                <div className="bg-blue-500 text-white p-2 mb-4 text-center">
+                  📋 TAB: {status.toUpperCase()} | isLoading: {isLoading} | invoices: {invoices?.length || 0}
                 </div>
-              )}
-            </TabsContent>
-          ))}
+                {isLoading ? (
+                  <div className="text-center py-8">{t('common.loading')}</div>
+                ) : (
+                  <div className="grid gap-4">
+                    {/* SIMPLE TEST */}
+                    <div className="bg-red-500 text-white p-4 text-center font-bold">
+                      TEST: ABOUT TO RENDER {invoices?.length || 0} INVOICES FOR TAB: {status}
+                    </div>
+                    
+                    {invoices?.map((invoice: any) => (
+                      <div key={invoice.id} className="bg-yellow-300 border-4 border-red-500 p-8 text-black">
+                        <h2 className="text-2xl font-bold">INVOICE CARD TEST</h2>
+                        <p>Number: {invoice.invoiceNumber}</p>
+                        <p>Status: {invoice.status}</p>
+                        <p>Amount: {invoice.totalAmount} SAR</p>
+                        <p>Tab Filter: {status}</p>
+                      </div>
+                    ))}
+                    
+                    {(!invoices || invoices.length === 0) && (
+                      <div className="text-center py-12 bg-gray-100">
+                        <p className="text-gray-600">No invoices found for {status}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </TabsContent>
+            );
+          })}
         </Tabs>
       </div>
       
