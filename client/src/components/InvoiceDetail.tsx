@@ -61,7 +61,7 @@ export function InvoiceDetail({ invoice, open, onOpenChange, onDownloadPdf, onSu
             <div>
               <DialogTitle className="text-2xl">{t('invoice.invoiceNumber')} {invoice.invoiceNumber}</DialogTitle>
               <DialogDescription>
-                {formatDate(invoice.issue_date || invoice.issueDate)}
+                {formatDate(invoice.issueDate || invoice.createdAt)}
               </DialogDescription>
             </div>
             {getStatusBadge(invoice.status)}
