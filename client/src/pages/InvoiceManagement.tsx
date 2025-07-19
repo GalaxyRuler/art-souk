@@ -425,43 +425,49 @@ export default function InvoiceManagement() {
             <TabsTrigger value="paid">{t('invoice.tabs.paid')}</TabsTrigger>
             <TabsTrigger value="overdue">{t('invoice.tabs.overdue')}</TabsTrigger>
           </TabsList>
+          
+          {/* ALWAYS VISIBLE TEST */}
+          <div className="bg-purple-500 text-white p-8 m-4 text-center text-xl font-bold">
+            🚀 ALWAYS VISIBLE TEST - DATA: {invoices?.length || 0} invoices
+          </div>
 
-          {['all', 'draft', 'sent', 'paid', 'overdue'].map((status) => {
-            console.log(`🏷️ Creating tab content for status: ${status}`);
-            return (
-              <TabsContent key={status} value={status}>
-                <div className="bg-blue-500 text-white p-2 mb-4 text-center">
-                  📋 TAB: {status.toUpperCase()} | isLoading: {isLoading} | invoices: {invoices?.length || 0}
-                </div>
-                {isLoading ? (
-                  <div className="text-center py-8">{t('common.loading')}</div>
-                ) : (
-                  <div className="grid gap-4">
-                    {/* SIMPLE TEST */}
-                    <div className="bg-red-500 text-white p-4 text-center font-bold">
-                      TEST: ABOUT TO RENDER {invoices?.length || 0} INVOICES FOR TAB: {status}
-                    </div>
-                    
-                    {invoices?.map((invoice: any) => (
-                      <div key={invoice.id} className="bg-yellow-300 border-4 border-red-500 p-8 text-black">
-                        <h2 className="text-2xl font-bold">INVOICE CARD TEST</h2>
-                        <p>Number: {invoice.invoiceNumber}</p>
-                        <p>Status: {invoice.status}</p>
-                        <p>Amount: {invoice.totalAmount} SAR</p>
-                        <p>Tab Filter: {status}</p>
-                      </div>
-                    ))}
-                    
-                    {(!invoices || invoices.length === 0) && (
-                      <div className="text-center py-12 bg-gray-100">
-                        <p className="text-gray-600">No invoices found for {status}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </TabsContent>
-            );
-          })}
+          <TabsContent value="all">
+            <div className="bg-green-500 text-white p-8 text-center text-xl font-bold">
+              ✅ ALL TAB CONTENT - {invoices?.length || 0} invoices
+            </div>
+            {invoices?.map((invoice: any) => (
+              <div key={invoice.id} className="bg-yellow-300 border-4 border-red-500 p-8 m-4 text-black">
+                <h2 className="text-2xl font-bold">INVOICE: {invoice.invoiceNumber}</h2>
+                <p>Status: {invoice.status}</p>
+                <p>Amount: {invoice.totalAmount} SAR</p>
+              </div>
+            ))}
+          </TabsContent>
+          
+          <TabsContent value="draft">
+            <div className="bg-orange-500 text-white p-8 text-center text-xl font-bold">
+              📝 DRAFT TAB CONTENT - {invoices?.length || 0} invoices
+            </div>
+            {invoices?.filter((inv: any) => inv.status === 'draft').map((invoice: any) => (
+              <div key={invoice.id} className="bg-yellow-300 border-4 border-red-500 p-8 m-4 text-black">
+                <h2 className="text-2xl font-bold">DRAFT INVOICE: {invoice.invoiceNumber}</h2>
+                <p>Status: {invoice.status}</p>
+                <p>Amount: {invoice.totalAmount} SAR</p>
+              </div>
+            ))}
+          </TabsContent>
+          
+          <TabsContent value="sent">
+            <div className="bg-blue-500 text-white p-8 text-center text-xl">SENT TAB</div>
+          </TabsContent>
+          
+          <TabsContent value="paid">
+            <div className="bg-indigo-500 text-white p-8 text-center text-xl">PAID TAB</div>
+          </TabsContent>
+          
+          <TabsContent value="overdue">
+            <div className="bg-red-500 text-white p-8 text-center text-xl">OVERDUE TAB</div>
+          </TabsContent>
         </Tabs>
       </div>
       
