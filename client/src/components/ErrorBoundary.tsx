@@ -65,7 +65,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
                 We're sorry, but something unexpected happened. Please try refreshing the page or contact support if the problem persists.
               </p>
               
-              {process.env.NODE_ENV === 'development' && this.state.error && (
+              {import.meta.env.DEV && this.state.error && (
                 <details className="mt-4 p-4 bg-red-50 rounded-lg">
                   <summary className="cursor-pointer font-medium text-red-800">
                     Error Details (Development)

@@ -38,7 +38,7 @@ export function InvoiceDetail({ invoice, open, onOpenChange, onDownloadPdf, onSu
     const statusConfig = {
       draft: { variant: 'secondary' as const, icon: FileText },
       sent: { variant: 'default' as const, icon: Send },
-      paid: { variant: 'success' as const, icon: CheckCircle },
+      paid: { variant: 'outline' as const, icon: CheckCircle },
       overdue: { variant: 'destructive' as const, icon: Clock },
     };
 
@@ -233,7 +233,7 @@ export function InvoiceDetail({ invoice, open, onOpenChange, onDownloadPdf, onSu
               )}
               {invoice.zatcaClearanceStatus && (
                 <div>
-                  <Badge variant={invoice.zatcaClearanceStatus === 'cleared' ? 'success' : 'secondary'}>
+                  <Badge variant={invoice.zatcaClearanceStatus === 'cleared' ? 'outline' : 'secondary'}>
                     ZATCA {invoice.zatcaClearanceStatus}
                   </Badge>
                 </div>

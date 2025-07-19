@@ -159,82 +159,22 @@ export default function InvoiceManagement() {
     },
   });
 
-  // COMPREHENSIVE DEBUG: Log actual invoice data structure
+  // Simple debug logging
   React.useEffect(() => {
-    console.log('=== COMPREHENSIVE INVOICE DEBUG START ===');
-    console.log('🔍 Invoices data:', invoices);
-    console.log('🔍 Invoices type:', typeof invoices);
-    console.log('🔍 Invoices isArray:', Array.isArray(invoices));
-    console.log('🔍 Invoices length:', invoices?.length);
-    console.log('🔍 IsLoading:', isLoading);
-    console.log('🔍 IsSuccess:', isSuccess);
-    console.log('🔍 IsFetching:', isFetching);
-    console.log('🔍 Error:', error);
-    console.log('🔍 Raw invoices:', JSON.stringify(invoices, null, 2));
-    
-    if (invoices && Array.isArray(invoices) && invoices.length > 0) {
-      console.log('🔍 First invoice FULL:', invoices[0]);
-      console.log('🔍 First invoice keys:', Object.keys(invoices[0]));
-      console.log('🔍 First invoice ID:', invoices[0].id);
-      console.log('🔍 First invoice number:', invoices[0].invoice_number);
-      console.log('🔍 First invoice total:', invoices[0].total_amount);
-      console.log('🔍 First invoice buyer:', invoices[0].buyer_name);
-      console.log('🔍 First invoice created:', invoices[0].created_at);
-      console.log('🔍 Field validation: {');
-      console.log('   id exists:', 'id' in invoices[0]);
-      console.log('   invoice_number exists:', 'invoice_number' in invoices[0]);
-      console.log('   total_amount exists:', 'total_amount' in invoices[0]);
-      console.log('   buyer_name exists:', 'buyer_name' in invoices[0]);
-      console.log('   created_at exists:', 'created_at' in invoices[0]);
-      console.log('🔍 }');
-    } else {
-      console.log('🔍 NO INVOICES OR NOT ARRAY!');
-    }
-    console.log('Invoices length:', invoices?.length || 0);
-    console.log('Is loading:', isLoading);
-    console.log('Has error:', error);
-    if (invoices && invoices.length > 0) {
-      console.log('First invoice:', invoices[0]);
-      console.log('Invoice fields:', Object.keys(invoices[0]));
-    }
-    console.log('=== INVOICE DEBUG END ===');
-  }, [invoices, isLoading, error]);
-
-  // Enhanced debug logging for React Query state
-  console.log('🔍 REACT QUERY STATE:', {
-    isLoading,
-    isFetching,
-    isSuccess,
-    hasError: !!error,
-    error: error?.message || null,
-    invoicesLength: invoices?.length || 0,
-    invoicesType: typeof invoices,
-    invoicesIsArray: Array.isArray(invoices),
-    rawInvoicesKeys: invoices?.[0] ? Object.keys(invoices[0]) : [],
-    timestamp: new Date().toISOString()
-  });
-
-  // Debug first invoice structure
-  React.useEffect(() => {
-    if (invoices && invoices.length > 0) {
-      console.log('🔍 TAB DEBUG:', { activeTab, invoicesLength: invoices.length });
-      console.log('🔍 First invoice structure:', {
+    console.log('INVOICE DEBUG:', {
+      isLoading,
+      hasError: !!error,
+      invoicesLength: invoices?.length || 0,
+      invoicesType: typeof invoices,
+      isArray: Array.isArray(invoices),
+      firstInvoice: invoices?.[0] ? {
         id: invoices[0].id,
-        number: invoices[0].number,
         invoice_number: invoices[0].invoice_number,
-        status: invoices[0].status,
-        total: invoices[0].total,
         total_amount: invoices[0].total_amount,
-        created: invoices[0].created,
-        created_at: invoices[0].created_at,
-        allKeys: Object.keys(invoices[0])
-      });
-      
-      // Check if the filter is working for drafts
-      const draftInvoices = invoices.filter((inv: any) => inv.status === 'draft');
-      console.log('🔍 DRAFT FILTER:', { totalInvoices: invoices.length, draftCount: draftInvoices.length });
-    }
-  }, [invoices, activeTab]);
+        status: invoices[0].status
+      } : null
+    });
+  }, [invoices, isLoading, error]);
 
   // Create invoice mutation
   const createInvoiceMutation = useMutation({
@@ -563,18 +503,16 @@ export default function InvoiceManagement() {
           <div className="mt-6">
             {activeTab === 'all' && (
               <div className="grid gap-4">
-                <div className="bg-yellow-100 p-4 border">
-                  DEBUG: Invoices array length: {invoices?.length || 0} | 
-                  Type: {typeof invoices} | 
-                  IsArray: {Array.isArray(invoices) ? 'true' : 'false'}
+                {/* Debug Info */}
+                <div className="bg-blue-50 p-3 border border-blue-200 rounded text-sm">
+                  Debug: Found {invoices?.length || 0} invoices | Loading: {isLoading ? 'Yes' : 'No'} | Error: {error ? 'Yes' : 'No'}
                 </div>
+                
+                {/* Invoice Cards */}
                 {invoices?.map((invoice: any, index: number) => (
-                  <Card key={invoice.id} className="p-6 border-2 border-green-500">
-                    <div className="bg-blue-50 p-2 mb-4 text-xs">
-                      DEBUG CARD #{index}: ID={invoice.id} | 
-                      Number={invoice.invoice_number} | 
-                      Total={invoice.total_amount} | 
-                      Keys={Object.keys(invoice).slice(0,5).join(',')}...
+                  <Card key={invoice.id || index} className="p-6">
+                    <div className="bg-green-50 p-2 mb-2 text-xs border-l-4 border-green-400">
+                      Card {index + 1}: ID={invoice.id} | Number={invoice.invoice_number} | Amount={invoice.total_amount}
                     </div>
                     <div className="flex justify-between items-start">
                       <div>

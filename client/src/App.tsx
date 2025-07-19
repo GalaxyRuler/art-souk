@@ -143,7 +143,7 @@ function Router() {
             <Route path="/manage/events" component={ManageEvents} />
             <Route path="/artworks/manage" component={ArtworkManagement} />
             <Route path="/role-selection" component={RoleSelection} />
-            <Route path="/role-debug" component={() => import("@/pages/RoleDebug")} />
+            <Route path="/role-debug" component={lazy(() => import("@/pages/RoleDebug"))} />
             {/* <Route path="/tap-payment-setup" component={TapPaymentSetup} /> */}
           </>
         )}
