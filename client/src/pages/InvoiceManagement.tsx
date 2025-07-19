@@ -421,10 +421,13 @@ export default function InvoiceManagement() {
                   {invoices
                     .filter((invoice: any) => {
                       const isMatch = status === 'all' || invoice.status === status;
+                      console.log(`🔍 Filter - Invoice ${invoice.invoiceNumber} status:'${invoice.status}' vs tab:'${status}' = ${isMatch ? 'MATCH' : 'NO MATCH'}`);
                       return isMatch;
                     })
-                    .map((invoice: any) => (
-                      <Card key={invoice.id} className="hover:shadow-lg transition-shadow">
+                    .map((invoice: any) => {
+                      console.log(`🎨 Rendering card for: ${invoice.invoiceNumber}`);
+                      return (
+                        <Card key={invoice.id} className="hover:shadow-lg transition-shadow">
                         <CardContent className="p-6">
                           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                             <div className="flex-1">
