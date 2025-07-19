@@ -614,33 +614,73 @@ export default function InvoiceManagement() {
             )}
             
             {activeTab === 'draft' && (
-              <div className="grid gap-4">
+              <div className="grid gap-6">
                 {invoices?.filter((inv: any) => inv.status === 'draft').map((invoice: any) => (
-                  <Card key={invoice.id} className="p-6">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="text-lg font-semibold">{invoice.invoiceNumber}</h3>
-                        <p className="text-gray-600">{invoice.buyerName || t('invoice.customer')}</p>
-                        <p className="text-sm text-gray-500">
-                          {invoice.createdAt ? format(new Date(invoice.createdAt), 'MMM dd, yyyy') : 'N/A'}
-                        </p>
+                  <Card key={invoice.id} className="group relative overflow-hidden bg-gradient-to-r from-white to-gray-50 hover:from-blue-50 hover:to-indigo-50 border border-gray-200 hover:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-lg">
+                    {/* Status Indicator Strip */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+                    
+                    <div className="p-6">
+                      <div className="flex justify-between items-start mb-4">
+                        {/* Left side - Invoice Info */}
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <FileText className="h-5 w-5 text-blue-600" />
+                            <h3 className="text-lg font-bold text-gray-900">{invoice.invoiceNumber || invoice.invoice_number}</h3>
+                          </div>
+                          
+                          <div className="space-y-1 text-sm text-gray-600">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">Customer:</span>
+                              <span>{invoice.buyerName || invoice.buyer_name || 'N/A'}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">Issue Date:</span>
+                              <span>{invoice.createdAt ? format(new Date(invoice.createdAt), 'MMM dd, yyyy') : 'N/A'}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">ZATCA Compliant Invoice</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Right side - Status and Amount */}
+                        <div className="text-right">
+                          <Badge className="mb-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0">
+                            <div className="w-2 h-2 bg-white rounded-full mr-1"></div>
+                            {t('invoice.status.draft')}
+                          </Badge>
+                          
+                          <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-3 border border-gray-200">
+                            <div className="flex items-center justify-center gap-1 text-2xl font-bold text-gray-900">
+                              <span>{invoice.totalAmount || invoice.total_amount}</span>
+                              <span className="text-lg text-gray-600">{invoice.currency || 'SAR'}</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <Badge variant="secondary">{t('invoice.status.draft')}</Badge>
-                        <p className="text-lg font-semibold mt-2">
-                          {invoice.totalAmount} {invoice.currency || 'SAR'}
-                        </p>
+                      
+                      {/* Action Buttons */}
+                      <div className="flex gap-3 pt-4 border-t border-gray-100">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleViewInvoice(invoice)}
+                          className="flex-1 border-blue-300 text-blue-700 hover:bg-blue-50 hover:border-blue-400 hover:text-blue-800 transition-all duration-200"
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          {t('invoice.view')}
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="default"
+                          onClick={() => handleDownloadInvoice(invoice)}
+                          className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 border-0 shadow-md hover:shadow-lg transition-all duration-200"
+                        >
+                          <Download className="w-4 h-4 mr-2" />
+                          {t('invoice.download')}
+                        </Button>
                       </div>
-                    </div>
-                    <div className="flex gap-2 mt-4">
-                      <Button size="sm" variant="outline" onClick={() => handleViewInvoice(invoice)}>
-                        <Eye className="w-4 h-4 mr-2" />
-                        {t('invoice.view')}
-                      </Button>
-                      <Button size="sm">
-                        <Send className="w-4 h-4 mr-2" />
-                        {t('invoice.send')}
-                      </Button>
                     </div>
                   </Card>
                 ))}
@@ -654,9 +694,82 @@ export default function InvoiceManagement() {
             )}
             
             {activeTab === 'sent' && (
-              <div className="text-center py-12">
-                <Send className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">{t('invoice.noSentInvoices')}</p>
+              <div className="grid gap-6">
+                {invoices?.filter((inv: any) => inv.status === 'sent').map((invoice: any) => (
+                  <Card key={invoice.id} className="group relative overflow-hidden bg-gradient-to-r from-white to-gray-50 hover:from-orange-50 hover:to-amber-50 border border-gray-200 hover:border-orange-300 transition-all duration-300 shadow-sm hover:shadow-lg">
+                    {/* Status Indicator Strip */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 to-amber-500"></div>
+                    
+                    <div className="p-6">
+                      <div className="flex justify-between items-start mb-4">
+                        {/* Left side - Invoice Info */}
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <Send className="h-5 w-5 text-orange-600" />
+                            <h3 className="text-lg font-bold text-gray-900">{invoice.invoiceNumber || invoice.invoice_number}</h3>
+                          </div>
+                          
+                          <div className="space-y-1 text-sm text-gray-600">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">Customer:</span>
+                              <span>{invoice.buyerName || invoice.buyer_name || 'N/A'}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">Issue Date:</span>
+                              <span>{invoice.createdAt ? format(new Date(invoice.createdAt), 'MMM dd, yyyy') : 'N/A'}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">ZATCA Compliant Invoice</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Right side - Status and Amount */}
+                        <div className="text-right">
+                          <Badge className="mb-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white border-0">
+                            <div className="w-2 h-2 bg-white rounded-full mr-1"></div>
+                            {t('invoice.status.sent')}
+                          </Badge>
+                          
+                          <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-3 border border-gray-200">
+                            <div className="flex items-center justify-center gap-1 text-2xl font-bold text-gray-900">
+                              <span>{invoice.totalAmount || invoice.total_amount}</span>
+                              <span className="text-lg text-gray-600">{invoice.currency || 'SAR'}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Action Buttons */}
+                      <div className="flex gap-3 pt-4 border-t border-gray-100">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleViewInvoice(invoice)}
+                          className="flex-1 border-orange-300 text-orange-700 hover:bg-orange-50 hover:border-orange-400 hover:text-orange-800 transition-all duration-200"
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          {t('invoice.view')}
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="default"
+                          onClick={() => handleDownloadInvoice(invoice)}
+                          className="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 border-0 shadow-md hover:shadow-lg transition-all duration-200"
+                        >
+                          <Download className="w-4 h-4 mr-2" />
+                          {t('invoice.download')}
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+                {(!invoices?.filter((inv: any) => inv.status === 'sent').length) && (
+                  <div className="text-center py-12">
+                    <Send className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600">{t('invoice.noSentInvoices')}</p>
+                  </div>
+                )}
               </div>
             )}
             
