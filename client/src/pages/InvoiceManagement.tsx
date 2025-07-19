@@ -31,7 +31,7 @@ export default function InvoiceManagement() {
 
   // Handle viewing an invoice
   const handleViewInvoice = (invoice: any) => {
-    console.log('📋 Opening invoice details for:', invoice.invoiceNumber);
+    console.log('📋 Opening invoice details for:', invoice.invoice_number);
     setSelectedInvoice(invoice);
     setDetailDialogOpen(true);
   };
@@ -39,7 +39,7 @@ export default function InvoiceManagement() {
   // Handle downloading invoice PDF
   const handleDownloadInvoice = async (invoice: any) => {
     try {
-      console.log('📥 Downloading invoice:', invoice.invoiceNumber);
+      console.log('📥 Downloading invoice:', invoice.invoice_number);
       console.log('📋 Full invoice object:', invoice);
       console.log('🆔 Invoice ID:', invoice.id);
       console.log('🔍 Invoice keys:', Object.keys(invoice));
@@ -68,7 +68,7 @@ export default function InvoiceManagement() {
       const a = document.createElement('a');
       a.style.display = 'none';
       a.href = url;
-      a.download = `${invoice.invoiceNumber}.pdf`;
+      a.download = `${invoice.invoice_number}.pdf`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -76,7 +76,7 @@ export default function InvoiceManagement() {
       
       toast({
         title: t('invoice.downloadSuccess'),
-        description: `${invoice.invoiceNumber} PDF downloaded successfully`,
+        description: `${invoice.invoice_number} PDF downloaded successfully`,
       });
     } catch (error) {
       console.error('❌ Error downloading invoice:', error);
@@ -91,7 +91,7 @@ export default function InvoiceManagement() {
   // Handle ZATCA submission
   const handleZATCASubmit = async (invoice: any) => {
     try {
-      console.log('📨 Submitting invoice to ZATCA:', invoice.invoiceNumber);
+      console.log('📨 Submitting invoice to ZATCA:', invoice.invoice_number);
       const response = await fetch(`/api/invoices/${invoice.id}/zatca-submit`, {
         method: 'POST',
         credentials: 'include',
@@ -106,7 +106,7 @@ export default function InvoiceManagement() {
       
       toast({
         title: t('invoice.zatcaSubmitSuccess'),
-        description: `${invoice.invoiceNumber} submitted to ZATCA successfully`,
+        description: `${invoice.invoice_number} submitted to ZATCA successfully`,
       });
     } catch (error) {
       console.error('Error submitting to ZATCA:', error);
@@ -545,16 +545,16 @@ export default function InvoiceManagement() {
                   <Card key={invoice.id} className="p-6 border-2 border-green-500">
                     <div className="bg-blue-50 p-2 mb-4 text-xs">
                       DEBUG CARD #{index}: ID={invoice.id} | 
-                      Number={invoice.invoiceNumber} | 
-                      Total={invoice.totalAmount} | 
+                      Number={invoice.invoice_number} | 
+                      Total={invoice.total_amount} | 
                       Keys={Object.keys(invoice).slice(0,5).join(',')}...
                     </div>
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-lg font-semibold">{invoice.invoiceNumber || 'NO NUMBER'}</h3>
-                        <p className="text-gray-600">{invoice.buyerName || t('invoice.customer')}</p>
+                        <h3 className="text-lg font-semibold">{invoice.invoice_number || 'NO NUMBER'}</h3>
+                        <p className="text-gray-600">{invoice.buyer_name || t('invoice.customer')}</p>
                         <p className="text-sm text-gray-500">
-                          {invoice.createdAt ? format(new Date(invoice.createdAt), 'MMM dd, yyyy') : 'N/A'}
+                          {invoice.created_at ? format(new Date(invoice.created_at), 'MMM dd, yyyy') : 'N/A'}
                         </p>
                       </div>
                       <div className="text-right">
@@ -562,7 +562,7 @@ export default function InvoiceManagement() {
                           {t(`invoice.status.${invoice.status}`) || invoice.status}
                         </Badge>
                         <p className="text-lg font-semibold mt-2">
-                          {invoice.totalAmount || 'NO AMOUNT'} {invoice.currency || 'SAR'}
+                          {invoice.total_amount || 'NO AMOUNT'} {invoice.currency || 'SAR'}
                         </p>
                       </div>
                     </div>
@@ -593,16 +593,16 @@ export default function InvoiceManagement() {
                   <Card key={invoice.id} className="p-6">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-lg font-semibold">{invoice.invoiceNumber}</h3>
-                        <p className="text-gray-600">{invoice.buyerName || t('invoice.customer')}</p>
+                        <h3 className="text-lg font-semibold">{invoice.invoice_number}</h3>
+                        <p className="text-gray-600">{invoice.buyer_name || t('invoice.customer')}</p>
                         <p className="text-sm text-gray-500">
-                          {invoice.createdAt ? format(new Date(invoice.createdAt), 'MMM dd, yyyy') : 'N/A'}
+                          {invoice.created_at ? format(new Date(invoice.created_at), 'MMM dd, yyyy') : 'N/A'}
                         </p>
                       </div>
                       <div className="text-right">
                         <Badge variant="secondary">{t('invoice.status.draft')}</Badge>
                         <p className="text-lg font-semibold mt-2">
-                          {invoice.totalAmount} {invoice.currency || 'SAR'}
+                          {invoice.total_amount} {invoice.currency || 'SAR'}
                         </p>
                       </div>
                     </div>
