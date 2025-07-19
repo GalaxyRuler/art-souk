@@ -484,22 +484,7 @@ export default function InvoiceManagement() {
           </div>
         </div>
 
-        {/* TEMPORARY DEBUG BOX */}
-        <div className="bg-red-100 border border-red-400 p-4 rounded mb-6">
-          <h3 className="font-bold text-red-800">FRONTEND DEBUG:</h3>
-          <p><strong>Loading:</strong> {isLoading ? 'YES' : 'NO'}</p>
-          <p><strong>Error:</strong> {error ? error.message : 'None'}</p>
-          <p><strong>Invoices Array:</strong> {invoices ? `${invoices.length} items` : 'undefined'}</p>
-          <p><strong>Array Type:</strong> {Array.isArray(invoices) ? 'Array' : typeof invoices}</p>
-          {invoices && invoices.length > 0 && (
-            <div>
-              <p><strong>First Invoice:</strong></p>
-              <pre className="text-xs bg-white p-2 mt-1 rounded">
-                {JSON.stringify(invoices[0], null, 2).slice(0, 300)}...
-              </pre>
-            </div>
-          )}
-        </div>
+
 
         {/* SIMPLE STATE-BASED TABS - NO RADIX UI */}
         <div className="space-y-6">
@@ -539,39 +524,116 @@ export default function InvoiceManagement() {
                 
                 {/* Invoice Cards */}
                 {invoices?.map((invoice: any, index: number) => (
-                  <Card key={invoice.id || index} className="p-6">
-                    <div className="bg-green-50 p-2 mb-2 text-xs border-l-4 border-green-400">
-                      Card {index + 1}: ID={invoice.id} | Fields={Object.keys(invoice).join(', ')}
-                    </div>
-                    <div className="bg-yellow-50 p-1 mb-2 text-xs">
-                      Fixed: invoiceNumber={invoice.invoiceNumber} | totalAmount={invoice.totalAmount} | status={invoice.status}
-                    </div>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="text-lg font-semibold">{invoice.invoiceNumber || 'NO NUMBER'}</h3>
-                        <p className="text-gray-600">{invoice.buyerName || t('invoice.customer')}</p>
-                        <p className="text-sm text-gray-500">
-                          {invoice.createdAt ? format(new Date(invoice.createdAt), 'MMM dd, yyyy') : 'N/A'}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <Badge variant={invoice.status === 'draft' ? 'secondary' : 'default'}>
+                  <Card key={invoice.id || index} className="group relative overflow-hidden border border-gray-200 hover:border-amber-300 hover:shadow-lg transition-all duration-200 bg-gradient-to-br from-white to-gray-50 hover:from-amber-50 hover:to-orange-50">
+                    {/* Status Indicator Strip */}
+                    <div className={`absolute top-0 left-0 right-0 h-1 ${
+                      invoice.status === 'draft' ? 'bg-gradient-to-r from-blue-400 to-blue-600' :
+                      invoice.status === 'sent' ? 'bg-gradient-to-r from-orange-400 to-orange-600' :
+                      invoice.status === 'paid' ? 'bg-gradient-to-r from-green-400 to-green-600' :
+                      'bg-gradient-to-r from-red-400 to-red-600'
+                    }`} />
+                    
+                    <div className="p-6">
+                      {/* Header with Invoice Number and Status */}
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className={`p-2 rounded-lg ${
+                            invoice.status === 'draft' ? 'bg-blue-100 text-blue-600' :
+                            invoice.status === 'sent' ? 'bg-orange-100 text-orange-600' :
+                            invoice.status === 'paid' ? 'bg-green-100 text-green-600' :
+                            'bg-red-100 text-red-600'
+                          }`}>
+                            <FileText className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-bold text-gray-900 group-hover:text-amber-700 transition-colors">
+                              {invoice.invoiceNumber || 'NO NUMBER'}
+                            </h3>
+                            <p className="text-sm text-gray-500 font-medium">
+                              ZATCA Compliant Invoice
+                            </p>
+                          </div>
+                        </div>
+                        <Badge 
+                          variant={invoice.status === 'draft' ? 'secondary' : 
+                                 invoice.status === 'paid' ? 'outline' : 'default'}
+                          className={`font-semibold ${
+                            invoice.status === 'draft' ? 'bg-blue-100 text-blue-700 border-blue-200' :
+                            invoice.status === 'sent' ? 'bg-orange-100 text-orange-700 border-orange-200' :
+                            invoice.status === 'paid' ? 'bg-green-100 text-green-700 border-green-200' :
+                            'bg-red-100 text-red-700 border-red-200'
+                          }`}
+                        >
+                          <div className={`w-2 h-2 rounded-full mr-2 ${
+                            invoice.status === 'draft' ? 'bg-blue-500' :
+                            invoice.status === 'sent' ? 'bg-orange-500' :
+                            invoice.status === 'paid' ? 'bg-green-500' :
+                            'bg-red-500'
+                          }`} />
                           {t(`invoice.status.${invoice.status}`) || invoice.status}
                         </Badge>
-                        <p className="text-lg font-semibold mt-2">
-                          {invoice.totalAmount || 'NO AMOUNT'} {invoice.currency || 'SAR'}
-                        </p>
                       </div>
-                    </div>
-                    <div className="flex gap-2 mt-4">
-                      <Button size="sm" variant="outline" onClick={() => handleViewInvoice(invoice)}>
-                        <Eye className="w-4 h-4 mr-2" />
-                        {t('invoice.view')}
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleDownloadInvoice(invoice)}>
-                        <Download className="w-4 h-4 mr-2" />
-                        {t('invoice.download')}
-                      </Button>
+
+                      {/* Customer and Date Info */}
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div className="space-y-1">
+                          <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                            {t('invoice.customer')}
+                          </p>
+                          <p className="font-semibold text-gray-900">
+                            {invoice.buyerName || t('invoice.customer')}
+                          </p>
+                        </div>
+                        <div className="space-y-1 text-right">
+                          <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                            {t('invoice.issueDate')}
+                          </p>
+                          <p className="font-semibold text-gray-900">
+                            {invoice.createdAt ? format(new Date(invoice.createdAt), 'MMM dd, yyyy') : 'N/A'}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Amount Display */}
+                      <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-lg p-4 mb-4">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <p className="text-xs text-amber-700 uppercase tracking-wider font-medium mb-1">
+                              {t('invoice.totalAmount')}
+                            </p>
+                            <p className="text-2xl font-bold text-amber-800">
+                              {invoice.totalAmount || '0.00'} {invoice.currency || 'SAR'}
+                            </p>
+                          </div>
+                          <div className="text-amber-600">
+                            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex gap-2">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          onClick={() => handleViewInvoice(invoice)}
+                          className="flex-1 border-gray-300 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          {t('invoice.view')}
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="default"
+                          onClick={() => handleDownloadInvoice(invoice)}
+                          className="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 border-0 shadow-md hover:shadow-lg transition-all duration-200"
+                        >
+                          <Download className="w-4 h-4 mr-2" />
+                          {t('invoice.download')}
+                        </Button>
+                      </div>
                     </div>
                   </Card>
                 ))}

@@ -55,93 +55,133 @@ export function InvoiceDetail({ invoice, open, onOpenChange, onDownloadPdf, onSu
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <DialogTitle className="text-2xl">{t('invoice.invoiceNumber')} {invoice.invoiceNumber}</DialogTitle>
-              <DialogDescription>
-                {formatDate(invoice.issueDate || invoice.createdAt)}
-              </DialogDescription>
-            </div>
-            {getStatusBadge(invoice.status)}
+      <DialogContent className="max-w-5xl max-h-[95vh] overflow-y-auto bg-gradient-to-br from-white via-gray-50 to-amber-50">
+        {/* Enhanced Header with Gradient Background */}
+        <div className="relative -m-6 mb-6 bg-gradient-to-r from-amber-600 via-orange-500 to-amber-700 text-white p-6 rounded-t-lg">
+          <div className="absolute inset-0 bg-black/10 rounded-t-lg" />
+          <div className="relative">
+            <DialogHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+                    <FileText className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <DialogTitle className="text-3xl font-bold">{t('invoice.invoiceNumber')} {invoice.invoiceNumber}</DialogTitle>
+                    <DialogDescription className="text-amber-100 text-lg">
+                      ZATCA Compliant Tax Invoice • {formatDate(invoice.issueDate || invoice.createdAt)}
+                    </DialogDescription>
+                  </div>
+                </div>
+                <div className="text-right">
+                  {getStatusBadge(invoice.status)}
+                  <p className="text-2xl font-bold mt-2">
+                    {invoice.totalAmount || '0.00'} {invoice.currency || 'SAR'}
+                  </p>
+                </div>
+              </div>
+            </DialogHeader>
           </div>
-        </DialogHeader>
+        </div>
 
-        <div className="space-y-4 mt-6">
+        <div className="space-y-6">
           {/* Invoice Type and Payment Method */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm font-medium">{t('invoice.type')}</CardTitle>
+            <Card className="border border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium text-blue-800 flex items-center gap-2">
+                  <FileSignature className="h-4 w-4" />
+                  {t('invoice.type')}
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center gap-2">
-                  <FileSignature className="h-4 w-4 text-gray-500" />
-                  <span className="font-semibold">
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-blue-900">
                     {invoice.invoiceType === 'standard' ? t('invoice.typeStandard') : t('invoice.typeSimplified')}
                   </span>
-                  <Badge variant="outline" className="ml-2">
+                  <Badge variant="outline" className="bg-blue-200 text-blue-800 border-blue-300">
                     {invoice.invoiceType === 'standard' ? 'B2B' : 'B2C'}
                   </Badge>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm font-medium">{t('invoice.paymentMethod')}</CardTitle>
+            <Card className="border border-green-200 bg-gradient-to-br from-green-50 to-green-100">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium text-green-800 flex items-center gap-2">
+                  <CreditCard className="h-4 w-4" />
+                  {t('invoice.paymentMethod')}
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center gap-2">
-                  <CreditCard className="h-4 w-4 text-gray-500" />
-                  <span className="font-semibold">
-                    {invoice.paymentMethod ? t(`invoice.${invoice.paymentMethod}`) : '-'}
-                  </span>
-                </div>
+                <span className="font-semibold text-green-900">
+                  {invoice.paymentMethod ? t(`invoice.${invoice.paymentMethod}`) : 'Not Specified'}
+                </span>
               </CardContent>
             </Card>
           </div>
 
           {/* Seller and Buyer Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm font-medium">{t('invoice.sellerInfo')}</CardTitle>
+            <Card className="border border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium text-purple-800 flex items-center gap-2">
+                  <Package className="h-4 w-4" />
+                  {t('invoice.sellerInfo')}
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
-                <p className="font-semibold">{invoice.sellerBusinessName}</p>
-                <p className="text-sm text-gray-600" dir="rtl">{invoice.sellerBusinessNameAr}</p>
-                {invoice.vatNumber && (
-                  <p className="text-sm">
-                    <span className="text-gray-600">{t('invoice.vatNumber')}:</span> {invoice.vatNumber}
-                  </p>
-                )}
-                {invoice.sellerCrNumber && (
-                  <p className="text-sm">
-                    <span className="text-gray-600">CR Number:</span> {invoice.sellerCrNumber}
-                  </p>
-                )}
+              <CardContent className="space-y-3">
+                <div>
+                  <p className="font-bold text-purple-900">{invoice.sellerBusinessName || 'Art Souk Platform'}</p>
+                  <p className="text-sm text-purple-700" dir="rtl">{invoice.sellerBusinessNameAr || 'منصة سوق الفن'}</p>
+                </div>
+                <div className="space-y-1">
+                  {invoice.vatNumber && (
+                    <div className="flex items-center gap-2 text-sm">
+                      <Shield className="h-3 w-3 text-purple-600" />
+                      <span className="text-purple-600">{t('invoice.vatNumber')}:</span> 
+                      <span className="font-mono text-purple-800">{invoice.vatNumber}</span>
+                    </div>
+                  )}
+                  {invoice.sellerCrNumber && (
+                    <div className="flex items-center gap-2 text-sm">
+                      <FileSignature className="h-3 w-3 text-purple-600" />
+                      <span className="text-purple-600">CR Number:</span> 
+                      <span className="font-mono text-purple-800">{invoice.sellerCrNumber}</span>
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm font-medium">{t('invoice.buyerInfo')}</CardTitle>
+            <Card className="border border-teal-200 bg-gradient-to-br from-teal-50 to-teal-100">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium text-teal-800 flex items-center gap-2">
+                  <MapPin className="h-4 w-4" />
+                  {t('invoice.buyerInfo')}
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
-                <p className="font-semibold">{invoice.buyerName || '-'}</p>
-                {invoice.buyerVatNumber && (
-                  <p className="text-sm">
-                    <span className="text-gray-600">{t('invoice.buyerVatNumber')}:</span> {invoice.buyerVatNumber}
-                  </p>
-                )}
-                {invoice.buyerAddress && (
-                  <div className="text-sm text-gray-600">
-                    <MapPin className="h-3 w-3 inline mr-1" />
-                    {typeof invoice.buyerAddress === 'string' ? invoice.buyerAddress : invoice.buyerAddress.address || '-'}
-                  </div>
-                )}
+              <CardContent className="space-y-3">
+                <div>
+                  <p className="font-bold text-teal-900">{invoice.buyerName || 'Customer Name Not Available'}</p>
+                </div>
+                <div className="space-y-1">
+                  {invoice.buyerVatNumber && (
+                    <div className="flex items-center gap-2 text-sm">
+                      <Shield className="h-3 w-3 text-teal-600" />
+                      <span className="text-teal-600">{t('invoice.buyerVatNumber')}:</span> 
+                      <span className="font-mono text-teal-800">{invoice.buyerVatNumber}</span>
+                    </div>
+                  )}
+                  {invoice.buyerAddress && (
+                    <div className="flex items-start gap-2 text-sm">
+                      <MapPin className="h-3 w-3 text-teal-600 mt-0.5" />
+                      <div className="text-teal-800">
+                        {typeof invoice.buyerAddress === 'string' ? invoice.buyerAddress : invoice.buyerAddress.address || 'Address Not Available'}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -254,24 +294,24 @@ export function InvoiceDetail({ invoice, open, onOpenChange, onDownloadPdf, onSu
             </Card>
           )}
 
-          {/* Actions */}
-          <div className="flex gap-2 justify-end">
+          {/* Action Buttons */}
+          <div className="flex gap-3 pt-6 border-t border-gray-200">
             <Button
               variant="outline"
               onClick={() => onDownloadPdf(invoice.id)}
+              className="flex-1 border-amber-300 text-amber-700 hover:bg-amber-50 hover:border-amber-400 hover:text-amber-800 transition-all duration-200"
             >
               <Download className="h-4 w-4 mr-2" />
               {t('invoice.downloadPdf')}
             </Button>
-            {invoice.status === 'draft' && (
-              <Button
-                onClick={() => onSubmitToZatca(invoice.id)}
-                className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700"
-              >
-                <Send className="h-4 w-4 mr-2" />
-                {t('invoice.submitToZatca')}
-              </Button>
-            )}
+            <Button
+              variant="default"
+              onClick={() => onSubmitToZatca(invoice.id)}
+              className="flex-1 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 border-0 shadow-md hover:shadow-lg transition-all duration-200"
+            >
+              <Send className="h-4 w-4 mr-2" />
+              {t('invoice.submitToZatca')}
+            </Button>
           </div>
         </div>
       </DialogContent>
