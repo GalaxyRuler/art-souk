@@ -418,89 +418,24 @@ export default function InvoiceManagement() {
                 <div className="text-center py-8">{t('common.loading')}</div>
               ) : (
                 <div className="grid gap-4">
-                  {invoices
-                    .filter((invoice: any) => {
-                      const isMatch = status === 'all' || invoice.status === status;
-                      console.log(`🔍 Filter - Invoice ${invoice.invoiceNumber} status:'${invoice.status}' vs tab:'${status}' = ${isMatch ? 'MATCH' : 'NO MATCH'}`);
-                      return isMatch;
-                    })
-                    .map((invoice: any) => {
-                      console.log(`🎨 Rendering card for: ${invoice.invoiceNumber}`);
-                      return (
-                        <Card key={invoice.id} className="hover:shadow-lg transition-shadow bg-green-50 border-green-200">
-                        <CardContent className="p-6">
-                          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <h3 className="text-lg font-semibold">{invoice.invoiceNumber || invoice.invoice_number}</h3>
-                                {getStatusBadge(invoice.status)}
-                              </div>
-                              <p className="text-gray-600 mb-1">{invoice.buyerName || invoice.buyer_name || 'N/A'}</p>
-                              <p className="text-sm text-gray-500">
-                                {(() => {
-                                  try {
-                                    const dateToFormat = invoice.createdAt || invoice.created_at || invoice.issueDate || invoice.issue_date;
-                                    if (!dateToFormat) return 'No date available';
-                                    const date = new Date(dateToFormat);
-                                    if (isNaN(date.getTime())) return 'Invalid date';
-                                    return format(date, 'PPP');
-                                  } catch (error) {
-                                    return 'Date format error';
-                                  }
-                                })()}
-                              </p>
-                              <p className="text-lg font-semibold text-amber-600 mt-2">
-                                {(invoice.totalAmount || invoice.total_amount) ? 
-                                  parseFloat(invoice.totalAmount || invoice.total_amount).toLocaleString() : '0'} SAR
-                              </p>
-                            </div>
-                            
-                            <div className="flex flex-col sm:flex-row gap-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  setSelectedInvoice(invoice);
-                                  setDetailDialogOpen(true);
-                                }}
-                              >
-                                <Eye className="h-4 w-4 mr-1" />
-                                {t('common.view')}
-                              </Button>
-                              
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleDownloadPDF(invoice.id)}
-                              >
-                                <Download className="h-4 w-4 mr-1" />
-                                {t('invoice.downloadPDF')}
-                              </Button>
-                              
-                              {invoice.status === 'draft' && (
-                                <Button
-                                  size="sm"
-                                  onClick={() => handleZATCASubmit(invoice.id)}
-                                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white"
-                                >
-                                  <Send className="h-4 w-4 mr-1" />
-                                  {t('invoice.submitZATCA')}
-                                </Button>
-                              )}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                      );
-                    })}
+                  {/* SIMPLE TEST */}
+                  <div className="bg-red-500 text-white p-4 text-center font-bold">
+                    TEST: ABOUT TO RENDER {invoices?.length || 0} INVOICES
+                  </div>
                   
-                  {invoices.filter((invoice: any) => status === 'all' || invoice.status === status).length === 0 && (
-                    <Card>
-                      <CardContent className="text-center py-12">
-                        <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                        <p className="text-gray-600">{t('invoice.noInvoices')}</p>
-                      </CardContent>
-                    </Card>
+                  {invoices?.map((invoice: any) => (
+                    <div key={invoice.id} className="bg-yellow-300 border-4 border-red-500 p-8 text-black">
+                      <h2 className="text-2xl font-bold">INVOICE CARD TEST</h2>
+                      <p>Number: {invoice.invoiceNumber}</p>
+                      <p>Status: {invoice.status}</p>
+                      <p>Amount: {invoice.totalAmount} SAR</p>
+                    </div>
+                  ))}
+                  
+                  {(!invoices || invoices.length === 0) && (
+                    <div className="text-center py-12 bg-gray-100">
+                      <p className="text-gray-600">No invoices found</p>
+                    </div>
                   )}
                 </div>
               )}
