@@ -307,7 +307,18 @@ const resources = {
         },
         sendInquiry: "Send Inquiry",
         description: "Description",
-        details: "Details"
+        details: "Details",
+        favorite: "Add to Favorites",
+        favorited: "Remove from Favorites",
+        share: "Share",
+        inquire: "Make Inquiry",
+        inquiryTitle: "Send Inquiry",
+        inquiryEmail: "Email",
+        inquiryPhone: "Phone",
+        inquiryMessage: "Message",
+        inquiryMessagePlaceholder: "I'm interested in this artwork...",
+        artist: "About the Artist",
+        gallery: "Gallery Information"
       },
       artworks: {
         viewAll: "View All Artworks",
@@ -2072,7 +2083,18 @@ const resources = {
         },
         sendInquiry: "إرسال استفسار",
         description: "الوصف",
-        details: "التفاصيل"
+        details: "التفاصيل",
+        favorite: "إضافة للمفضلة",
+        favorited: "إزالة من المفضلة",
+        share: "مشاركة",
+        inquire: "إرسال استفسار",
+        inquiryTitle: "إرسال استفسار",
+        inquiryEmail: "البريد الإلكتروني",
+        inquiryPhone: "الهاتف",
+        inquiryMessage: "الرسالة",
+        inquiryMessagePlaceholder: "أنا مهتم بهذا العمل الفني...",
+        artist: "عن الفنان",
+        gallery: "معلومات الجاليري"
       },
       artworks: {
         viewAll: "عرض جميع الأعمال",
@@ -2718,3 +2740,25 @@ i18n.on('languageChanged', (lng) => {
 });
 
 export { i18n };
+
+// Re-initialize if resources were lost
+if (!i18n.hasResourceBundle('en', 'translation')) {
+  console.warn('i18n resources were lost, re-initializing...');
+  i18n.init({
+    resources,
+    lng: getInitialLanguage(),
+    fallbackLng: "en",
+    debug: false,
+    interpolation: {
+      escapeValue: false,
+    },
+    react: {
+      useSuspense: false,
+    },
+    keySeparator: '.',
+    nsSeparator: ':',
+    returnEmptyString: false,
+    returnNull: false,
+    returnObjects: false,
+  });
+}
