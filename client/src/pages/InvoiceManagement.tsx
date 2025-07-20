@@ -166,14 +166,15 @@ export default function InvoiceManagement() {
       firstInvoiceKeys: invoices?.[0] ? Object.keys(invoices[0]) : [],
       fieldTesting: invoices?.[0] ? {
         'id': invoices[0].id,
-        'number': invoices[0].number,
+        'invoiceNumber': invoices[0].invoiceNumber,
         'invoice_number': invoices[0].invoice_number, 
-        'total': invoices[0].total,
+        'totalAmount': invoices[0].totalAmount,
         'total_amount': invoices[0].total_amount,
         'status': invoices[0].status,
+        'buyerName': invoices[0].buyerName,
         'buyer_name': invoices[0].buyer_name,
-        'created_at': invoices[0].created_at,
-        'created': invoices[0].created
+        'createdAt': invoices[0].createdAt,
+        'created_at': invoices[0].created_at
       } : null
     });
   }, [invoices, isLoading, error]);
@@ -520,7 +521,7 @@ export default function InvoiceManagement() {
                           </div>
                           <div>
                             <h3 className="text-lg font-bold text-gray-900 group-hover:text-amber-700 transition-colors">
-                              {invoice.invoiceNumber || 'NO NUMBER'}
+                              {invoice.invoiceNumber || invoice.invoice_number || 'NO NUMBER'}
                             </h3>
                             <p className="text-sm text-gray-500 font-medium">
                               ZATCA Compliant Invoice
@@ -554,7 +555,7 @@ export default function InvoiceManagement() {
                             {t('invoice.customer')}
                           </p>
                           <p className="font-semibold text-gray-900">
-                            {invoice.buyerName || t('invoice.customer')}
+                            {invoice.buyerName || invoice.buyer_name || t('invoice.customer')}
                           </p>
                         </div>
                         <div className="space-y-1 text-right">
@@ -562,7 +563,7 @@ export default function InvoiceManagement() {
                             {t('invoice.issueDate')}
                           </p>
                           <p className="font-semibold text-gray-900">
-                            {invoice.createdAt ? format(new Date(invoice.createdAt), 'MMM dd, yyyy') : 'N/A'}
+                            {(invoice.createdAt || invoice.created_at) ? format(new Date(invoice.createdAt || invoice.created_at), 'MMM dd, yyyy') : 'N/A'}
                           </p>
                         </div>
                       </div>
@@ -575,7 +576,7 @@ export default function InvoiceManagement() {
                               {t('invoice.totalAmount')}
                             </p>
                             <p className="text-2xl font-bold text-amber-800">
-                              {invoice.totalAmount || '0.00'} {invoice.currency || 'SAR'}
+                              {invoice.totalAmount || invoice.total_amount || '0.00'} {invoice.currency || 'SAR'}
                             </p>
                           </div>
                           <div className="text-amber-600">
