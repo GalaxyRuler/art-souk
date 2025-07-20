@@ -1,0 +1,78 @@
+You are working in a monorepo that has:
+
+  • /frontend  → Vite + React 18 + TypeScript + Tailwind + shadcn/ui + Wouter
+  • /backend   → Express + TypeScript + Drizzle ORM + Neon PostgreSQL
+  • /tests     → Playwright + TS config
+
+############################################
+# JOURNEY MAP CONTEXT (do not edit > DevOps)
+#
+# Candidate stages & goals
+# 1. Awareness – discover role            -> public careers page
+# 2. Consideration – assess fit           -> job-detail modal
+# 3. Application – submit CV             -> Google Form webhook
+# 4. Screening – recruiter/NLP review     -> /api/candidates, dash filter
+# 5. Interview – booking + scorecards     -> /api/interviews, scheduler
+# 6. Offer – contract negotiation         -> /api/offers, e-sign widget
+# 7. Onboarding – travel / kit / visa     -> onboarding_tasks table
+# 8. Alumni – nurture unplaced talent     -> drip CRM, last_contacted_at
+#
+# Client stages & goals
+# A. Lead & Qualification – create client -> POST /api/clients
+# B. Onboarding & Agreement – sign SLA    -> client_documents, audit_log
+# C. Requisition Intake – define job      -> job_requisitions form
+# D. Shortlist Review – give feedback     -> /portal/:clientId
+# E. Interview & Selection – schedule     -> interview_slots
+# F. Offer & Placement – finalize hire    -> offer_details JSONB
+# G. Post-placement Feedback – survey     -> client_feedback table
+############################################
+
+Goal: Implement the journey above and surface it in the UI/UX.  
+Follow the steps in order; create helper files where sensible.
+
+1. **DB migrations (Drizzle)**
+   - Create tables `client_feedback` and `onboarding_tasks`, each with `id uuid PK`,
+     `recruiter_id uuid FK`, timestamps, plus:
+       • client_feedback → `placement_id uuid FK`, `rating int`, `comments text`
+       • onboarding_tasks → `candidate_id uuid FK`, `task text`,
+         `due_date date`, `status text CHECK (IN ('incomplete','done'))`
+   - Run `drizzle-kit push` to apply.  <!-- stage G, 7 --> 
+
+2. **TypeScript models**
+   - Add interfaces in `/backend/types/db.ts`.
+   - Export Zod schemas in `/backend/validators/*.ts`; infer types.
+
+3. **API routes (Express)**
+   - `POST /api/feedback`  (stage G) – create feedback.
+   - `GET  /api/portal/:clientId/shortlist`  (stage D) – list submissions+notes.
+   - Use recruiter-scoped auth middleware; return 401 on cross-tenant access.
+
+4. **React routes (Wouter)**
+   - `<Route path="/portal/:clientId" />`  (stage D)
+   - `<Route path="/feedback/:placementId" />`  (stage G)
+
+5. **UI (shadcn/ui + Tailwind)**
+   - Build:
+       • Feedback form card  
+       • Shortlist table (sortable, paginated)  
+       • Onboarding checklist component  
+   - Ensure keyboard navigation and ARIA labels.
+
+6. **Data fetching (TanStack Query)**
+   - Hooks: `useClientShortlist(clientId)` and `useSubmitFeedback()`.
+   - Invalidate `['shortlist', clientId]` after submission.
+
+7. **E2E tests (Playwright)**
+   - Happy path: recruiter logs in, submits feedback, client sees update.
+   - Headless Chromium; files in `/tests/e2e/`.
+
+8. **Analytics**
+   - Dashboard bar chart: average `client_feedback.rating` per client.
+
+9. **Acceptance criteria**
+   - `pnpm lint`, `pnpm test`, `pnpm typecheck` pass.
+   - Playwright suite green.
+   - Unit tests cover new routes.
+   - Shortlist API responds in < 300 ms.
+
+Comment your code, commit in logical chunks, and output a PR summary when done.
