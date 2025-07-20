@@ -50,12 +50,12 @@ export class EmailService {
   async queueEmail(emailData: Omit<InsertEmailNotificationQueue, 'id' | 'createdAt'>) {
     try {
       const [queued] = await db.insert(emailNotificationQueue).values(emailData).returning();
-      
+
       // Process immediately if high priority
       if (emailData.priority && emailData.priority <= 3) {
         this.processQueue();
       }
-      
+
       return queued;
     } catch (error) {
       console.error('Error queuing email:', error);
@@ -118,12 +118,12 @@ export class EmailService {
   // Replace variables in template content
   private replaceVariables(content: string, variables: Record<string, any>): string {
     let processed = content;
-    
+
     Object.entries(variables).forEach(([key, value]) => {
       const regex = new RegExp(`{{${key}}}`, 'g');
       processed = processed.replace(regex, String(value));
     });
-    
+
     return processed;
   }
 
@@ -398,7 +398,7 @@ export class EmailService {
       sendDate.setDate(sendDate.getDate() + days);
 
       const followUpContent = this.getFollowUpContent(userType, days);
-      
+
       await this.queueEmail({
         recipientEmail: user.email,
         recipientUserId: user.id,
@@ -556,6 +556,15 @@ export class EmailService {
     };
   }
 }
+
+// Process queue every 2 minutes to reduce memory pressure
+    setInterval(async () => {
+      try {
+        await this.processQueue();
+      } catch (error) {
+        console.error('Error processing email queue:', error);
+      }
+    }, 120000);
 
 // Export singleton instance
 export const emailService = EmailService.getInstance();

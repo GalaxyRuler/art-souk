@@ -8,45 +8,38 @@ import { healthCheckMiddleware, databaseHealthCheck, readinessCheck, livenessChe
 import { cacheConfigs } from "./middleware/caching";
 
 // Increased memory configuration for better performance
-process.env.NODE_OPTIONS = '--max-old-space-size=2048 --expose-gc --max-semi-space-size=128';
+process.env.NODE_OPTIONS = '--max-old-space-size=4096 --expose-gc --max-semi-space-size=256';
 
-// Simplified memory tracking (reduced overhead)
-let lastMemoryCheck = Date.now();
-let memoryCheckCount = 0;
+// Optimized memory tracking with less overhead
+let memoryTrackingEnabled = false;
+let lastCleanup = Date.now();
 
-// Optimized cleanup function (less aggressive)
+// Less aggressive cleanup function
 const periodicCleanup = () => {
+  const now = Date.now();
+  // Only check memory every 30 seconds minimum
+  if (now - lastCleanup < 30000) return;
+  
   const memUsage = process.memoryUsage();
   const heapPercent = (memUsage.heapUsed / memUsage.heapTotal) * 100;
 
-  // Only trigger cleanup if memory is critically high
-  if (heapPercent > 85) {
+  // Only trigger cleanup if memory is very high
+  if (heapPercent > 90) {
     if (global.gc) {
       global.gc();
+      lastCleanup = now;
     }
-
-    // Only log if memory is truly critical
-    if (heapPercent > 95) {
-      console.log(`🚨 High memory usage: ${Math.round(heapPercent)}%`);
+    
+    // Only log every 2 minutes when critical
+    if (heapPercent > 95 && now - lastCleanup > 120000) {
+      console.log(`🚨 Critical memory usage: ${Math.round(heapPercent)}%`);
+      lastCleanup = now;
     }
   }
 };
 
-// More frequent cleanup when memory is high, less frequent when stable
-let cleanupFrequency = 300000; // Start at 5 minutes
-setInterval(() => {
-  const memUsage = process.memoryUsage();
-  const heapPercent = (memUsage.heapUsed / memUsage.heapTotal) * 100;
-  
-  // Adjust cleanup frequency based on memory pressure
-  if (heapPercent > 80) {
-    cleanupFrequency = 60000; // 1 minute when high memory
-  } else if (heapPercent < 60) {
-    cleanupFrequency = 600000; // 10 minutes when low memory
-  }
-  
-  periodicCleanup();
-}, cleanupFrequency);
+// Much less frequent cleanup interval
+setInterval(periodicCleanup, 300000); // Every 5 minutes only
 
 // Remove aggressive memory leak detection that was consuming memory
 
@@ -85,18 +78,16 @@ try {
 
 // Additional monitoring endpoints will be added by routes.ts
 
-// Memory trend endpoint
+// Simplified memory endpoint without tracking history
 app.get('/health/memory-trend', (req, res) => {
+  const memUsage = process.memoryUsage();
   res.json({
-    samples: memoryTracking.samples.map(s => ({
-      timestamp: s.timestamp,
-      heapUsedMB: Math.round(s.heapUsed / 1024 / 1024),
-      heapTotalMB: Math.round(s.heapTotal / 1024 / 1024),
-      heapPercentage: Math.round((s.heapUsed / s.heapTotal) * 100)
-    })),
-    trend: memoryTracking.samples.length >= 2 ? 
-      (memoryTracking.samples[memoryTracking.samples.length - 1].heapUsed > 
-       memoryTracking.samples[memoryTracking.samples.length - 2].heapUsed ? 'increasing' : 'decreasing') : 'unknown'
+    current: {
+      heapUsedMB: Math.round(memUsage.heapUsed / 1024 / 1024),
+      heapTotalMB: Math.round(memUsage.heapTotal / 1024 / 1024),
+      heapPercentage: Math.round((memUsage.heapUsed / memUsage.heapTotal) * 100),
+      rss: Math.round(memUsage.rss / 1024 / 1024)
+    }
   });
 });
 

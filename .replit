@@ -19,7 +19,7 @@ localPort = 5000
 externalPort = 80
 
 [workflows]
-runButton = "Project"
+runButton = "High Memory Start"
 
 [[workflows.workflow]]
 name = "Project"
@@ -46,4 +46,4 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "NODE_OPTIONS=\"--max-old-space-size=2048 --expose-gc\" npm run dev"
+args = "NODE_OPTIONS=\"--max-old-space-size=4096 --expose-gc\" npm run dev"
