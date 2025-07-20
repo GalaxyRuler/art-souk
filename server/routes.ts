@@ -199,6 +199,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
     `);
   });
 
+  // Profile endpoint for authentication checks (allows unauthenticated access)
+  app.get('/api/profile', async (req: any, res) => {
+    try {
+      // Check for authentication in multiple ways
+      let userId = null;
+      
+      // Try session first
+      if (req.session?.user?.id) {
+        userId = req.session.user.id;
+      }
+      // Try passport user
+      else if (req.user?.claims?.sub) {
+        userId = req.user.claims.sub;
+      }
+      // Try authenticated check
+      else if (req.isAuthenticated && req.isAuthenticated() && req.user?.claims?.sub) {
+        userId = req.user.claims.sub;
+      }
+      
+      console.log('Profile endpoint check:', {
+        userId,
+        hasSession: !!req.session,
+        hasSessionUser: !!req.session?.user,
+        hasPassportUser: !!req.user,
+        isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false,
+        sessionID: req.sessionID
+      });
+      
+      // If no user found, return null (not authenticated) - this is expected behavior
+      if (!userId) {
+        console.log('No user ID found - user is not authenticated (returning null)');
+        return res.json(null);
+      }
+      
+      const user = await storage.getUser(userId);
+      
+      if (!user) {
+        console.log('User not found in database:', userId);
+        return res.json(null);
+      }
+      
+      console.log('Returning user data:', {
+        id: user.id,
+        email: user.email,
+        roles: user.roles,
+        isAdmin: user.roles?.includes('admin') || user.role === 'admin'
+      });
+      
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      res.json(null); // Return null instead of error for graceful handling
+    }
+  });
+
   // Auth routes (without aggressive rate limiting for normal usage)
   app.get('/api/auth/user', async (req: any, res) => {
     try {

@@ -425,6 +425,7 @@ const skipSecurityPaths = [
   '/api/auth/login',
   '/api/auth/register',
   '/api/auth/logout',
+  '/api/auth/user',
   '/api/profile',
   '/api/dev',
   '/manifest.json'
