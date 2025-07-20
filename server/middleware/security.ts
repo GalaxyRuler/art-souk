@@ -89,13 +89,54 @@ export const generateCSRFToken = (req: Request, res: Response) => {
 
 // SQL Injection Prevention
 export const sqlInjectionProtection = (req: Request, res: Response, next: NextFunction) => {
+  // Skip SQL injection protection for development routes and Vite assets
+  const developmentPaths = [
+    '/src/',
+    '/@vite/',
+    '/@react-refresh',
+    '/@fs/',
+    '/node_modules/'
+  ];
+
+  const developmentExtensions = [
+    '.tsx',
+    '.ts',
+    '.js',
+    '.css',
+    '.mjs',
+    '.jsx'
+  ];
+
+  // Check if this is a development/asset request
+  const isDevelopmentPath = developmentPaths.some(path => req.path.startsWith(path));
+  const isDevelopmentExtension = developmentExtensions.some(ext => req.path.endsWith(ext));
+  const isViteRequest = req.query.v !== undefined; // Vite version parameter
+
+  console.log('Security middleware check:', {
+    path: req.path,
+    query: req.query,
+    isDevelopmentPath,
+    isDevelopmentExtension,
+    isViteRequest,
+    shouldSkip: isDevelopmentPath || isDevelopmentExtension || isViteRequest
+  });
+
+  // Skip SQL injection check for development requests
+  if (isDevelopmentPath || isDevelopmentExtension || isViteRequest) {
+    return next();
+  }
+
   const checkForSQLInjection = (value: any): boolean => {
     if (typeof value !== 'string') return false;
 
+    // More precise SQL injection patterns that won't trigger on Vite version hashes
     const sqlPatterns = [
       /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION|SCRIPT)\b)/gi,
       /(\b(OR|AND)\s+\d+\s*=\s*\d+)/gi,
-      /(;|--|\/\*|\*\/|'|")/g,
+      /(;\s*(DROP|DELETE|UPDATE|INSERT))/gi, // More specific semicolon patterns
+      /(--\s+.*$)/gm, // SQL comments with space after --
+      /(\/\*.*?\*\/)/g, // SQL block comments
+      /('[^']*';\s*(DROP|DELETE|UPDATE|INSERT))/gi, // Quote-based injection
       /(\bINFORMATION_SCHEMA\b)/gi,
       /(\bSYS\b)/gi,
     ];
