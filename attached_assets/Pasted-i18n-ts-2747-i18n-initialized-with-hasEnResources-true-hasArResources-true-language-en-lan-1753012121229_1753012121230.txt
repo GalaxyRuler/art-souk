@@ -1,0 +1,145 @@
+i18n.ts:2747 i18n initialized with: {hasEnResources: true, hasArResources: true, language: 'en', languages: Array(1)}hasArResources: truehasEnResources: truelanguage: "en"languages: Array(1)0: "en"length: 1[[Prototype]]: Array(0)at: ƒ at()concat: ƒ concat()constructor: ƒ Array()copyWithin: ƒ copyWithin()entries: ƒ entries()every: ƒ every()fill: ƒ fill()filter: ƒ filter()find: ƒ find()findIndex: ƒ findIndex()findLast: ƒ findLast()findLastIndex: ƒ findLastIndex()flat: ƒ flat()flatMap: ƒ flatMap()forEach: ƒ forEach()includes: ƒ includes()indexOf: ƒ indexOf()join: ƒ join()keys: ƒ keys()lastIndexOf: ƒ lastIndexOf()length: 0map: ƒ map()pop: ƒ pop()push: ƒ push()reduce: ƒ reduce()reduceRight: ƒ reduceRight()reverse: ƒ reverse()shift: ƒ shift()slice: ƒ slice()some: ƒ some()sort: ƒ sort()splice: ƒ splice()toLocaleString: ƒ toLocaleString()toReversed: ƒ toReversed()toSorted: ƒ toSorted()toSpliced: ƒ toSpliced()toString: ƒ toString()unshift: ƒ unshift()values: ƒ values()with: ƒ with()Symbol(Symbol.iterator): ƒ values()Symbol(Symbol.unscopables): {at: true, copyWithin: true, entries: true, fill: true, find: true, …}[[Prototype]]: Object[[Prototype]]: Objectconstructor: ƒ Object()hasOwnProperty: ƒ hasOwnProperty()isPrototypeOf: ƒ isPrototypeOf()propertyIsEnumerable: ƒ propertyIsEnumerable()toLocaleString: ƒ toLocaleString()toString: ƒ toString()valueOf: ƒ valueOf()__defineGetter__: ƒ __defineGetter__()__defineSetter__: ƒ __defineSetter__()__lookupGetter__: ƒ __lookupGetter__()__lookupSetter__: ƒ __lookupSetter__()__proto__: (...)get __proto__: ƒ __proto__()set __proto__: ƒ __proto__()
+i18n.ts:2747 i18n initialized with: {hasEnResources: true, hasArResources: true, language: 'en', languages: Array(1)}hasArResources: truehasEnResources: truelanguage: "en"languages: ['en'][[Prototype]]: Object
+App.tsx:73 🔍 Router Debug: {isAuthenticated: false, isLoading: true, roleLoading: true, setupComplete: false}
+content.bundle.js:31149 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+injected.js:1 Script was injected!
+content.js:202 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+App.tsx:73 🔍 Router Debug: {isAuthenticated: true, isLoading: false, roleLoading: true, setupComplete: false}
+QalamExtension.js:25 Uncaught (in promise) Error: An unexpected error occurred
+    at h (QalamExtension.js:25:128682)
+h @ QalamExtension.js:25Understand this error
+App.tsx:73 🔍 Router Debug: {isAuthenticated: true, isLoading: false, roleLoading: false, setupComplete: true}
+hook.js:608 Warning: validateDOMNesting(...): <button> cannot appear as a descendant of <button>. Error Component Stack
+    at button (<anonymous>)
+    at _c (button.tsx:43:6)
+    at button (<anonymous>)
+    at dialog.tsx:37:6
+    at Dialog (dialog.tsx:15:3)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at ArtworkDetail (ArtworkDetail.tsx:79:18)
+    at Route (wouter.js?v=1e7e79c9:206:16)
+    at Switch (wouter.js?v=1e7e79c9:262:17)
+    at Suspense (<anonymous>)
+    at Router (App.tsx:69:42)
+    at Provider (chunk-56TV4RAP.js?v=1e7e79c9:22:15)
+    at TooltipProvider (@radix-ui_react-tooltip.js?v=1e7e79c9:61:5)
+    at I18nextProvider (react-i18next.js?v=1e7e79c9:922:19)
+    at QueryClientProvider (@tanstack_react-query.js?v=1e7e79c9:2763:3)
+    at ErrorBoundary (ErrorBoundary.tsx:19:5)
+    at App (<anonymous>)
+overrideMethod @ hook.js:608
+printWarning @ chunk-NKKMQWDD.js?v=1e7e79c9:521
+error @ chunk-NKKMQWDD.js?v=1e7e79c9:505
+validateDOMNesting @ chunk-NKKMQWDD.js?v=1e7e79c9:8303
+createInstance @ chunk-NKKMQWDD.js?v=1e7e79c9:8375
+completeWork @ chunk-NKKMQWDD.js?v=1e7e79c9:16338
+completeUnitOfWork @ chunk-NKKMQWDD.js?v=1e7e79c9:19277
+performUnitOfWork @ chunk-NKKMQWDD.js?v=1e7e79c9:19259
+workLoopSync @ chunk-NKKMQWDD.js?v=1e7e79c9:19190
+renderRootSync @ chunk-NKKMQWDD.js?v=1e7e79c9:19169
+performSyncWorkOnRoot @ chunk-NKKMQWDD.js?v=1e7e79c9:18927
+flushSyncCallbacks @ chunk-NKKMQWDD.js?v=1e7e79c9:9166
+(anonymous) @ chunk-NKKMQWDD.js?v=1e7e79c9:18677
+setTimeout
+(anonymous) @ @tanstack_react-query.js?v=1e7e79c9:268
+sleep @ @tanstack_react-query.js?v=1e7e79c9:267
+scheduleMicrotask @ @tanstack_react-query.js?v=1e7e79c9:272
+flush @ @tanstack_react-query.js?v=1e7e79c9:603
+batch @ @tanstack_react-query.js?v=1e7e79c9:578
+dispatch @ @tanstack_react-query.js?v=1e7e79c9:1004
+setData @ @tanstack_react-query.js?v=1e7e79c9:685
+onSuccess @ @tanstack_react-query.js?v=1e7e79c9:893
+resolve @ @tanstack_react-query.js?v=1e7e79c9:471
+Promise.then
+run @ @tanstack_react-query.js?v=1e7e79c9:511
+createRetryer @ @tanstack_react-query.js?v=1e7e79c9:541
+fetch @ @tanstack_react-query.js?v=1e7e79c9:881
+executeFetch @ @tanstack_react-query.js?v=1e7e79c9:2014
+onSubscribe @ @tanstack_react-query.js?v=1e7e79c9:1896
+subscribe @ @tanstack_react-query.js?v=1e7e79c9:25
+(anonymous) @ @tanstack_react-query.js?v=1e7e79c9:2957
+subscribeToStore @ chunk-NKKMQWDD.js?v=1e7e79c9:12032
+commitHookEffectListMount @ chunk-NKKMQWDD.js?v=1e7e79c9:16963
+commitPassiveMountOnFiber @ chunk-NKKMQWDD.js?v=1e7e79c9:18206
+commitPassiveMountEffects_complete @ chunk-NKKMQWDD.js?v=1e7e79c9:18179
+commitPassiveMountEffects_begin @ chunk-NKKMQWDD.js?v=1e7e79c9:18169
+commitPassiveMountEffects @ chunk-NKKMQWDD.js?v=1e7e79c9:18159
+flushPassiveEffectsImpl @ chunk-NKKMQWDD.js?v=1e7e79c9:19543
+flushPassiveEffects @ chunk-NKKMQWDD.js?v=1e7e79c9:19500
+(anonymous) @ chunk-NKKMQWDD.js?v=1e7e79c9:19381
+workLoop @ chunk-NKKMQWDD.js?v=1e7e79c9:197
+flushWork @ chunk-NKKMQWDD.js?v=1e7e79c9:176
+performWorkUntilDeadline @ chunk-NKKMQWDD.js?v=1e7e79c9:384Understand this error
+hook.js:608 Warning: React does not recognize the `asChild` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `aschild` instead. If you accidentally passed it from a parent component, remove it from the DOM element. Error Component Stack
+    at button (<anonymous>)
+    at dialog.tsx:37:6
+    at Dialog (dialog.tsx:15:3)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at ArtworkDetail (ArtworkDetail.tsx:79:18)
+    at Route (wouter.js?v=1e7e79c9:206:16)
+    at Switch (wouter.js?v=1e7e79c9:262:17)
+    at Suspense (<anonymous>)
+    at Router (App.tsx:69:42)
+    at Provider (chunk-56TV4RAP.js?v=1e7e79c9:22:15)
+    at TooltipProvider (@radix-ui_react-tooltip.js?v=1e7e79c9:61:5)
+    at I18nextProvider (react-i18next.js?v=1e7e79c9:922:19)
+    at QueryClientProvider (@tanstack_react-query.js?v=1e7e79c9:2763:3)
+    at ErrorBoundary (ErrorBoundary.tsx:19:5)
+    at App (<anonymous>)
+overrideMethod @ hook.js:608
+printWarning @ chunk-NKKMQWDD.js?v=1e7e79c9:521
+error @ chunk-NKKMQWDD.js?v=1e7e79c9:505
+validateProperty$1 @ chunk-NKKMQWDD.js?v=1e7e79c9:3433
+warnUnknownProperties @ chunk-NKKMQWDD.js?v=1e7e79c9:3465
+validateProperties$2 @ chunk-NKKMQWDD.js?v=1e7e79c9:3484
+validatePropertiesInDevelopment @ chunk-NKKMQWDD.js?v=1e7e79c9:7378
+setInitialProperties @ chunk-NKKMQWDD.js?v=1e7e79c9:7567
+finalizeInitialChildren @ chunk-NKKMQWDD.js?v=1e7e79c9:8392
+completeWork @ chunk-NKKMQWDD.js?v=1e7e79c9:16341
+completeUnitOfWork @ chunk-NKKMQWDD.js?v=1e7e79c9:19277
+performUnitOfWork @ chunk-NKKMQWDD.js?v=1e7e79c9:19259
+workLoopSync @ chunk-NKKMQWDD.js?v=1e7e79c9:19190
+renderRootSync @ chunk-NKKMQWDD.js?v=1e7e79c9:19169
+performSyncWorkOnRoot @ chunk-NKKMQWDD.js?v=1e7e79c9:18927
+flushSyncCallbacks @ chunk-NKKMQWDD.js?v=1e7e79c9:9166
+(anonymous) @ chunk-NKKMQWDD.js?v=1e7e79c9:18677
+setTimeout
+(anonymous) @ @tanstack_react-query.js?v=1e7e79c9:268
+sleep @ @tanstack_react-query.js?v=1e7e79c9:267
+scheduleMicrotask @ @tanstack_react-query.js?v=1e7e79c9:272
+flush @ @tanstack_react-query.js?v=1e7e79c9:603
+batch @ @tanstack_react-query.js?v=1e7e79c9:578
+dispatch @ @tanstack_react-query.js?v=1e7e79c9:1004
+setData @ @tanstack_react-query.js?v=1e7e79c9:685
+onSuccess @ @tanstack_react-query.js?v=1e7e79c9:893
+resolve @ @tanstack_react-query.js?v=1e7e79c9:471
+Promise.then
+run @ @tanstack_react-query.js?v=1e7e79c9:511
+createRetryer @ @tanstack_react-query.js?v=1e7e79c9:541
+fetch @ @tanstack_react-query.js?v=1e7e79c9:881
+executeFetch @ @tanstack_react-query.js?v=1e7e79c9:2014
+onSubscribe @ @tanstack_react-query.js?v=1e7e79c9:1896
+subscribe @ @tanstack_react-query.js?v=1e7e79c9:25
+(anonymous) @ @tanstack_react-query.js?v=1e7e79c9:2957
+subscribeToStore @ chunk-NKKMQWDD.js?v=1e7e79c9:12032
+commitHookEffectListMount @ chunk-NKKMQWDD.js?v=1e7e79c9:16963
+commitPassiveMountOnFiber @ chunk-NKKMQWDD.js?v=1e7e79c9:18206
+commitPassiveMountEffects_complete @ chunk-NKKMQWDD.js?v=1e7e79c9:18179
+commitPassiveMountEffects_begin @ chunk-NKKMQWDD.js?v=1e7e79c9:18169
+commitPassiveMountEffects @ chunk-NKKMQWDD.js?v=1e7e79c9:18159
+flushPassiveEffectsImpl @ chunk-NKKMQWDD.js?v=1e7e79c9:19543
+flushPassiveEffects @ chunk-NKKMQWDD.js?v=1e7e79c9:19500
+(anonymous) @ chunk-NKKMQWDD.js?v=1e7e79c9:19381
+workLoop @ chunk-NKKMQWDD.js?v=1e7e79c9:197
+flushWork @ chunk-NKKMQWDD.js?v=1e7e79c9:176
+performWorkUntilDeadline @ chunk-NKKMQWDD.js?v=1e7e79c9:384Understand this error

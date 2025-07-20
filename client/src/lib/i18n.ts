@@ -2742,11 +2742,3 @@ i18n.on('languageChanged', (lng) => {
 });
 
 export { i18n };
-
-// Log initial state to debug
-console.log('i18n initialized with:', {
-  hasEnResources: i18n.hasResourceBundle('en', 'translation'),
-  hasArResources: i18n.hasResourceBundle('ar', 'translation'),
-  language: i18n.language,
-  languages: i18n.languages
-});
