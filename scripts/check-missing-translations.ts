@@ -138,3 +138,125 @@ if (require.main === module) {
 }
 
 export { validateTranslations };
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Function to extract translation keys from source files
+function extractTranslationKeys(filePath: string): string[] {
+  const content = fs.readFileSync(filePath, 'utf8');
+  const regex = /t\(['"`]([^'"`]+)['"`]\)/g;
+  const keys: string[] = [];
+  let match;
+  
+  while ((match = regex.exec(content)) !== null) {
+    keys.push(match[1]);
+  }
+  
+  return keys;
+}
+
+// Function to recursively find TypeScript/React files
+function findSourceFiles(dir: string): string[] {
+  const files: string[] = [];
+  
+  function traverse(currentDir: string) {
+    const items = fs.readdirSync(currentDir);
+    
+    for (const item of items) {
+      const fullPath = path.join(currentDir, item);
+      const stat = fs.statSync(fullPath);
+      
+      if (stat.isDirectory() && !item.startsWith('.') && item !== 'node_modules') {
+        traverse(fullPath);
+      } else if (item.endsWith('.tsx') || item.endsWith('.ts')) {
+        files.push(fullPath);
+      }
+    }
+  }
+  
+  traverse(dir);
+  return files;
+}
+
+// Main validation function
+function validateTranslations() {
+  console.log('🔍 Checking translation keys...\n');
+  
+  // Load locale files
+  const enPath = path.join(__dirname, '../client/src/locales/en.json');
+  const arPath = path.join(__dirname, '../client/src/locales/ar.json');
+  
+  let enTranslations: any = {};
+  let arTranslations: any = {};
+  
+  try {
+    enTranslations = JSON.parse(fs.readFileSync(enPath, 'utf8'));
+    console.log('✅ English translations loaded');
+  } catch (error) {
+    console.error('❌ Failed to load English translations:', error.message);
+    return;
+  }
+  
+  try {
+    arTranslations = JSON.parse(fs.readFileSync(arPath, 'utf8'));
+    console.log('✅ Arabic translations loaded');
+  } catch (error) {
+    console.error('❌ Failed to load Arabic translations:', error.message);
+    return;
+  }
+  
+  // Find all source files
+  const clientDir = path.join(__dirname, '../client/src');
+  const sourceFiles = findSourceFiles(clientDir);
+  
+  // Extract all translation keys
+  const allKeys = new Set<string>();
+  
+  for (const file of sourceFiles) {
+    const keys = extractTranslationKeys(file);
+    keys.forEach(key => allKeys.add(key));
+  }
+  
+  console.log(`\n📊 Found ${allKeys.size} unique translation keys in source code`);
+  
+  // Check for missing keys
+  const missingEnKeys: string[] = [];
+  const missingArKeys: string[] = [];
+  
+  for (const key of allKeys) {
+    if (!getNestedValue(enTranslations, key)) {
+      missingEnKeys.push(key);
+    }
+    if (!getNestedValue(arTranslations, key)) {
+      missingArKeys.push(key);
+    }
+  }
+  
+  // Report results
+  if (missingEnKeys.length === 0 && missingArKeys.length === 0) {
+    console.log('🎉 All translation keys are present!');
+  } else {
+    if (missingEnKeys.length > 0) {
+      console.log(`\n❌ Missing English translations (${missingEnKeys.length}):`);
+      missingEnKeys.forEach(key => console.log(`  - ${key}`));
+    }
+    
+    if (missingArKeys.length > 0) {
+      console.log(`\n❌ Missing Arabic translations (${missingArKeys.length}):`);
+      missingArKeys.forEach(key => console.log(`  - ${key}`));
+    }
+    
+    process.exit(1);
+  }
+}
+
+// Helper function to get nested object values
+function getNestedValue(obj: any, path: string): any {
+  return path.split('.').reduce((current, key) => current?.[key], obj);
+}
+
+validateTranslations();
