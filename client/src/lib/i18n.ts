@@ -105,7 +105,8 @@ const resources = {
         commentAddedDesc: "Your comment has been added",
         commentUpdated: "Comment Updated",
         commentUpdatedDesc: "Your comment has been updated",
-        commentDeleted: "Comment Deleted"
+        commentDeleted: "Comment Deleted",
+        comments: "Comments"
       },
       favorites: {
         added: "Added to Favorites",
@@ -1751,7 +1752,8 @@ const resources = {
         commentAddedDesc: "تمت إضافة تعليقك",
         commentUpdated: "تم تحديث التعليق",
         commentUpdatedDesc: "تم تحديث تعليقك",
-        commentDeleted: "تم حذف التعليق"
+        commentDeleted: "تم حذف التعليق",
+        comments: "التعليقات"
       },
       favorites: {
         added: "تمت إضافة إلى المفضلات",
@@ -2741,24 +2743,10 @@ i18n.on('languageChanged', (lng) => {
 
 export { i18n };
 
-// Re-initialize if resources were lost
-if (!i18n.hasResourceBundle('en', 'translation')) {
-  console.warn('i18n resources were lost, re-initializing...');
-  i18n.init({
-    resources,
-    lng: getInitialLanguage(),
-    fallbackLng: "en",
-    debug: false,
-    interpolation: {
-      escapeValue: false,
-    },
-    react: {
-      useSuspense: false,
-    },
-    keySeparator: '.',
-    nsSeparator: ':',
-    returnEmptyString: false,
-    returnNull: false,
-    returnObjects: false,
-  });
-}
+// Log initial state to debug
+console.log('i18n initialized with:', {
+  hasEnResources: i18n.hasResourceBundle('en', 'translation'),
+  hasArResources: i18n.hasResourceBundle('ar', 'translation'),
+  language: i18n.language,
+  languages: i18n.languages
+});
