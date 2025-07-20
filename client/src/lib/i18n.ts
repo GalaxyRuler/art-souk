@@ -1517,15 +1517,6 @@ const resources = {
         loadingUserRoles: "جاري تحميل أدوار المستخدم...",
         orderManagement: "إدارة الطلبات",
         ordersCount: "طلبات",
-        status: {
-          pending: "في الانتظار",
-          confirmed: "مؤكد",
-          processing: "قيد المعالجة",
-          in_transit: "في الطريق",
-          out_for_delivery: "في طريق التسليم",
-          delivered: "تم التسليم",
-          returned: "تم الإرجاع"
-        },
         orderStatus: {
           pending: "في الانتظار",
           confirmed: "مؤكد",
@@ -1553,10 +1544,6 @@ const resources = {
         allCarriers: "كل شركات الشحن",
         sortByDate: "ترتيب حسب التاريخ",
         amount: "المبلغ",
-        noProfile: "لا يوجد ملف شخصي",
-        noProfileDesc: "لم يتم إنشاء ملف شخصي للشحن بعد",
-        noTracking: "لا يوجد تتبع",
-        noTrackingDesc: "لا توجد معلومات تتبع متاحة",
         ordersFound: "طلبات موجودة",
         noMatchingOrders: "لا توجد طلبات مطابقة",
         filters: "المرشحات",
@@ -1679,8 +1666,6 @@ const resources = {
         buyerVatNumber: "الرقم الضريبي للمشتري",
         createTitle: "إنشاء فاتورة جديدة",
         createDescription: "إنشاء فاتورة ضريبية متوافقة مع ZATCA",
-        descriptionEn: "الوصف (بالإنجليزية)",
-        descriptionAr: "الوصف (بالعربية)",
         type: "نوع الفاتورة",
         typeStandard: "فاتورة ضريبية",
         typeSimplified: "فاتورة ضريبية مبسطة",
@@ -2045,53 +2030,6 @@ const resources = {
         muscat: "مسقط",
         salalah: "صلالة",
         sohar: "صحار"
-      },
-      shipping: {
-        title: "إدارة الشحن",
-        profile: "الملف الشخصي للشحن",
-        tracking: "تتبع الشحنات",
-        orders: "الطلبات",
-        analytics: "التحليلات",
-        accessDenied: "الوصول مرفوض",
-        artistGalleryOnly: "هذه الصفحة متاحة فقط للفنانين والمعارض",
-        profileUpdated: "تم تحديث الملف الشخصي",
-        profileUpdatedDesc: "تم تحديث ملف الشحن الخاص بك بنجاح",
-        trackingUpdated: "تم تحديث التتبع",
-        trackingUpdateError: "خطأ في تحديث التتبع",
-        profileSaved: "تم حفظ الملف الشخصي",
-        profileSavedDesc: "تم حفظ ملف الشحن الخاص بك بنجاح",
-        businessProfile: "الملف الشخصي للأعمال",
-        businessInfo: "معلومات الأعمال",
-        businessName: "اسم الأعمال",
-        businessNamePlaceholder: "أدخل اسم الأعمال",
-        businessNameAr: "اسم الأعمال بالعربية",
-        businessNameArPlaceholder: "أدخل اسم الأعمال بالعربية",
-        contactPerson: "شخص الاتصال",
-        contactPersonPlaceholder: "أدخل اسم شخص الاتصال",
-        contactPhone: "رقم الهاتف",
-        contactEmail: "البريد الإلكتروني",
-        shippingRates: "أسعار الشحن",
-        domesticRate: "الشحن المحلي",
-        internationalRate: "الشحن الدولي",
-        handlingTime: "وقت التعامل",
-        days: "أيام",
-        updateProfile: "تحديث الملف الشخصي",
-        trackingInfo: "معلومات التتبع",
-        noTrackingDesc: "لا توجد معلومات تتبع متاحة",
-        ordersToShip: "الطلبات للشحن",
-        noOrders: "لا توجد طلبات",
-        noOrdersDesc: "لا توجد طلبات للشحن في الوقت الحالي",
-        selectCarrier: "اختر شركة الشحن",
-        selectCity: "اختر المدينة",
-        defaultCarrier: "شركة الشحن الافتراضية",
-        notes: "ملاحظات",
-        notesPlaceholder: "أدخل ملاحظات إضافية",
-        status: {
-          in_transit: "في الطريق",
-          out_for_delivery: "خارج للتوصيل",
-          delivered: "تم التوصيل",
-          returned: "تم الإرجاع"
-        }
       },
       artists: {
         title: "الفنانون",
@@ -2740,32 +2678,35 @@ const resources = {
   }
 };
 
-i18n.use(initReactI18next).init({
-  resources,
-  lng: getInitialLanguage(),
-  fallbackLng: "en",
-  debug: true,
-  interpolation: {
-    escapeValue: false,
-  },
-  react: {
-    useSuspense: false,
-  },
-  keySeparator: '.',
-  nsSeparator: ':',
-  returnEmptyString: false,
-  returnNull: false,
-  returnObjects: false,
-});
+// Check if already initialized to prevent double initialization
+if (!i18n.isInitialized) {
+  i18n.use(initReactI18next).init({
+    resources,
+    lng: getInitialLanguage(),
+    fallbackLng: "en",
+    debug: process.env.NODE_ENV === 'development',
+    interpolation: {
+      escapeValue: false,
+    },
+    react: {
+      useSuspense: false,
+    },
+    keySeparator: '.',
+    nsSeparator: ':',
+    returnEmptyString: false,
+    returnNull: false,
+    returnObjects: false,
+  });
 
-// Log to verify
-console.log('i18n initialized with inline resources');
-console.log('Sample translation nav.home:', i18n.t('nav.home'));
-console.log('Sample translation auth.login:', i18n.t('auth.login'));
-console.log('Sample translation hero.title:', i18n.t('hero.title'));
-console.log('Sample translation collector.dashboard.title:', i18n.t('collector.dashboard.title'));
-console.log('Sample translation collector.stats.totalOrders:', i18n.t('collector.stats.totalOrders'));
-console.log('Sample translation collector.tabs.orders:', i18n.t('collector.tabs.orders'));
+  // Log to verify (only on first initialization)
+  console.log('i18n initialized with inline resources');
+  console.log('Sample translation nav.home:', i18n.t('nav.home'));
+  console.log('Sample translation auth.login:', i18n.t('auth.login'));
+  console.log('Sample translation hero.title:', i18n.t('hero.title'));
+  console.log('Sample translation collector.dashboard.title:', i18n.t('collector.dashboard.title'));
+  console.log('Sample translation collector.stats.totalOrders:', i18n.t('collector.stats.totalOrders'));
+  console.log('Sample translation collector.tabs.orders:', i18n.t('collector.tabs.orders'));
+}
 
 // Save language changes to localStorage
 i18n.on('languageChanged', (lng) => {

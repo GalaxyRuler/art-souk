@@ -1,0 +1,121 @@
+i18n.ts:2743 i18next: languageChanged en
+i18n.ts:2743 i18next: initialized {debug: true, initImmediate: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+i18n.ts:2762 i18n initialized with inline resources
+i18n.ts:2763 Sample translation nav.home: Home
+i18n.ts:2764 Sample translation auth.login: Sign In
+i18n.ts:2765 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2766 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2767 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2768 Sample translation collector.tabs.orders: Orders
+i18n.ts:2743 i18next: languageChanged en
+i18n.ts:2743 i18next: init: i18next is already initialized. You should call init just once!
+overrideMethod @ hook.js:608
+output @ i18next.js?v=1e7e79c9:88
+warn @ i18next.js?v=1e7e79c9:82
+forward @ i18next.js?v=1e7e79c9:148
+warn2 @ i18next.js?v=1e7e79c9:125
+finish2 @ i18next.js?v=1e7e79c9:2389
+done2 @ i18next.js?v=1e7e79c9:2526
+(anonymous) @ i18next.js?v=1e7e79c9:2541
+loadResources2 @ i18next.js?v=1e7e79c9:2442
+setLng2 @ i18next.js?v=1e7e79c9:2540
+changeLanguage2 @ i18next.js?v=1e7e79c9:2553
+load2 @ i18next.js?v=1e7e79c9:2397
+init2 @ i18next.js?v=1e7e79c9:2400
+(anonymous) @ i18n.ts:2743
+i18n.ts:2743 i18next: initialized {debug: true, initImmediate: true, ns: Array(1), defaultNS: Array(1), fallbackLng: Array(1), …}
+i18n.ts:2762 i18n initialized with inline resources
+i18n.ts:2763 Sample translation nav.home: Home
+i18n.ts:2764 Sample translation auth.login: Sign In
+i18n.ts:2765 Sample translation hero.title: Discover Art from Saudi Arabia & the GCC
+i18n.ts:2766 Sample translation collector.dashboard.title: Collector Dashboard
+i18n.ts:2767 Sample translation collector.stats.totalOrders: Total Orders
+i18n.ts:2768 Sample translation collector.tabs.orders: Orders
+App.tsx:73 🔍 Router Debug: {isAuthenticated: false, isLoading: true, roleLoading: true, setupComplete: false}
+content.bundle.js:31149 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+injected.js:1 Script was injected!
+content.js:202 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+App.tsx:73 🔍 Router Debug: {isAuthenticated: true, isLoading: false, roleLoading: true, setupComplete: false}
+QalamExtension.js:25 Uncaught (in promise) Error: An unexpected error occurred
+    at h (QalamExtension.js:25:128682)
+h @ QalamExtension.js:25
+App.tsx:73 🔍 Router Debug: {isAuthenticated: true, isLoading: false, roleLoading: false, setupComplete: true}isAuthenticated: trueisLoading: falseroleLoading: falsesetupComplete: true[[Prototype]]: Object
+hook.js:608 SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+overrideMethod @ hook.js:608
+onError @ @tanstack_react-query.js?v=1e7e79c9:873
+reject @ @tanstack_react-query.js?v=1e7e79c9:479
+(anonymous) @ @tanstack_react-query.js?v=1e7e79c9:521
+Promise.catch
+run @ @tanstack_react-query.js?v=1e7e79c9:511
+createRetryer @ @tanstack_react-query.js?v=1e7e79c9:541
+fetch @ @tanstack_react-query.js?v=1e7e79c9:881
+executeFetch @ @tanstack_react-query.js?v=1e7e79c9:2014
+onSubscribe @ @tanstack_react-query.js?v=1e7e79c9:1896
+subscribe @ @tanstack_react-query.js?v=1e7e79c9:25
+(anonymous) @ @tanstack_react-query.js?v=1e7e79c9:2957
+subscribeToStore @ chunk-NKKMQWDD.js?v=1e7e79c9:12032
+commitHookEffectListMount @ chunk-NKKMQWDD.js?v=1e7e79c9:16963
+commitPassiveMountOnFiber @ chunk-NKKMQWDD.js?v=1e7e79c9:18206
+commitPassiveMountEffects_complete @ chunk-NKKMQWDD.js?v=1e7e79c9:18179
+commitPassiveMountEffects_begin @ chunk-NKKMQWDD.js?v=1e7e79c9:18169
+commitPassiveMountEffects @ chunk-NKKMQWDD.js?v=1e7e79c9:18159
+flushPassiveEffectsImpl @ chunk-NKKMQWDD.js?v=1e7e79c9:19543
+flushPassiveEffects @ chunk-NKKMQWDD.js?v=1e7e79c9:19500
+(anonymous) @ chunk-NKKMQWDD.js?v=1e7e79c9:19381
+workLoop @ chunk-NKKMQWDD.js?v=1e7e79c9:197
+flushWork @ chunk-NKKMQWDD.js?v=1e7e79c9:176
+performWorkUntilDeadline @ chunk-NKKMQWDD.js?v=1e7e79c9:384
+hook.js:608 SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+overrideMethod @ hook.js:608
+onError @ @tanstack_react-query.js?v=1e7e79c9:873
+reject @ @tanstack_react-query.js?v=1e7e79c9:479
+(anonymous) @ @tanstack_react-query.js?v=1e7e79c9:521
+Promise.catch
+run @ @tanstack_react-query.js?v=1e7e79c9:511
+createRetryer @ @tanstack_react-query.js?v=1e7e79c9:541
+fetch @ @tanstack_react-query.js?v=1e7e79c9:881
+executeFetch @ @tanstack_react-query.js?v=1e7e79c9:2014
+setOptions @ @tanstack_react-query.js?v=1e7e79c9:1941
+(anonymous) @ @tanstack_react-query.js?v=1e7e79c9:2962
+commitHookEffectListMount @ chunk-NKKMQWDD.js?v=1e7e79c9:16963
+commitPassiveMountOnFiber @ chunk-NKKMQWDD.js?v=1e7e79c9:18206
+commitPassiveMountEffects_complete @ chunk-NKKMQWDD.js?v=1e7e79c9:18179
+commitPassiveMountEffects_begin @ chunk-NKKMQWDD.js?v=1e7e79c9:18169
+commitPassiveMountEffects @ chunk-NKKMQWDD.js?v=1e7e79c9:18159
+flushPassiveEffectsImpl @ chunk-NKKMQWDD.js?v=1e7e79c9:19543
+flushPassiveEffects @ chunk-NKKMQWDD.js?v=1e7e79c9:19500
+commitRootImpl @ chunk-NKKMQWDD.js?v=1e7e79c9:19469
+commitRoot @ chunk-NKKMQWDD.js?v=1e7e79c9:19330
+performSyncWorkOnRoot @ chunk-NKKMQWDD.js?v=1e7e79c9:18948
+flushSyncCallbacks @ chunk-NKKMQWDD.js?v=1e7e79c9:9166
+(anonymous) @ chunk-NKKMQWDD.js?v=1e7e79c9:18677
+setTimeout
+(anonymous) @ @tanstack_react-query.js?v=1e7e79c9:268
+sleep @ @tanstack_react-query.js?v=1e7e79c9:267
+scheduleMicrotask @ @tanstack_react-query.js?v=1e7e79c9:272
+flush @ @tanstack_react-query.js?v=1e7e79c9:603
+batch @ @tanstack_react-query.js?v=1e7e79c9:578
+dispatch @ @tanstack_react-query.js?v=1e7e79c9:1004
+setData @ @tanstack_react-query.js?v=1e7e79c9:685
+onSuccess @ @tanstack_react-query.js?v=1e7e79c9:893
+resolve @ @tanstack_react-query.js?v=1e7e79c9:471
+Promise.then
+run @ @tanstack_react-query.js?v=1e7e79c9:511
+createRetryer @ @tanstack_react-query.js?v=1e7e79c9:541
+fetch @ @tanstack_react-query.js?v=1e7e79c9:881
+executeFetch @ @tanstack_react-query.js?v=1e7e79c9:2014
+onSubscribe @ @tanstack_react-query.js?v=1e7e79c9:1896
+subscribe @ @tanstack_react-query.js?v=1e7e79c9:25
+(anonymous) @ @tanstack_react-query.js?v=1e7e79c9:2957
+subscribeToStore @ chunk-NKKMQWDD.js?v=1e7e79c9:12032
+commitHookEffectListMount @ chunk-NKKMQWDD.js?v=1e7e79c9:16963
+commitPassiveMountOnFiber @ chunk-NKKMQWDD.js?v=1e7e79c9:18206
+commitPassiveMountEffects_complete @ chunk-NKKMQWDD.js?v=1e7e79c9:18179
+commitPassiveMountEffects_begin @ chunk-NKKMQWDD.js?v=1e7e79c9:18169
+commitPassiveMountEffects @ chunk-NKKMQWDD.js?v=1e7e79c9:18159
+flushPassiveEffectsImpl @ chunk-NKKMQWDD.js?v=1e7e79c9:19543
+flushPassiveEffects @ chunk-NKKMQWDD.js?v=1e7e79c9:19500
+(anonymous) @ chunk-NKKMQWDD.js?v=1e7e79c9:19381
+workLoop @ chunk-NKKMQWDD.js?v=1e7e79c9:197
+flushWork @ chunk-NKKMQWDD.js?v=1e7e79c9:176
+performWorkUntilDeadline @ chunk-NKKMQWDD.js?v=1e7e79c9:384
