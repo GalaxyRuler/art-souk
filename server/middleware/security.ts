@@ -415,6 +415,21 @@ export const securityMiddlewareStack = [
   // csrfProtection, // Enable when you have proper session management
 ];
 
+// Skip security checks for development assets and specific paths
+const skipSecurityPaths = [
+  '/favicon.ico',
+  '/robots.txt',
+  '/sitemap.xml',
+  '/api/health',
+  '/health',
+  '/api/auth/login',
+  '/api/auth/register',
+  '/api/auth/logout',
+  '/api/profile',
+  '/api/dev',
+  '/manifest.json'
+];
+
 // Export individual middleware for selective use
 export {
   CSRFTokenManager,
