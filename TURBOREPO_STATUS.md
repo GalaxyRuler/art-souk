@@ -6,9 +6,8 @@ The Art Souk monorepo is now properly configured with Turborepo:
 
 ### Workspace Structure
 ```
-apps/
-  ├── web/        (@art-souk/web)     - React frontend
-  └── api/        (@art-souk/api)     - Express backend
+client/                                - React frontend
+server/                                - Express backend
 packages/
   ├── ui/         (@art-souk/ui)      - Shared UI components
   ├── db/         (@art-souk/db)      - Database schema

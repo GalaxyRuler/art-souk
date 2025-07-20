@@ -239,8 +239,8 @@ jobs:
         with:
           name: build-artifacts
           path: |
-            apps/web/dist/
-            apps/api/dist/
+            client/dist/
+            server/dist/
 
   deploy:
     runs-on: ubuntu-latest
