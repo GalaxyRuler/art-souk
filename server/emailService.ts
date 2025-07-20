@@ -16,13 +16,14 @@ if (process.env.SENDGRID_API_KEY) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 }
 
+
+
 export class EmailService {
   private static instance: EmailService;
-  private processingInterval: NodeJS.Timeout | null = null;
 
   private constructor() {
-    // Start processing emails every minute
-    this.startProcessing();
+    // Email processing is now handled by the dedicated EmailWorker
+    console.log('📧 EmailService initialized - processing handled by EmailWorker');
   }
 
   static getInstance(): EmailService {
@@ -32,18 +33,8 @@ export class EmailService {
     return EmailService.instance;
   }
 
-  private startProcessing() {
-    // Process emails every minute
-    this.processingInterval = setInterval(() => {
-      this.processQueue();
-    }, 60000); // 1 minute
-  }
-
   stopProcessing() {
-    if (this.processingInterval) {
-      clearInterval(this.processingInterval);
-      this.processingInterval = null;
-    }
+    // No-op - processing is handled by EmailWorker
   }
 
   // Queue an email for sending
@@ -127,102 +118,25 @@ export class EmailService {
     return processed;
   }
 
-  // Process queued emails
-  private async processQueue() {
-    if (!process.env.SENDGRID_API_KEY) {
-      console.log('SendGrid API key not configured, skipping email processing');
-      return;
-    }
-
+  // Get queue statistics for monitoring
+  async getQueueStats() {
     try {
-      // Get pending emails (max 10 at a time)
-      const pendingEmails = await db
-        .select()
-        .from(emailNotificationQueue)
-        .where(and(
-          eq(emailNotificationQueue.status, 'pending'),
-          lte(emailNotificationQueue.attempts, 3)
-        ))
-        .orderBy(emailNotificationQueue.priority)
-        .limit(10);
+      const [pendingResult, sendingResult, sentResult, failedResult] = await Promise.all([
+        db.select({ count: count() }).from(emailNotificationQueue).where(eq(emailNotificationQueue.status, 'pending')),
+        db.select({ count: count() }).from(emailNotificationQueue).where(eq(emailNotificationQueue.status, 'sending')),
+        db.select({ count: count() }).from(emailNotificationQueue).where(eq(emailNotificationQueue.status, 'sent')),
+        db.select({ count: count() }).from(emailNotificationQueue).where(eq(emailNotificationQueue.status, 'failed'))
+      ]);
 
-      for (const email of pendingEmails) {
-        await this.sendEmail(email);
-      }
-    } catch (error) {
-      console.error('Error processing email queue:', error);
-    }
-  }
-
-  // Send an individual email
-  private async sendEmail(email: typeof emailNotificationQueue.$inferSelect) {
-    try {
-      // Update status to sending
-      await db
-        .update(emailNotificationQueue)
-        .set({ 
-          status: 'sending',
-          attempts: email.attempts + 1 
-        })
-        .where(eq(emailNotificationQueue.id, email.id));
-
-      // Prepare email message
-      const msg = {
-        to: email.recipientEmail,
-        from: process.env.SENDGRID_FROM_EMAIL || 'noreply@artsouk.com',
-        subject: email.subject,
-        html: email.bodyHtml,
-        text: email.bodyText || undefined,
+      return {
+        pending: pendingResult[0]?.count || 0,
+        sending: sendingResult[0]?.count || 0,
+        sent: sentResult[0]?.count || 0,
+        failed: failedResult[0]?.count || 0
       };
-
-      // Send via SendGrid
-      const [response] = await sgMail.send(msg);
-      const messageId = response.headers['x-message-id'];
-
-      // Update queue status
-      await db
-        .update(emailNotificationQueue)
-        .set({ 
-          status: 'sent',
-          sentAt: new Date()
-        })
-        .where(eq(emailNotificationQueue.id, email.id));
-
-      // Log the sent email
-      await db.insert(emailNotificationLog).values({
-        queueId: email.id,
-        recipientEmail: email.recipientEmail,
-        recipientUserId: email.recipientUserId,
-        templateCode: email.templateCode,
-        subject: email.subject,
-        status: 'sent',
-        sendgridMessageId: messageId,
-        sendgridResponse: response,
-      });
-
-    } catch (error: any) {
-      console.error('Error sending email:', error);
-
-      // Update queue with failure
-      await db
-        .update(emailNotificationQueue)
-        .set({ 
-          status: email.attempts >= 3 ? 'failed' : 'pending',
-          failedAt: new Date(),
-          errorMessage: error.message || 'Unknown error'
-        })
-        .where(eq(emailNotificationQueue.id, email.id));
-
-      // Log the failure
-      await db.insert(emailNotificationLog).values({
-        queueId: email.id,
-        recipientEmail: email.recipientEmail,
-        recipientUserId: email.recipientUserId,
-        templateCode: email.templateCode,
-        subject: email.subject,
-        status: 'failed',
-        sendgridResponse: error.response?.body || error,
-      });
+    } catch (error) {
+      console.error('Error getting queue stats:', error);
+      return { pending: 0, sending: 0, sent: 0, failed: 0 };
     }
   }
 
@@ -556,15 +470,6 @@ export class EmailService {
     };
   }
 }
-
-// Process queue every 2 minutes to reduce memory pressure
-    setInterval(async () => {
-      try {
-        await this.processQueue();
-      } catch (error) {
-        console.error('Error processing email queue:', error);
-      }
-    }, 120000);
 
 // Export singleton instance
 export const emailService = EmailService.getInstance();

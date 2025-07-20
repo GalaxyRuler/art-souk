@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
-import { emailService } from "./emailService";
+import { emailService, EmailService } from "./emailService";
 import { adminRouter } from "./routes/admin";
 import { sellerRouter } from "./routes/seller";
 import { artistProfileRouter } from "./routes/artistProfile";
@@ -4352,11 +4352,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/health/performance', async (req, res) => {
     try {
       const stats = performanceMonitor.getStatistics();
+      const memoryUsage = process.memoryUsage();
+      const queueStats = await emailService.getQueueStats();
+      
       res.json({
         status: 'healthy',
         timestamp: new Date().toISOString(),
         performance: stats || {
           message: 'No performance data available yet'
+        },
+        memory: {
+          heapUsed: Math.round(memoryUsage.heapUsed / 1024 / 1024),
+          heapTotal: Math.round(memoryUsage.heapTotal / 1024 / 1024),
+          rss: Math.round(memoryUsage.rss / 1024 / 1024),
+          external: Math.round(memoryUsage.external / 1024 / 1024),
+          rssPercentage: Math.round((memoryUsage.rss / (process.env.REPLIT_MAX_MEMORY ? parseInt(process.env.REPLIT_MAX_MEMORY) * 1024 * 1024 : 512 * 1024 * 1024)) * 100)
+        },
+        emailQueue: {
+          ...queueStats,
+          queueLag: queueStats.pending || 0
         }
       });
     } catch (error) {
@@ -4380,6 +4394,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({
         status: 'error',
         message: 'Failed to get cache statistics',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  // New memory-specific health endpoint
+  app.get('/health/memory', (req, res) => {
+    try {
+      const memoryUsage = process.memoryUsage();
+      const memoryLimitBytes = process.env.REPLIT_MAX_MEMORY ? 
+        parseInt(process.env.REPLIT_MAX_MEMORY) * 1024 * 1024 : 
+        512 * 1024 * 1024; // Default 512MB
+      
+      const rssPercentage = Math.round((memoryUsage.rss / memoryLimitBytes) * 100);
+      const heapPercentage = Math.round((memoryUsage.heapUsed / memoryUsage.heapTotal) * 100);
+      
+      res.json({
+        status: rssPercentage < 75 ? 'healthy' : rssPercentage < 90 ? 'warning' : 'critical',
+        timestamp: new Date().toISOString(),
+        memory: {
+          heapUsed: Math.round(memoryUsage.heapUsed / 1024 / 1024),
+          heapTotal: Math.round(memoryUsage.heapTotal / 1024 / 1024),
+          rss: Math.round(memoryUsage.rss / 1024 / 1024),
+          external: Math.round(memoryUsage.external / 1024 / 1024),
+          arrayBuffers: Math.round(memoryUsage.arrayBuffers / 1024 / 1024),
+          heapPercentage,
+          rssPercentage,
+          limitMB: Math.round(memoryLimitBytes / 1024 / 1024)
+        },
+        uptime: Math.round(process.uptime()),
+        pid: process.pid
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 'error',
+        message: 'Failed to get memory statistics',
         error: error instanceof Error ? error.message : 'Unknown error'
       });
     }
