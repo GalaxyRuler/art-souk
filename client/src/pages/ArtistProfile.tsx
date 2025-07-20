@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { MapPin, Calendar, Users, Heart, Share2, ArrowLeft, ExternalLink, Award, Palette, Eye } from "lucide-react";
+import { MapPin, Calendar, Users, Heart, Share2, ArrowLeft, ExternalLink, Award, Palette, Eye, HandHeart } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { ArtworkCard } from "@/components/ArtworkCard";
 import { FollowButton } from "@/components/SocialComponents";
+import { RepresentationRequestModal } from "@/components/RepresentationRequestModal";
 
 interface ArtistDetail {
   id: number;
@@ -78,7 +79,7 @@ export default function ArtistProfile() {
   const { id } = useParams();
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("artworks");
@@ -275,6 +276,22 @@ export default function ArtistProfile() {
                   entityType="artist"
                   entityId={artist.id}
                 />
+                
+                {/* Show representation request button only for galleries */}
+                {isAuthenticated && user?.roles?.includes('gallery') && (
+                  <RepresentationRequestModal
+                    artistId={artist.id}
+                    artistName={name}
+                  >
+                    <Button
+                      variant="secondary"
+                      className="bg-brand-purple/20 text-white hover:bg-brand-purple/30 border border-white/30"
+                    >
+                      <HandHeart className="h-4 w-4 mr-2" />
+                      Request Representation
+                    </Button>
+                  </RepresentationRequestModal>
+                )}
                 
                 <Button
                   variant="secondary"

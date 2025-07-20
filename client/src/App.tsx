@@ -47,6 +47,7 @@ const TestCommissions = lazy(() => import("@/pages/TestCommissions"));
 const RoleSelection = lazy(() => import("@/pages/RoleSelection"));
 const ArtworkManagement = lazy(() => import("@/pages/ArtworkManagement"));
 const ShippingManagement = lazy(() => import("@/pages/ShippingManagement"));
+const RepresentationRequests = lazy(() => import("@/pages/RepresentationRequests"));
 // const TapPaymentSetup = lazy(() => import("@/pages/TapPaymentSetup")); // Disabled until sufficient traffic
 
 // Admin pages
@@ -147,6 +148,7 @@ function Router() {
             <Route path="/manage/workshops" component={ManageWorkshops} />
             <Route path="/manage/events" component={ManageEvents} />
             <Route path="/artworks/manage" component={ArtworkManagement} />
+            <Route path="/representation-requests" component={RepresentationRequests} />
             <Route path="/role-selection" component={RoleSelection} />
             <Route path="/role-debug" component={lazy(() => import("@/pages/RoleDebug"))} />
             {/* <Route path="/tap-payment-setup" component={TapPaymentSetup} /> */}

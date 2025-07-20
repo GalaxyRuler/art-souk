@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Heart, MessageSquare, User, Settings, Eye, Calendar, MapPin, Phone, Mail, Edit2, Save, X, BarChart3, Package, Palette } from "lucide-react";
+import { Heart, MessageSquare, User, Settings, Eye, Calendar, MapPin, Phone, Mail, Edit2, Save, X, BarChart3, Package, Palette, HandHeart } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/useAuth";
@@ -399,6 +399,15 @@ export default function Dashboard() {
                           <Button className="w-full h-11 bg-pink-600 hover:bg-pink-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
                             <Palette className="h-4 w-4 mr-3" />
                             Artwork Management - {user?.roles?.includes('artist') && user?.roles?.includes('gallery') ? 'Artist & Gallery' : user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
+                          </Button>
+                        </Link>
+                      </div>
+
+                      <div className="mb-5">
+                        <Link to="/representation-requests">
+                          <Button className="w-full h-11 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white transition-all duration-200 shadow-sm hover:shadow-md">
+                            <HandHeart className="h-4 w-4 mr-3" />
+                            Representation Requests - {user?.roles?.includes('artist') && user?.roles?.includes('gallery') ? 'Artist & Gallery' : user?.roles?.includes('artist') ? 'Artist' : 'Gallery'}
                           </Button>
                         </Link>
                       </div>

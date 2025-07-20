@@ -556,6 +556,30 @@ export const artistGalleries = pgTable("artist_galleries", {
   uniqueArtistGallery: unique().on(table.artistId, table.galleryId)
 }));
 
+// Gallery representation requests
+export const representationRequests = pgTable("representation_requests", {
+  id: serial("id").primaryKey(),
+  galleryId: integer("gallery_id").references(() => galleries.id).notNull(),
+  artistId: integer("artist_id").references(() => artists.id).notNull(),
+  status: varchar("status").default("pending"), // 'pending', 'approved', 'declined', 'withdrawn'
+  exclusivity: varchar("exclusivity"), // 'exclusive', 'non-exclusive', 'regional'
+  proposedStartDate: date("proposed_start_date"),
+  proposedEndDate: date("proposed_end_date"), // null for ongoing
+  commissionRate: decimal("commission_rate", { precision: 5, scale: 2 }), // Gallery commission percentage
+  terms: text("terms"), // Gallery's proposed terms
+  termsAr: text("terms_ar"), // Arabic version of terms
+  message: text("message"), // Personal message from gallery
+  messageAr: text("message_ar"), // Arabic version of message
+  artistResponse: text("artist_response"), // Artist's response message
+  artistResponseAr: text("artist_response_ar"), // Arabic version of artist response
+  artistCounterTerms: text("artist_counter_terms"), // Artist's counter-proposal
+  respondedAt: timestamp("responded_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => ({
+  uniquePendingRequest: unique().on(table.galleryId, table.artistId, table.status)
+}));
+
 // Price alerts table for collectors to track artist works
 export const priceAlerts = pgTable("price_alerts", {
   id: serial("id").primaryKey(),
@@ -1054,12 +1078,14 @@ export const artistsRelations = relations(artists, ({ one, many }) => ({
   shows: many(shows),
   galleries: many(artistGalleries),
   priceAlerts: many(priceAlerts),
+  representationRequests: many(representationRequests),
 }));
 
 export const galleriesRelations = relations(galleries, ({ one, many }) => ({
   user: one(users, { fields: [galleries.userId], references: [users.id] }),
   artworks: many(artworks),
   artists: many(artistGalleries),
+  representationRequests: many(representationRequests),
 }));
 
 export const artworksRelations = relations(artworks, ({ one, many }) => ({
@@ -1300,6 +1326,12 @@ export const badgeProgressRelations = relations(badgeProgress, ({ one }) => ({
   badge: one(achievementBadges, { fields: [badgeProgress.badgeId], references: [achievementBadges.id] }),
 }));
 
+// Representation Requests relations
+export const representationRequestsRelations = relations(representationRequests, ({ one }) => ({
+  gallery: one(galleries, { fields: [representationRequests.galleryId], references: [galleries.id] }),
+  artist: one(artists, { fields: [representationRequests.artistId], references: [artists.id] }),
+}));
+
 // Export types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -1349,6 +1381,9 @@ export type Bid = typeof bids.$inferSelect;
 
 export type InsertAuctionResult = typeof auctionResults.$inferInsert;
 export type AuctionResult = typeof auctionResults.$inferSelect;
+
+export type InsertRepresentationRequest = typeof representationRequests.$inferInsert;
+export type RepresentationRequest = typeof representationRequests.$inferSelect;
 
 export type InsertCollection = typeof collections.$inferInsert;
 export type Collection = typeof collections.$inferSelect;

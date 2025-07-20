@@ -9,6 +9,7 @@ import { adminRouter } from "./routes/admin";
 import { sellerRouter } from "./routes/seller";
 import { artistProfileRouter } from "./routes/artistProfile";
 import { priceAlertsRouter } from "./routes/priceAlerts";
+import { representationRequestsRouter } from "./routes/representationRequests";
 import { db } from "./db";
 import * as schema from "@shared/schema";
 import { eq, desc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
@@ -526,6 +527,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Use price alerts router
   app.use('/api/price-alerts', priceAlertsRouter);
+
+  // Use representation requests router
+  app.use('/api/representation-requests', representationRequestsRouter);
 
   // First-time admin setup endpoint - allows creating the first admin without authentication
   app.post('/api/admin/setup', rateLimiters.auth, async (req: any, res) => {
