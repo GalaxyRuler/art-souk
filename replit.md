@@ -198,6 +198,24 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- January 20, 2025: Translation System and Artwork Display Fix (COMPLETED)
+  ✓ **Translation System Fully Resolved**: Fixed duplicate i18n initialization causing translation keys to display instead of translated text
+    • Removed redundant i18n.init() call that was re-initializing the translation system with empty resources
+    • Translation keys now properly display localized text in both English and Arabic
+    • Eliminated all "missingKey" console errors throughout the application
+  ✓ **Invoice Field Mapping Enhanced**: Added support for both camelCase and snake_case field formats
+    • Invoice management now handles buyerName/buyer_name, totalAmount/total_amount, createdAt/created_at
+    • Fixed invoice display issues where buyer names and amounts weren't showing
+    • Enhanced robustness of data handling for different API response formats
+  ✓ **Artwork Image Display Fixed**: Updated artwork images with working Unsplash URLs
+    • Replaced broken image URLs (404 errors) with valid high-resolution alternatives
+    • Updated all 5 featured artworks with w=800 parameter for better quality
+    • Images now display correctly on both home page and artwork detail pages
+  ✓ **Component Safety Enhancements**: Added null safety checks to prevent runtime errors
+    • Enhanced ArtworkDetail component with optional chaining for image arrays
+    • Fixed image gallery rendering with proper data availability checks
+    • Improved error handling throughout image display components
+
 - January 20, 2025: Critical Security Fix and File Standards Compliance (COMPLETED)
   ✓ **Invoice Role-Based Access Control Fixed**: Resolved security vulnerability in invoice management page
     • Removed hardcoded seller access bypass that was masking role-based access problems

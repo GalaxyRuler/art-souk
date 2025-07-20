@@ -109,7 +109,7 @@ export function ArtworkCard({
   };
 
   const getImageSrc = () => {
-    if (artwork.images && artwork.images.length > 0) {
+    if (artwork.images && Array.isArray(artwork.images) && artwork.images.length > 0) {
       return artwork.images[0];
     }
     // Fallback to placeholder

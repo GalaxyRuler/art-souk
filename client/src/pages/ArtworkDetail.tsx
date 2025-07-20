@@ -235,16 +235,16 @@ export default function ArtworkDetail() {
           <div className="space-y-4">
             <div className="relative group">
               <img
-                src={artwork.images[selectedImageIndex] || artwork.images[0]}
+                src={artwork?.images?.[selectedImageIndex] || artwork?.images?.[0] || ""}
                 alt={title}
                 className="w-full h-96 md:h-[500px] lg:h-[600px] object-cover rounded-2xl shadow-brand"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors rounded-2xl"></div>
             </div>
             
-            {artwork.images.length > 1 && (
+            {artwork?.images?.length > 1 && (
               <div className="flex gap-2 overflow-x-auto pb-2">
-                {artwork.images.map((image, index) => (
+                {artwork?.images?.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
