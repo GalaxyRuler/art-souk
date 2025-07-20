@@ -1760,7 +1760,6 @@ const resources = {
         writeComment: "اكتب تعليقاً...",
         postComment: "نشر التعليق",
         noComments: "لا توجد تعليقات بعد",
-        ```text
         confirmDelete: "هل أنت متأكد من أنك تريد حذف هذا التعليق؟",
         addedToFavorites: "تمت إضافة إلى المفضلات",
         removedFromFavorites: "تم حذف من المفضلات",

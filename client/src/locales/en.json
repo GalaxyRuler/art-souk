@@ -16,7 +16,8 @@
     "logout": "Logout",
     "admin": "Admin",
     "sellerDashboard": "Seller Dashboard",
-    "collectorDashboard": "Collector Dashboard"
+    "collectorDashboard": "Collector Dashboard",
+    "commissions": "Commissions"
   },
   "common": {
     "loading": "Loading...",
@@ -59,7 +60,14 @@
     "new": "New",
     "popular": "Popular",
     "trending": "Trending",
-    "recommended": "Recommended"
+    "recommended": "Recommended",
+    "linkCopied": "Link copied to clipboard",
+    "views": "views",
+    "by": "by",
+    "anonymous": "Anonymous",
+    "items": "items",
+    "errorTryAgain": "An error occurred. Please try again.",
+    "siteName": "Art Souk"
   },
   "hero": {
     "title": "Discover Extraordinary Art from Saudi Arabia & the GCC",
@@ -86,6 +94,76 @@
     "medium": "Medium",
     "experience": "Years of Experience"
   },
+  "auctions": {
+    "title": "Auctions",
+    "linkCopiedDesc": "Auction link has been copied to your clipboard",
+    "statusText": {
+      "liveNow": "Live Now",
+      "startingSoon": "Starting Soon",
+      "ended": "Ended"
+    },
+    "backToAuctions": "Back to Auctions",
+    "yourBid": "Your Bid",
+    "enterBidAmount": "Enter bid amount",
+    "placingBid": "Placing bid...",
+    "minimumBid": "Minimum bid",
+    "biddingIncrements": "Bidding increments",
+    "hasReserve": "Reserve price",
+    "signInToBid": "Sign in to bid",
+    "signInToBidDesc": "You need to sign in to place a bid on this auction",
+    "signInToBidButton": "Sign In",
+    "auctionStartingSoon": "Auction starting soon",
+    "starts": "Starts",
+    "auctionEnded": "Auction ended",
+    "finalBid": "Final bid",
+    "liveBidding": "Live bidding",
+    "updatesAutomatically": "Updates automatically",
+    "biddingActivity": "Bidding activity",
+    "leading": "Leading",
+    "noBidsYet": "No bids yet",
+    "beFirstToBid": "Be the first to bid",
+    "auctionDetails": "Auction details",
+    "termsAndConditions": "Terms and conditions",
+    "ended": "Ended",
+    "timeRemaining": "Time remaining",
+    "timeEnded": "Time ended",
+    "endingSoon": "Ending soon",
+    "subtitle": "Discover exceptional artworks",
+    "description": "Exclusive art auctions",
+    "viewAll": "View All",
+    "bids": "bids",
+    "endsIn": "Ends in",
+    "startsIn": "Starts in",
+    "status": {
+      "live": "Live",
+      "upcoming": "Upcoming",
+      "ended": "Ended",
+      "unknown": "Unknown"
+    },
+    "stats": {
+      "live": "Live",
+      "upcoming": "Upcoming", 
+      "totalBids": "Total Bids",
+      "total": "Total"
+    },
+    "tabs": {
+      "live": "Live",
+      "upcoming": "Upcoming",
+      "all": "All"
+    },
+    "noLive": {
+      "title": "No live auctions",
+      "description": "Check back soon for exciting live auctions"
+    },
+    "noUpcoming": {
+      "title": "No upcoming auctions",
+      "description": "All scheduled auctions are complete"
+    },
+    "noAuctions": {
+      "title": "No auctions found",
+      "description": "Browse our artworks or check back later"
+    }
+  },
   "artworks": {
     "title": "Artworks",
     "featured": "Featured Artworks",
@@ -93,7 +171,7 @@
     "details": "Artwork Details",
     "artist": "Artist",
     "year": "Year",
-    "medium": "Medium",
+    "medium": "Medium", 
     "dimensions": "Dimensions",
     "price": "Price",
     "availability": "Availability",
@@ -113,6 +191,51 @@
     "certificate": "Certificate of Authenticity",
     "shipping": "Shipping Information"
   },
+  "artwork": {
+    "year": "Year",
+    "medium": "Medium", 
+    "dimensions": "Dimensions"
+  },
+  "commissions": {
+    "title": "Commissions",
+    "bidSubmitted": "Bid submitted successfully",
+    "bidSubmittedDescription": "Your bid has been sent to the collector for review",
+    "fillAllFields": "Please fill in all required fields",
+    "requestNotFound": "Commission request not found",
+    "featured": "Featured",
+    "description": "Description",
+    "details": "Details",
+    "category": "Category",
+    "medium": "Medium",
+    "style": "Style",
+    "dimensions": "Dimensions",
+    "budget": "Budget",
+    "deadline": "Deadline",
+    "bids": "Bids",
+    "messages": "Messages",
+    "artistBid": "Artist bid",
+    "days": "days",
+    "noBidsYet": "No bids yet",
+    "noMessagesYet": "No messages yet",
+    "submitBid": "Submit bid",
+    "bidAmount": "Bid amount",
+    "enterBidAmount": "Enter your bid amount",
+    "timeline": "Timeline",
+    "enterTimeline": "Enter project timeline",
+    "proposal": "Proposal",
+    "enterProposal": "Enter your proposal",
+    "requestedBy": "Requested by",
+    "collector": "Collector",
+    "referenceImages": "Reference images",
+    "requests": {
+      "title": "Commission Requests",
+      "subtitle": "Browse custom art commissions",
+      "postRequest": "Post Request",
+      "noRequests": "No commission requests",
+      "noRequestsDescription": "Be the first to post a commission request",
+      "postFirstRequest": "Post your first request"
+    }
+  },
   "galleries": {
     "title": "Galleries",
     "featured": "Featured Galleries",
@@ -123,38 +246,105 @@
     "contact": "Contact",
     "location": "Location",
     "hours": "Opening Hours",
-    "website": "Website",
-    "established": "Established",
-    "specialties": "Specialties",
-    "currentExhibitions": "Current Exhibitions",
-    "upcomingExhibitions": "Upcoming Exhibitions",
-    "pastExhibitions": "Past Exhibitions"
+    "overview": "Overview",
+    "events": "Events",
+    "works": "Works",
+    "searchEvents": "Search events",
+    "allEvents": "All events",
+    "upcoming": "Upcoming",
+    "ongoing": "Ongoing", 
+    "completed": "Completed",
+    "allArtworks": "All artworks",
+    "available": "Available",
+    "sold": "Sold",
+    "reserved": "Reserved",
+    "sortNewest": "Newest first",
+    "sortPriceLow": "Price: Low to high",
+    "sortPriceHigh": "Price: High to low",
+    "inquiryType": "Inquiry type",
+    "generalInquiry": "General inquiry",
+    "artworkInquiry": "Artwork inquiry",
+    "exhibitionInquiry": "Exhibition inquiry",
+    "pressInquiry": "Press inquiry",
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "following": "Following",
+    "followers": "followers",
+    "viewMore": "View More"
   },
-  "auctions": {
-    "title": "Auctions",
-    "live": "Live Auctions",
-    "upcoming": "Upcoming Auctions",
-    "past": "Past Auctions",
-    "details": "Auction Details",
-    "startTime": "Start Time",
-    "endTime": "End Time",
-    "currentBid": "Current Bid",
-    "startingBid": "Starting Bid",
-    "estimate": "Estimate",
-    "bidNow": "Bid Now",
-    "placeBid": "Place Bid",
-    "bidHistory": "Bid History",
-    "condition": "Condition Report",
-    "provenance": "Provenance",
-    "literature": "Literature",
-    "exhibitions": "Exhibition History",
-    "lot": "Lot",
-    "seller": "Seller",
-    "auctionHouse": "Auction House",
-    "reserve": "Reserve",
-    "hammer": "Hammer Price",
-    "premium": "Buyer's Premium",
-    "total": "Total Price"
+  "dashboard": {
+    "profile": {
+      "edit": "Edit Profile",
+      "firstName": "First Name",
+      "lastName": "Last Name", 
+      "phone": "Phone",
+      "location": "Location",
+      "bio": "Bio"
+    },
+    "quickStats": {
+      "title": "Quick Stats",
+      "favorites": "Favorites",
+      "inquiries": "Inquiries",
+      "views": "Views"
+    },
+    "managementTools": "Management Tools",
+    "favorites": {
+      "title": "My Favorites",
+      "empty": "No favorites yet",
+      "emptyDescription": "Discover and save artworks you love",
+      "browseArtworks": "Browse Artworks"
+    },
+    "inquiries": {
+      "title": "My Inquiries",
+      "count": "inquiries",
+      "response": "Response",
+      "empty": "No inquiries yet",
+      "emptyDescription": "Start inquiring about artworks you're interested in",
+      "browseArtworks": "Browse Artworks"
+    },
+    "settings": {
+      "title": "Account Settings",
+      "preferences": "Preferences"
+    }
+  },
+  "editorial": {
+    "title": "Editorial",
+    "subtitle": "Insights into the art world",
+    "search": {
+      "placeholder": "Search articles..."
+    },
+    "filters": {
+      "category": "Category",
+      "allCategories": "All Categories"
+    },
+    "categories": {
+      "art": "Art",
+      "interview": "Interview", 
+      "guide": "Guide",
+      "news": "News",
+      "market": "Market"
+    },
+    "sort": {
+      "latest": "Latest",
+      "popular": "Popular",
+      "featured": "Featured"
+    },
+    "noResults": {
+      "title": "No articles found",
+      "description": "Try adjusting your search or filters",
+      "clearFilters": "Clear filters"
+    },
+    "newsletter": {
+      "title": "Stay Updated",
+      "description": "Get the latest art news and insights",
+      "placeholder": "Enter your email",
+      "subscribe": "Subscribe"
+    }
+  },
+  "auth": {
+    "required": "Authentication required",
+    "unauthorized": "Unauthorized access",
+    "loggingInAgain": "Logging in again..."
   },
   "workshops": {
     "title": "Workshops",
@@ -185,27 +375,157 @@
   },
   "events": {
     "title": "Events",
-    "featured": "Featured Events",
-    "upcoming": "Upcoming Events",
-    "past": "Past Events",
-    "details": "Event Details",
-    "organizer": "Organizer",
-    "date": "Date",
-    "time": "Time",
-    "location": "Location",
-    "venue": "Venue",
-    "description": "Description",
-    "rsvp": "RSVP",
-    "attending": "Attending",
-    "notAttending": "Not Attending",
-    "maybe": "Maybe",
-    "attendees": "Attendees",
-    "capacity": "Capacity",
-    "free": "Free Event",
-    "ticketed": "Ticketed Event",
-    "soldOut": "Sold Out",
-    "cancelled": "Cancelled",
-    "postponed": "Postponed"
+    "loginToRSVP": "Login to RSVP",
+    "rsvpSuccess": "RSVP successful",
+    "rsvpFailed": "RSVP failed",
+    "rsvpFailedDesc": "Please try again later",
+    "loading": "Loading events...",
+    "categories": {
+      "all": "All Events"
+    }
+  },
+  "categories": {
+    "painting": "Painting",
+    "sculpture": "Sculpture", 
+    "photography": "Photography",
+    "digital": "Digital Art",
+    "mixed_media": "Mixed Media",
+    "installation": "Installation",
+    "performance": "Performance",
+    "video": "Video Art",
+    "drawing": "Drawing",
+    "printmaking": "Printmaking",
+    "ceramics": "Ceramics",
+    "textile": "Textile Art",
+    "calligraphy": "Calligraphy",
+    "abstract": "Abstract",
+    "contemporary": "Contemporary",
+    "traditional": "Traditional",
+    "modern": "Modern",
+    "conceptual": "Conceptual",
+    "realism": "Realism",
+    "expressionism": "Expressionism",
+    "minimalism": "Minimalism",
+    "surrealism": "Surrealism"
+  },
+  "shipping": {
+    "title": "Shipping Management",
+    "profile": "Shipping Profile",
+    "orders": "Orders to Ship",
+    "analytics": "Analytics",
+    "orderManagement": "Order Management",
+    "trackingInfo": "Tracking Information",
+    "businessProfile": "Business Profile",
+    "businessInfo": "Business Information",
+    "businessName": "Business Name",
+    "contactPerson": "Contact Person",
+    "contactPhone": "Contact Phone", 
+    "contactEmail": "Contact Email",
+    "shippingRates": "Shipping Rates",
+    "domesticRate": "Domestic Rate",
+    "internationalRate": "International Rate",
+    "handlingTime": "Handling Time",
+    "days": "days",
+    "noTrackingDesc": "No tracking information available",
+    "noOrders": "No orders to ship",
+    "noOrdersDesc": "You have no pending orders",
+    "selectCarrier": "Select carrier",
+    "selectCity": "Select city",
+    "defaultCarrier": "Default carrier",
+    "notes": "Notes",
+    "status": "Status",
+    "orderNumber": "Order Number",
+    "customer": "Customer",
+    "artwork": "Artwork",
+    "addTracking": "Add Tracking",
+    "updateStatus": "Update Status", 
+    "sendNotification": "Send Notification",
+    "loadingUserRoles": "Loading user roles...",
+    "deselectAll": "Deselect All",
+    "selectAll": "Select All",
+    "clear": "Clear",
+    "phone": "Phone",
+    "email": "Email",
+    "selected": "selected"
+  },
+  "errors": {
+    "loadingArticles": "Error loading articles",
+    "networkError": "Network error occurred",
+    "serverError": "Server error occurred",
+    "authError": "Authentication error",
+    "permissionDenied": "Permission denied",
+    "notFound": "Resource not found",
+    "validationError": "Validation error",
+    "unknownError": "Unknown error occurred"
+  },
+  "artist": {
+    "featured": "Featured Artist"
+  },
+  "favorites": {
+    "added": "Added to favorites",
+    "addedDesc": "Artwork has been added to your favorites",
+    "removed": "Removed from favorites", 
+    "removedDesc": "Artwork has been removed from your favorites",
+    "error": "Error with favorites",
+    "loginToFavorite": "Login to add to favorites"
+  },
+  "artwork": {
+    "status": {
+      "available": "Available",
+      "sold": "Sold",
+      "reserved": "Reserved"
+    }
+  },
+  "curators": {
+    "title": "Curators",
+    "description": "Expert selections",
+    "viewAll": "View All"
+  },
+  "collections": {
+    "featured": {
+      "title": "Featured Collections",
+      "description": "Carefully curated selections"
+    }
+  },
+  "footer": {
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Get the latest updates",
+      "placeholder": "Your email",
+      "subscribe": "Subscribe"
+    },
+    "explore": {
+      "title": "Explore"
+    },
+    "resources": {
+      "title": "Resources",
+      "guide": "Buyer's Guide",
+      "investment": "Art Investment",
+      "support": "Support"
+    }
+  },
+  "gallery": {
+    "searchEvents": "Search events",
+    "allEvents": "All events",
+    "upcoming": "Upcoming",
+    "ongoing": "Ongoing",
+    "completed": "Completed",
+    "allArtworks": "All artworks",
+    "available": "Available",
+    "sold": "Sold",
+    "reserved": "Reserved",
+    "sortNewest": "Newest first",
+    "sortPriceLow": "Price: Low to high",
+    "sortPriceHigh": "Price: High to low",
+    "inquiryType": "Inquiry type",
+    "generalInquiry": "General inquiry",
+    "artworkInquiry": "Artwork inquiry",
+    "exhibitionInquiry": "Exhibition inquiry",
+    "pressInquiry": "Press inquiry",
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "following": "Following",
+    "followers": "followers"
   },
   "community": {
     "title": "Community",
