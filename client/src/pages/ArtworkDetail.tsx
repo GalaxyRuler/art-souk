@@ -119,8 +119,8 @@ export default function ArtworkDetail() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/favorites/${id}/check`] });
       toast({
-        title: isFavorite?.isFavorite ? "Removed from favorites" : "Added to favorites",
-        description: isFavorite?.isFavorite ? "Artwork removed from your collection" : "Artwork saved to your collection",
+        title: isFavorite?.isFavorite ? t("social.removedFromFavorites") : t("social.addedToFavorites"),
+        description: isFavorite?.isFavorite ? t("social.removedFromFavoritesDesc") : t("social.addedToFavoritesDesc"),
       });
     },
   });
@@ -139,8 +139,8 @@ export default function ArtworkDetail() {
       setIsInquiryOpen(false);
       setInquiryForm({ name: "", email: "", phone: "", message: "" });
       toast({
-        title: "Inquiry sent successfully",
-        description: "We'll contact you soon with more information.",
+        title: t("artwork.sent"),
+        description: t("artwork.sentDesc"),
       });
     },
   });
@@ -567,7 +567,7 @@ export default function ArtworkDetail() {
                 className="text-gray-600 hover:text-brand-purple"
               >
                 <Share2 className="h-4 w-4 mr-2" />
-                Share
+                {t("social.share")}
               </Button>
             </div>
           </div>

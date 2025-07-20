@@ -106,7 +106,21 @@ const resources = {
         commentUpdated: "Comment Updated",
         commentUpdatedDesc: "Your comment has been updated",
         commentDeleted: "Comment Deleted",
-        comments: "Comments"
+        commentDeletedDesc: "Your comment has been deleted",
+        comments: "Comments",
+        share: "Share",
+        writeComment: "Write a comment...",
+        postComment: "Post Comment",
+        noComments: "No comments yet",
+        confirmDelete: "Are you sure you want to delete this comment?",
+        addedToFavorites: "Added to favorites",
+        removedFromFavorites: "Removed from favorites",
+        addedToFavoritesDesc: "Artwork saved to your collection",
+        removedFromFavoritesDesc: "Artwork removed from your collection",
+        signInToComment: "Sign in to comment",
+        joinedDate: "Joined {{date}}",
+        website: "Website",
+        recentActivity: "Recent Activity"
       },
       favorites: {
         added: "Added to Favorites",
@@ -318,6 +332,8 @@ const resources = {
         inquiryPhone: "Phone",
         inquiryMessage: "Message",
         inquiryMessagePlaceholder: "I'm interested in this artwork...",
+        sent: "Inquiry sent successfully",
+        sentDesc: "We'll contact you soon with more information.",
         artist: "About the Artist",
         gallery: "Gallery Information"
       },
@@ -1753,7 +1769,21 @@ const resources = {
         commentUpdated: "تم تحديث التعليق",
         commentUpdatedDesc: "تم تحديث تعليقك",
         commentDeleted: "تم حذف التعليق",
-        comments: "التعليقات"
+        commentDeletedDesc: "تم حذف تعليقك",
+        comments: "التعليقات",
+        share: "مشاركة",
+        writeComment: "اكتب تعليقاً...",
+        postComment: "نشر التعليق",
+        noComments: "لا توجد تعليقات بعد",
+        confirmDelete: "هل أنت متأكد من أنك تريد حذف هذا التعليق؟",
+        addedToFavorites: "تمت إضافة إلى المفضلات",
+        removedFromFavorites: "تم حذف من المفضلات",
+        addedToFavoritesDesc: "تم حفظ العمل الفني في مجموعتك",
+        removedFromFavoritesDesc: "تم حذف العمل الفني من مجموعتك",
+        signInToComment: "سجل الدخول للتعليق",
+        joinedDate: "انضم في {{date}}",
+        website: "الموقع الإلكتروني",
+        recentActivity: "النشاط الأخير"
       },
       favorites: {
         added: "تمت إضافة إلى المفضلات",
@@ -2095,6 +2125,8 @@ const resources = {
         inquiryPhone: "الهاتف",
         inquiryMessage: "الرسالة",
         inquiryMessagePlaceholder: "أنا مهتم بهذا العمل الفني...",
+        sent: "تم إرسال الاستفسار بنجاح",
+        sentDesc: "سنتواصل معك قريباً لمزيد من المعلومات.",
         artist: "عن الفنان",
         gallery: "معلومات الجاليري"
       },
