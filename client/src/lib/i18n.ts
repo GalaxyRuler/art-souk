@@ -1287,8 +1287,6 @@ const resources = {
         amount: "Amount",
         noProfile: "No Profile",
         noProfileDesc: "No shipping profile created yet",
-        noTracking: "No Tracking",
-        noTrackingDesc: "No tracking information available",
         ordersFound: "orders found",
         noMatchingOrders: "No matching orders",
         filters: "filters",
