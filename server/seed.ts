@@ -2,7 +2,8 @@ import { db } from "./db";
 import { sql } from "drizzle-orm";
 import { 
   artists, galleries, artworks, auctions, bids, collections, collectionArtworks, 
-  inquiries, favorites, users, workshops, events, commissionRequests, commissionBids
+  inquiries, favorites, users, workshops, events, commissionRequests, commissionBids,
+  followers, auctionResults, shows, artistGalleries, priceAlerts
 } from "@shared/schema";
 
 // Comprehensive mock data for Art Souk marketplace
@@ -846,6 +847,121 @@ const mockData = {
       status: "open",
       category: "Installation"
     }
+  ],
+
+  // New artist profile enhancement data
+  followers: [
+    { followerId: "user1", artistId: 1 },
+    { followerId: "user2", artistId: 1 },
+    { followerId: "user3", artistId: 1 },
+    { followerId: "user1", artistId: 2 },
+    { followerId: "user4", artistId: 2 },
+    { followerId: "user5", artistId: 3 },
+    { followerId: "user1", artistId: 3 },
+    { followerId: "user2", artistId: 4 }
+  ],
+
+  auctionResults: [
+    {
+      artworkId: 1,
+      artistId: 1,
+      auctionDate: new Date("2024-12-15T19:00:00Z"),
+      hammerPrice: "185000.00",
+      estimateLow: "150000.00",
+      estimateHigh: "200000.00",
+      auctionHouse: "Christie's Dubai",
+      lotNumber: "LOT 125",
+      provenance: "Private collection, Riyadh"
+    },
+    {
+      artworkId: 3,
+      artistId: 2,
+      auctionDate: new Date("2024-11-20T18:30:00Z"),
+      hammerPrice: "95000.00",
+      estimateLow: "80000.00",
+      estimateHigh: "120000.00",
+      auctionHouse: "Sotheby's London",
+      lotNumber: "LOT 87",
+      provenance: "Artist's studio"
+    }
+  ],
+
+  shows: [
+    {
+      artistId: 1,
+      title: "Visions of Tomorrow",
+      titleAr: "رؤى الغد",
+      venue: "National Museum of Saudi Arabia",
+      venueAr: "المتحف الوطني السعودي",
+      location: "Riyadh, Saudi Arabia",
+      locationAr: "الرياض، المملكة العربية السعودية",
+      startDate: new Date("2025-02-01"),
+      endDate: new Date("2025-04-30"),
+      type: "solo",
+      status: "upcoming",
+      description: "A comprehensive solo exhibition showcasing contemporary works exploring Saudi identity.",
+      descriptionAr: "معرض شخصي شامل يعرض أعمالاً معاصرة تستكشف الهوية السعودية.",
+      curator: "Dr. Sarah Al-Mahmoud",
+      curatorAr: "د. سارة المحمود",
+      website: "https://nationalmuseum.sa/exhibitions/visions-tomorrow",
+      featured: true
+    },
+    {
+      artistId: 2,
+      title: "Echoes of Heritage",
+      titleAr: "أصداء التراث",
+      venue: "King Abdulaziz Center for World Culture",
+      venueAr: "مركز الملك عبدالعزيز الثقافي العالمي",
+      location: "Dhahran, Saudi Arabia",
+      locationAr: "الظهران، المملكة العربية السعودية",
+      startDate: new Date("2024-10-15"),
+      endDate: new Date("2025-01-15"),
+      type: "group",
+      status: "current",
+      description: "Group exhibition featuring contemporary Middle Eastern artists.",
+      descriptionAr: "معرض جماعي يضم فنانين معاصرين من الشرق الأوسط.",
+      curator: "Ahmed Al-Rashid",
+      curatorAr: "أحمد الراشد",
+      featured: false
+    }
+  ],
+
+  artistGalleries: [
+    {
+      artistId: 1,
+      galleryId: 1,
+      featured: true,
+      startDate: new Date("2023-01-01"),
+      exclusivity: "exclusive",
+      contractDetails: "Exclusive representation in the Middle East region"
+    },
+    {
+      artistId: 2,
+      galleryId: 2,
+      featured: false,
+      startDate: new Date("2024-06-01"),
+      exclusivity: "non-exclusive",
+      contractDetails: "Non-exclusive representation for contemporary works"
+    }
+  ],
+
+  priceAlerts: [
+    {
+      userId: "user1",
+      artistId: 1,
+      priceThreshold: "50000.00",
+      category: "Contemporary",
+      alertType: "immediate",
+      isActive: true
+    },
+    {
+      userId: "user2",
+      artistId: 2,
+      priceThreshold: "75000.00",
+      category: "Mixed Media",
+      alertType: "weekly",
+      isActive: true
+    }
   ]
 };
 
@@ -866,6 +982,11 @@ export async function seedDatabase() {
     await db.execute(sql`TRUNCATE TABLE workshops CASCADE`);
     await db.execute(sql`TRUNCATE TABLE event_rsvps CASCADE`);
     await db.execute(sql`TRUNCATE TABLE events CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE price_alerts CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE artist_galleries CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE shows CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE auction_results CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE followers CASCADE`);
     await db.execute(sql`TRUNCATE TABLE artworks CASCADE`);
     await db.execute(sql`TRUNCATE TABLE galleries CASCADE`);
     await db.execute(sql`TRUNCATE TABLE artists CASCADE`);
@@ -994,6 +1115,55 @@ export async function seedDatabase() {
     ];
     await db.insert(inquiries).values(inquiriesData);
     console.log(`📧 Seeded ${inquiriesData.length} inquiries`);
+
+    // Seed new artist profile enhancement tables
+    
+    // Seed Followers
+    const followerData = mockData.followers.map(follow => ({
+      ...follow,
+      followerId: insertedUsers.find(u => u.id === follow.followerId)?.id || insertedUsers[0].id,
+      artistId: insertedArtists[follow.artistId - 1]?.id || insertedArtists[0].id
+    }));
+    const insertedFollowers = await db.insert(followers).values(followerData).returning();
+    console.log(`👥 Seeded ${insertedFollowers.length} followers`);
+
+    // Seed Auction Results
+    const auctionResultData = mockData.auctionResults.map(result => ({
+      ...result,
+      artworkId: insertedArtworks[result.artworkId - 1]?.id || insertedArtworks[0].id,
+      artistId: insertedArtists[result.artistId - 1]?.id || insertedArtists[0].id
+    }));
+    const insertedAuctionResults = await db.insert(auctionResults).values(auctionResultData).returning();
+    console.log(`🔨 Seeded ${insertedAuctionResults.length} auction results`);
+
+    // Seed Shows
+    const showData = mockData.shows.map(show => ({
+      ...show,
+      artistId: insertedArtists[show.artistId - 1]?.id || insertedArtists[0].id
+    }));
+    const insertedShows = await db.insert(shows).values(showData).returning();
+    console.log(`🎭 Seeded ${insertedShows.length} shows`);
+
+    // Seed Artist Galleries
+    const artistGalleryData = mockData.artistGalleries.map(ag => ({
+      ...ag,
+      artistId: insertedArtists[ag.artistId - 1]?.id || insertedArtists[0].id,
+      galleryId: insertedGalleries[ag.galleryId - 1]?.id || insertedGalleries[0].id
+    }));
+    const insertedArtistGalleries = await db.insert(artistGalleries).values(artistGalleryData).returning();
+    console.log(`🏛️ Seeded ${insertedArtistGalleries.length} artist-gallery relationships`);
+
+    // Seed Price Alerts
+    const priceAlertData = mockData.priceAlerts.map(alert => ({
+      userId: insertedUsers.find(u => u.id === alert.userId)?.id || insertedUsers[0].id,
+      artistId: insertedArtists[alert.artistId - 1]?.id || insertedArtists[0].id,
+      priceThreshold: alert.priceThreshold,
+      category: alert.category,
+      alertType: alert.alertType,
+      isActive: alert.isActive
+    }));
+    const insertedPriceAlerts = await db.insert(priceAlerts).values(priceAlertData).returning();
+    console.log(`💰 Seeded ${insertedPriceAlerts.length} price alerts`);
 
     console.log("✅ Database seeding completed successfully!");
     

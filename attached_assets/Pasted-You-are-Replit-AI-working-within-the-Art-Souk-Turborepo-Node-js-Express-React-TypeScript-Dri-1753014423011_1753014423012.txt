@@ -1,0 +1,58 @@
+You are Replit AI, working within the Art Souk Turborepo (Node.js/Express + React + TypeScript + Drizzle). Implement the following on the artist profile:
+
+1. **Followers**  
+   - Create a `followers` table via Drizzle migration.  
+   - Add Express routes in `apps/api/src/routes/artists.ts`:  
+     • POST `/artists/:id/follow` to follow  
+     • DELETE `/artists/:id/follow` to unfollow  
+     • GET `/artists/:id/followers/count` to return follower count  
+   - On the client, add `<FollowButton>` in `apps/web/src/components/artist/FollowButton.tsx` that uses TanStack Query to read/update follow status.
+
+2. **Biography expander**  
+   - No DB change.  
+   - In `apps/web/src/components/artist/Biography.tsx`, render a truncated bio with a “Read more” link that toggles full text.
+
+3. **Tabbed navigation**  
+   - Install/import Radix UI Tabs.  
+   - In `apps/web/src/pages/artists/[id].tsx`, wrap sections in `<Tabs>`: “Artworks”, “Auction Results”, “About”.
+
+4. **Artworks grid + filters**  
+   - Extend your API route GET `/artists/:id/artworks` to accept `filter` & `sort` query params.  
+   - Create `apps/web/src/components/artist/ArtworksGrid.tsx` with filter controls (medium, price, availability) and sort dropdown. Use TanStack Query to fetch.
+
+5. **Auction results & stats**  
+   - Create `auction_results` table plus aggregate query for high-record.  
+   - Add GET `/artists/:id/auctions` returning highest sale and history.  
+   - Add `apps/web/src/components/artist/AuctionResultsTable.tsx` and a “High record” stat card.
+
+6. **Exhibitions timeline**  
+   - New `shows` table.  
+   - GET `/artists/:id/shows` returns past/upcoming.  
+   - Build `ExhibitionsTimeline.tsx` with two tabs (“Upcoming” vs. “Past”), listing venue + dates.
+
+7. **Representation**  
+   - Add `artist_galleries` relationship with `featured` flag.  
+   - API returns `featuredGallery`.  
+   - Component `<RepresentedBy>` listing gallery name + link.
+
+8. **Quick stats cards**  
+   - Extend GET `/artists/:id/stats` to include total exhibitions, awards count.  
+   - Create `StatsCard` component array under the profile header.
+
+9. **Price alerts**  
+   - POST `/price-alerts` API.  
+   - Add “Create Alert” button opening a modal in `PriceAlertModal.tsx` and confirmation toast.
+
+10. **Social share & deep links**  
+    - Add `<SocialShare>` with share URLs.  
+    - Ensure each tab is deep-linkable via `?tab=` anchor.
+
+11. **Related artists carousel**  
+    - GET `/artists/:id/recommendations`.  
+    - Create `RelatedArtistsCarousel.tsx` displaying 4–6 similar artists.
+
+For each change:  
+• Write Drizzle migrations and update `packages/db`.  
+• Add or update Express routes in `apps/api`.  
+• Create React components in `apps/web` with proper TypeScript typings, Tailwind & Radix UI styling, and TanStack Query hooks.  
+• Include unit and integration tests (Vitest & Playwright).  

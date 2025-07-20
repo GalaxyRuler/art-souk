@@ -155,23 +155,7 @@ export const bids = pgTable("bids", {
 });
 
 // Auction Results table - tracks final auction outcomes
-export const auctionResults = pgTable("auction_results", {
-  id: serial("id").primaryKey(),
-  auctionId: integer("auction_id").references(() => auctions.id).unique(),
-  artworkId: integer("artwork_id").references(() => artworks.id),
-  artistId: integer("artist_id").references(() => artists.id),
-  finalPrice: decimal("final_price", { precision: 10, scale: 2 }),
-  currency: varchar("currency").default("SAR"),
-  winnerUserId: varchar("winner_user_id").references(() => users.id),
-  totalBids: integer("total_bids").default(0),
-  startingPrice: decimal("starting_price", { precision: 10, scale: 2 }),
-  priceIncrease: decimal("price_increase", { precision: 10, scale: 2 }), // percentage increase
-  auctionDate: timestamp("auction_date"),
-  status: varchar("status").default("completed"), // completed, cancelled, no_sale
-  notes: text("notes"),
-  notesAr: text("notes_ar"),
-  createdAt: timestamp("created_at").defaultNow(),
-});
+
 
 // Achievement Badges table - defines all available badges
 export const achievementBadges = pgTable("achievement_badges", {
@@ -508,6 +492,84 @@ export const userProfiles = pgTable("user_profiles", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Followers table for artist following functionality
+export const followers = pgTable("followers", {
+  id: serial("id").primaryKey(),
+  followerId: varchar("follower_id").references(() => users.id).notNull(),
+  artistId: integer("artist_id").references(() => artists.id).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => ({
+  uniqueFollower: unique().on(table.followerId, table.artistId)
+}));
+
+// Auction results table for tracking artist auction history
+export const auctionResults = pgTable("auction_results", {
+  id: serial("id").primaryKey(),
+  artworkId: integer("artwork_id").references(() => artworks.id).notNull(),
+  artistId: integer("artist_id").references(() => artists.id).notNull(),
+  auctionDate: timestamp("auction_date").notNull(),
+  hammerPrice: decimal("hammer_price", { precision: 12, scale: 2 }).notNull(),
+  estimateLow: decimal("estimate_low", { precision: 12, scale: 2 }),
+  estimateHigh: decimal("estimate_high", { precision: 12, scale: 2 }),
+  auctionHouse: varchar("auction_house").notNull(),
+  lotNumber: varchar("lot_number"),
+  provenance: text("provenance"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Shows/Exhibitions table for artist exhibition history
+export const shows = pgTable("shows", {
+  id: serial("id").primaryKey(),
+  artistId: integer("artist_id").references(() => artists.id).notNull(),
+  title: varchar("title").notNull(),
+  titleAr: varchar("title_ar"),
+  venue: varchar("venue").notNull(),
+  venueAr: varchar("venue_ar"),
+  location: varchar("location").notNull(),
+  locationAr: varchar("location_ar"),
+  startDate: date("start_date").notNull(),
+  endDate: date("end_date").notNull(),
+  type: varchar("type").notNull(), // 'solo', 'group', 'institutional', 'gallery', 'museum'
+  status: varchar("status").default("upcoming"), // 'upcoming', 'current', 'past'
+  description: text("description"),
+  descriptionAr: text("description_ar"),
+  curator: varchar("curator"),
+  curatorAr: varchar("curator_ar"),
+  website: varchar("website"),
+  featured: boolean("featured").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Artist-Gallery representation relationships
+export const artistGalleries = pgTable("artist_galleries", {
+  id: serial("id").primaryKey(),
+  artistId: integer("artist_id").references(() => artists.id).notNull(),
+  galleryId: integer("gallery_id").references(() => galleries.id).notNull(),
+  featured: boolean("featured").default(false), // Primary representation
+  startDate: date("start_date"),
+  endDate: date("end_date"), // null for ongoing representation
+  exclusivity: varchar("exclusivity"), // 'exclusive', 'non-exclusive', 'regional'
+  contractDetails: text("contract_details"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => ({
+  uniqueArtistGallery: unique().on(table.artistId, table.galleryId)
+}));
+
+// Price alerts table for collectors to track artist works
+export const priceAlerts = pgTable("price_alerts", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  artistId: integer("artist_id").references(() => artists.id).notNull(),
+  artworkId: integer("artwork_id").references(() => artworks.id),
+  category: varchar("category"),
+  priceThreshold: decimal("price_threshold", { precision: 10, scale: 2 }).notNull(),
+  alertType: varchar("alert_type").default("immediate"),
+  isActive: boolean("is_active").default(true),
+  lastTriggered: timestamp("last_triggered"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Analytics tables
 export const artworkViews = pgTable("artwork_views", {
   id: serial("id").primaryKey(),
@@ -731,18 +793,7 @@ export const collectorProfiles = pgTable("collector_profiles", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-export const priceAlerts = pgTable("price_alerts", {
-  id: serial("id").primaryKey(),
-  userId: varchar("user_id").references(() => users.id).notNull(),
-  artistId: integer("artist_id").references(() => artists.id),
-  artworkId: integer("artwork_id").references(() => artworks.id),
-  category: varchar("category"),
-  priceThreshold: decimal("price_threshold", { precision: 10, scale: 2 }),
-  alertType: varchar("alert_type"), // price_drop, new_artwork, auction_starting
-  isActive: boolean("is_active").default(true),
-  lastTriggered: timestamp("last_triggered"),
-  createdAt: timestamp("created_at").defaultNow(),
-});
+
 
 export const artworkCertificates = pgTable("artwork_certificates", {
   id: serial("id").primaryKey(),
@@ -992,17 +1043,23 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   emailNotifications: many(emailNotificationQueue),
   emailLogs: many(emailNotificationLog),
   auctionWins: many(auctionResults),
+  followedArtists: many(followers),
 }));
 
 export const artistsRelations = relations(artists, ({ one, many }) => ({
   user: one(users, { fields: [artists.userId], references: [users.id] }),
   artworks: many(artworks),
   auctionResults: many(auctionResults),
+  followers: many(followers),
+  shows: many(shows),
+  galleries: many(artistGalleries),
+  priceAlerts: many(priceAlerts),
 }));
 
 export const galleriesRelations = relations(galleries, ({ one, many }) => ({
   user: one(users, { fields: [galleries.userId], references: [users.id] }),
   artworks: many(artworks),
+  artists: many(artistGalleries),
 }));
 
 export const artworksRelations = relations(artworks, ({ one, many }) => ({
@@ -1085,7 +1142,25 @@ export const favoritesRelations = relations(favorites, ({ one }) => ({
   artwork: one(artworks, { fields: [favorites.artworkId], references: [artworks.id] }),
 }));
 
-// New table relations
+// New table relations for artist profile enhancements
+export const followersRelations = relations(followers, ({ one }) => ({
+  user: one(users, { fields: [followers.followerId], references: [users.id] }),
+  artist: one(artists, { fields: [followers.artistId], references: [artists.id] }),
+}));
+
+
+
+export const showsRelations = relations(shows, ({ one }) => ({
+  artist: one(artists, { fields: [shows.artistId], references: [artists.id] }),
+}));
+
+export const artistGalleriesRelations = relations(artistGalleries, ({ one }) => ({
+  artist: one(artists, { fields: [artistGalleries.artistId], references: [artists.id] }),
+  gallery: one(galleries, { fields: [artistGalleries.galleryId], references: [galleries.id] }),
+}));
+
+
+
 export const followsRelations = relations(follows, ({ one }) => ({
   user: one(users, { fields: [follows.userId], references: [users.id] }),
 }));
@@ -1161,7 +1236,6 @@ export const collectorProfilesRelations = relations(collectorProfiles, ({ one })
 export const priceAlertsRelations = relations(priceAlerts, ({ one }) => ({
   user: one(users, { fields: [priceAlerts.userId], references: [users.id] }),
   artist: one(artists, { fields: [priceAlerts.artistId], references: [artists.id] }),
-  artwork: one(artworks, { fields: [priceAlerts.artworkId], references: [artworks.id] }),
 }));
 
 export const artworkCertificatesRelations = relations(artworkCertificates, ({ one }) => ({
@@ -1200,12 +1274,10 @@ export const emailNotificationLogRelations = relations(emailNotificationLog, ({ 
   queue: one(emailNotificationQueue, { fields: [emailNotificationLog.queueId], references: [emailNotificationQueue.id] }),
 }));
 
-// Auction Results relations
+// Auction Results relations (for artist profile enhancement)
 export const auctionResultsRelations = relations(auctionResults, ({ one }) => ({
-  auction: one(auctions, { fields: [auctionResults.auctionId], references: [auctions.id] }),
   artwork: one(artworks, { fields: [auctionResults.artworkId], references: [artworks.id] }),
   artist: one(artists, { fields: [auctionResults.artistId], references: [artists.id] }),
-  winner: one(users, { fields: [auctionResults.winnerUserId], references: [users.id] }),
 }));
 
 // Achievement Badges relations
@@ -1331,7 +1403,6 @@ export const insertGallerySchema = createInsertSchema(galleries).omit({ id: true
 export const insertArtworkSchema = createInsertSchema(artworks).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertAuctionSchema = createInsertSchema(auctions).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertBidSchema = createInsertSchema(bids).omit({ id: true, createdAt: true });
-export const insertAuctionResultSchema = createInsertSchema(auctionResults).omit({ id: true, createdAt: true });
 export const insertCollectionSchema = createInsertSchema(collections).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertWorkshopSchema = createInsertSchema(workshops).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertWorkshopRegistrationSchema = createInsertSchema(workshopRegistrations).omit({ id: true, registeredAt: true });
@@ -1511,6 +1582,25 @@ export const insertConversationSchema = createInsertSchema(conversations).omit({
 export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertSearchIndexSchema = createInsertSchema(searchIndex).omit({ id: true, createdAt: true, updatedAt: true, lastIndexed: true });
 export const insertLifecycleTransitionSchema = createInsertSchema(lifecycleTransitions).omit({ id: true, transitionAt: true });
+
+// Artist Profile Enhancement Types
+export type Follower = typeof followers.$inferSelect;
+export type InsertFollower = typeof followers.$inferInsert;
+export type AuctionResult = typeof auctionResults.$inferSelect;
+export type InsertAuctionResult = typeof auctionResults.$inferInsert;
+export type Show = typeof shows.$inferSelect;
+export type InsertShow = typeof shows.$inferInsert;
+export type ArtistGallery = typeof artistGalleries.$inferSelect;
+export type InsertArtistGallery = typeof artistGalleries.$inferInsert;
+export type PriceAlert = typeof priceAlerts.$inferSelect;
+export type InsertPriceAlert = typeof priceAlerts.$inferInsert;
+
+// Artist Profile Enhancement Schemas
+export const insertFollowerSchema = createInsertSchema(followers).omit({ id: true, createdAt: true });
+export const insertAuctionResultSchema = createInsertSchema(auctionResults).omit({ id: true, createdAt: true });
+export const insertShowSchema = createInsertSchema(shows).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertArtistGallerySchema = createInsertSchema(artistGalleries).omit({ id: true, createdAt: true });
+export const insertPriceAlertSchema = createInsertSchema(priceAlerts).omit({ id: true, createdAt: true, updatedAt: true });
 
 // Privacy and Trust/Safety exports
 export * from './schema/privacy';
