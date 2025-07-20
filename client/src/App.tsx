@@ -77,7 +77,7 @@ function Router() {
     setupComplete
   });
 
-  // Loading state - add timeout to prevent infinite loading
+  // Loading state - only show loading for auth
   if (isLoading) {
     return <PageLoader />;
   }
