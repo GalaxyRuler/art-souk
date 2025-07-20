@@ -10,7 +10,8 @@ export function useRoleSetup() {
   const { data: roleData, isLoading } = useQuery({
     queryKey: ['/api/user/roles'],
     enabled: isAuthenticated,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 0, // Always fetch fresh data to reflect role setup changes
+    refetchOnMount: true,
   });
 
   useEffect(() => {
