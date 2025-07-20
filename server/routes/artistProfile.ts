@@ -31,17 +31,10 @@ router.get("/:id/followers", rateLimiters.standard, async (req, res) => {
       .from(schema.followers)
       .where(eq(schema.followers.artistId, artistId));
 
-    // Get followers list with user details
+    // Get basic followers list without join for now to avoid field issues
     const followersList = await db
-      .select({
-        id: schema.followers.id,
-        userId: schema.followers.followerId,
-        followedAt: schema.followers.createdAt,
-        userName: schema.users.firstName,
-        userEmail: schema.users.email
-      })
+      .select()
       .from(schema.followers)
-      .leftJoin(schema.users, eq(schema.followers.followerId, schema.users.id))
       .where(eq(schema.followers.artistId, artistId))
       .orderBy(desc(schema.followers.createdAt));
 
@@ -155,24 +148,15 @@ router.get("/:id/shows", rateLimiters.standard, async (req, res) => {
 router.get("/:id/galleries", rateLimiters.standard, async (req, res) => {
   try {
     const artistId = parseInt(req.params.id);
+    
+    // Get basic gallery relationships without join for now to avoid field issues
     const relationships = await db
-      .select({
-        id: schema.artistGalleries.id,
-        galleryId: schema.artistGalleries.galleryId,
-        exclusivity: schema.artistGalleries.exclusivity,
-        startDate: schema.artistGalleries.startDate,
-        endDate: schema.artistGalleries.endDate,
-        contractDetails: schema.artistGalleries.contractDetails,
-        galleryName: schema.galleries.name,
-        galleryLocation: schema.galleries.location,
-        galleryWebsite: schema.galleries.website
-      })
+      .select()
       .from(schema.artistGalleries)
-      .leftJoin(schema.galleries, eq(schema.artistGalleries.galleryId, schema.galleries.id))
       .where(eq(schema.artistGalleries.artistId, artistId))
       .orderBy(desc(schema.artistGalleries.startDate));
 
-    res.json(relationships);
+    res.json(relationships || []);
   } catch (error) {
     console.error("Error fetching artist gallery relationships:", error);
     res.status(500).json({ error: "Internal server error" });

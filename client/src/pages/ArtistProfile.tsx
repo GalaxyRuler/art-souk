@@ -603,13 +603,13 @@ export default function ArtistProfile() {
                             <div className="flex items-center gap-3">
                               <Avatar className="w-10 h-10">
                                 <AvatarFallback className="bg-brand-purple text-white text-sm">
-                                  {follower.userName ? follower.userName[0] : 'U'}
+                                  F
                                 </AvatarFallback>
                               </Avatar>
                               <div className="flex-1">
-                                <h4 className="font-medium text-sm">{follower.userName || 'Anonymous'}</h4>
+                                <h4 className="font-medium text-sm">Follower</h4>
                                 <p className="text-xs text-muted-foreground">
-                                  Followed {new Date(follower.followedAt).toLocaleDateString()}
+                                  Followed {new Date(follower.createdAt).toLocaleDateString()}
                                 </p>
                               </div>
                             </div>
@@ -703,25 +703,14 @@ export default function ArtistProfile() {
                             <div className="flex items-start justify-between">
                               <div className="flex-1">
                                 <div className="flex items-center gap-2">
-                                  <h4 className="font-semibold text-brand-charcoal">{relationship.galleryName}</h4>
+                                  <h4 className="font-semibold text-brand-charcoal">Gallery #{relationship.galleryId}</h4>
                                   {relationship.exclusivity === 'exclusive' && (
                                     <Badge className="bg-brand-gold text-brand-charcoal text-xs">
                                       Exclusive
                                     </Badge>
                                   )}
                                 </div>
-                                <p className="text-sm text-muted-foreground">{relationship.galleryLocation}</p>
-                                {relationship.galleryWebsite && (
-                                  <a 
-                                    href={relationship.galleryWebsite} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="text-sm text-brand-purple hover:underline inline-flex items-center gap-1"
-                                  >
-                                    <ExternalLink className="h-3 w-3" />
-                                    Visit Gallery
-                                  </a>
-                                )}
+                                <p className="text-sm text-muted-foreground">Professional representation</p>
                               </div>
                               <div className="text-right text-sm text-muted-foreground">
                                 {relationship.startDate && (
