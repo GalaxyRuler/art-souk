@@ -5,7 +5,10 @@ export function useAuth() {
   // Get user data from the working profile endpoint
   const { data: user, isLoading, error } = useQuery<User | null>({
     queryKey: ["/api/profile"],
-    retry: false,
+    retry: 2,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: 30 * 1000, // 30 seconds
     // Handle 401 errors gracefully - they indicate the user is not authenticated
     queryFn: async () => {
       try {

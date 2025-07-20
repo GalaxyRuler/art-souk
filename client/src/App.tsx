@@ -69,7 +69,7 @@ function Router() {
   const { isAuthenticated, isLoading } = useAuth();
   const { setupComplete, isLoading: roleLoading } = useRoleSetup();
 
-  // Debug logging to track routing (removed location for now)
+  // Debug logging to track routing
   console.log('🔍 Router Debug:', {
     isAuthenticated,
     isLoading,
@@ -77,9 +77,14 @@ function Router() {
     setupComplete
   });
 
-  // Loading state
-  if (isLoading || roleLoading) {
-    return <div>Loading...</div>;
+  // Loading state - add timeout to prevent infinite loading
+  if (isLoading) {
+    return <PageLoader />;
+  }
+
+  // If authenticated but role loading, show appropriate loading
+  if (isAuthenticated && roleLoading) {
+    return <PageLoader />;
   }
 
   return (

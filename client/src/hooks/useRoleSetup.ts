@@ -4,18 +4,20 @@ import { useLocation } from 'wouter';
 import { useAuth } from './useAuth';
 
 export function useRoleSetup() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [, navigate] = useLocation();
 
   const { data: roleData, isLoading } = useQuery({
     queryKey: ['/api/user/roles'],
-    enabled: isAuthenticated,
-    staleTime: 0, // Always fetch fresh data to reflect role setup changes
-    refetchOnMount: true,
+    enabled: isAuthenticated && !authLoading,
+    retry: 2,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: 30 * 1000, // 30 seconds
   });
 
   useEffect(() => {
-    if (isAuthenticated && !isLoading && roleData) {
+    if (isAuthenticated && !isLoading && !authLoading && roleData) {
       // Check if user hasn't completed role setup
       if (!roleData.setupComplete) {
         // Don't redirect if already on role selection page
@@ -24,11 +26,11 @@ export function useRoleSetup() {
         }
       }
     }
-  }, [isAuthenticated, isLoading, roleData, navigate]);
+  }, [isAuthenticated, isLoading, authLoading, roleData, navigate]);
 
   return {
-    setupComplete: roleData?.setupComplete || false,
+    setupComplete: roleData?.setupComplete ?? true, // Default to true to prevent infinite loading
     userRoles: roleData?.roles || [],
-    isLoading,
+    isLoading: isLoading || authLoading,
   };
 }
