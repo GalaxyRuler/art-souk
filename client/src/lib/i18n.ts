@@ -910,7 +910,6 @@ const resources = {
         updateOrderStatus: "Update Order Status",
         orderStatus: "Order Status",
         selectOrderStatus: "Select Order Status",
-        selectPaymentType: "Select Payment Type",
         sellerNotes: "Seller Notes",
         sellerNotesPlaceholder: "Enter notes for the buyer",
         trackingNumber: "Tracking Number",
@@ -1364,7 +1363,7 @@ const resources = {
         noInvoices: "No Invoices",
         noInvoicesDesc: "You haven't created any invoices yet",
         noDraftInvoices: "No Draft Invoices",
-        noSentInvoices: "No Sent Invoices", 
+        noSentInvoices: "No Sent Invoices",
         noPaidInvoices: "No Paid Invoices",
         noOverdueInvoices: "No Overdue Invoices",
         createFirst: "Create your first invoice",
@@ -1760,8 +1759,8 @@ const resources = {
         share: "مشاركة",
         writeComment: "اكتب تعليقاً...",
         postComment: "نشر التعليق",
-```text
         noComments: "لا توجد تعليقات بعد",
+        ```text
         confirmDelete: "هل أنت متأكد من أنك تريد حذف هذا التعليق؟",
         addedToFavorites: "تمت إضافة إلى المفضلات",
         removedFromFavorites: "تم حذف من المفضلات",
