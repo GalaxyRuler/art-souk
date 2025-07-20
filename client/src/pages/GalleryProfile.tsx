@@ -142,7 +142,7 @@ export default function GalleryProfile() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/galleries/${id}/follow-status`] });
       toast({
-        title: isFollowing?.isFollowing ? t('gallery.unfollowedGallery') : t('gallery.followingGallery'),
+        title: String(isFollowing?.isFollowing ? t('gallery.unfollowedGallery') : t('gallery.followingGallery')),
         description: isFollowing?.isFollowing 
           ? t('gallery.unfollowDescription') 
           : t('gallery.followDescription'),
@@ -203,8 +203,8 @@ export default function GalleryProfile() {
     } else {
       navigator.clipboard.writeText(window.location.href);
       toast({
-        title: t('gallery.linkCopied'),
-        description: t('gallery.linkCopiedDescription'),
+        title: String(t('gallery.linkCopied')),
+        description: String(t('gallery.linkCopiedDescription')),
       });
     }
   };

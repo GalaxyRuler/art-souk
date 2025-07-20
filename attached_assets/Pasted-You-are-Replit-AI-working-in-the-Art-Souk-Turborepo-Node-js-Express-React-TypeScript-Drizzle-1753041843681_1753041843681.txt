@@ -1,0 +1,51 @@
+You are Replit AI, working in the Art Souk Turborepo (Node.js/Express + React + TypeScript + Drizzle).  
+Your task is to extend the existing GalleryProfile to match Artsy’s VEFA Gallery feature set:
+
+1. **Followers**  
+   - Create a `followers` table via Drizzle migration (columns: gallery_id, user_id, timestamps).  
+   - Add Express routes in `apps/api/src/routes/galleries.ts`:  
+     • POST `/galleries/:id/follow` → follow  
+     • DELETE `/galleries/:id/follow` → unfollow  
+     • GET `/galleries/:id/followers/count` → return count  
+   - On the client (`apps/web/src/components/gallery/FollowButton.tsx`), implement a `<FollowButton>` using TanStack Query to read/mutate follow status.
+
+2. **Tabbed Navigation**  
+   - Install/import Radix UI Tabs.  
+   - In `apps/web/src/pages/galleries/[id].tsx`, wrap content sections in `<Tabs>` labeled “Overview”, “Events”, “Works”, “Artists”, “Contact”.  
+   - Ensure deep-linking so `?tab=events` activates the Events tab.
+
+3. **Overview Section Enhancements**  
+   - Render `gallery.websiteUrl` as a prominent “Visit Website” link.  
+   - Include a truncated “About” blurb with full text toggle if length > 300 chars.
+
+4. **Events Table**  
+   - Use or build a table component (e.g. shadcn/ui or Radix Table) in `EventsTable.tsx`.  
+   - Fetch `/api/galleries/:id/shows` with pagination query params (`?page=&limit=`) and optional filters for upcoming vs. past.  
+   - Display columns: Show type, name, dates, location, with “Page X of Y” controls.
+
+5. **Works Grid**  
+   - Create `GET /api/galleries/:id/artworks` endpoint supporting filters (medium, price, availability) and sorting.  
+   - Build `GalleryWorksGrid.tsx` with infinite scroll or pagination, filter sidebar, and sort dropdown.
+
+6. **Featured Artists “View All”**  
+   - If `gallery.artists` is paginated, show first 6 in `FeaturedArtistsGrid.tsx` and add “View all” linking to `/galleries/:id/artists`.  
+   - Ensure full roster loads on that route.
+
+7. **Contact Tab**  
+   - Add a contact form component that POSTS inquiries to `/api/inquiries` (fields: name, email, message).  
+   - Display static contact info (email, phone, address) alongside the form.
+
+8. **Responsive & Accessibility**  
+   - Validate mobile layouts: tabs swipeable, tables scrollable, grids wrap correctly.  
+   - Add ARIA roles/labels for tabs, buttons, and form controls.
+
+9. **Testing**  
+   - Write Vitest unit/integration tests for all new API routes and Drizzle schema.  
+   - Add React Testing Library tests for hooks and components (`FollowButton`, `Tabs`, `EventsTable`, `GalleryWorksGrid`, contact form).  
+   - Create Playwright e2e tests covering follow flow, tab switching, pagination, filtering, and form submission.
+
+For each change:  
+• Write any necessary Drizzle migrations in `packages/db`.  
+• Update or add Express routes in `apps/api`.  
+• Create React components in `apps/web` with TypeScript, Tailwind CSS, Radix UI, and TanStack Query hooks.  
+• Ensure 100% test coverage on new logic.  

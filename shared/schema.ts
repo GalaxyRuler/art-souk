@@ -492,14 +492,15 @@ export const userProfiles = pgTable("user_profiles", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Followers table for artist following functionality
+// Followers table for artist and gallery following functionality
 export const followers = pgTable("followers", {
   id: serial("id").primaryKey(),
   followerId: varchar("follower_id").references(() => users.id).notNull(),
-  artistId: integer("artist_id").references(() => artists.id).notNull(),
+  artistId: integer("artist_id").references(() => artists.id),
+  galleryId: integer("gallery_id").references(() => galleries.id),
   createdAt: timestamp("created_at").defaultNow(),
 }, (table) => ({
-  uniqueFollower: unique().on(table.followerId, table.artistId)
+  uniqueFollower: unique().on(table.followerId, table.artistId, table.galleryId)
 }));
 
 // Auction results table for tracking artist auction history
@@ -592,6 +593,29 @@ export const priceAlerts = pgTable("price_alerts", {
   isActive: boolean("is_active").default(true),
   lastTriggered: timestamp("last_triggered"),
   createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Gallery Events Table for VEFA Gallery features
+export const galleryEvents = pgTable("gallery_events", {
+  id: serial("id").primaryKey(),
+  galleryId: integer("gallery_id").references(() => galleries.id).notNull(),
+  title: varchar("title").notNull(),
+  titleAr: varchar("title_ar"),
+  description: text("description"),
+  descriptionAr: text("description_ar"),
+  eventType: varchar("event_type").notNull(), // 'exhibition', 'opening', 'talk', 'workshop'
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date"),
+  location: varchar("location"),
+  locationAr: varchar("location_ar"),
+  featured: boolean("featured").default(false),
+  coverImage: varchar("cover_image"),
+  maxAttendees: integer("max_attendees"),
+  price: decimal("price", { precision: 10, scale: 2 }),
+  currency: varchar("currency").default("SAR"),
+  status: varchar("status").default("upcoming"), // 'upcoming', 'ongoing', 'completed', 'cancelled'
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Analytics tables
@@ -1086,6 +1110,8 @@ export const galleriesRelations = relations(galleries, ({ one, many }) => ({
   artworks: many(artworks),
   artists: many(artistGalleries),
   representationRequests: many(representationRequests),
+  followers: many(followers),
+  events: many(galleryEvents),
 }));
 
 export const artworksRelations = relations(artworks, ({ one, many }) => ({
@@ -1107,7 +1133,7 @@ export const artworksRelations = relations(artworks, ({ one, many }) => ({
 export const auctionsRelations = relations(auctions, ({ one, many }) => ({
   artwork: one(artworks, { fields: [auctions.artworkId], references: [artworks.id] }),
   bids: many(bids),
-  result: one(auctionResults, { fields: [auctions.id], references: [auctionResults.auctionId] }),
+  result: one(auctionResults, { fields: [auctions.id], references: [auctionResults.artworkId] }),
 }));
 
 export const bidsRelations = relations(bids, ({ one }) => ({
@@ -1172,6 +1198,11 @@ export const favoritesRelations = relations(favorites, ({ one }) => ({
 export const followersRelations = relations(followers, ({ one }) => ({
   user: one(users, { fields: [followers.followerId], references: [users.id] }),
   artist: one(artists, { fields: [followers.artistId], references: [artists.id] }),
+  gallery: one(galleries, { fields: [followers.galleryId], references: [galleries.id] }),
+}));
+
+export const galleryEventsRelations = relations(galleryEvents, ({ one }) => ({
+  gallery: one(galleries, { fields: [galleryEvents.galleryId], references: [galleries.id] }),
 }));
 
 
@@ -1379,17 +1410,15 @@ export type Auction = typeof auctions.$inferSelect;
 export type InsertBid = typeof bids.$inferInsert;
 export type Bid = typeof bids.$inferSelect;
 
-export type InsertAuctionResult = typeof auctionResults.$inferInsert;
-export type AuctionResult = typeof auctionResults.$inferSelect;
-
 export type InsertRepresentationRequest = typeof representationRequests.$inferInsert;
 export type RepresentationRequest = typeof representationRequests.$inferSelect;
 
 export type InsertCollection = typeof collections.$inferInsert;
 export type Collection = typeof collections.$inferSelect;
 
-export type InsertArticle = typeof articles.$inferInsert;
-export type Article = typeof articles.$inferSelect;
+// TODO: Add articles table definition
+// export type InsertArticle = typeof articles.$inferInsert;
+// export type Article = typeof articles.$inferSelect;
 
 export type InsertInquiry = typeof inquiries.$inferInsert;
 export type Inquiry = typeof inquiries.$inferSelect;
@@ -1621,8 +1650,7 @@ export const insertLifecycleTransitionSchema = createInsertSchema(lifecycleTrans
 // Artist Profile Enhancement Types
 export type Follower = typeof followers.$inferSelect;
 export type InsertFollower = typeof followers.$inferInsert;
-export type AuctionResult = typeof auctionResults.$inferSelect;
-export type InsertAuctionResult = typeof auctionResults.$inferInsert;
+// Auction Result types moved to avoid duplication
 export type Show = typeof shows.$inferSelect;
 export type InsertShow = typeof shows.$inferInsert;
 export type ArtistGallery = typeof artistGalleries.$inferSelect;
@@ -1630,12 +1658,19 @@ export type InsertArtistGallery = typeof artistGalleries.$inferInsert;
 export type PriceAlert = typeof priceAlerts.$inferSelect;
 export type InsertPriceAlert = typeof priceAlerts.$inferInsert;
 
+// Gallery Events Types
+export type GalleryEvent = typeof galleryEvents.$inferSelect;
+export type InsertGalleryEvent = typeof galleryEvents.$inferInsert;
+
 // Artist Profile Enhancement Schemas
 export const insertFollowerSchema = createInsertSchema(followers).omit({ id: true, createdAt: true });
 export const insertAuctionResultSchema = createInsertSchema(auctionResults).omit({ id: true, createdAt: true });
 export const insertShowSchema = createInsertSchema(shows).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertArtistGallerySchema = createInsertSchema(artistGalleries).omit({ id: true, createdAt: true });
-export const insertPriceAlertSchema = createInsertSchema(priceAlerts).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertPriceAlertSchema = createInsertSchema(priceAlerts).omit({ id: true, createdAt: true });
+
+// Gallery Events Schemas
+export const insertGalleryEventSchema = createInsertSchema(galleryEvents).omit({ id: true, createdAt: true, updatedAt: true });
 
 // Privacy and Trust/Safety exports
 export * from './schema/privacy';
