@@ -8,7 +8,7 @@ export function useRoleSetup() {
   const [, navigate] = useLocation();
 
   // Don't run role query for unauthenticated users
-  const { data: roleData, isLoading } = useQuery({
+  const { data: roleData, isLoading: roleQueryLoading } = useQuery({
     queryKey: ['/api/user/roles'],
     enabled: isAuthenticated && !authLoading,
     retry: false, // Don't retry for role queries
@@ -18,7 +18,7 @@ export function useRoleSetup() {
   });
 
   useEffect(() => {
-    if (isAuthenticated && !isLoading && !authLoading && roleData) {
+    if (isAuthenticated && !roleQueryLoading && !authLoading && roleData) {
       // Check if user hasn't completed role setup
       if (!roleData.setupComplete) {
         // Don't redirect if already on role selection page
@@ -27,10 +27,18 @@ export function useRoleSetup() {
         }
       }
     }
-  }, [isAuthenticated, isLoading, authLoading, roleData, navigate]);
+  }, [isAuthenticated, roleQueryLoading, authLoading, roleData, navigate]);
 
-  // For unauthenticated users, immediately return without loading
-  if (!isAuthenticated) {
+  console.log('🔍 RoleSetup Hook Debug:', {
+    isAuthenticated,
+    authLoading,
+    roleQueryLoading,
+    roleData,
+    shouldReturnEarly: !authLoading && !isAuthenticated
+  });
+
+  // For unauthenticated users, immediately return without loading when auth is resolved
+  if (!authLoading && !isAuthenticated) {
     return {
       setupComplete: true, // Unauthenticated users don't need role setup
       userRoles: [],
@@ -38,10 +46,19 @@ export function useRoleSetup() {
     };
   }
 
+  // Still loading auth
+  if (authLoading) {
+    return {
+      setupComplete: false,
+      userRoles: [],
+      isLoading: true,
+    };
+  }
+
   // For authenticated users
   return {
     setupComplete: roleData?.setupComplete ?? true, // Default to true to prevent infinite loading
     userRoles: roleData?.roles || [],
-    isLoading: isLoading, // Only role query loading, not auth loading
+    isLoading: roleQueryLoading, // Only role query loading, not auth loading
   };
 }

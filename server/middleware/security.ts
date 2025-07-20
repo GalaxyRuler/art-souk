@@ -112,14 +112,7 @@ export const sqlInjectionProtection = (req: Request, res: Response, next: NextFu
   const isDevelopmentExtension = developmentExtensions.some(ext => req.path.endsWith(ext));
   const isViteRequest = req.query.v !== undefined; // Vite version parameter
 
-  console.log('Security middleware check:', {
-    path: req.path,
-    query: req.query,
-    isDevelopmentPath,
-    isDevelopmentExtension,
-    isViteRequest,
-    shouldSkip: isDevelopmentPath || isDevelopmentExtension || isViteRequest
-  });
+  // Debug logging disabled for cleaner console
 
   // Skip SQL injection check for development requests
   if (isDevelopmentPath || isDevelopmentExtension || isViteRequest) {

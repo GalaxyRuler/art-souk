@@ -3,9 +3,9 @@ import { User } from "@/types";
 
 export function useAuth() {
   // Get user data from the working profile endpoint
-  const { data: user, isLoading, error, isSuccess } = useQuery<User | null>({
+  const { data: user, isLoading, error, isSuccess, isError } = useQuery<User | null>({
     queryKey: ["/api/profile"],
-    retry: 1, // Reduce retries
+    retry: false, // No retries to avoid delays
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     staleTime: 30 * 1000, // 30 seconds
@@ -32,6 +32,14 @@ export function useAuth() {
         return null;
       }
     },
+  });
+
+  console.log('🔍 Auth Hook Debug:', {
+    user: !!user,
+    isLoading,
+    isSuccess,
+    isError,
+    data: user
   });
 
   return {
