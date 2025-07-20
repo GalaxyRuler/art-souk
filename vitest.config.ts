@@ -1,46 +1,28 @@
-import { defineConfig } from 'vitest/config'
-import react from '@vitejs/plugin-react'
-import path from 'path'
+import { defineConfig } from 'vitest/config';
+import { resolve } from 'path';
 
 export default defineConfig({
-  plugins: [react()],
   test: {
-    globals: true,
     environment: 'jsdom',
     setupFiles: ['./tests/setup.ts'],
+    globals: true,
     coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
+      reporter: ['text', 'html', 'json'],
       exclude: [
         'node_modules/',
-        'dist/',
         'tests/',
         '**/*.d.ts',
-        '**/*.config.ts',
-        '**/*.config.js',
+        '**/*.config.*',
         'coverage/',
-        '.turbo/',
-        'server/index.ts' // Main server file
+        'dist/'
       ]
-    },
-    include: [
-      'client/src/**/*.{test,spec}.{ts,tsx}',
-      'server/**/*.{test,spec}.{ts,tsx}',
-      'shared/**/*.{test,spec}.{ts,tsx}'
-    ],
-    exclude: [
-      'node_modules/',
-      'dist/',
-      '.turbo/',
-      'coverage/'
-    ]
+    }
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './client/src'),
-      '@shared': path.resolve(__dirname, './shared'),
-      '@server': path.resolve(__dirname, './server'),
-      '@assets': path.resolve(__dirname, './attached_assets')
+      '@': resolve(__dirname, './client/src'),
+      '@shared': resolve(__dirname, './shared'),
+      '@server': resolve(__dirname, './server')
     }
   }
-})
+});

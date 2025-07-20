@@ -7,6 +7,8 @@ import { setupAuth, isAuthenticated } from "./replitAuth";
 import { emailService } from "./emailService";
 import { adminRouter } from "./routes/admin";
 import { sellerRouter } from "./routes/seller";
+import { artistProfileRouter } from "./routes/artistProfile";
+import { priceAlertsRouter } from "./routes/priceAlerts";
 import { db } from "./db";
 import * as schema from "@shared/schema";
 import { eq, desc, and, or, ilike, sql, count, ne, gte, lte } from "drizzle-orm";
@@ -463,6 +465,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register admin and seller routes AFTER auth routes
   app.use('/api/admin', adminRouter);
   app.use('/api/seller', sellerRouter);
+
+  // Use enhanced artist profile router
+  app.use('/api/artists', artistProfileRouter);
+  
+  // Use price alerts router
+  app.use('/api/price-alerts', priceAlertsRouter);
 
   // First-time admin setup endpoint - allows creating the first admin without authentication
   app.post('/api/admin/setup', rateLimiters.auth, async (req: any, res) => {
