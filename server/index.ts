@@ -8,7 +8,7 @@ import { healthCheckMiddleware, databaseHealthCheck, readinessCheck, livenessChe
 import { cacheConfigs } from "./middleware/caching";
 
 // Increased memory configuration for better performance
-process.env.NODE_OPTIONS = '--max-old-space-size=1024 --expose-gc';
+process.env.NODE_OPTIONS = '--max-old-space-size=2048 --expose-gc --max-semi-space-size=128';
 
 // Simplified memory tracking (reduced overhead)
 let lastMemoryCheck = Date.now();
@@ -32,8 +32,21 @@ const periodicCleanup = () => {
   }
 };
 
-// Reduced frequency cleanup - every 5 minutes instead of 20 seconds
-setInterval(periodicCleanup, 300000);
+// More frequent cleanup when memory is high, less frequent when stable
+let cleanupFrequency = 300000; // Start at 5 minutes
+setInterval(() => {
+  const memUsage = process.memoryUsage();
+  const heapPercent = (memUsage.heapUsed / memUsage.heapTotal) * 100;
+  
+  // Adjust cleanup frequency based on memory pressure
+  if (heapPercent > 80) {
+    cleanupFrequency = 60000; // 1 minute when high memory
+  } else if (heapPercent < 60) {
+    cleanupFrequency = 600000; // 10 minutes when low memory
+  }
+  
+  periodicCleanup();
+}, cleanupFrequency);
 
 // Remove aggressive memory leak detection that was consuming memory
 

@@ -12,8 +12,8 @@ export interface MemoryMetrics {
 export class MemoryMonitor {
   private static instance: MemoryMonitor;
   private metrics: MemoryMetrics[] = [];
-  private maxMetrics = 20; // Keep last 20 readings (reduced from 100)
-  private alertThreshold = 98; // Alert at 98% memory usage (increased from 85%)
+  private maxMetrics = 10; // Keep only last 10 readings to reduce memory usage
+  private alertThreshold = 95; // Alert at 95% memory usage
   private cleanupInterval: NodeJS.Timeout | null = null;
   private alertCallbacks: ((metrics: MemoryMetrics) => void)[] = [];
 
@@ -29,11 +29,11 @@ export class MemoryMonitor {
   }
 
   private startMonitoring() {
-    // Monitor memory every 5 minutes (reduced frequency)
+    // Monitor memory every 10 minutes (further reduced frequency)
     this.cleanupInterval = setInterval(() => {
       this.collectMetrics();
       this.performCleanup();
-    }, 300000);
+    }, 600000);
 
     // Initial collection
     this.collectMetrics();
