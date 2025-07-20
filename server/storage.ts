@@ -3647,8 +3647,50 @@ export class DatabaseStorage implements IStorage {
 
   // Lifecycle Funnel implementations
   async trackUserInteraction(interaction: InsertUserInteraction): Promise<UserInteraction> {
-    const [tracked] = await db.insert(userInteractions).values(interaction).returning();
-    return tracked;
+    try {
+      // Check if user exists before tracking interaction
+      if (interaction.userId) {
+        const userExists = await db.select().from(users).where(eq(users.id, interaction.userId)).limit(1);
+        if (userExists.length === 0) {
+          console.warn(`User ${interaction.userId} not found, skipping interaction tracking`);
+          // Return a mock interaction to avoid breaking the flow
+          return {
+            id: 0,
+            userId: interaction.userId,
+            action: interaction.action,
+            entityType: interaction.entityType || null,
+            entityId: interaction.entityId || null,
+            previousStage: interaction.previousStage || null,
+            newStage: interaction.newStage || null,
+            metadata: interaction.metadata || null,
+            sessionId: interaction.sessionId || null,
+            ipAddress: interaction.ipAddress || null,
+            userAgent: interaction.userAgent || null,
+            createdAt: new Date()
+          } as UserInteraction;
+        }
+      }
+      
+      const [tracked] = await db.insert(userInteractions).values(interaction).returning();
+      return tracked;
+    } catch (error) {
+      console.error('Error tracking user interaction:', error);
+      // Return a mock interaction to avoid breaking the application flow
+      return {
+        id: 0,
+        userId: interaction.userId || null,
+        action: interaction.action,
+        entityType: interaction.entityType || null,
+        entityId: interaction.entityId || null,
+        previousStage: interaction.previousStage || null,
+        newStage: interaction.newStage || null,
+        metadata: interaction.metadata || null,
+        sessionId: interaction.sessionId || null,
+        ipAddress: interaction.ipAddress || null,
+        userAgent: interaction.userAgent || null,
+        createdAt: new Date()
+      } as UserInteraction;
+    }
   }
 
   async trackLifecycleTransition(transition: InsertLifecycleTransition): Promise<LifecycleTransition> {
