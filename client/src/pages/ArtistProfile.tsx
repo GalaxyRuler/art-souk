@@ -97,6 +97,22 @@ export default function ArtistProfile() {
     enabled: !!artist,
   });
 
+  // Enhanced artist profile data
+  const { data: followersData } = useQuery({
+    queryKey: [`/api/artists/${id}/followers`],
+    enabled: !!id,
+  });
+
+  const { data: auctionResults } = useQuery({
+    queryKey: [`/api/artists/${id}/auction-results`],
+    enabled: !!id,
+  });
+
+  const { data: galleries } = useQuery({
+    queryKey: [`/api/artists/${id}/galleries`],
+    enabled: !!id,
+  });
+
   const { data: isFollowing } = useQuery<{ isFollowing: boolean }>({
     queryKey: [`/api/artists/${id}/follow-status`],
     enabled: isAuthenticated && !!id,
@@ -429,14 +445,33 @@ export default function ArtistProfile() {
           {/* Main Content */}
           <div className="lg:col-span-2">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="artworks" className="flex items-center gap-2">
-                  <Palette className="h-4 w-4" />
-                  {t("artist.tabs.artworks")} ({artworks?.length || 0})
+              <TabsList className="grid w-full grid-cols-5 text-xs">
+                <TabsTrigger value="artworks" className="flex items-center gap-1">
+                  <Palette className="h-3 w-3" />
+                  <span className="hidden sm:inline">{t("artist.tabs.artworks")}</span>
+                  <span className="sm:hidden">Art</span>
+                  ({artworks?.length || 0})
                 </TabsTrigger>
-                <TabsTrigger value="exhibitions" className="flex items-center gap-2">
-                  <Eye className="h-4 w-4" />
-                  {t("artist.exhibitions")}
+                <TabsTrigger value="exhibitions" className="flex items-center gap-1">
+                  <Eye className="h-3 w-3" />
+                  <span className="hidden sm:inline">{t("artist.exhibitions")}</span>
+                  <span className="sm:hidden">Shows</span>
+                </TabsTrigger>
+                <TabsTrigger value="followers" className="flex items-center gap-1">
+                  <Users className="h-3 w-3" />
+                  <span className="hidden sm:inline">Followers</span>
+                  <span className="sm:hidden">Fans</span>
+                  ({followersData?.totalCount || 0})
+                </TabsTrigger>
+                <TabsTrigger value="market" className="flex items-center gap-1">
+                  <Award className="h-3 w-3" />
+                  <span className="hidden sm:inline">Market</span>
+                  <span className="sm:hidden">Sales</span>
+                </TabsTrigger>
+                <TabsTrigger value="galleries" className="flex items-center gap-1">
+                  <MapPin className="h-3 w-3" />
+                  <span className="hidden sm:inline">Galleries</span>
+                  <span className="sm:hidden">Reps</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -546,6 +581,174 @@ export default function ArtistProfile() {
                       </h3>
                       <p className="text-muted-foreground">
                         {t("artist.noExhibitionsDescription")}
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+
+              {/* Followers Tab */}
+              <TabsContent value="followers" className="space-y-6">
+                {followersData && followersData.followers?.length > 0 ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-brand-charcoal">
+                        {followersData.totalCount} Followers
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {followersData.followers.map((follower: any) => (
+                        <Card key={follower.id} className="card-elevated">
+                          <CardContent className="p-4">
+                            <div className="flex items-center gap-3">
+                              <Avatar className="w-10 h-10">
+                                <AvatarFallback className="bg-brand-purple text-white text-sm">
+                                  {follower.userName ? follower.userName[0] : 'U'}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="flex-1">
+                                <h4 className="font-medium text-sm">{follower.userName || 'Anonymous'}</h4>
+                                <p className="text-xs text-muted-foreground">
+                                  Followed {new Date(follower.followedAt).toLocaleDateString()}
+                                </p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Card className="card-elevated">
+                    <CardContent className="p-12 text-center">
+                      <Users className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-brand-charcoal mb-2">
+                        No Followers Yet
+                      </h3>
+                      <p className="text-muted-foreground">
+                        This artist hasn't gained any followers yet.
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+
+              {/* Market Performance Tab */}
+              <TabsContent value="market" className="space-y-6">
+                {auctionResults && auctionResults.length > 0 ? (
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-brand-charcoal">
+                      Auction Results ({auctionResults.length})
+                    </h3>
+                    <div className="space-y-3">
+                      {auctionResults.map((result: any) => (
+                        <Card key={result.id} className="card-elevated">
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <h4 className="font-semibold text-brand-charcoal">{result.artworkTitle}</h4>
+                                <p className="text-sm text-muted-foreground">{result.artworkMedium}</p>
+                                <p className="text-sm text-muted-foreground">{result.auctionHouse}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  {new Date(result.auctionDate).toLocaleDateString()}
+                                </p>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-lg font-bold text-brand-gold">
+                                  {formatPrice(result.hammerPrice, "SAR", isRTL ? 'ar' : 'en')}
+                                </div>
+                                {result.estimateLow && result.estimateHigh && (
+                                  <div className="text-xs text-muted-foreground">
+                                    Est: {formatPrice(result.estimateLow, "SAR", isRTL ? 'ar' : 'en')} - {formatPrice(result.estimateHigh, "SAR", isRTL ? 'ar' : 'en')}
+                                  </div>
+                                )}
+                                {result.lotNumber && (
+                                  <div className="text-xs text-muted-foreground">
+                                    Lot {result.lotNumber}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Card className="card-elevated">
+                    <CardContent className="p-12 text-center">
+                      <Award className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-brand-charcoal mb-2">
+                        No Auction Results
+                      </h3>
+                      <p className="text-muted-foreground">
+                        This artist hasn't had any recorded auction sales yet.
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+
+              {/* Galleries Tab */}
+              <TabsContent value="galleries" className="space-y-6">
+                {galleries && galleries.length > 0 ? (
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-brand-charcoal">
+                      Gallery Representation ({galleries.length})
+                    </h3>
+                    <div className="space-y-3">
+                      {galleries.map((relationship: any) => (
+                        <Card key={relationship.id} className="card-elevated">
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2">
+                                  <h4 className="font-semibold text-brand-charcoal">{relationship.galleryName}</h4>
+                                  {relationship.exclusivity === 'exclusive' && (
+                                    <Badge className="bg-brand-gold text-brand-charcoal text-xs">
+                                      Exclusive
+                                    </Badge>
+                                  )}
+                                </div>
+                                <p className="text-sm text-muted-foreground">{relationship.galleryLocation}</p>
+                                {relationship.galleryWebsite && (
+                                  <a 
+                                    href={relationship.galleryWebsite} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-brand-purple hover:underline inline-flex items-center gap-1"
+                                  >
+                                    <ExternalLink className="h-3 w-3" />
+                                    Visit Gallery
+                                  </a>
+                                )}
+                              </div>
+                              <div className="text-right text-sm text-muted-foreground">
+                                {relationship.startDate && (
+                                  <div>Since {new Date(relationship.startDate).getFullYear()}</div>
+                                )}
+                                {relationship.endDate && (
+                                  <div>Until {new Date(relationship.endDate).getFullYear()}</div>
+                                )}
+                                <div className="text-xs">
+                                  {relationship.exclusivity || 'Standard'}
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Card className="card-elevated">
+                    <CardContent className="p-12 text-center">
+                      <MapPin className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-brand-charcoal mb-2">
+                        No Gallery Representation
+                      </h3>
+                      <p className="text-muted-foreground">
+                        This artist is not currently represented by any galleries.
                       </p>
                     </CardContent>
                   </Card>

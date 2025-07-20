@@ -24,26 +24,29 @@ interface AuthenticatedRequest extends Express.Request {
 router.get("/:id/followers", rateLimiters.standard, async (req, res) => {
   try {
     const artistId = parseInt(req.params.id);
-    const followersList = await db
-      .select({
-        id: schema.followers.id,
-        userId: schema.followers.userId,
-        followedAt: schema.followers.followedAt,
-        userName: schema.users.name,
-        userEmail: schema.users.email
-      })
-      .from(schema.followers)
-      .leftJoin(schema.users, eq(schema.followers.userId, schema.users.id))
-      .where(eq(schema.followers.artistId, artistId))
-      .orderBy(desc(schema.followers.followedAt));
-
+    
+    // Get follower count first
     const followerCount = await db
       .select({ count: count() })
       .from(schema.followers)
       .where(eq(schema.followers.artistId, artistId));
 
+    // Get followers list with user details
+    const followersList = await db
+      .select({
+        id: schema.followers.id,
+        userId: schema.followers.followerId,
+        followedAt: schema.followers.createdAt,
+        userName: schema.users.firstName,
+        userEmail: schema.users.email
+      })
+      .from(schema.followers)
+      .leftJoin(schema.users, eq(schema.followers.followerId, schema.users.id))
+      .where(eq(schema.followers.artistId, artistId))
+      .orderBy(desc(schema.followers.createdAt));
+
     res.json({
-      followers: followersList,
+      followers: followersList || [],
       totalCount: followerCount[0]?.count || 0
     });
   } catch (error) {
@@ -156,7 +159,7 @@ router.get("/:id/galleries", rateLimiters.standard, async (req, res) => {
       .select({
         id: schema.artistGalleries.id,
         galleryId: schema.artistGalleries.galleryId,
-        representationType: schema.artistGalleries.representationType,
+        exclusivity: schema.artistGalleries.exclusivity,
         startDate: schema.artistGalleries.startDate,
         endDate: schema.artistGalleries.endDate,
         contractDetails: schema.artistGalleries.contractDetails,
