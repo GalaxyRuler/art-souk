@@ -77,12 +77,12 @@ function Router() {
     setupComplete
   });
 
-  // Loading state - only show loading for auth
+  // Only show loading if auth is still loading
   if (isLoading) {
     return <PageLoader />;
   }
 
-  // If authenticated but role loading, show appropriate loading
+  // For authenticated users, show loading only if role setup is loading
   if (isAuthenticated && roleLoading) {
     return <PageLoader />;
   }

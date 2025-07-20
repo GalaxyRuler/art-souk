@@ -3,9 +3,9 @@ import { User } from "@/types";
 
 export function useAuth() {
   // Get user data from the working profile endpoint
-  const { data: user, isLoading, error } = useQuery<User | null>({
+  const { data: user, isLoading, error, isSuccess } = useQuery<User | null>({
     queryKey: ["/api/profile"],
-    retry: 2,
+    retry: 1, // Reduce retries
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     staleTime: 30 * 1000, // 30 seconds
@@ -17,7 +17,7 @@ export function useAuth() {
         });
         
         if (response.status === 401) {
-          // 401 is expected when user is not authenticated
+          // 401 is expected when user is not authenticated - return null to complete the query
           return null;
         }
         
@@ -28,6 +28,7 @@ export function useAuth() {
         return response.json();
       } catch (error) {
         console.error("Auth error:", error);
+        // Return null instead of throwing to complete the query
         return null;
       }
     },

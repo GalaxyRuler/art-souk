@@ -7,10 +7,11 @@ export function useRoleSetup() {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [, navigate] = useLocation();
 
+  // Don't run role query for unauthenticated users
   const { data: roleData, isLoading } = useQuery({
     queryKey: ['/api/user/roles'],
     enabled: isAuthenticated && !authLoading,
-    retry: 1,
+    retry: false, // Don't retry for role queries
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     staleTime: 30 * 1000, // 30 seconds
@@ -28,18 +29,19 @@ export function useRoleSetup() {
     }
   }, [isAuthenticated, isLoading, authLoading, roleData, navigate]);
 
-  // For unauthenticated users, don't show loading state
-  if (!isAuthenticated && !authLoading) {
+  // For unauthenticated users, immediately return without loading
+  if (!isAuthenticated) {
     return {
       setupComplete: true, // Unauthenticated users don't need role setup
       userRoles: [],
-      isLoading: false,
+      isLoading: false, // Never loading for unauthenticated users
     };
   }
 
+  // For authenticated users
   return {
     setupComplete: roleData?.setupComplete ?? true, // Default to true to prevent infinite loading
     userRoles: roleData?.roles || [],
-    isLoading: authLoading || (isAuthenticated && isLoading),
+    isLoading: isLoading, // Only role query loading, not auth loading
   };
 }
