@@ -28,7 +28,7 @@ const ArtworkDetail = lazy(() => import("@/pages/ArtworkDetail"));
 const ArtistProfile = lazy(() => import("@/pages/ArtistProfile"));
 const Search = lazy(() => import("@/pages/Search"));
 // Dashboard is now eagerly loaded above
-const GalleryProfile = lazy(() => import("@/pages/GalleryProfile"));
+const GalleryProfile = lazy(() => import("@/pages/GalleryProfileEnhanced"));
 const AuctionDetail = lazy(() => import("@/pages/AuctionDetail"));
 const Workshops = lazy(() => import("@/pages/Workshops"));
 const Events = lazy(() => import("@/pages/Events"));
