@@ -300,8 +300,14 @@ const resources = {
       },
       artwork: {
         status: {
-          available: "Available"
-        }
+          available: "Available",
+          sold: "Sold", 
+          reserved: "Reserved",
+          not_for_sale: "Not for Sale"
+        },
+        sendInquiry: "Send Inquiry",
+        description: "Description",
+        details: "Details"
       },
       artworks: {
         viewAll: "View All Artworks",
@@ -2059,8 +2065,14 @@ const resources = {
       },
       artwork: {
         status: {
-          available: "متاح"
-        }
+          available: "متاح",
+          sold: "مباع",
+          reserved: "محجوز",
+          not_for_sale: "غير للبيع"
+        },
+        sendInquiry: "إرسال استفسار",
+        description: "الوصف",
+        details: "التفاصيل"
       },
       artworks: {
         viewAll: "عرض جميع الأعمال",
