@@ -30,7 +30,7 @@ packages/
 - Unused variables (uuid, z, one)
 - Reference to removed 'articles' table
 
-**apps/web**:
+**client**:
 - High memory usage causing timeouts
 - Need to run with limited concurrency
 
