@@ -1,0 +1,43 @@
+Summary
+
+The file client/src/locales/en.json begins with an extra literal json before the opening brace. This makes the JSON invalid and prevents it from being parsed correctly, which can break translation imports and force a fallback to displaying the key names.
+
+client/src/locales/en_broken.json also fails to parse as valid JSON due to trailing/formatting issues (Node throws “Unexpected non‑whitespace character after JSON”).
+
+Because these locale files are malformed, the project resorts to a large inline resources object in client/src/lib/i18n.ts, which is difficult to maintain. Missing keys inside this object lead to untranslated text appearing in the UI.
+
+The repository provides generate-translations-csv.js, a utility for exporting translations to a CSV file, but no automated check ensures every t('...') key exists in the resources.
+
+Recommendations
+
+Fix invalid JSON
+
+Remove the stray json line at the top of client/src/locales/en.json.
+
+Correct the formatting issues at the end of client/src/locales/en_broken.json so both files parse cleanly.
+
+Suggested task
+Clean up locale JSON files
+
+Start task
+Automate translation key validation
+
+Introduce a script (e.g., scripts/check-missing-translations.ts) that scans source files for t('...') calls and verifies each key exists in both locale JSON files.
+
+Add an npm script like npm run check-translations to run this validation during CI or before commits.
+
+Suggested task
+Add translation key checker
+
+Start task
+Gradually transition back to JSON-based resources
+
+Once the locale files are valid and a checker ensures coverage, refactor client/src/lib/i18n.ts to import en.json and ar.json instead of maintaining an enormous inline resources object.
+
+Keep the existing resources object only as a fallback during the transition.
+
+Suggested task
+Refactor i18n initialization to use JSON resources
+
+Start task
+Implementing these changes will ensure translations load reliably, prevent stray key names from appearing in the UI, and provide a maintainable workflow for future translation updates.
