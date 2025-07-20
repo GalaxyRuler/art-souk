@@ -18,13 +18,13 @@ let memoryCheckCount = 0;
 const periodicCleanup = () => {
   const memUsage = process.memoryUsage();
   const heapPercent = (memUsage.heapUsed / memUsage.heapTotal) * 100;
-  
+
   // Only trigger cleanup if memory is critically high
   if (heapPercent > 85) {
     if (global.gc) {
       global.gc();
     }
-    
+
     // Only log if memory is truly critical
     if (heapPercent > 95) {
       console.log(`🚨 High memory usage: ${Math.round(heapPercent)}%`);
@@ -109,12 +109,12 @@ process.on('uncaughtException', (error) => {
     // SEO-friendly headers
     res.setHeader('X-Robots-Tag', 'index, follow');
     res.setHeader('Cache-Control', 'public, max-age=3600');
-    
+
     // For main page requests
     if (req.path === '/' || req.path === '/index.html') {
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
     }
-    
+
     next();
   });
 
