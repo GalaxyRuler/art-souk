@@ -1,0 +1,38 @@
+Auth Hook Debug: {user: false, isLoading: true, isSuccess: false, isError: false, data: undefined}data: undefinedisError: falseisLoading: trueisSuccess: falseuser: false[[Prototype]]: Object
+useAuth.ts:37 🔍 Auth Hook Debug: {user: false, isLoading: true, isSuccess: false, isError: false, data: undefined}data: undefinedisError: falseisLoading: trueisSuccess: falseuser: false[[Prototype]]: Object
+useRoleSetup.ts:32 🔍 RoleSetup Hook Debug: {isAuthenticated: false, authLoading: true, roleQueryLoading: true, roleData: undefined, shouldReturnEarly: false}authLoading: trueisAuthenticated: falseroleData: undefinedroleQueryLoading: trueshouldReturnEarly: false[[Prototype]]: Object
+App.tsx:73 🔍 Router Debug: {isAuthenticated: false, isLoading: true, roleLoading: true, setupComplete: false}isAuthenticated: falseisLoading: trueroleLoading: truesetupComplete: false[[Prototype]]: Object
+content.bundle.js:31149 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+injected.js:1 Script was injected!
+content.js:202 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+useAuth.ts:15  GET https://ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev/api/profile 401 (Unauthorized)
+queryFn @ useAuth.ts:15
+fetchFn @ @tanstack_react-query.js?v=a3779c79:842
+run @ @tanstack_react-query.js?v=a3779c79:507
+createRetryer @ @tanstack_react-query.js?v=a3779c79:541
+fetch @ @tanstack_react-query.js?v=a3779c79:881
+executeFetch @ @tanstack_react-query.js?v=a3779c79:2014
+onSubscribe @ @tanstack_react-query.js?v=a3779c79:1896
+subscribe @ @tanstack_react-query.js?v=a3779c79:25
+(anonymous) @ @tanstack_react-query.js?v=a3779c79:2957
+subscribeToStore @ chunk-NKKMQWDD.js?v=a3779c79:12032
+commitHookEffectListMount @ chunk-NKKMQWDD.js?v=a3779c79:16963
+commitPassiveMountOnFiber @ chunk-NKKMQWDD.js?v=a3779c79:18206
+commitPassiveMountEffects_complete @ chunk-NKKMQWDD.js?v=a3779c79:18179
+commitPassiveMountEffects_begin @ chunk-NKKMQWDD.js?v=a3779c79:18169
+commitPassiveMountEffects @ chunk-NKKMQWDD.js?v=a3779c79:18159
+flushPassiveEffectsImpl @ chunk-NKKMQWDD.js?v=a3779c79:19543
+flushPassiveEffects @ chunk-NKKMQWDD.js?v=a3779c79:19500
+performSyncWorkOnRoot @ chunk-NKKMQWDD.js?v=a3779c79:18921
+flushSyncCallbacks @ chunk-NKKMQWDD.js?v=a3779c79:9166
+commitRootImpl @ chunk-NKKMQWDD.js?v=a3779c79:19485
+commitRoot @ chunk-NKKMQWDD.js?v=a3779c79:19330
+finishConcurrentRender @ chunk-NKKMQWDD.js?v=a3779c79:18858
+performConcurrentWorkOnRoot @ chunk-NKKMQWDD.js?v=a3779c79:18768
+workLoop @ chunk-NKKMQWDD.js?v=a3779c79:197
+flushWork @ chunk-NKKMQWDD.js?v=a3779c79:176
+performWorkUntilDeadline @ chunk-NKKMQWDD.js?v=a3779c79:384Understand this error
+useAuth.ts:37 🔍 Auth Hook Debug: {user: false, isLoading: false, isSuccess: true, isError: false, data: null}
+useAuth.ts:37 🔍 Auth Hook Debug: {user: false, isLoading: false, isSuccess: true, isError: false, data: null}data: nullisError: falseisLoading: falseisSuccess: trueuser: false[[Prototype]]: Object
+useRoleSetup.ts:32 🔍 RoleSetup Hook Debug: {isAuthenticated: false, authLoading: false, roleQueryLoading: true, roleData: undefined, shouldReturnEarly: true}authLoading: falseisAuthenticated: falseroleData: undefinedroleQueryLoading: trueshouldReturnEarly: true[[Prototype]]: Object
+App.tsx:73 🔍 Router Debug: 
