@@ -107,9 +107,15 @@ export default function InvoiceManagement() {
 
 
 
-  // Simplified: Always allow access and fetch invoices
-  const hasSellerAccess = true;
-  const userRoles = [];
+  // Check user roles for proper access control
+  const { data: userRoles = [], isLoading: roleLoading } = useQuery({
+    queryKey: ['/api/user/roles'],
+    retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  // Proper role-based access control
+  const hasSellerAccess = userRoles.includes?.('artist') || userRoles.includes?.('gallery') || userRoles.includes?.('admin');
 
   // Fetch invoices with enhanced debugging
   const { data: invoices = [], isLoading, error, isSuccess, isFetching } = useQuery({
