@@ -455,7 +455,27 @@ const enResources = {
     "unfollowedGallery": "Unfollowed gallery",
     "followingGallery": "Following gallery",
     "unfollowDescription": "You are no longer following this gallery",
-    "followDescription": "You are now following this gallery"
+    "followDescription": "You are now following this gallery",
+    "tabs": {
+      "overview": "Overview",
+      "artworks": "Artworks", 
+      "artists": "Artists",
+      "exhibitions": "Exhibitions",
+      "events": "Events"
+    },
+    "overview": "Overview",
+    "contactForm": {
+      "title": "Contact Gallery",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send Message",
+      "sending": "Sending...",
+      "success": "Message sent successfully",
+      "error": "Error sending message"
+    }
   },
   "dashboard": {
     "title": "Dashboard",
@@ -1839,7 +1859,27 @@ const arResources = {
     "unfollowedGallery": "إلغاء متابعة المعرض",
     "followingGallery": "متابعة المعرض",
     "unfollowDescription": "لم تعد تتابع هذا المعرض",
-    "followDescription": "أنت تتابع هذا المعرض الآن"
+    "followDescription": "أنت تتابع هذا المعرض الآن",
+    "tabs": {
+      "overview": "نظرة عامة",
+      "artworks": "الأعمال الفنية",
+      "artists": "الفنانون", 
+      "exhibitions": "المعارض",
+      "events": "الفعاليات"
+    },
+    "overview": "نظرة عامة",
+    "contactForm": {
+      "title": "اتصل بالمعرض",
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "subject": "الموضوع",
+      "message": "الرسالة",
+      "send": "إرسال رسالة",
+      "sending": "جاري الإرسال...",
+      "success": "تم إرسال الرسالة بنجاح",
+      "error": "خطأ في إرسال الرسالة"
+    }
   },
   "cities": {
     "riyadh": "الرياض",

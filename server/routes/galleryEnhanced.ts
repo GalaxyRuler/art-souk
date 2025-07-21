@@ -73,11 +73,11 @@ router.get("/galleries/:id/events", async (req, res) => {
     const { status, featured } = req.query;
 
     let whereConditions = [eq(schema.galleryEvents.galleryId, id)];
-    
+
     if (status && status !== 'all') {
       whereConditions.push(eq(schema.galleryEvents.status, status as string));
     }
-    
+
     if (featured === 'true') {
       whereConditions.push(eq(schema.galleryEvents.featured, true));
     }
@@ -102,7 +102,7 @@ router.get("/galleries/:id/artworks", async (req, res) => {
     const { availability, limit = 20, offset = 0 } = req.query;
 
     let whereConditions = [eq(schema.artworks.artistId, id)];
-    
+
     if (availability && availability !== 'all') {
       whereConditions.push(eq(schema.artworks.availability, availability as string));
     }
@@ -138,9 +138,12 @@ router.get("/galleries/:id/artworks", async (req, res) => {
 });
 
 // Get gallery represented artists
-router.get("/galleries/:id/artists", async (req, res) => {
+router.get('/:id/artists', async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
+    const galleryId = parseInt(req.params.id);
+    if (isNaN(galleryId)) {
+      return res.status(400).json({ error: 'Invalid gallery ID' });
+    }
 
     const artists = await db
       .select({
@@ -156,7 +159,7 @@ router.get("/galleries/:id/artists", async (req, res) => {
       .from(schema.artistGalleries)
       .innerJoin(schema.artists, eq(schema.artistGalleries.artistId, schema.artists.id))
       .leftJoin(schema.artworks, eq(schema.artworks.artistId, schema.artists.id))
-      .where(eq(schema.artistGalleries.galleryId, id))
+      .where(eq(schema.artistGalleries.galleryId, galleryId))
       .groupBy(
         schema.artists.id,
         schema.artists.name,
@@ -166,12 +169,12 @@ router.get("/galleries/:id/artists", async (req, res) => {
         schema.artists.biographyAr,
         schema.artistGalleries.featured
       )
-      .orderBy(desc(schema.artistGalleries.featured), schema.artists.name);
+      .orderBy(desc(sql`COALESCE(${schema.artistGalleries.featured}, false)`), schema.artists.name);
 
-    res.json(artists);
+    res.json(artists || []);
   } catch (error) {
-    console.error("Error fetching gallery artists:", error);
-    res.status(500).json({ error: "Failed to fetch gallery artists" });
+    console.error('Error fetching gallery artists:', error);
+    res.status(500).json({ error: 'Failed to fetch gallery artists' });
   }
 });
 
