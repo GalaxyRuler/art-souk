@@ -152,9 +152,8 @@ const enResources = {
     "timeRemaining": "Time remaining",
     "timeEnded": "Time ended",
     "endingSoon": "Ending soon",
-    "subtitle": "Discover exceptional artworks",
+    "subtitle": "Discover exceptional artworks", 
     "description": "Exclusive art auctions",
-    "viewAll": "View All",
     "bids": "bids",
     "endsIn": "Ends in",
     "startsIn": "Starts in",
@@ -488,22 +487,6 @@ const enResources = {
     "phone": "Phone",
     "email": "Email",
     "selected": "selected"
-  },
-  "errors": {
-    "general": "Something went wrong. Please try again.",
-    "network": "Network error. Please check your connection.",
-    "timeout": "Request timed out. Please try again.",
-    "unauthorized": "You are not authorized to perform this action.",
-    "forbidden": "Access denied.",
-    "notFound": "The requested item was not found.",
-    "conflict": "This item already exists.",
-    "validation": "Please check your input and try again.",
-    "server": "Server error. Please try again later.",
-    "maintenance": "System is under maintenance. Please try again later.",
-    "quota": "Quota exceeded. Please upgrade your plan.",
-    "payment": "Payment failed. Please check your payment details.",
-    "upload": "File upload failed. Please try again.",
-    "download": "File download failed. Please try again."
   },
   "artist": {
     "featured": "Featured Artist",
@@ -997,7 +980,6 @@ const arResources = {
     "endingSoon": "ينتهي قريباً",
     "subtitle": "اكتشف أعمالاً فنية استثنائية",
     "description": "مزادات فنية حصرية",
-    "viewAll": "عرض الكل",
     "bids": "عروض",
     "endsIn": "ينتهي في",
     "startsIn": "يبدأ في",
@@ -1227,8 +1209,8 @@ const arResources = {
           artists: "الفنانون"
         },
         recommendations: {
-          title": "موصى لك",
-          subtitle": "اكتشف أعمالاً فنية قد تعجبك",
+          "title": "موصى لك",
+          "subtitle": "اكتشف أعمالاً فنية قد تعجبك",
           exploreArtists: "استكشف الفنانين",
           empty: "لا توجد توصيات حالياً"
         },
@@ -1472,10 +1454,6 @@ const arResources = {
       "qatar": "قطر",
       "bahrain": "البحرين",
       "oman": "عمان"
-    },
-    "errors": {
-      "loadingArtists": "خطأ في تحميل الفنانين",
-      "tryAgainLater": "يرجى المحاولة مرة أخرى لاحقاً"
     }
   ,
   "artworks": {
@@ -1553,11 +1531,6 @@ const arResources = {
       "featured": "المميز أولاً"
     },
     "results": "{{count}} عمل فني موجود",
-    "noResults": {
-      "title": "لا توجد أعمال فنية",
-      "description": "جرب تعديل مصطلحات البحث أو المرشحات للعثور على أعمال فنية.",
-      "clearFilters": "مسح جميع المرشحات"
-    },
     "viewArtwork": "عرض العمل الفني",
     "artworkNotFound": "العمل الفني غير موجود",
     "backToArtworks": "العودة للأعمال الفنية"
