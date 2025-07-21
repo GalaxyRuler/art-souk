@@ -909,6 +909,10 @@
     "liked": "أعجبني",
     "unlikedDesc": "ألغيت إعجابك بهذا العنصر",
     "likedDesc": "أعجبك هذا العنصر",
+    "addedToFavorites": "أُضيف للمفضلة",
+    "removedFromFavorites": "أُزيل من المفضلة",
+    "addedToFavoritesDesc": "تمت إضافة العمل الفني إلى مفضلتك",
+    "removedFromFavoritesDesc": "تمت إزالة العمل الفني من مفضلتك",
     "commentAdded": "تمت إضافة التعليق",
     "commentAddedDesc": "تمت إضافة تعليقك",
     "commentUpdated": "تم تحديث التعليق",
@@ -921,6 +925,7 @@
     "postComment": "نشر التعليق",
     "noComments": "لا توجد تعليقات بعد",
     "signInToComment": "سجل الدخول للتعليق",
+    "share": "شارك",
     "website": "الموقع الإلكتروني",
     "recentActivity": "النشاط الأخير"
   },
@@ -933,7 +938,23 @@
       "available": "متاح",
       "sold": "مباع",
       "reserved": "محجوز"
-    }
+    },
+    "sent": "تم إرسال الاستفسار",
+    "sentDesc": "تم إرسال استفسارك بنجاح",
+    "favorited": "في المفضلة",
+    "favorite": "أضف للمفضلة",
+    "share": "شارك",
+    "inquire": "استفسر",
+    "inquiryTitle": "استفسار عن العمل الفني",
+    "inquiryEmail": "البريد الإلكتروني",
+    "inquiryPhone": "الهاتف",
+    "inquiryMessage": "الرسالة",
+    "inquiryMessagePlaceholder": "أخبرنا عن اهتمامك بهذا العمل الفني...",
+    "sendInquiry": "إرسال الاستفسار",
+    "description": "الوصف",
+    "details": "التفاصيل",
+    "artist": "الفنان",
+    "gallery": "المعرض"
   },
   "footer": {
     "newsletter": {

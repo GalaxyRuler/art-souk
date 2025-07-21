@@ -1043,6 +1043,10 @@
     "liked": "Liked",
     "unlikedDesc": "You unliked this item",
     "likedDesc": "You liked this item",
+    "addedToFavorites": "Added to Favorites",
+    "removedFromFavorites": "Removed from Favorites",
+    "addedToFavoritesDesc": "Artwork has been added to your favorites",
+    "removedFromFavoritesDesc": "Artwork has been removed from your favorites",
     "commentAdded": "Comment added",
     "commentAddedDesc": "Your comment has been added",
     "commentUpdated": "Comment updated",
@@ -1055,6 +1059,7 @@
     "postComment": "Post Comment",
     "noComments": "No comments yet",
     "signInToComment": "Sign in to comment",
+    "share": "Share",
     "website": "Website",
     "recentActivity": "Recent Activity"
   },
@@ -1067,7 +1072,23 @@
       "available": "Available",
       "sold": "Sold", 
       "reserved": "Reserved"
-    }
+    },
+    "sent": "Inquiry Sent",
+    "sentDesc": "Your inquiry has been sent successfully",
+    "favorited": "Favorited",
+    "favorite": "Add to Favorites",
+    "share": "Share",
+    "inquire": "Inquire",
+    "inquiryTitle": "Artwork Inquiry",
+    "inquiryEmail": "Email",
+    "inquiryPhone": "Phone",
+    "inquiryMessage": "Message",
+    "inquiryMessagePlaceholder": "Tell us about your interest in this artwork...",
+    "sendInquiry": "Send Inquiry",
+    "description": "Description",
+    "details": "Details",
+    "artist": "Artist",
+    "gallery": "Gallery"
   },
   "footer": {
     "newsletter": {
