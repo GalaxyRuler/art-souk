@@ -15,6 +15,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { GalleryEventsTable, GalleryWorksGrid, GalleryContactForm } from "@/components/GalleryComponents";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 interface Gallery {
   id: number;
@@ -142,24 +144,32 @@ export default function GalleryProfileEnhanced() {
 
   if (galleryLoading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="animate-pulse space-y-8">
-          <div className="h-64 bg-muted rounded-xl" />
-          <div className="h-32 bg-muted rounded-lg" />
-          <div className="h-96 bg-muted rounded-lg" />
-        </div>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <main className="max-w-7xl mx-auto px-4 py-8">
+          <div className="animate-pulse space-y-8">
+            <div className="h-64 bg-muted rounded-xl" />
+            <div className="h-32 bg-muted rounded-lg" />
+            <div className="h-96 bg-muted rounded-lg" />
+          </div>
+        </main>
+        <Footer />
       </div>
     );
   }
 
   if (!gallery) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <h1 className="text-2xl font-bold mb-4">{t('gallery.notFound')}</h1>
-        <p className="text-muted-foreground mb-8">{t('gallery.notFoundDescription')}</p>
-        <Button asChild>
-          <Link href="/galleries">{t('gallery.browseGalleries')}</Link>
-        </Button>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <main className="max-w-4xl mx-auto px-4 py-16 text-center">
+          <h1 className="text-2xl font-bold mb-4">{t('gallery.notFound')}</h1>
+          <p className="text-muted-foreground mb-8">{t('gallery.notFoundDescription')}</p>
+          <Button asChild>
+            <Link href="/galleries">{t('gallery.browseGalleries')}</Link>
+          </Button>
+        </main>
+        <Footer />
       </div>
     );
   }
@@ -169,8 +179,10 @@ export default function GalleryProfileEnhanced() {
   const galleryLocation = isRTL && gallery.locationAr ? gallery.locationAr : gallery.location;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Hero Section with Cover Image */}
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        {/* Hero Section with Cover Image */}
       <div className="relative mb-8">
         {gallery.coverImage && (
           <div className="h-64 md:h-80 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl overflow-hidden">
@@ -570,6 +582,8 @@ export default function GalleryProfileEnhanced() {
           </div>
         </TabsContent>
       </Tabs>
+      </main>
+      <Footer />
     </div>
   );
 }
