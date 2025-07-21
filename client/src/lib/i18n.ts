@@ -534,7 +534,8 @@ const enResources = {
       "guide": "Collector's Guide",
       "investment": "Art Investment",
       "support": "Support"
-    }
+    },
+    "copyright": "© 2024 Art Souk. All rights reserved."
   },
   "gallery": {
     "searchEvents": "Search events",
@@ -1107,7 +1108,8 @@ const arResources = {
       "guide": "دليل المقتني",
       "investment": "استثمار الفن",
       "support": "الدعم"
-    }
+    },
+    "copyright": "© 2024 سوق آرت. جميع الحقوق محفوظة."
   },
    "home": {
         welcome: "مرحباً {name}",
