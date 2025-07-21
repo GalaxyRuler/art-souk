@@ -271,7 +271,11 @@ export default function GalleryProfileEnhanced() {
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-amber-600">{galleryStats.avgPrice}</div>
+              <div className="text-2xl font-bold text-amber-600">
+                {galleryStats.avgPrice !== "0.00" 
+                  ? `${Number(galleryStats.avgPrice).toLocaleString()} ${galleryStats.currency}`
+                  : "-"}
+              </div>
               <div className="text-sm text-muted-foreground">{t('gallery.avgPrice')}</div>
             </CardContent>
           </Card>

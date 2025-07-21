@@ -63,7 +63,7 @@ router.get("/galleries/:id/stats", async (req, res) => {
       followersCount: followerResult[0]?.count || 0,
       artistsCount: artistCount[0]?.count || 0,
       artworksCount: artworkStats[0]?.count || 0,
-      avgPrice: artworkStats[0]?.avgPrice || 0,
+      avgPrice: artworkStats[0]?.avgPrice ? parseFloat(artworkStats[0].avgPrice).toFixed(2) : "0.00",
       exhibitionsCount: exhibitionStats[0]?.count || 0,
       totalViews: Math.floor(Math.random() * 10000),
       currency: "SAR"
