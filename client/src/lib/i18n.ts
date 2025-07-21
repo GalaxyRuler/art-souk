@@ -352,6 +352,7 @@ const enResources = {
   },
   "galleries": {
     "title": "Galleries",
+    "subtitle": "Explore prestigious galleries and exhibition spaces in Saudi Arabia and GCC countries",
     "featured": "Featured Galleries",
     "profile": "Gallery Profile",
     "about": "About",
@@ -360,6 +361,7 @@ const enResources = {
     "contact": "Contact",
     "location": "Location",
     "hours": "Opening Hours",
+    "website": "Website",
     "overview": "Overview",
     "events": "Events",
     "works": "Works",
@@ -384,7 +386,25 @@ const enResources = {
     "unfollow": "Unfollow",
     "following": "Following",
     "followers": "followers",
-    "viewMore": "View More"
+    "viewMore": "View More",
+    "search": {
+      "placeholder": "Search galleries by name..."
+    },
+    "filters": {
+      "location": "Location",
+      "allLocations": "All Locations"
+    },
+    "sort": {
+      "latest": "Latest",
+      "name": "Name A-Z",
+      "featured": "Featured First"
+    },
+    "results": "{{count}} galleries found",
+    "noResults": {
+      "title": "No galleries found",
+      "description": "Try adjusting your search terms or filters to find galleries.",
+      "clearFilters": "Clear All Filters"
+    }
   },
   "dashboard": {
     "title": "Dashboard",
@@ -533,8 +553,31 @@ const enResources = {
     "bahrain": "Bahrain",
     "oman": "Oman"
   },
+  "cities": {
+    "riyadh": "Riyadh",
+    "jeddah": "Jeddah",
+    "dammam": "Dammam",
+    "khobar": "Khobar",
+    "makkah": "Makkah",
+    "madinah": "Madinah",
+    "tabuk": "Tabuk",
+    "abha": "Abha",
+    "dubai": "Dubai",
+    "abuDhabi": "Abu Dhabi",
+    "sharjah": "Sharjah",
+    "ajman": "Ajman",
+    "fujairah": "Fujairah",
+    "rasAlKhaimah": "Ras Al Khaimah",
+    "kuwaitCity": "Kuwait City",
+    "doha": "Doha",
+    "manama": "Manama",
+    "muscat": "Muscat",
+    "salalah": "Salalah",
+    "sohar": "Sohar"
+  },
   "errors": {
     "loadingArtists": "Error loading artists",
+    "loadingGalleries": "Error loading galleries",
     "tryAgainLater": "Please try again later"
   },
   "shipping": {
@@ -1695,6 +1738,40 @@ const arResources = {
       "description": "جرب تعديل مصطلحات البحث أو المرشحات للعثور على معارض.",
       "clearFilters": "مسح جميع المرشحات"
     }
+  },
+  "cities": {
+    "riyadh": "الرياض",
+    "jeddah": "جدة",
+    "dammam": "الدمام",
+    "khobar": "الخبر",
+    "makkah": "مكة المكرمة",
+    "madinah": "المدينة المنورة",
+    "tabuk": "تبوك",
+    "abha": "أبها",
+    "dubai": "دبي",
+    "abuDhabi": "أبو ظبي",
+    "sharjah": "الشارقة",
+    "ajman": "عجمان",
+    "fujairah": "الفجيرة",
+    "rasAlKhaimah": "رأس الخيمة",
+    "kuwaitCity": "مدينة الكويت",
+    "doha": "الدوحة",
+    "manama": "المنامة",
+    "muscat": "مسقط",
+    "salalah": "صلالة",
+    "sohar": "صحار"
+  },
+  "errors": {
+    "loadingArticles": "خطأ في تحميل المقالات",
+    "loadingGalleries": "خطأ في تحميل المعارض",
+    "networkError": "حدث خطأ في الشبكة",
+    "serverError": "حدث خطأ في الخادم",
+    "authError": "خطأ في المصادقة",
+    "permissionDenied": "تم رفض الإذن",
+    "notFound": "المورد غير موجود",
+    "validationError": "خطأ في التحقق",
+    "unknownError": "حدث خطأ غير معروف",
+    "tryAgainLater": "يرجى المحاولة مرة أخرى لاحقاً"
   },
 };
 
