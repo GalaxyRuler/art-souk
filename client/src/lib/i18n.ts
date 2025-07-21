@@ -849,7 +849,20 @@ const enResources = {
     "messageSent": "Message sent successfully",
     "messageError": "Error sending message",
     "messageErrorDescription": "Please try again later",
-    "messageResponseTime": "We'll respond within 24 hours"
+    "messageResponseTime": "We'll respond within 24 hours",
+    "artists": "Artists",
+    "artworks": "Artworks",
+    "exhibitions": "Exhibitions",
+    "avgPrice": "Average Price",
+    "overview": "Overview",
+    "events": "Events",
+    "works": "Works",
+    "contact": "Contact",
+    "aboutGallery": "About Gallery",
+    "noBiography": "No biography available",
+    "contactInfo": "Contact Info",
+    "visitWebsite": "Visit Website",
+    "viewMore": "View More"
   },
   "community": {
     "title": "Community",
@@ -1500,7 +1513,20 @@ const arResources = {
     "messageSent": "تم إرسال الرسالة بنجاح",
     "messageError": "خطأ في إرسال الرسالة",
     "messageErrorDescription": "يرجى المحاولة مرة أخرى لاحقاً",
-    "messageResponseTime": "سنرد خلال 24 ساعة"
+    "messageResponseTime": "سنرد خلال 24 ساعة",
+    "artists": "الفنانون",
+    "artworks": "الأعمال الفنية",
+    "exhibitions": "المعارض",
+    "avgPrice": "متوسط السعر",
+    "overview": "نظرة عامة",
+    "events": "الفعاليات",
+    "works": "الأعمال",
+    "contact": "اتصل",
+    "aboutGallery": "عن المعرض",
+    "noBiography": "لا توجد سيرة ذاتية متاحة",
+    "contactInfo": "معلومات الاتصال",
+    "visitWebsite": "زيارة الموقع",
+    "viewMore": "عرض المزيد"
   },
   "hero": {
     "description": "اكتشف فن الشرق الأوسط الاستثنائي",
