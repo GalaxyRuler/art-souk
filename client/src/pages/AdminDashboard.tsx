@@ -409,8 +409,8 @@ export default function AdminDashboard() {
                   >
                     <Globe className="h-5 w-5 text-blue-600" />
                     <div className="text-left">
-                      <p className="font-medium">Translation Management</p>
-                      <p className="text-xs text-muted-foreground">Manage all platform translations</p>
+                      <p className="font-medium">{t('admin.translationManagement')}</p>
+                      <p className="text-xs text-muted-foreground">{t('admin.manageTranslations')}</p>
                     </div>
                   </Button>
                   <Button 
@@ -420,8 +420,8 @@ export default function AdminDashboard() {
                   >
                     <Users className="h-5 w-5 text-green-600" />
                     <div className="text-left">
-                      <p className="font-medium">User Management</p>
-                      <p className="text-xs text-muted-foreground">Manage users and roles</p>
+                      <p className="font-medium">{t('admin.userManagement')}</p>
+                      <p className="text-xs text-muted-foreground">{t('admin.users')}</p>
                     </div>
                   </Button>
                   <Button 
@@ -431,8 +431,8 @@ export default function AdminDashboard() {
                   >
                     <ImageIcon className="h-5 w-5 text-purple-600" />
                     <div className="text-left">
-                      <p className="font-medium">Content Moderation</p>
-                      <p className="text-xs text-muted-foreground">Review submitted content</p>
+                      <p className="font-medium">{t('admin.contentManagement')}</p>
+                      <p className="text-xs text-muted-foreground">{t('admin.content')}</p>
                     </div>
                   </Button>
                   <Button 
@@ -442,7 +442,7 @@ export default function AdminDashboard() {
                   >
                     <AlertCircle className="h-5 w-5 text-amber-600" />
                     <div className="text-left">
-                      <p className="font-medium">KYC Verification</p>
+                      <p className="font-medium">{t('admin.kycDocuments')}</p>
                       <p className="text-xs text-muted-foreground">Review KYC documents</p>
                     </div>
                   </Button>
