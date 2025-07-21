@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Users, Palette, Building, ImageIcon, Star, TrendingUp, Activity, AlertCircle } from 'lucide-react';
+import { Users, Palette, Building, ImageIcon, Star, TrendingUp, Activity, AlertCircle, Globe } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { Navbar } from '@/components/Navbar';
@@ -394,6 +394,61 @@ export default function AdminDashboard() {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Quick Actions Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('admin.quickActions')}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Button 
+                    onClick={() => window.location.href = '/admin/translations'}
+                    variant="outline"
+                    className="flex items-center justify-center gap-2 h-auto py-4"
+                  >
+                    <Globe className="h-5 w-5 text-blue-600" />
+                    <div className="text-left">
+                      <p className="font-medium">Translation Management</p>
+                      <p className="text-xs text-muted-foreground">Manage all platform translations</p>
+                    </div>
+                  </Button>
+                  <Button 
+                    onClick={() => setSelectedTab('users')}
+                    variant="outline"
+                    className="flex items-center justify-center gap-2 h-auto py-4"
+                  >
+                    <Users className="h-5 w-5 text-green-600" />
+                    <div className="text-left">
+                      <p className="font-medium">User Management</p>
+                      <p className="text-xs text-muted-foreground">Manage users and roles</p>
+                    </div>
+                  </Button>
+                  <Button 
+                    onClick={() => setSelectedTab('content')}
+                    variant="outline"
+                    className="flex items-center justify-center gap-2 h-auto py-4"
+                  >
+                    <ImageIcon className="h-5 w-5 text-purple-600" />
+                    <div className="text-left">
+                      <p className="font-medium">Content Moderation</p>
+                      <p className="text-xs text-muted-foreground">Review submitted content</p>
+                    </div>
+                  </Button>
+                  <Button 
+                    onClick={() => setSelectedTab('kyc-documents')}
+                    variant="outline"
+                    className="flex items-center justify-center gap-2 h-auto py-4"
+                  >
+                    <AlertCircle className="h-5 w-5 text-amber-600" />
+                    <div className="text-left">
+                      <p className="font-medium">KYC Verification</p>
+                      <p className="text-xs text-muted-foreground">Review KYC documents</p>
+                    </div>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Real-time Activity Feed */}
             <Card>
