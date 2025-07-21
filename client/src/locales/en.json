@@ -7,7 +7,13 @@
     "workshops": "Workshops",
     "events": "Events",
     "dashboard": "Dashboard",
-    "commissions": "Commissions"
+    "commissions": "Commissions",
+    "profile": "Profile",
+    "login": "Login",
+    "logout": "Logout",
+    "admin": "Admin",
+    "sellerDashboard": "Seller Dashboard",
+    "collectorDashboard": "Collector Dashboard"
   },
   "common": {
     "loading": "Loading...",
