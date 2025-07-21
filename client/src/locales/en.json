@@ -643,6 +643,97 @@
     "permissions": "Permissions",
     "roles": "Roles"
   },
+  "social": {
+    "unfollowed": "Unfollowed",
+    "followed": "Followed",
+    "unfollowedDesc": "You have unfollowed this user",
+    "followedDesc": "You are now following this user",
+    "following": "Following",
+    "follow": "Follow",
+    "unliked": "Unliked",
+    "liked": "Liked",
+    "unlikedDesc": "You unliked this item",
+    "likedDesc": "You liked this item",
+    "commentAdded": "Comment added",
+    "commentAddedDesc": "Your comment has been added",
+    "commentUpdated": "Comment updated",
+    "commentUpdatedDesc": "Your comment has been updated",
+    "commentDeleted": "Comment deleted",
+    "commentDeletedDesc": "Your comment has been deleted",
+    "confirmDelete": "Are you sure you want to delete this comment?",
+    "comments": "Comments",
+    "writeComment": "Write a comment...",
+    "postComment": "Post Comment",
+    "noComments": "No comments yet",
+    "signInToComment": "Sign in to comment",
+    "website": "Website",
+    "recentActivity": "Recent Activity"
+  },
+  "site": {
+    "name": "Art Souk",
+    "tagline": "Saudi & GCC Art Marketplace"
+  },
+  "artwork": {
+    "status": {
+      "available": "Available",
+      "sold": "Sold", 
+      "reserved": "Reserved"
+    }
+  },
+  "footer": {
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Stay updated with the latest art and exhibitions",
+      "placeholder": "Enter your email",
+      "subscribe": "Subscribe"
+    },
+    "explore": {
+      "title": "Explore"
+    },
+    "resources": {
+      "title": "Resources",
+      "guide": "Collector's Guide",
+      "investment": "Art Investment",
+      "support": "Support"
+    }
+  },
+  "editorial": {
+    "description": "Latest art news and insights",
+    "viewAll": "View All Articles"
+  },
+  "invoice": {
+    "invoiceNumber": "Invoice Number",
+    "type": "Invoice Type",
+    "typeStandard": "Standard Tax Invoice",
+    "typeSimplified": "Simplified Tax Invoice",
+    "paymentMethod": "Payment Method",
+    "sellerInfo": "Seller Information",
+    "vatNumber": "VAT Number",
+    "buyerInfo": "Buyer Information",
+    "buyerVatNumber": "Buyer VAT Number",
+    "itemDetails": "Item Details",
+    "referenceNumber": "Reference Number",
+    "supplyDate": "Supply Date",
+    "amountDetails": "Amount Details",
+    "subtotal": "Subtotal",
+    "discountPercentage": "Discount %",
+    "shippingAmount": "Shipping Amount",
+    "vat": "VAT",
+    "total": "Total",
+    "zatcaInfo": "ZATCA Information",
+    "zatcaUuid": "ZATCA UUID",
+    "invoiceHash": "Invoice Hash",
+    "qrCodeGenerated": "QR Code Generated",
+    "digitalSignature": "Digital Signature",
+    "notes": "Notes",
+    "downloadPdf": "Download PDF",
+    "status": {
+      "draft": "Draft",
+      "sent": "Sent",
+      "paid": "Paid",
+      "overdue": "Overdue"
+    }
+  },
   "forms": {
     "required": "This field is required",
     "invalid": "Please enter a valid value",

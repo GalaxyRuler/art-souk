@@ -497,5 +497,76 @@
     "signInToComment": "سجل الدخول للتعليق",
     "website": "الموقع الإلكتروني",
     "recentActivity": "النشاط الأخير"
+  },
+  "site": {
+    "name": "سوق آرت",
+    "tagline": "سوق الفن السعودي ودول الخليج"
+  },
+  "artwork": {
+    "status": {
+      "available": "متاح",
+      "sold": "مباع",
+      "reserved": "محجوز"
+    }
+  },
+  "auth": {
+    "signin": "تسجيل الدخول",
+    "signup": "التسجيل",
+    "logout": "تسجيل الخروج",
+    "loginRequired": "يرجى تسجيل الدخول"
+  },
+  "footer": {
+    "newsletter": {
+      "title": "النشرة الإخبارية",
+      "description": "ابق على اطلاع بآخر الأعمال الفنية والمعارض",
+      "placeholder": "أدخل بريدك الإلكتروني",
+      "subscribe": "اشترك"
+    },
+    "explore": {
+      "title": "استكشف"
+    },
+    "resources": {
+      "title": "الموارد",
+      "guide": "دليل المقتني",
+      "investment": "استثمار الفن",
+      "support": "الدعم"
+    }
+  },
+  "editorial": {
+    "description": "آخر أخبار الفن والرؤى",
+    "viewAll": "عرض جميع المقالات"
+  },
+  "invoice": {
+    "invoiceNumber": "رقم الفاتورة",
+    "type": "نوع الفاتورة",
+    "typeStandard": "فاتورة ضريبية معيارية",
+    "typeSimplified": "فاتورة ضريبية مبسطة",
+    "paymentMethod": "طريقة الدفع",
+    "sellerInfo": "معلومات البائع",
+    "vatNumber": "الرقم الضريبي",
+    "buyerInfo": "معلومات المشتري",
+    "buyerVatNumber": "الرقم الضريبي للمشتري",
+    "itemDetails": "تفاصيل العناصر",
+    "referenceNumber": "الرقم المرجعي",
+    "supplyDate": "تاريخ التوريد",
+    "amountDetails": "تفاصيل المبلغ",
+    "subtotal": "المجموع الفرعي",
+    "discountPercentage": "نسبة الخصم",
+    "shippingAmount": "مبلغ الشحن",
+    "vat": "ضريبة القيمة المضافة",
+    "total": "المجموع",
+    "zatcaInfo": "معلومات زاتكا",
+    "zatcaUuid": "معرف زاتكا",
+    "invoiceHash": "هاش الفاتورة",
+    "qrCodeGenerated": "تم إنشاء رمز الاستجابة السريعة",
+    "digitalSignature": "التوقيع الرقمي",
+    "notes": "ملاحظات",
+    "downloadPdf": "تحميل PDF",
+    "status": {
+      "draft": "مسودة",
+      "sent": "مرسل",
+      "paid": "مدفوع",
+      "overdue": "متأخر"
+    }
   }
 }
