@@ -495,7 +495,7 @@ const enResources = {
     }
   },
   "home": {
-    "welcome": "Welcome {name}",
+    "welcome": "Welcome {{name}}",
     "user": "User",
     "subtitle": "Discover exceptional art from the region",
     "stats": {
@@ -1112,7 +1112,7 @@ const arResources = {
     "copyright": "© 2024 سوق آرت. جميع الحقوق محفوظة."
   },
    "home": {
-        welcome: "مرحباً {name}",
+        welcome: "مرحباً {{name}}",
         user: "المستخدم",
         subtitle: "اكتشف الفن الاستثنائي من المنطقة",
         stats: {
@@ -1359,7 +1359,12 @@ i18n
     },
 
     interpolation: {
-      escapeValue: false
+      escapeValue: false,
+      format: function(value, format, lng) {
+        if (format === 'uppercase') return value.toUpperCase();
+        if (value instanceof Date) return value.toLocaleDateString(lng);
+        return value;
+      }
     }
   });
 
