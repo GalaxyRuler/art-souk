@@ -6,17 +6,7 @@
     "auctions": "Auctions",
     "workshops": "Workshops",
     "events": "Events",
-    "community": "Community",
-    "editorial": "Editorial",
-    "virtualExhibitions": "Virtual Exhibitions",
-    "search": "Search",
-    "profile": "Profile",
     "dashboard": "Dashboard",
-    "login": "Login",
-    "logout": "Logout",
-    "admin": "Admin",
-    "sellerDashboard": "Seller Dashboard",
-    "collectorDashboard": "Collector Dashboard",
     "commissions": "Commissions"
   },
   "common": {
@@ -70,10 +60,15 @@
     "siteName": "Art Souk"
   },
   "hero": {
-    "title": "Discover Extraordinary Art from Saudi Arabia & the GCC",
-    "subtitle": "Connect with renowned artists, explore curated collections, and own pieces that tell the story of our rich cultural heritage",
-    "cta": "Explore Collections",
-    "secondaryCta": "Join as Artist"
+    "description": "Discover exceptional Middle Eastern art",
+    "cta": {
+      "browse": "Browse Artworks",
+      "start": "Get Started"
+    },
+    "title": "Art Souk",
+    "subtitle": "Saudi & GCC Art Marketplace",
+    "featuredArt": "Featured Art",
+    "featuredArtist": "Featured Artist"
   },
   "artists": {
     "title": "Artists",
@@ -142,7 +137,7 @@
     },
     "stats": {
       "live": "Live",
-      "upcoming": "Upcoming", 
+      "upcoming": "Upcoming",
       "totalBids": "Total Bids",
       "total": "Total"
     },
@@ -171,7 +166,7 @@
     "details": "Artwork Details",
     "artist": "Artist",
     "year": "Year",
-    "medium": "Medium", 
+    "medium": "Medium",
     "dimensions": "Dimensions",
     "price": "Price",
     "availability": "Availability",
@@ -192,9 +187,11 @@
     "shipping": "Shipping Information"
   },
   "artwork": {
-    "year": "Year",
-    "medium": "Medium", 
-    "dimensions": "Dimensions"
+    "status": {
+      "available": "Available",
+      "sold": "Sold",
+      "reserved": "Reserved"
+    }
   },
   "commissions": {
     "title": "Commissions",
@@ -252,7 +249,7 @@
     "searchEvents": "Search events",
     "allEvents": "All events",
     "upcoming": "Upcoming",
-    "ongoing": "Ongoing", 
+    "ongoing": "Ongoing",
     "completed": "Completed",
     "allArtworks": "All artworks",
     "available": "Available",
@@ -273,78 +270,81 @@
     "viewMore": "View More"
   },
   "dashboard": {
-    "profile": {
-      "edit": "Edit Profile",
-      "firstName": "First Name",
-      "lastName": "Last Name", 
-      "phone": "Phone",
-      "location": "Location",
-      "bio": "Bio"
-    },
-    "quickStats": {
-      "title": "Quick Stats",
-      "favorites": "Favorites",
-      "inquiries": "Inquiries",
-      "views": "Views"
-    },
-    "managementTools": "Management Tools",
-    "favorites": {
-      "title": "My Favorites",
-      "empty": "No favorites yet",
-      "emptyDescription": "Discover and save artworks you love",
-      "browseArtworks": "Browse Artworks"
-    },
-    "inquiries": {
-      "title": "My Inquiries",
-      "count": "inquiries",
-      "response": "Response",
-      "empty": "No inquiries yet",
-      "emptyDescription": "Start inquiring about artworks you're interested in",
-      "browseArtworks": "Browse Artworks"
-    },
-    "settings": {
-      "title": "Account Settings",
-      "preferences": "Preferences"
-    }
+    "title": "Dashboard",
+    "overview": "Overview",
+    "analytics": "Analytics",
+    "sales": "Sales",
+    "revenue": "Revenue",
+    "orders": "Orders",
+    "customers": "Customers",
+    "products": "Products",
+    "inventory": "Inventory",
+    "reports": "Reports",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "messages": "Messages",
+    "calendar": "Calendar",
+    "tasks": "Tasks",
+    "recent": "Recent Activity",
+    "performance": "Performance",
+    "metrics": "Metrics",
+    "insights": "Insights"
   },
   "editorial": {
     "title": "Editorial",
-    "subtitle": "Insights into the art world",
-    "search": {
-      "placeholder": "Search articles..."
-    },
-    "filters": {
-      "category": "Category",
-      "allCategories": "All Categories"
-    },
-    "categories": {
-      "art": "Art",
-      "interview": "Interview", 
-      "guide": "Guide",
-      "news": "News",
-      "market": "Market"
-    },
-    "sort": {
-      "latest": "Latest",
-      "popular": "Popular",
-      "featured": "Featured"
-    },
-    "noResults": {
-      "title": "No articles found",
-      "description": "Try adjusting your search or filters",
-      "clearFilters": "Clear filters"
-    },
-    "newsletter": {
-      "title": "Stay Updated",
-      "description": "Get the latest art news and insights",
-      "placeholder": "Enter your email",
-      "subscribe": "Subscribe"
-    }
+    "articles": "Articles",
+    "interviews": "Interviews",
+    "reviews": "Reviews",
+    "news": "News",
+    "featured": "Featured Articles",
+    "latest": "Latest Articles",
+    "author": "Author",
+    "publishedOn": "Published on",
+    "readTime": "min read",
+    "tags": "Tags",
+    "category": "Category",
+    "relatedArticles": "Related Articles",
+    "share": "Share Article",
+    "print": "Print",
+    "save": "Save for Later",
+    "comment": "Comment",
+    "comments": "Comments"
   },
   "auth": {
-    "required": "Authentication required",
-    "unauthorized": "Unauthorized access",
-    "loggingInAgain": "Logging in again..."
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "forgotPassword": "Forgot Password?",
+    "resetPassword": "Reset Password",
+    "changePassword": "Change Password",
+    "confirmPassword": "Confirm Password",
+    "email": "Email Address",
+    "password": "Password",
+    "newPassword": "New Password",
+    "currentPassword": "Current Password",
+    "rememberMe": "Remember Me",
+    "createAccount": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "loginWith": "Login with",
+    "registerWith": "Register with",
+    "google": "Google",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "apple": "Apple",
+    "or": "or",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "agreeToTerms": "I agree to the Terms of Service and Privacy Policy",
+    "emailVerification": "Email Verification",
+    "verifyEmail": "Verify Email",
+    "resendVerification": "Resend Verification",
+    "accountVerified": "Account Verified",
+    "welcomeBack": "Welcome Back",
+    "accountCreated": "Account Created Successfully"
   },
   "workshops": {
     "title": "Workshops",
@@ -371,7 +371,23 @@
     "price": "Price",
     "free": "Free",
     "certificate": "Certificate",
-    "cancellation": "Cancellation Policy"
+    "cancellation": "Cancellation Policy",
+    "loginToRegister": "Login to register",
+    "registrationSuccess": "Registration successful",
+    "registrationSuccessDesc": "You have been registered for the workshop",
+    "registrationFailed": "Registration failed",
+    "registrationFailedDesc": "Please try again later",
+    "loading": "Loading workshops...",
+    "categories": {
+      "painting": "Painting",
+      "sculpture": "Sculpture",
+      "drawing": "Drawing",
+      "digital_art": "Digital Art",
+      "photography": "Photography"
+    },
+    "skillLevel": {
+      "all": "All Levels"
+    }
   },
   "events": {
     "title": "Events",
@@ -386,7 +402,7 @@
   },
   "categories": {
     "painting": "Painting",
-    "sculpture": "Sculpture", 
+    "sculpture": "Sculpture",
     "photography": "Photography",
     "digital": "Digital Art",
     "mixed_media": "Mixed Media",
@@ -419,7 +435,7 @@
     "businessInfo": "Business Information",
     "businessName": "Business Name",
     "contactPerson": "Contact Person",
-    "contactPhone": "Contact Phone", 
+    "contactPhone": "Contact Phone",
     "contactEmail": "Contact Email",
     "shippingRates": "Shipping Rates",
     "domesticRate": "Domestic Rate",
@@ -438,7 +454,7 @@
     "customer": "Customer",
     "artwork": "Artwork",
     "addTracking": "Add Tracking",
-    "updateStatus": "Update Status", 
+    "updateStatus": "Update Status",
     "sendNotification": "Send Notification",
     "loadingUserRoles": "Loading user roles...",
     "deselectAll": "Deselect All",
@@ -449,14 +465,20 @@
     "selected": "selected"
   },
   "errors": {
-    "loadingArticles": "Error loading articles",
-    "networkError": "Network error occurred",
-    "serverError": "Server error occurred",
-    "authError": "Authentication error",
-    "permissionDenied": "Permission denied",
-    "notFound": "Resource not found",
-    "validationError": "Validation error",
-    "unknownError": "Unknown error occurred"
+    "general": "Something went wrong. Please try again.",
+    "network": "Network error. Please check your connection.",
+    "timeout": "Request timed out. Please try again.",
+    "unauthorized": "You are not authorized to perform this action.",
+    "forbidden": "Access denied.",
+    "notFound": "The requested item was not found.",
+    "conflict": "This item already exists.",
+    "validation": "Please check your input and try again.",
+    "server": "Server error. Please try again later.",
+    "maintenance": "System is under maintenance. Please try again later.",
+    "quota": "Quota exceeded. Please upgrade your plan.",
+    "payment": "Payment failed. Please check your payment details.",
+    "upload": "File upload failed. Please try again.",
+    "download": "File download failed. Please try again."
   },
   "artist": {
     "featured": "Featured Artist"
@@ -464,17 +486,10 @@
   "favorites": {
     "added": "Added to favorites",
     "addedDesc": "Artwork has been added to your favorites",
-    "removed": "Removed from favorites", 
+    "removed": "Removed from favorites",
     "removedDesc": "Artwork has been removed from your favorites",
     "error": "Error with favorites",
     "loginToFavorite": "Login to add to favorites"
-  },
-  "artwork": {
-    "status": {
-      "available": "Available",
-      "sold": "Sold",
-      "reserved": "Reserved"
-    }
   },
   "curators": {
     "title": "Curators",
@@ -488,21 +503,26 @@
     }
   },
   "footer": {
-    "newsletter": {
-      "title": "Newsletter",
-      "description": "Get the latest updates",
-      "placeholder": "Your email",
-      "subscribe": "Subscribe"
-    },
-    "explore": {
-      "title": "Explore"
-    },
-    "resources": {
-      "title": "Resources",
-      "guide": "Buyer's Guide",
-      "investment": "Art Investment",
-      "support": "Support"
-    }
+    "about": "About Art Souk",
+    "mission": "Our Mission",
+    "team": "Our Team",
+    "careers": "Careers",
+    "press": "Press",
+    "contact": "Contact Us",
+    "support": "Support",
+    "help": "Help Center",
+    "faq": "FAQ",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "cookies": "Cookie Policy",
+    "legal": "Legal",
+    "newsletter": "Newsletter",
+    "subscribe": "Subscribe",
+    "social": "Follow Us",
+    "copyright": "© 2024 Art Souk. All rights reserved.",
+    "language": "Language",
+    "currency": "Currency",
+    "region": "Region"
   },
   "gallery": {
     "searchEvents": "Search events",
@@ -510,22 +530,46 @@
     "upcoming": "Upcoming",
     "ongoing": "Ongoing",
     "completed": "Completed",
+    "featured": "Featured",
+    "maxAttendees": "Max attendees",
+    "viewDetails": "View Details",
+    "noEvents": "No events",
+    "noEventsDescription": "No events scheduled at this time",
     "allArtworks": "All artworks",
     "available": "Available",
     "sold": "Sold",
     "reserved": "Reserved",
+    "searchArtworks": "Search artworks",
     "sortNewest": "Newest first",
+    "sortOldest": "Oldest first",
+    "sortTitle": "Sort by title",
     "sortPriceLow": "Price: Low to high",
     "sortPriceHigh": "Price: High to low",
+    "artworksFound": "artworks found",
+    "noArtworksFound": "No artworks found",
+    "tryDifferentFilters": "Try different filters",
     "inquiryType": "Inquiry type",
     "generalInquiry": "General inquiry",
     "artworkInquiry": "Artwork inquiry",
     "exhibitionInquiry": "Exhibition inquiry",
     "pressInquiry": "Press inquiry",
+    "partnershipInquiry": "Partnership inquiry",
     "follow": "Follow",
     "unfollow": "Unfollow",
     "following": "Following",
-    "followers": "followers"
+    "followers": "followers",
+    "contactGallery": "Contact Gallery",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "subject": "Subject",
+    "message": "Message",
+    "sending": "Sending...",
+    "sendMessage": "Send Message",
+    "messageSent": "Message sent successfully",
+    "messageError": "Error sending message",
+    "messageErrorDescription": "Please try again later",
+    "messageResponseTime": "We'll respond within 24 hours"
   },
   "community": {
     "title": "Community",
@@ -551,26 +595,6 @@
     "moderator": "Moderator",
     "admin": "Admin",
     "member": "Member"
-  },
-  "editorial": {
-    "title": "Editorial",
-    "articles": "Articles",
-    "interviews": "Interviews",
-    "reviews": "Reviews",
-    "news": "News",
-    "featured": "Featured Articles",
-    "latest": "Latest Articles",
-    "author": "Author",
-    "publishedOn": "Published on",
-    "readTime": "min read",
-    "tags": "Tags",
-    "category": "Category",
-    "relatedArticles": "Related Articles",
-    "share": "Share Article",
-    "print": "Print",
-    "save": "Save for Later",
-    "comment": "Comment",
-    "comments": "Comments"
   },
   "profile": {
     "title": "Profile",
@@ -598,27 +622,6 @@
     "purchases": "Purchases",
     "bids": "Bids",
     "inquiries": "Inquiries"
-  },
-  "dashboard": {
-    "title": "Dashboard",
-    "overview": "Overview",
-    "analytics": "Analytics",
-    "sales": "Sales",
-    "revenue": "Revenue",
-    "orders": "Orders",
-    "customers": "Customers",
-    "products": "Products",
-    "inventory": "Inventory",
-    "reports": "Reports",
-    "settings": "Settings",
-    "notifications": "Notifications",
-    "messages": "Messages",
-    "calendar": "Calendar",
-    "tasks": "Tasks",
-    "recent": "Recent Activity",
-    "performance": "Performance",
-    "metrics": "Metrics",
-    "insights": "Insights"
   },
   "admin": {
     "title": "Admin Dashboard",
@@ -678,22 +681,6 @@
     "confirmed": "Confirmed successfully",
     "cancelled": "Cancelled successfully"
   },
-  "errors": {
-    "general": "Something went wrong. Please try again.",
-    "network": "Network error. Please check your connection.",
-    "timeout": "Request timed out. Please try again.",
-    "unauthorized": "You are not authorized to perform this action.",
-    "forbidden": "Access denied.",
-    "notFound": "The requested item was not found.",
-    "conflict": "This item already exists.",
-    "validation": "Please check your input and try again.",
-    "server": "Server error. Please try again later.",
-    "maintenance": "System is under maintenance. Please try again later.",
-    "quota": "Quota exceeded. Please upgrade your plan.",
-    "payment": "Payment failed. Please check your payment details.",
-    "upload": "File upload failed. Please try again.",
-    "download": "File download failed. Please try again."
-  },
   "pagination": {
     "first": "First",
     "last": "Last",
@@ -744,63 +731,5 @@
     "rating": "Highest Rated",
     "featured": "Featured First",
     "random": "Random"
-  },
-  "auth": {
-    "login": "Login",
-    "logout": "Logout",
-    "register": "Register",
-    "signUp": "Sign Up",
-    "signIn": "Sign In",
-    "signOut": "Sign Out",
-    "forgotPassword": "Forgot Password?",
-    "resetPassword": "Reset Password",
-    "changePassword": "Change Password",
-    "confirmPassword": "Confirm Password",
-    "email": "Email Address",
-    "password": "Password",
-    "newPassword": "New Password",
-    "currentPassword": "Current Password",
-    "rememberMe": "Remember Me",
-    "createAccount": "Create Account",
-    "alreadyHaveAccount": "Already have an account?",
-    "dontHaveAccount": "Don't have an account?",
-    "loginWith": "Login with",
-    "registerWith": "Register with",
-    "google": "Google",
-    "facebook": "Facebook",
-    "twitter": "Twitter",
-    "apple": "Apple",
-    "or": "or",
-    "termsOfService": "Terms of Service",
-    "privacyPolicy": "Privacy Policy",
-    "agreeToTerms": "I agree to the Terms of Service and Privacy Policy",
-    "emailVerification": "Email Verification",
-    "verifyEmail": "Verify Email",
-    "resendVerification": "Resend Verification",
-    "accountVerified": "Account Verified",
-    "welcomeBack": "Welcome Back",
-    "accountCreated": "Account Created Successfully"
-  },
-  "footer": {
-    "about": "About Art Souk",
-    "mission": "Our Mission",
-    "team": "Our Team",
-    "careers": "Careers",
-    "press": "Press",
-    "contact": "Contact Us",
-    "support": "Support",
-    "help": "Help Center",
-    "faq": "FAQ",
-    "terms": "Terms of Service",
-    "privacy": "Privacy Policy",
-    "cookies": "Cookie Policy",
-    "legal": "Legal",
-    "newsletter": "Newsletter",
-    "subscribe": "Subscribe",
-    "social": "Follow Us",
-    "copyright": "© 2024 Art Souk. All rights reserved.",
-    "language": "Language",
-    "currency": "Currency",
-    "region": "Region"
   }
 }

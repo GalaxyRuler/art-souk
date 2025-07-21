@@ -239,13 +239,16 @@
     "required": "تسجيل الدخول مطلوب",
     "unauthorized": "وصول غير مصرح",
     "loggingInAgain": "جاري تسجيل الدخول مرة أخرى...",
-    "loginRequired": "يرجى تسجيل الدخول"
+    "loginRequired": "يرجى تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "signin": "تسجيل الدخول",
+    "signup": "التسجيل"
   },
   "editorial": {
     "title": "المحتوى التحريري",
     "subtitle": "نظرة عميقة في عالم الفن",
-    "description": "مقالات ومقابلات فنية",
-    "viewAll": "عرض الكل",
+    "description": "اكتشف مقالات وأفكار فنية",
+    "viewAll": "عرض جميع المقالات",
     "search": {
       "placeholder": "البحث في المقالات..."
     },
@@ -335,22 +338,57 @@
     "upcoming": "قادم",
     "ongoing": "جاري",
     "completed": "مكتمل",
+    "featured": "مميز",
+    "maxAttendees": "أقصى عدد حضور",
+    "viewDetails": "عرض التفاصيل",
+    "noEvents": "لا توجد فعاليات",
+    "noEventsDescription": "لا توجد فعاليات مجدولة في هذا الوقت",
     "allArtworks": "جميع الأعمال الفنية",
     "available": "متاح",
     "sold": "مباع",
     "reserved": "محجوز",
+    "searchArtworks": "البحث في الأعمال الفنية",
     "sortNewest": "الأحدث أولاً",
+    "sortOldest": "الأقدم أولاً",
+    "sortTitle": "ترتيب حسب العنوان",
     "sortPriceLow": "السعر: من الأقل للأعلى",
     "sortPriceHigh": "السعر: من الأعلى للأقل",
+    "artworksFound": "عمل فني موجود",
+    "noArtworksFound": "لا توجد أعمال فنية",
+    "tryDifferentFilters": "جرب مرشحات مختلفة",
     "inquiryType": "نوع الاستفسار",
     "generalInquiry": "استفسار عام",
     "artworkInquiry": "استفسار عن عمل فني",
     "exhibitionInquiry": "استفسار عن معرض",
     "pressInquiry": "استفسار صحفي",
+    "partnershipInquiry": "استفسار شراكة",
     "follow": "متابعة",
     "unfollow": "إلغاء المتابعة",
     "following": "متابَع",
-    "followers": "متابعون"
+    "followers": "متابعون",
+    "contactGallery": "اتصل بالمعرض",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "subject": "الموضوع",
+    "message": "الرسالة",
+    "sending": "جاري الإرسال...",
+    "sendMessage": "إرسال رسالة",
+    "messageSent": "تم إرسال الرسالة بنجاح",
+    "messageError": "خطأ في إرسال الرسالة",
+    "messageErrorDescription": "يرجى المحاولة مرة أخرى لاحقاً",
+    "messageResponseTime": "سنرد خلال 24 ساعة"
+  },
+  "hero": {
+    "description": "اكتشف فن الشرق الأوسط الاستثنائي",
+    "cta": {
+      "browse": "تصفح الأعمال الفنية",
+      "start": "ابدأ الآن"
+    },
+    "title": "سوق آرت",
+    "subtitle": "سوق الفن السعودي ودول الخليج",
+    "featuredArt": "الفن المميز",
+    "featuredArtist": "الفنان المميز"
   },
   "shipping": {
     "title": "إدارة الشحن",
@@ -412,8 +450,52 @@
     "notFound": "المورد غير موجود",
     "validationError": "خطأ في التحقق",
     "unknownError": "حدث خطأ غير معروف"
+  },
+  "workshops": {
+    "loginToRegister": "سجل الدخول للتسجيل",
+    "registrationSuccess": "تم التسجيل بنجاح",
+    "registrationSuccessDesc": "تم تسجيلك في ورشة العمل",
+    "registrationFailed": "فشل التسجيل",
+    "registrationFailedDesc": "يرجى المحاولة مرة أخرى لاحقاً",
+    "loading": "جاري تحميل ورش العمل...",
+    "online": "عبر الإنترنت",
+    "free": "مجاني",
+    "full": "مكتمل",
+    "categories": {
+      "painting": "الرسم",
+      "sculpture": "النحت",
+      "drawing": "الرسم بالقلم",
+      "digital_art": "الفن الرقمي",
+      "photography": "التصوير"
+    },
+    "skillLevel": {
+      "all": "جميع المستويات"
+    }
+  },
+  "social": {
+    "unfollowed": "إلغاء المتابعة",
+    "followed": "تم المتابعة",
+    "unfollowedDesc": "ألغيت متابعة هذا المستخدم",
+    "followedDesc": "أنت تتابع هذا المستخدم الآن",
+    "following": "متابعة",
+    "follow": "تابع",
+    "unliked": "لم يعد معجباً",
+    "liked": "أعجبني",
+    "unlikedDesc": "ألغيت إعجابك بهذا العنصر",
+    "likedDesc": "أعجبك هذا العنصر",
+    "commentAdded": "تمت إضافة التعليق",
+    "commentAddedDesc": "تمت إضافة تعليقك",
+    "commentUpdated": "تم تحديث التعليق",
+    "commentUpdatedDesc": "تم تحديث تعليقك",
+    "commentDeleted": "تم حذف التعليق",
+    "commentDeletedDesc": "تم حذف تعليقك",
+    "confirmDelete": "هل أنت متأكد من أنك تريد حذف هذا التعليق؟",
+    "comments": "التعليقات",
+    "writeComment": "اكتب تعليقاً...",
+    "postComment": "نشر التعليق",
+    "noComments": "لا توجد تعليقات بعد",
+    "signInToComment": "سجل الدخول للتعليق",
+    "website": "الموقع الإلكتروني",
+    "recentActivity": "النشاط الأخير"
   }
 }
-    "achievementPoints": "نقاط الإنجاز",
-    "artistNotFound": "الفنان غير موجود",
-    "badges": {
