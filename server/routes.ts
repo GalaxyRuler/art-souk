@@ -519,21 +519,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Register admin and seller routes AFTER auth routes
-  app.use('/api/admin', adminRouter);
-  app.use('/api/seller', sellerRouter);
-
-  // Use enhanced artist profile router
-  app.use('/api/artists', artistProfileRouter);
-  
-  // Use price alerts router
-  app.use('/api/price-alerts', priceAlertsRouter);
-
-  // Use representation requests router
-  app.use('/api/representation-requests', representationRequestsRouter);
-  app.use('/api', galleryEnhanced);
-
-  // First-time admin setup endpoint - allows creating the first admin without authentication
+  // First-time admin setup endpoint - must be BEFORE admin router to avoid middleware
   app.post('/api/admin/setup', rateLimiters.auth, async (req: any, res) => {
     try {
       // First check if there are any admins already
@@ -579,6 +565,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to create admin user" });
     }
   });
+
+  // Register admin and seller routes AFTER auth routes and setup endpoint
+  app.use('/api/admin', adminRouter);
+  app.use('/api/seller', sellerRouter);
+
+  // Use enhanced artist profile router
+  app.use('/api/artists', artistProfileRouter);
+  
+  // Use price alerts router
+  app.use('/api/price-alerts', priceAlertsRouter);
+
+  // Use representation requests router
+  app.use('/api/representation-requests', representationRequestsRouter);
+  app.use('/api', galleryEnhanced);
 
   // Note: Admin endpoints are now handled by the admin router at /api/admin/*
   // This provides proper middleware and role checking
