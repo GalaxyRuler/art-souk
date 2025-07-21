@@ -893,7 +893,7 @@ const enResources = {
     "copied": "Copied to clipboard",
     "shared": "Shared successfully",
     "subscribed": "Subscribed successfully",
-    "unsubscribed": "Unsubscribed successfully",
+    "unsubscribedsuccessfully",
     "confirmed": "Confirmed successfully",
     "cancelled": "Cancelled successfully"
   },
@@ -1639,7 +1639,63 @@ const arResources = {
     "viewArtwork": "عرض العمل الفني",
     "artworkNotFound": "العمل الفني غير موجود",
     "backToArtworks": "العودة للأعمال الفنية"
-  }
+  },
+  "galleries": {
+    "title": "المعارض",
+    "subtitle": "استكشف المعارض المرموقة ومساحات العرض في المملكة العربية السعودية ودول مجلس التعاون الخليجي",
+    "featured": "المعارض المميزة",
+    "profile": "ملف المعرض",
+    "about": "حول",
+    "artists": "الفنانون المُمثَّلون",
+    "exhibitions": "المعارض",
+    "contact": "اتصال",
+    "location": "الموقع",
+    "hours": "ساعات العمل",
+    "website": "الموقع الإلكتروني",
+    "overview": "نظرة عامة",
+    "events": "الفعاليات",
+    "works": "الأعمال",
+    "searchEvents": "البحث في الفعاليات",
+    "allEvents": "جميع الفعاليات",
+    "upcoming": "قادم",
+    "ongoing": "جاري",
+    "completed": "مكتمل",
+    "allArtworks": "جميع الأعمال الفنية",
+    "available": "متاح",
+    "sold": "مباع",
+    "reserved": "محجوز",
+    "sortNewest": "الأحدث أولاً",
+    "sortPriceLow": "السعر: من الأقل للأعلى",
+    "sortPriceHigh": "السعر:من الأعلى للأقل",
+    "inquiryType": "نوع الاستفسار",
+    "generalInquiry": "استفسار عام",
+    "artworkInquiry": "استفسار عن عمل فني",
+    "exhibitionInquiry": "استفسار عن معرض",
+    "pressInquiry": "استفسار صحفي",
+    "follow": "متابعة",
+    "unfollow": "إلغاء المتابعة",
+    "following": "متابَع",
+    "followers": "متابعون",
+    "viewMore": "عرض المزيد",
+    "search": {
+      "placeholder": "البحث في المعارض بالاسم..."
+    },
+    "filters": {
+      "location": "الموقع",
+      "allLocations": "جميع المواقع"
+    },
+    "sort": {
+      "latest": "الأحدث",
+      "name": "الاسم أ-ي",
+      "featured": "المميز أولاً"
+    },
+    "results": "{{count}} معرض موجود",
+    "noResults": {
+      "title": "لا توجد معارض",
+      "description": "جرب تعديل مصطلحات البحث أو المرشحات للعثور على معارض.",
+      "clearFilters": "مسح جميع المرشحات"
+    }
+  },
 };
 
 i18n
