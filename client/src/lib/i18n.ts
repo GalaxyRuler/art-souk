@@ -456,6 +456,19 @@ const enResources = {
     "followingGallery": "Following gallery",
     "unfollowDescription": "You are no longer following this gallery",
     "followDescription": "You are now following this gallery",
+    "overview": "Overview",
+    "contactForm": {
+      "title": "Contact Gallery",
+      "name": "Name",
+      "email": "Email", 
+      "phone": "Phone",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send Message",
+      "sending": "Sending...",
+      "success": "Message sent successfully",
+      "error": "Error sending message"
+    },
     "tabs": {
       "overview": "Overview",
       "artworks": "Artworks", 
@@ -882,7 +895,8 @@ const enResources = {
     "accountSettings": "Account Settings",
     "changePassword": "Change Password",
     "deleteAccount": "Delete Account",
-    "favorites": "Favorites",
+    "favorites": "```text
+Favorites",
     "following": "Following",
     "followers": "Followers",
     "collections": "Collections",
@@ -1668,7 +1682,7 @@ const arResources = {
     },
     "countries": {
       "saudiArabia": "المملكة العربية السعودية",
-      "uae": "الإمارات العربية المتحدة",
+      "uae": "الإمارات العربية المتحدة",```text
       "kuwait": "الكويت",
       "qatar": "قطر",
       "bahrain": "البحرين",
@@ -1860,13 +1874,6 @@ const arResources = {
     "followingGallery": "متابعة المعرض",
     "unfollowDescription": "لم تعد تتابع هذا المعرض",
     "followDescription": "أنت تتابع هذا المعرض الآن",
-    "tabs": {
-      "overview": "نظرة عامة",
-      "artworks": "الأعمال الفنية",
-      "artists": "الفنانون", 
-      "exhibitions": "المعارض",
-      "events": "الفعاليات"
-    },
     "overview": "نظرة عامة",
     "contactForm": {
       "title": "اتصل بالمعرض",
