@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'wouter';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -7,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
-import { Search, Save, Download, Upload, Globe, AlertCircle } from 'lucide-react';
+import { Search, Save, Download, Upload, Globe, AlertCircle, ArrowLeft } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 
@@ -239,14 +240,22 @@ export default function TranslationManagement() {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <Globe className="h-6 w-6" />
-                Translation Management
-              </CardTitle>
-              <CardDescription>
-                Manage all translations for the Art Souk platform
-              </CardDescription>
+            <div className="flex items-center gap-4">
+              <Link href="/admin">
+                <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to Admin
+                </Button>
+              </Link>
+              <div>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Globe className="h-6 w-6" />
+                  Translation Management
+                </CardTitle>
+                <CardDescription>
+                  Manage all translations for the Art Souk platform
+                </CardDescription>
+              </div>
             </div>
             <div className="flex gap-2">
               <Button
