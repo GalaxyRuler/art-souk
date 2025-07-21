@@ -33,14 +33,15 @@ router.get("/galleries/:id/stats", async (req, res) => {
         eq(schema.follows.entityId, id)
       ));
 
-    // Get artwork count and average price
+    // Get artwork count and average price from all artists represented by this gallery
     const artworkStats = await db
       .select({
-        count: sql<number>`COUNT(*)`.as('count'),
+        count: sql<number>`COUNT(DISTINCT ${schema.artworks.id})`.as('count'),
         avgPrice: sql<number>`AVG(CAST(${schema.artworks.price} AS DECIMAL))`.as('avgPrice'),
       })
       .from(schema.artworks)
-      .where(eq(schema.artworks.artistId, id));
+      .innerJoin(schema.artistGalleries, eq(schema.artworks.artistId, schema.artistGalleries.artistId))
+      .where(eq(schema.artistGalleries.galleryId, id));
 
     // Get exhibition count
     const exhibitionStats = await db
@@ -50,8 +51,17 @@ router.get("/galleries/:id/stats", async (req, res) => {
       .from(schema.galleryEvents)
       .where(eq(schema.galleryEvents.galleryId, id));
 
+    // Get artist count
+    const artistCount = await db
+      .select({
+        count: sql<number>`COUNT(*)`.as('count'),
+      })
+      .from(schema.artistGalleries)
+      .where(eq(schema.artistGalleries.galleryId, id));
+
     const stats = {
       followersCount: followerResult[0]?.count || 0,
+      artistsCount: artistCount[0]?.count || 0,
       artworksCount: artworkStats[0]?.count || 0,
       avgPrice: artworkStats[0]?.avgPrice || 0,
       exhibitionsCount: exhibitionStats[0]?.count || 0,
