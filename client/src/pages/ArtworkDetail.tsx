@@ -175,9 +175,9 @@ export default function ArtworkDetail() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">Artwork not found</h1>
+          <h1 className="text-2xl font-bold text-foreground mb-4">{t("common.artworkNotFound")}</h1>
           <Link href="/">
-            <Button>Return to Home</Button>
+            <Button>{t("common.returnToHome")}</Button>
           </Link>
         </div>
       </div>
@@ -208,8 +208,8 @@ export default function ArtworkDetail() {
     } else {
       navigator.clipboard.writeText(window.location.href);
       toast({
-        title: "Link copied",
-        description: "Artwork link copied to clipboard",
+        title: t("common.linkCopiedTitle"),
+        description: t("common.artworkLinkCopied"),
       });
     }
   };
@@ -392,7 +392,7 @@ export default function ArtworkDetail() {
                         className="w-full bg-brand-gradient"
                         disabled={inquiryMutation.isPending}
                       >
-                        {inquiryMutation.isPending ? "Sending..." : t("artwork.sendInquiry")}
+                        {inquiryMutation.isPending ? t("common.sending") : t("artwork.sendInquiry")}
                       </Button>
                     </form>
                   </DialogContent>
