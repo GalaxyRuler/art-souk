@@ -3,7 +3,7 @@ import { db } from "../db.js";
 import { isAuthenticated } from "../replitAuth.js";
 import { z } from "zod";
 import * as schema from "@shared/schema";
-import { eq, desc, and, or, ilike, sql, count } from "drizzle-orm";
+import { eq, desc, and, or, ilike, sql, count, inArray } from "drizzle-orm";
 
 const router = Router();
 
@@ -111,7 +111,20 @@ router.get("/galleries/:id/artworks", async (req, res) => {
     const id = parseInt(req.params.id);
     const { availability, limit = 20, offset = 0 } = req.query;
 
-    let whereConditions = [eq(schema.artworks.artistId, id)];
+    // First get artists represented by this gallery
+    const representedArtists = await db
+      .select({
+        artistId: schema.artistGalleries.artistId,
+      })
+      .from(schema.artistGalleries)
+      .where(eq(schema.artistGalleries.galleryId, id));
+
+    if (!representedArtists.length) {
+      return res.json([]);
+    }
+
+    const artistIds = representedArtists.map(ra => ra.artistId);
+    let whereConditions = [inArray(schema.artworks.artistId, artistIds)];
 
     if (availability && availability !== 'all') {
       whereConditions.push(eq(schema.artworks.availability, availability as string));
