@@ -56,7 +56,6 @@ const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
 const AdminTest = lazy(() => import("@/pages/AdminTest"));
 const AuthTest = lazy(() => import("@/pages/AuthTest"));
 const TranslationManagement = lazy(() => import("@/pages/admin/TranslationManagement"));
-const TranslationManagement = lazy(() => import("@/pages/admin/TranslationManagement"));
 
 // Loading component
 const PageLoader = () => (
