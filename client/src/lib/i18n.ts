@@ -1227,8 +1227,8 @@ const arResources = {
           artists: "الفنانون"
         },
         recommendations: {
-          title: "موصى لك",
-          subtitle: "اكتشف أعمالاً فنية قد تعجبك",
+          title": "موصى لك",
+          subtitle": "اكتشف أعمالاً فنية قد تعجبك",
           exploreArtists: "استكشف الفنانين",
           empty: "لا توجد توصيات حالياً"
         },
@@ -1477,6 +1477,91 @@ const arResources = {
       "loadingArtists": "خطأ في تحميل الفنانين",
       "tryAgainLater": "يرجى المحاولة مرة أخرى لاحقاً"
     }
+  ,
+  "artworks": {
+    "title": "الأعمال الفنية",
+    "featured": "الأعمال المميزة",
+    "curatorsPicks": "اختيارات القيمين",
+    "details": "تفاصيل العمل الفني",
+    "artist": "الفنان",
+    "year": "السنة",
+    "medium": "الوسط",
+    "dimensions": "الأبعاد",
+    "price": "السعر",
+    "category": "الفئة",
+    "style": "الأسلوب",
+    "availability": "التوفر",
+    "available": "متاح",
+    "sold": "مباع",
+    "reserved": "محجوز",
+    "description": "الوصف",
+    "tags": "العلامات",
+    "provenance": "المصدر",
+    "condition": "الحالة",
+    "frame": "الإطار",
+    "signed": "موقع",
+    "edition": "الطبعة",
+    "certificate": "شهادة الأصالة",
+    "insurance": "التأمين",
+    "shipping": "الشحن",
+    "inquiry": "استفسار",
+    "inquire": "استفسار",
+    "addToFavorites": "أضف للمفضلة",
+    "removeFromFavorites": "احذف من المفضلة",
+    "share": "مشاركة",
+    "viewSimilar": "عرض أعمال مشابهة",
+    "similarWorks": "أعمال مشابهة",
+    "artistProfile": "ملف الفنان",
+    "galleryInfo": "معلومات المعرض",
+    "exhibitionHistory": "تاريخ المعارض",
+    "relatedWorks": "أعمال ذات صلة",
+    "moreFromArtist": "المزيد من هذا الفنان",
+    "searchPlaceholder": "البحث في الأعمال الفنية...",
+    "filterBy": "تصفية حسب",
+    "sortBy": "ترتيب حسب",
+    "noResults": "لا توجد نتائج",
+    "loadMore": "تحميل المزيد",
+    "viewGrid": "عرض شبكي",
+    "viewList": "عرض قائمة",
+    "priceRange": "نطاق السعر",
+    "yearCreated": "سنة الإنتاج",
+    "newArrivals": "الوصولات الجديدة",
+    "bestSellers": "الأكثر مبيعاً",
+    "onSale": "في التخفيضات",
+    "soldOut": "نفدت الكمية",
+    "comingSoon": "قريباً",
+    "subtitle": "اكتشف أعمالاً فنية استثنائية من فنانين موهوبين",
+    "search": {
+      "placeholder": "البحث في الأعمال الفنية بالعنوان أو الفنان أو الوسط..."
+    },
+    "filters": {
+      "category": "الفئة",
+      "style": "الأسلوب", 
+      "medium": "الوسط",
+      "priceRange": "نطاق السعر",
+      "availability": "التوفر",
+      "allCategories": "جميع الفئات",
+      "allStyles": "جميع الأساليب",
+      "allMediums": "جميع الأوساط"
+    },
+    "sort": {
+      "latest": "الأحدث",
+      "oldest": "الأقدم",
+      "priceAsc": "السعر: من الأقل للأعلى",
+      "priceDesc": "السعر: من الأعلى للأقل", 
+      "title": "العنوان أ-ي",
+      "featured": "المميز أولاً"
+    },
+    "results": "{{count}} عمل فني موجود",
+    "noResults": {
+      "title": "لا توجد أعمال فنية",
+      "description": "جرب تعديل مصطلحات البحث أو المرشحات للعثور على أعمال فنية.",
+      "clearFilters": "مسح جميع المرشحات"
+    },
+    "viewArtwork": "عرض العمل الفني",
+    "artworkNotFound": "العمل الفني غير موجود",
+    "backToArtworks": "العودة للأعمال الفنية"
+  }
 };
 
 i18n
