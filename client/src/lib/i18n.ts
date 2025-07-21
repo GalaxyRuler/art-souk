@@ -61,7 +61,9 @@ const enResources = {
     "anonymous": "Anonymous",
     "items": "items",
     "errorTryAgain": "An error occurred. Please try again.",
-    "siteName": "Art Souk"
+    "siteName": "Art Souk",
+    "retry": "Retry",
+    "sortBy": "Sort by"
   },
   "hero": {
     "description": "Discover exceptional Middle Eastern art",
@@ -92,7 +94,26 @@ const enResources = {
     "nationality": "Nationality",
     "style": "Style",
     "medium": "Medium",
-    "experience": "Years of Experience"
+    "experience": "Years of Experience",
+    "subtitle": "Discover talented artists from Saudi Arabia and the GCC region",
+    "search": {
+      "placeholder": "Search artists by name..."
+    },
+    "filters": {
+      "nationality": "Nationality",
+      "allCountries": "All Countries"
+    },
+    "sort": {
+      "latest": "Latest",
+      "name": "Name",
+      "featured": "Featured First"
+    },
+    "results": "{{count}} artists found",
+    "noResults": {
+      "title": "No artists found",
+      "description": "Try adjusting your search terms or filters to find artists.",
+      "clearFilters": "Clear All Filters"
+    }
   },
   "auctions": {
     "title": "Auctions",
@@ -415,6 +436,18 @@ const enResources = {
     "expressionism": "Expressionism",
     "minimalism": "Minimalism",
     "surrealism": "Surrealism"
+  },
+  "countries": {
+    "saudiArabia": "Saudi Arabia",
+    "uae": "United Arab Emirates",
+    "kuwait": "Kuwait",
+    "qatar": "Qatar",
+    "bahrain": "Bahrain",
+    "oman": "Oman"
+  },
+  "errors": {
+    "loadingArtists": "Error loading artists",
+    "tryAgainLater": "Please try again later"
   },
   "shipping": {
     "title": "Shipping Management",
@@ -915,7 +948,9 @@ const arResources = {
     "anonymous": "مجهول",
     "items": "عنصر",
     "errorTryAgain": "حدث خطأ. يرجى المحاولة مرة أخرى.",
-    "siteName": "سوق آرت"
+    "siteName": "سوق آرت",
+    "retry": "إعادة المحاولة",
+    "sortBy": "ترتيب حسب"
   },
   "auctions": {
     "title": "المزادات",
@@ -1410,6 +1445,37 @@ const arResources = {
         "featured": "الفنانون المميزون",
         "all": "جميع الفنانين",
         "viewAll": "عرض جميع الفنانين",
+        "subtitle": "اكتشف فنانين موهوبين من المملكة العربية السعودية ودول مجلس التعاون الخليجي",
+        "search": {
+          "placeholder": "ابحث عن الفنانين بالاسم..."
+        },
+        "filters": {
+          "nationality": "الجنسية",
+          "allCountries": "جميع الدول"
+        },
+        "sort": {
+          "latest": "الأحدث",
+          "name": "الاسم",
+          "featured": "المميز أولاً"
+        },
+        "results": "{{count}} فنان موجود",
+        "noResults": {
+          "title": "لا يوجد فنانون",
+          "description": "جرب تعديل مصطلحات البحث أو المرشحات للعثور على فنانين.",
+          "clearFilters": "مسح جميع المرشحات"
+        }
+    },
+    "countries": {
+      "saudiArabia": "المملكة العربية السعودية",
+      "uae": "الإمارات العربية المتحدة",
+      "kuwait": "الكويت",
+      "qatar": "قطر",
+      "bahrain": "البحرين",
+      "oman": "عمان"
+    },
+    "errors": {
+      "loadingArtists": "خطأ في تحميل الفنانين",
+      "tryAgainLater": "يرجى المحاولة مرة أخرى لاحقاً"
     }
 };
 
