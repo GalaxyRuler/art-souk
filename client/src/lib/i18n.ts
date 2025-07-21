@@ -78,6 +78,7 @@ const enResources = {
     "title": "Artists",
     "featured": "Featured Artists",
     "all": "All Artists",
+    "viewAll": "View All Artists",
     "profile": "Artist Profile",
     "bio": "Biography",
     "artworks": "Artworks",
@@ -96,6 +97,9 @@ const enResources = {
   "auctions": {
     "title": "Auctions",
     "linkCopiedDesc": "Auction link has been copied to your clipboard",
+    "live": "Live",
+    "placeBid": "Place Bid",
+    "viewAll": "View All",
     "statusText": {
       "liveNow": "Live Now",
       "startingSoon": "Starting Soon",
@@ -490,6 +494,31 @@ const enResources = {
       "description": "Carefully curated selections"
     }
   },
+  "home": {
+    "welcome": "Welcome {name}",
+    "user": "User",
+    "subtitle": "Discover exceptional art from the region",
+    "stats": {
+      "favorites": "Favorites",
+      "trending": "Trending",
+      "liveAuctions": "Live Auctions",
+      "artists": "Artists"
+    },
+    "recommendations": {
+      "title": "Recommended for You",
+      "subtitle": "Discover artworks you might like",
+      "exploreArtists": "Explore Artists",
+      "empty": "No recommendations available"
+    },
+    "liveAuctions": {
+      "title": "Live Auctions"
+    },
+    "featuredArtists": {
+      "title": "Featured Artists",
+      "subtitle": "Meet the talented artists from the region",
+      "empty": "No featured artists available"
+    }
+  },
   "footer": {
     "newsletter": {
       "title": "Newsletter",
@@ -855,6 +884,9 @@ const arResources = {
   "auctions": {
     "title": "المزادات",
     "linkCopiedDesc": "تم نسخ رابط المزاد إلى الحافظة",
+    live: "مباشر",
+    placeBid: "قدم عرضاً",
+    viewAll: "عرض الكل",
     "statusText": {
       "liveNow": "مباشر الآن",
       "startingSoon": "يبدأ قريباً",
@@ -866,7 +898,7 @@ const arResources = {
       "ended": "انتهى",
       "unknown": "غير معروف"
     },
-    "backToAuctions": "العودة للمزادات",
+        "backToAuctions": "العودة للمزادات",
     "yourBid": "عرضك",
     "enterBidAmount": "أدخل مبلغ العرض",
     "placingBid": "جاري تقديم العرض...",
@@ -1077,6 +1109,31 @@ const arResources = {
       "support": "الدعم"
     }
   },
+   "home": {
+        welcome: "مرحباً {name}",
+        user: "المستخدم",
+        subtitle: "اكتشف الفن الاستثنائي من المنطقة",
+        stats: {
+          favorites: "المفضلة",
+          trending: "الرائج",
+          liveAuctions: "المزادات المباشرة",
+          artists: "الفنانون"
+        },
+        recommendations: {
+          title: "موصى لك",
+          subtitle: "اكتشف أعمالاً فنية قد تعجبك",
+          exploreArtists: "استكشف الفنانين",
+          empty: "لا توجد توصيات حالياً"
+        },
+        liveAuctions: {
+          "title": "المزادات المباشرة"
+        },
+        featuredArtists: {
+          "title": "الفنانون المميزون",
+          "subtitle": "تعرف على فناني المنطقة الموهوبين",
+          "empty": "لا يوجد فنانون مميزون حالياً"
+        }
+      },
   "gallery": {
     "searchEvents": "البحث في الفعاليات",
     "allEvents": "جميع الفعاليات",
@@ -1275,7 +1332,13 @@ const arResources = {
       "paid": "مدفوع",
       "overdue": "متأخر"
     }
-  }
+  },
+   "artists": {
+        "title": "الفنانون",
+        "featured": "الفنانون المميزون",
+        "all": "جميع الفنانين",
+        "viewAll": "عرض جميع الفنانين",
+    }
 };
 
 i18n
@@ -1283,7 +1346,7 @@ i18n
   .init({
     fallbackLng: 'en',
     lng: 'en', // default language
-    
+
     resources: {
       en: {
         translation: enResources
@@ -1292,7 +1355,7 @@ i18n
         translation: arResources
       }
     },
-    
+
     interpolation: {
       escapeValue: false
     }
