@@ -893,7 +893,7 @@ const enResources = {
     "copied": "Copied to clipboard",
     "shared": "Shared successfully",
     "subscribed": "Subscribed successfully",
-    "unsubscribedsuccessfully",
+    "unsubscribed": "Unsubscribed successfully",
     "confirmed": "Confirmed successfully",
     "cancelled": "Cancelled successfully"
   },
