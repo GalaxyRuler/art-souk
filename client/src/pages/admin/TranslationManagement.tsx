@@ -270,7 +270,6 @@ export default function TranslationManagement() {
                 <Button
                   variant="outline"
                   size="sm"
-                  as="span"
                   className="cursor-pointer"
                 >
                   <Upload className="h-4 w-4 mr-2" />
