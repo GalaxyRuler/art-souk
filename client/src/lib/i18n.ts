@@ -895,8 +895,7 @@ const enResources = {
     "accountSettings": "Account Settings",
     "changePassword": "Change Password",
     "deleteAccount": "Delete Account",
-    "favorites": "```text
-Favorites",
+    "favorites": "Favorites",
     "following": "Following",
     "followers": "Followers",
     "collections": "Collections",
@@ -1682,7 +1681,7 @@ const arResources = {
     },
     "countries": {
       "saudiArabia": "المملكة العربية السعودية",
-      "uae": "الإمارات العربية المتحدة",```text
+      "uae": "الإمارات العربية المتحدة",
       "kuwait": "الكويت",
       "qatar": "قطر",
       "bahrain": "البحرين",
