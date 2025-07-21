@@ -571,7 +571,19 @@
     "unfollow": "Unfollow",
     "following": "Following",
     "followers": "followers",
-    "viewMore": "View More"
+    "viewMore": "View More",
+    "aboutGallery": "About Gallery",
+    "noBiography": "No biography available",
+    "contactInfo": "Contact Info",
+    "visitWebsite": "Visit Website",
+    "avgPrice": "Average Price",
+    "artworks": "Artworks",
+    "exhibitions": "Exhibitions",
+    "overview": "Overview",
+    "events": "Events",
+    "works": "Works",
+    "artists": "Artists",
+    "contact": "Contact"
   },
   "dashboard": {
     "title": "Dashboard",

@@ -808,7 +808,20 @@
     "messageSent": "تم إرسال الرسالة بنجاح",
     "messageError": "خطأ في إرسال الرسالة",
     "messageErrorDescription": "يرجى المحاولة مرة أخرى لاحقاً",
-    "messageResponseTime": "سنرد خلال 24 ساعة"
+    "messageResponseTime": "سنرد خلال 24 ساعة",
+    "aboutGallery": "عن المعرض",
+    "noBiography": "لا توجد سيرة متاحة",
+    "contactInfo": "معلومات التواصل",
+    "visitWebsite": "زيارة الموقع",
+    "avgPrice": "متوسط السعر",
+    "artworks": "الأعمال الفنية",
+    "exhibitions": "المعارض",
+    "overview": "نظرة عامة",
+    "events": "الفعاليات",
+    "works": "الأعمال",
+    "artists": "الفنانين",
+    "contact": "اتصل",
+    "viewMore": "عرض المزيد"
   },
   "hero": {
     "description": "اكتشف فن الشرق الأوسط الاستثنائي",
