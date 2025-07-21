@@ -488,7 +488,6 @@
     "artworks": "الأعمال الفنية",
     "emerging": "فنان ناشئ",
     "established": "فنان راسخ",
-    "gallery": "المعرض",
     "studio": "الاستوديو",
     "website": "الموقع الإلكتروني",
     "social": "وسائل التواصل",
@@ -971,8 +970,7 @@
     "sendInquiry": "إرسال الاستفسار",
     "description": "الوصف",
     "details": "التفاصيل",
-    "artist": "الفنان",
-    "gallery": "المعرض"
+    "artist": "الفنان"
   },
   "footer": {
     "newsletter": {
