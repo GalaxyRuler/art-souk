@@ -120,6 +120,7 @@ const enResources = {
     "linkCopiedDesc": "Auction link has been copied to your clipboard",
     "live": "Live",
     "placeBid": "Place Bid",
+    "currentBid": "Current Bid",
     "viewAll": "View All",
     "statusText": {
       "liveNow": "Live Now",
@@ -1151,9 +1152,10 @@ const arResources = {
   "auctions": {
     "title": "المزادات",
     "linkCopiedDesc": "تم نسخ رابط المزاد إلى الحافظة",
-    live: "مباشر",
-    placeBid: "قدم عرضاً",
-    viewAll: "عرض الكل",
+    "live": "مباشر",
+    "placeBid": "قدم عرضاً",
+    "currentBid": "المزايدة الحالية",
+    "viewAll": "عرض الكل",
     "statusText": {
       "liveNow": "مباشر الآن",
       "startingSoon": "يبدأ قريباً",
