@@ -1,0 +1,50 @@
+2025-07-22 15:20:13.750 [info] Resolving ssh remote authority 'ec34765c-37ae-4ebf-8075-02be67e36334@ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev:22' (Unparsed 'ssh-remote+ec34765c-37ae-4ebf-8075-02be67e36334@ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev:22') (attempt #1)
+2025-07-22 15:20:13.794 [info] SSH askpass server listening on port 53657
+2025-07-22 15:20:13.796 [info] Using askpass script: c:\Users\aoa\.cursor\extensions\anysphere.remote-ssh-1.0.22\dist\scripts\launchSSHAskpass.bat with javascript file c:\Users\aoa\.cursor\extensions\anysphere.remote-ssh-1.0.22\dist\scripts\sshAskClient.js. Askpass handle: 53657
+2025-07-22 15:20:13.805 [info] Launching SSH server via shell with command: type "C:\Users\aoa\AppData\Local\Temp\cursor_remote_install_19310.sh" | ssh -v -T -D 53658 -p 22 ec34765c-37ae-4ebf-8075-02be67e36334@ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev bash --login -c bash
+2025-07-22 15:20:13.805 [info] Started installation script. Waiting for it to finish...
+2025-07-22 15:20:13.805 [info] Waiting for server to install via process(8196)...
+2025-07-22 15:20:13.856 [info] (ssh_tunnel) stderr: OpenSSH_for_Windows_9.5p1, LibreSSL 3.8.2
+
+2025-07-22 15:20:13.858 [info] (ssh_tunnel) stderr: debug1: Reading configuration data C:\\Users\\aoa/.ssh/config
+
+2025-07-22 15:20:13.859 [info] (ssh_tunnel) stderr: debug1: C:\\Users\\aoa/.ssh/config line 1: Applying options for *.replit.dev
+
+2025-07-22 15:20:13.987 [info] (ssh_tunnel) stderr: debug1: Connecting to ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev [34.173.153.191] port 22.
+
+2025-07-22 15:20:14.351 [info] (ssh_tunnel) stderr: debug1: Connection established.
+
+2025-07-22 15:20:14.351 [info] (ssh_tunnel) stderr: vdollar_percent_expand: unknown key %H
+
+2025-07-22 15:20:14.351 [info] (ssh_tunnel) stderr: percent_dollar_expand: failed
+
+2025-07-22 15:20:14.353 [info] (ssh_tunnel) stderr: The process tried to write to a nonexistent pipe.
+
+2025-07-22 15:20:14.358 [info] (ssh_tunnel): exit: code=255 signal=null
+2025-07-22 15:20:14.359 [error] Error installing server: Failed to install the Cursor Server. Please check the logs for more details.
+2025-07-22 15:20:16.132 [info] Selected platform linux for remote host ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev
+2025-07-22 15:20:16.132 [info] Deleting local script C:\Users\aoa\AppData\Local\Temp\cursor_remote_install_19310.sh
+2025-07-22 15:20:16.132 [info] Using askpass script: c:\Users\aoa\.cursor\extensions\anysphere.remote-ssh-1.0.22\dist\scripts\launchSSHAskpass.bat with javascript file c:\Users\aoa\.cursor\extensions\anysphere.remote-ssh-1.0.22\dist\scripts\sshAskClient.js. Askpass handle: 53657
+2025-07-22 15:20:16.143 [info] Launching SSH server via shell with command: type "C:\Users\aoa\AppData\Local\Temp\cursor_remote_install_90729.sh" | ssh -v -T -D 53660 -p 22 ec34765c-37ae-4ebf-8075-02be67e36334@ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev bash --login -c bash
+2025-07-22 15:20:16.143 [info] Started installation script. Waiting for it to finish...
+2025-07-22 15:20:16.143 [info] Waiting for server to install via process(23292)...
+2025-07-22 15:20:16.179 [info] (ssh_tunnel) stderr: OpenSSH_for_Windows_9.5p1, LibreSSL 3.8.2
+
+2025-07-22 15:20:16.180 [info] (ssh_tunnel) stderr: debug1: Reading configuration data C:\\Users\\aoa/.ssh/config
+
+2025-07-22 15:20:16.180 [info] (ssh_tunnel) stderr: debug1: C:\\Users\\aoa/.ssh/config line 1: Applying options for *.replit.dev
+
+2025-07-22 15:20:16.186 [info] (ssh_tunnel) stderr: debug1: Connecting to ec34765c-37ae-4ebf-8075-02be67e36334-00-3g6lh1iki2l9i.riker.replit.dev [34.173.153.191] port 22.
+
+2025-07-22 15:20:16.408 [info] (ssh_tunnel) stderr: debug1: Connection established.
+
+2025-07-22 15:20:16.409 [info] (ssh_tunnel) stderr: vdollar_percent_expand: unknown key %H
+
+2025-07-22 15:20:16.409 [info] (ssh_tunnel) stderr: percent_dollar_expand: failed
+
+2025-07-22 15:20:16.410 [info] (ssh_tunnel) stderr: The process tried to write to a nonexistent pipe.
+
+2025-07-22 15:20:16.415 [info] (ssh_tunnel): exit: code=255 signal=null
+2025-07-22 15:20:16.415 [error] Error installing server: Failed to install the Cursor Server. Please check the logs for more details.
+2025-07-22 15:20:16.415 [info] Deleting local script C:\Users\aoa\AppData\Local\Temp\cursor_remote_install_90729.sh
+2025-07-22 15:20:16.416 [error] Error resolving SSH authority Failed to install the Cursor Server. Please check the logs for more details.
