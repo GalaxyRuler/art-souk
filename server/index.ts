@@ -6,6 +6,7 @@ import { rateLimiters } from "./middleware/rateLimiting";
 import { performanceMiddleware, memoryMonitoringMiddleware, requestLoggingMiddleware } from "./middleware/performance";
 import { healthCheckMiddleware, databaseHealthCheck, readinessCheck, livenessCheck, memoryHealthCheck } from "./middleware/healthChecks";
 import { cacheConfigs } from "./middleware/caching";
+import { createRequire } from "node:module";
 
 // Increased memory configuration for better performance
 process.env.NODE_OPTIONS = '--max-old-space-size=4096 --expose-gc --max-semi-space-size=256';
@@ -69,11 +70,13 @@ app.get('/health/live', livenessCheck);
 // Development tools middleware
 let devTools: any = null;
 try {
-  devTools = require('./devToolsSimple');
+  const require = createRequire(import.meta.url);
+  // devToolsSimple is CommonJS so default export may reside directly on module.exports
+  devTools = (require('./devToolsSimple') as any).default ?? require('./devToolsSimple');
   app.use(devTools.middleware());
   console.log('✅ Development tools middleware loaded');
 } catch (error) {
-  console.warn('⚠️ Development tools not loaded:', error.message);
+  console.warn('⚠️ Development tools not loaded:', (error as Error).message);
 }
 
 // Additional monitoring endpoints will be added by routes.ts

@@ -4,12 +4,11 @@ export default {
   darkMode: ["class"],
   content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
   safelist: [
-    // Radix UI data attributes
-    { pattern: /data-state-(open|closed|on|off|checked|unchecked|delayed-open|instant-open)/ },
-    { pattern: /data-side-(top|right|bottom|left)/ },
-    { pattern: /data-align-(start|center|end)/ },
-    { pattern: /data-orientation-(horizontal|vertical)/ },
-    { pattern: /data-radix-/ },
+    // Radix UI attribute-variant prefixes (keep them during purge)
+    { pattern: /data-\[state=(open|closed|on|off|checked|unchecked|delayed-open|instant-open)\]/ },
+    { pattern: /data-\[side=(top|right|bottom|left)\]/ },
+    { pattern: /data-\[align=(start|center|end)\]/ },
+    { pattern: /data-\[orientation=(horizontal|vertical)\]/ },
     // Dynamic z-index classes
     'z-50', 'z-[9999]', 'z-[10000]', 'z-[10001]',
     // Radix Select specific classes

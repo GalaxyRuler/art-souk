@@ -74,6 +74,12 @@ class PerformanceMonitor {
   // Check if memory usage is high
   checkMemoryHealth() {
     const memory = this.getMemoryUsage();
+
+    // Skip alerts during startup when the heap is still sizing itself
+    const uptimeSeconds = (Date.now() - this.startTime) / 1000;
+    if (uptimeSeconds < 30) {
+      return memory;
+    }
     
     if (memory.heap.percentage > 90) {
       const alert = `🚨 Critical memory usage: ${memory.heap.percentage}% heap used`;
