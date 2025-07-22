@@ -536,7 +536,9 @@ const enResources = {
   },
   "workshops": {
     "title": "Workshops",
+    "subtitle": "Learn from skilled artists and galleries through hands-on workshops",
     "featured": "Featured Workshops",
+    "all": "All Workshops",
     "upcoming": "Upcoming Workshops",
     "past": "Past Workshops",
     "details": "Workshop Details",
@@ -566,6 +568,11 @@ const enResources = {
     "registrationFailed": "Registration failed",
     "registrationFailedDesc": "Please try again later",
     "loading": "Loading workshops...",
+    "search": "Search workshops...",
+    "filter": "Filter",
+    "category": "Category",
+    "participants": "{{current}}/{{max}} participants",
+    "empty": "No workshops found matching your criteria.",
     "categories": {
       "painting": "Painting",
       "sculpture": "Sculpture",
@@ -574,7 +581,10 @@ const enResources = {
       "photography": "Photography"
     },
     "skillLevel": {
-      "all": "All Levels"
+      "all": "All Levels",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
     }
   },
   "events": {
@@ -1589,15 +1599,44 @@ const arResources = {
     "unknownError": "حدث خطأ غير معروف"
   },
   "workshops": {
+    "title": "ورش العمل",
+    "subtitle": "تعلم من فنانين ومعارض ماهرة من خلال ورش العمل التطبيقية",
+    "featured": "ورش العمل المميزة",
+    "all": "جميع ورش العمل",
+    "upcoming": "ورش العمل القادمة",
+    "past": "ورش العمل السابقة",
+    "details": "تفاصيل ورشة العمل",
+    "instructor": "المدرب",
+    "duration": "المدة",
+    "level": "المستوى",
+    "beginner": "مبتدئ",
+    "intermediate": "متوسط",
+    "advanced": "متقدم",
+    "materials": "المواد المشمولة",
+    "prerequisites": "المتطلبات المسبقة",
+    "register": "تسجيل",
+    "full": "مكتمل",
+    "spotsLeft": "مقاعد متبقية",
+    "schedule": "الجدولة",
+    "location": "الموقع",
+    "online": "عبر الإنترنت",
+    "inPerson": "حضوري",
+    "hybrid": "مختلط",
+    "price": "السعر",
+    "free": "مجاني",
+    "certificate": "شهادة",
+    "cancellation": "سياسة الإلغاء",
     "loginToRegister": "سجل الدخول للتسجيل",
     "registrationSuccess": "تم التسجيل بنجاح",
     "registrationSuccessDesc": "تم تسجيلك في ورشة العمل",
     "registrationFailed": "فشل التسجيل",
     "registrationFailedDesc": "يرجى المحاولة مرة أخرى لاحقاً",
     "loading": "جاري تحميل ورش العمل...",
-    "online": "عبر الإنترنت",
-    "free": "مجاني",
-    "full": "مكتمل",
+    "search": "البحث في ورش العمل...",
+    "filter": "تصفية",
+    "category": "الفئة",
+    "participants": "{{current}}/{{max}} مشارك",
+    "empty": "لم يتم العثور على ورش عمل تطابق معاييرك.",
     "categories": {
       "painting": "الرسم",
       "sculpture": "النحت",
@@ -1606,7 +1645,10 @@ const arResources = {
       "photography": "التصوير"
     },
     "skillLevel": {
-      "all": "جميع المستويات"
+      "all": "جميع المستويات",
+      "beginner": "مبتدئ",
+      "intermediate": "متوسط",
+      "advanced": "متقدم"
     }
   },
   "social": {
