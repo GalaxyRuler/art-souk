@@ -63,7 +63,8 @@ const enResources = {
     "errorTryAgain": "An error occurred. Please try again.",
     "siteName": "Art Souk",
     "retry": "Retry",
-    "sortBy": "Sort by"
+    "sortBy": "Sort by",
+    "sar": "SAR"
   },
   "hero": {
     "description": "Discover exceptional Middle Eastern art",
@@ -476,7 +477,6 @@ const enResources = {
   "dashboard": {
     "title": "Dashboard",
     "overview": "Overview",
-    "analytics": "Analytics",
     "sales": "Sales",
     "revenue": "Revenue",
     "orders": "Orders",
@@ -1157,7 +1157,8 @@ const arResources = {
     "errorTryAgain": "حدث خطأ. يرجى المحاولة مرة أخرى.",
     "siteName": "سوق آرت",
     "retry": "إعادة المحاولة",
-    "sortBy": "ترتيب حسب"
+    "sortBy": "ترتيب حسب",
+    "sar": "ر.س"
   },
   "auctions": {
     "title": "المزادات",
@@ -1972,6 +1973,74 @@ const arResources = {
     "unknownError": "حدث خطأ غير معروف",
     "tryAgainLater": "يرجى المحاولة مرة أخرى لاحقاً"
   },
+  "analytics": {
+    "advancedDashboard": "لوحة تحكم التحليلات المتقدمة",
+    "comprehensiveInsights": "رؤى شاملة حول أداء المنصة.",
+    "last7Days": "آخر 7 أيام",
+    "last30Days": "آخر 30 يومًا",
+    "last90Days": "آخر 90 يومًا",
+    "lastYear": "العام الماضي",
+    "export": "تصدير",
+    "totalViews": "إجمالي المشاهدات",
+    "fromLastPeriod": "من الفترة السابقة",
+    "uniqueVisitors": "زوار فريدون",
+    "engagement": "تفاعل",
+    "conversionRate": "معدل التحويل",
+    "overview": "نظرة عامة",
+    "users": "المستخدمون",
+    "content": "المحتوى",
+    "conversion": "تحويل",
+    "revenue": "الإيرادات",
+    "trafficOverTime": "حركة المرور مع الوقت",
+    "dailyVisitorTrends": "اتجاهات الزوار اليومية",
+    "userJourney": "رحلة المستخدم",
+    "conversionFunnelAnalysis": "تحليل مسار التحويل",
+    "topPerformingContent": "أفضل محتوى أداءً",
+    "mostViewedArtworks": "الأعمال الفنية الأكثر مشاهدة",
+    "views": "مشاهدات",
+    "userDemographics": "التركيبة السكانية للمستخدمين",
+    "userTypeDistribution": "توزيع أنواع المستخدمين",
+    "userActivity": "نشاط المستخدم",
+    "dailyActiveUsers": "المستخدمون النشطون يوميًا",
+    "lifecycleStages": "مراحل دورة الحياة",
+    "userProgressThroughStages": "تقدم المستخدم عبر المراحل",
+    "contentPerformance": "أداء المحتوى",
+    "engagementByContentType": "التفاعل حسب نوع المحتوى",
+    "categoryTrends": "اتجاهات الفئات",
+    "popularArtCategories": "الفئات الفنية الشائعة",
+    "conversionFunnel": "مسار التحويل",
+    "userConversionPath": "مسار تحويل المستخدم",
+    "goalCompletions": "إكمال الأهداف",
+    "keyActionTracking": "تتبع الإجراءات الرئيسية",
+    "revenueTrends": "اتجاهات الإيرادات",
+    "platformCommissions": "عمولات المنصة",
+    "topEarningArtists": "الفنانون الأعلى ربحًا",
+    "highestRevenue": "أعلى الإيرادات",
+    "artworksSold": "الأعمال الفنية المباعة",
+    "totalRevenue": "إجمالي الإيرادات"
+  },
+  "notifications": {
+    "success": "نجاح",
+    "allMarkedRead": "تم تعليم جميع الإشعارات كمقروءة",
+    "settingsUpdated": "تم تحديث إعدادات الإشعارات"
+  },
+  "community": {
+    "title": "مجتمع الفن",
+    "subtitle": "تواصل مع الفنانين الآخرين وشارك التقنيات وناقش الفن",
+    "search": "ابحث في المناقشات...",
+    "category": "الفئة",
+    "filter": "تصفية",
+    "new": "مناقشة جديدة",
+    "newDiscussion": "إنشاء مناقشة جديدة",
+    "titlePlaceholder": "عنوان المناقشة...",
+    "selectCategory": "اختر الفئة",
+    "contentPlaceholder": "شارك أفكارك...",
+    "create": "إنشاء مناقشة",
+    "cancel": "إلغاء",
+    "reply": "رد",
+    "like": "إعجاب",
+    "empty": "لم يتم العثور على مناقشات. ابدأ المحادثة!"
+  }
 };
 
 i18n
