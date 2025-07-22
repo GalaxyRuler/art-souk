@@ -269,12 +269,9 @@ const enResources = {
     "backToArtworks": "Back to Artworks",
     "notFound": "Artwork not found",
     "browseArtworks": "Browse Artworks",
-    "moreFromArtist": "More from this Artist",
-    "relatedWorks": "Related Works",
     "viewInGallery": "View in Gallery",
     "purchaseInquiry": "Purchase Inquiry",
     "priceOnRequest": "Price on Request",
-    "edition": "Edition",
     "signature": "Signature",
     "framing": "Framing",
     "exhibition": "Exhibition History",
@@ -286,7 +283,6 @@ const enResources = {
     "movement": "Movement",
     "period": "Period",
     "location": "Current Location",
-    "insurance": "Insurance",
     "condition_report": "Condition Report"
   },
   "artwork": {
@@ -453,7 +449,6 @@ const enResources = {
     "followingGallery": "Following gallery",
     "unfollowDescription": "You are no longer following this gallery",
     "followDescription": "You are now following this gallery",
-    "overview": "Overview",
     "contactForm": {
       "title": "Contact Gallery",
       "name": "Name",
@@ -1589,16 +1584,6 @@ const arResources = {
       "all": "جميع الفعاليات"
     }
   },
-  "errors": {
-    "loadingArticles": "خطأ في تحميل المقالات",
-    "networkError": "حدث خطأ في الشبكة",
-    "serverError": "حدث خطأ في الخادم",
-    "authError": "خطأ في المصادقة",
-    "permissionDenied": "تم رفض الإذن",
-    "notFound": "المورد غير موجود",
-    "validationError": "خطأ في التحقق",
-    "unknownError": "حدث خطأ غير معروف"
-  },
   "workshops": {
     "title": "ورش العمل",
     "subtitle": "تعلم من فنانين ومعارض ماهرة من خلال ورش العمل التطبيقية",
@@ -1925,7 +1910,6 @@ const arResources = {
     "followingGallery": "متابعة المعرض",
     "unfollowDescription": "لم تعد تتابع هذا المعرض",
     "followDescription": "أنت تتابع هذا المعرض الآن",
-    "overview": "نظرة عامة",
     "contactForm": {
       "title": "اتصل بالمعرض",
       "name": "الاسم",
