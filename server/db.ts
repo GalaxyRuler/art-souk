@@ -28,8 +28,8 @@ export async function checkDatabaseHealth(): Promise<boolean> {
   }
   
   try {
-    // Simple query to test connection
-    await db.select().from(schema.users).limit(1);
+    // Simple query to test connection using raw SQL to avoid type issues
+    await sql`SELECT 1 as health_check LIMIT 1`;
     connectionHealthy = true;
     lastHealthCheck = now;
     return true;
@@ -44,10 +44,11 @@ export async function checkDatabaseHealth(): Promise<boolean> {
 // Graceful shutdown handling
 export async function closeDatabaseConnection(): Promise<void> {
   try {
-    await pool.end();
-    console.log('Database connection pool closed.');
+    // For Neon serverless, we don't need to explicitly close connections
+    // The serverless connection handles cleanup automatically
+    console.log('Database connection cleanup completed.');
   } catch (error) {
-    console.error('Error closing database connection:', error);
+    console.error('Error during database connection cleanup:', error);
   }
 }
 
