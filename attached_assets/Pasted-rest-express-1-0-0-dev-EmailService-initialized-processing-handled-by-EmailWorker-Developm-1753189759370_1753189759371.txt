@@ -1,0 +1,102 @@
+rest-express@1.0.0 dev
+📧 EmailService initialized - processing handled by EmailWorker
+⚠️ Development tools not loaded: require is not defined
+1:07:23 PM [express] serving on port 5000
+📝 Session reload failed: failed to load session
+GET /?vscodeBrowserReqId=1753189648158 200 - 230ms
+1:07:31 PM [vite] (client) warning: Duplicate key "moreFromArtist" in object literal
+270|      "notFound": "Artwork not found",
+271|      "browseArtworks": "Browse Artworks",
+272|      "moreFromArtist": "More from this Artist",
+   |      ^
+273|      "relatedWorks": "Related Works",
+274|      "viewInGallery": "View in Gallery",
+
+  Plugin: vite:esbuild
+  File: /home/runner/workspace/client/src/lib/i18n.ts
+1:07:31 PM [vite] (client) warning: Duplicate key "relatedWorks" in object literal
+271|      "browseArtworks": "Browse Artworks",
+272|      "moreFromArtist": "More from this Artist",
+273|      "relatedWorks": "Related Works",
+   |      ^
+274|      "viewInGallery": "View in Gallery",
+275|      "purchaseInquiry": "Purchase Inquiry",
+
+  Plugin: vite:esbuild
+  File: /home/runner/workspace/client/src/lib/i18n.ts
+1:07:31 PM [vite] (client) warning: Duplicate key "edition" in object literal
+275|      "purchaseInquiry": "Purchase Inquiry",
+276|      "priceOnRequest": "Price on Request",
+277|      "edition": "Edition",
+   |      ^
+278|      "signature": "Signature",
+279|      "framing": "Framing",
+
+  Plugin: vite:esbuild
+  File: /home/runner/workspace/client/src/lib/i18n.ts
+1:07:31 PM [vite] (client) warning: Duplicate key "insurance" in object literal
+287|      "period": "Period",
+288|      "location": "Current Location",
+289|      "insurance": "Insurance",
+   |      ^
+290|      "condition_report": "Condition Report"
+291|    },
+
+  Plugin: vite:esbuild
+  File: /home/runner/workspace/client/src/lib/i18n.ts
+1:07:31 PM [vite] (client) warning: Duplicate key "overview" in object literal
+454|      "unfollowDescription": "You are no longer following this gallery",
+455|      "followDescription": "You are now following this gallery",
+456|      "overview": "Overview",
+   |      ^
+457|      "contactForm": {
+458|        "title": "Contact Gallery",
+
+  Plugin: vite:esbuild
+  File: /home/runner/workspace/client/src/lib/i18n.ts
+1:07:31 PM [vite] (client) warning: Duplicate key "overview" in object literal
+1926|      "unfollowDescription": "لم تعد تتابع هذا المعرض",
+1927|      "followDescription": "أنت تتابع هذا المعرض الآن",
+1928|      "overview": "نظرة عامة",
+   |      ^
+1929|      "contactForm": {
+1930|        "title": "اتصل بالمعرض",
+
+  Plugin: vite:esbuild
+  File: /home/runner/workspace/client/src/lib/i18n.ts
+1:07:31 PM [vite] (client) warning: Duplicate key "errors" in object literal
+1962|      "sohar": "صحار"
+1963|    },
+1964|    "errors": {
+   |    ^
+1965|      "loadingArticles": "خطأ في تحميل المقالات",
+1966|      "loadingGalleries": "خطأ في تحميل المعارض",
+
+  Plugin: vite:esbuild
+  File: /home/runner/workspace/client/src/lib/i18n.ts
+
+warn - The safelist pattern `/data-state-(open|closed|on|off|checked|unchecked|delayed-open|instant-open)/` doesn't match any Tailwind CSS classes.
+warn - Fix this pattern or remove it from your `safelist` configuration.
+warn - https://tailwindcss.com/docs/content-configuration#safelisting-classes
+
+warn - The safelist pattern `/data-side-(top|right|bottom|left)/` doesn't match any Tailwind CSS classes.
+warn - Fix this pattern or remove it from your `safelist` configuration.
+warn - https://tailwindcss.com/docs/content-configuration#safelisting-classes
+
+warn - The safelist pattern `/data-align-(start|center|end)/` doesn't match any Tailwind CSS classes.
+warn - Fix this pattern or remove it from your `safelist` configuration.
+warn - https://tailwindcss.com/docs/content-configuration#safelisting-classes
+
+warn - The safelist pattern `/data-orientation-(horizontal|vertical)/` doesn't match any Tailwind CSS classes.
+warn - Fix this pattern or remove it from your `safelist` configuration.
+warn - https://tailwindcss.com/docs/content-configuration#safelisting-classes
+
+warn - The safelist pattern `/data-radix-/` doesn't match any Tailwind CSS classes.
+warn - Fix this pattern or remove it from your `safelist` configuration.
+warn - https://tailwindcss.com/docs/content-configuration#safelisting-classes
+^CSIGINT received, closing database connection...
+Error closing database connection: ReferenceError: pool is not defined
+    at closeDatabaseConnection (/home/runner/workspace/server/db.ts:47:5)
+    at process.<anonymous> (/home/runner/workspace/server/db.ts:63:9)
+    at process.emit (node:events:536:35)
+    at process.emit (/home/runner/workspace/node_modules/tsx/dist/suppress-warnings.cjs:1:472)
